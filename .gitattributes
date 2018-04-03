@@ -1,0 +1,4 @@
+file.dat	binary
+*.zip		binary
+*.gz		binary
+
