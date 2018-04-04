@@ -35,7 +35,7 @@ requirements = [
     'Click>=6.0',
     'colorama',
     'pendulum',
-    'requests',
+    'requests>=2.18.0',
     'requestium',
     'selenium',
     'cookiecutter',
@@ -65,7 +65,7 @@ test_requirements = [
 setup(
     name='gc3_query',
     version='0.1.0',
-    description="Oracle Cloud utility for fetching and storing IaaS and PaaS data.",
+    description="Oracle Cloud utility for fetching, storing, and reporting on IaaS and PaaS data.",
     long_description=readme + '\n\n' + history,
     author="Eric Harris",
     author_email='eric.harris@oracle.com',
