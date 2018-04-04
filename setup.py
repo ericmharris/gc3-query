@@ -40,16 +40,15 @@ requirements = [
     'selenium',
     'cookiecutter',
     'beautifulsoup4',
-    'sortedcontainers',
-    'sortedcontainers',
+    # 'sortedcontainers',
     'openpyxl',
     'psutil',
-    'pycrypto',
+    # 'pycrypto',
     'prettyprinter',
     'deepdiff',
     'dataclasses',
     # 'pywin32',
-    # 'keyring',
+    'keyring',
     # TODO: put package requirements here
 ]
 
