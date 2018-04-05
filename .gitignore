@@ -6,6 +6,7 @@
 lib/
 lib64/
 var/
+gc3_query/var/*.zip
 
 # Package subdirs
 !gc3_query/lib/
