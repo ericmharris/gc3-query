@@ -1,16 +1,14 @@
 from prettyprinter import pprint as pp
 from json import loads
 
-print('Running .xonshrc_cloud')
-
-
+print('Configuring xonsh for gc3-query')
 
 def _pretty_print_json(args=None, stdin=None):
     """
 [root@eharris-lnxobi-01:master ~]# ppj opc -f json compute instance list $OPC_IDENT_CONTAINER
 args: ['opc', '-f', 'json', 'compute', 'instance', 'list', '/Compute-587626604']
 stdin: None
-[root@eharris-lnxobi-01:master ~]# 
+[root@eharris-lnxobi-01:master ~]#
 
     """
     print('args: {}'.format(args))
@@ -23,19 +21,18 @@ def _pretty_print_psm_data(args=None, stdin=None):
 aliases['ppp'] = _pretty_print_psm_data
 
 
+aliases['dev'] = r'cd $DEVEL_DIR'
+aliases['Gh'] = r'cd $DEVEL_DIR/gc3-query/gc3_query'
+
 
 if 'win' in sys.platform:
 
-    aliases['dev'] = r'cd $DEVEL_DIR'
-    aliases['Ih'] = r'cd $DEVEL_DIR/iniparser'
-
+    # aliases['dev'] = r'cd $DEVEL_DIR'
+    # aliases['Gh'] = r'cd $DEVEL_DIR/gc3-query/gc3_query'
     aliases['show_interfaces'] = r'netsh interface ipv4 show subinterface'
-    aliases['test_ping'] = r'ping -t -n 20 8.8.8.8'
-
-
-
-    aliases['inip'] = r'python.exe ~/Dropbox/Development/iniparser/bin/inip.py'
-    aliases['fautil'] = r'python.exe ~/Dropbox/Development/fadmin/bin/fautil.py'
+    # aliases['test_ping'] = r'ping -t -n 20 8.8.8.8'
+    # aliases['inip'] = r'python.exe ~/Dropbox/Development/iniparser/bin/inip.py'
+    # aliases['fautil'] = r'python.exe ~/Dropbox/Development/fadmin/bin/fautil.py'
 
 
     # # If Git is installed, add to $PATH and use some included GNU utils
@@ -62,7 +59,7 @@ if 'win' in sys.platform:
 
 #  Linux/Unix
 if 'linux' in sys.platform:
-    
+
     aliases['dev'] = r'cd $DEVEL_DIR'
     aliases['Ih'] = r'cd $DEVEL_DIR/iniparser'
 
