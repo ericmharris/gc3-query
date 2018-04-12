@@ -2,6 +2,9 @@
 
 # var/scratchpad/secrets.py
 secrets.py
+etc/config/secrets.py
+**/secrets.py
+/**/secrets.py
 .ipynb_checkpoints
 
 # Pycharm
