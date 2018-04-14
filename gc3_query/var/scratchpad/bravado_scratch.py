@@ -11,6 +11,7 @@ from gc3_query.lib.requests_client import OPCRequestsClient
 from bravado.swagger_model import load_file
 from secrets import opc_username, opc_password
 
+from tinydb import TinyDB, Query
 
 from prettyprinter import pprint, pformat
 
@@ -204,11 +205,18 @@ instances_discovered = json.loads(discover_instance_result)
 # In[ ]:
 
 
-pprint(f"""
-discover_instance_result: {discover_instance_result}, 
-discover_instance_response: {discover_instance_response}, 
-""")
+pprint(f"discover_instance_result: {discover_instance_result}, discover_instance_response: {discover_instance_response}")
 
 
 print("instances_discovered:\n{}".format(pformat(instances_discovered)))
+
+#####  Store result in tinydb
+instances_db = TinyDB('instances_db.json')
+pprint(f"instances_db: {instances_db}")
+instances_db.insert(instances_discovered)
+pprint(f"instances_db contents: {instances_db.all()}")
+
+
+
 print('done.')
+
