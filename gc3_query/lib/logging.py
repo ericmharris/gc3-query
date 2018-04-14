@@ -6,7 +6,8 @@ from typing import Callable, Tuple
 
 
 class Logging:
-    default_logging_level = 'warning'
+    # default_logging_level = 'warning'
+    default_logging_level = 'debug'
     logging_levels = {'debug': logging.DEBUG,
                       'info': logging.INFO,
                       'warning': logging.WARN,

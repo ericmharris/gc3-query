@@ -1,0 +1,103 @@
+{
+    "definitions": {
+        "model_with_allOf_recursive": {
+            "allOf": [
+                {
+                    "properties": {
+                        "pong": {
+                            "$ref": "#/definitions/pong"
+                        }
+                    }
+                },
+                {
+                    "properties": {
+                        "ping": {
+                            "$ref": "aux.json#/definitions/ping"
+                        }
+                    }
+                }
+            ],
+            "x-model": "model_with_allOf_recursive"
+        },
+        "not_used": {
+            "type": "object",
+            "properties": {
+                "not_used_remote_reference": {
+                    "$ref": "aux.json#/definitions/not_used_remote_reference"
+                }
+            },
+            "x-model": "not_used"
+        },
+        "pong": {
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "ping": {
+                    "$ref": "aux.json#/definitions/ping"
+                }
+            },
+            "required": [
+                "message"
+            ],
+            "type": "object",
+            "x-model": "pong"
+        }
+    },
+    "info": {
+        "title": "Recursive response Spec",
+        "version": "1.0.0"
+    },
+    "parameters": {
+        "AcceptLanguage": {
+            "description": "HTTP Header [Accept Language](https://tools.ietf.org/html/rfc1945#appendix-D.2.4)",
+            "in": "header",
+            "minLength": 1,
+            "name": "Accept-Language",
+            "required": false,
+            "type": "string"
+        }
+    },
+    "paths": {
+        "/endpoint_defined_on_other_file": {
+            "$ref": "aux.json#/paths/endpoint_defined_on_other_file"
+        },
+        "/recursive/response": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "A recursive response",
+                        "schema": {
+                            "$ref": "aux.json#/definitions/ping"
+                        }
+                    }
+                }
+            }
+        },
+        "/recursive/responses": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "A list of recursive response",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "aux.json#/definitions/ping"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/referenced_response": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "$ref": "aux.json#/responses/ok_response"
+                    }
+                }
+            }
+        }
+    },
+    "swagger": "2.0"
+}

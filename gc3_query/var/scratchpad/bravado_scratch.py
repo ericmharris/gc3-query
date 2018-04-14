@@ -1,96 +1,205 @@
+# coding: utf-8
+
 import os
-import json
-import keyring
-import requests
-import dataclasses
-
+from pathlib import Path
 from bravado.client import SwaggerClient
-from bravado.client import SwaggerClient
-
-# Example with Basic Authentication
-from bravado.requests_client import RequestsClient
 from bravado.client import SwaggerClient
 from bravado.swagger_model import load_file
-
-
-from requests.auth import _basic_auth_str
+# from bravado.requests_client import RequestsClient
+from gc3_query.lib.requests_client import OPCRequestsClient
+from bravado.swagger_model import load_file
 from secrets import opc_username, opc_password
 
-from prettyprinter import pprint
-from prettyprinter import pprint as pp
+from urllib.parse import quote_plus, unquote_plus
 
-from requests import Session
-from requests.auth import HTTPBasicAuth
-from requests.auth import _basic_auth_str
-from secrets import opc_username, opc_password
+## https://medium.com/@betz.mark/validate-json-models-with-swagger-and-bravado-5fad6b21a825
+# Validate json models with swagger and bravado
+from bravado_core.spec import Spec
+from bravado_core.validate import validate_object
+from yaml import load, Loader, dump, Dumper
+
+# In[4]:
 
 
-
-idm_domain = 'gc30003'
-# idm_domain = '587626604'
-idm_username = f'{idm_domain}.{opc_username}'
-print(f'idm_username: {idm_username}')
-# load Swagger resource file into App object
-domain_auth_token = _basic_auth_str(idm_username, opc_password)
-print(f'domain_auth_token: {domain_auth_token}')
-
-#####
 idm_domain_name = 'gc30003'
 idm_service_instance_id = '587626604'
-idm_username = f'{idm_domain_name}.{opc_username}'
 iaas_rest_endpoint = r'https://compute.uscom-central-1.oraclecloud.com'
-iaas_auth_endpoint = r'https://compute.uscom-central-1.oraclecloud.com/authenticate/'
-traditional_iaas_username = f'/Compute-{idm_domain_name}/{opc_username}'
-idcs_iaas_username = f'/Compute-{idm_service_instance_id}/{opc_username}'
-# basic_auth_cred = _basic_auth_str(idcs_iaas_username, opc_password)
-json_data={"user":idm_domain_name, "password":opc_password}
+iaas_auth_endpoint = f'{iaas_rest_endpoint}/authenticate/'
+
+print(f'iaas_rest_endpoint: {iaas_rest_endpoint}')
+print(f'iaas_auth_endpoint: {iaas_auth_endpoint}\n')
+
+# In[5]:
+
+
+### Username/pass setup
+idm_domain_username = f'/Compute-{idm_domain_name}/{opc_username}'
+idm_service_instance_username = f'/Compute-{idm_service_instance_id}/{opc_username}'
+# username = traditional_iaas_username
+username = idm_service_instance_username
+# basic_auth_cred = _basic_auth_str(username, opc_password)
+
+print(f'idm_domain_username: {idm_domain_username}')
+print(f'idm_service_instance_username: {idm_service_instance_username}')
+print(f'username: {username}')
+# print(f'basic_auth_cred: {basic_auth_cred}')
+
+### END Username/pass setup
+json_data = {"user": username, "password": opc_password}
+print(f'\njson_data: {json_data}')
+
 files = None
 params = None
-data=None
 
-basic_auth_cred = _basic_auth_str(idm_username, opc_password)
 
-# headers = dict([('Authorization', basic_auth_cred), ('Content-Type', 'application/oracle-compute-v3+json'), ('X-ID-TENANT-NAME', 'gc30003'), ('X-PSM-CLI-REQUEST', 'cli'), ('X-PSM-CLI-VERSION', '1.1.20')])
-headers = dict([('Authorization', basic_auth_cred), ('X-ID-TENANT-NAME', 'gc30003'), ('X-PSM-CLI-REQUEST', 'cli'), ('X-PSM-CLI-VERSION', '1.1.20')])
+headers = dict([('Content-Type', 'application/oracle-compute-v3+json'),
+                ('Accept', 'application/oracle-compute-v3+directory+json'),
+                ])
 
 print(f'headers: {headers}')
-print(f'json_data: {json_data}')
-print(f'_basic_auth_str(idm_username={idm_username}, opc_password), basic_auth_cred: {basic_auth_cred}')
-# print(f'idm_username: {idm_username}')
-# print(f'idcs_iaas_username: {idcs_iaas_username}')
-# print(f'iaas_rest_endpoint: {iaas_rest_endpoint}')
-# print(f'iaas_auth_endpoint: {iaas_auth_endpoint}')
-#####
+
+# In[6]:
 
 
-compute_container = '/Compute-587626604/eric.harris@oracle.com'
-print(f'compute_container: {compute_container}')
-rest_endpoint = r'https://compute.uscom-central-1.oraclecloud.com/'
+requests_client = OPCRequestsClient()
+requests_client.session.headers.update(headers)
 
-# client_from_file = SwaggerClient.from_url(f'file:///{cwd}/instances_swagger.json')
+print(f"requests_client.session.headers before update: {requests_client.session.headers}\n")
+requests_client.session.headers.update(headers)
+print(f"requests_client.session.headers after update: {requests_client.session.headers}\n")
+
+
+
+
+response = requests_client.session.post(url=iaas_auth_endpoint, json=json_data)
+
+print(f'Response OK: {response.ok}, Status Code: {response.status_code}, URL: {response.url}')
+if response.ok and 'Set-Cookie' in response.headers:
+    print(f"Auth request succeess.\n")
+    ### The auth cookie is already placed in the session ... nothing else needs to be done.
+    print(f"\nSession Cookies: {requests_client.session.cookies}")
+    print(f"\nResponse Headers['Set-Cookie']: {response.headers['Set-Cookie']}")
+
+else:
+    print(f'Something failed! Response OK: {response.ok}, Status Code: {response.status_code}')
+
+# In[10]:
+
+
+print(f"requests_client.session.headers before update: {requests_client.session.headers}\n")
+cookie_header = {'Cookie': response.headers['Set-Cookie']}
+print(f"cookie_header: {cookie_header}\n")
+requests_client.session.headers.update(cookie_header)
+print(f"requests_client.session.headers after update: {requests_client.session.headers}\n")
+
+#
+
+# In[11]:
+
 
 cwd = os.getcwd()
-client = SwaggerClient.from_spec(load_file(f'{cwd}/open_api_definitions/iaas_instances.json'))
-client.Instances
+spec_file_path = Path().joinpath('open_api_definitions/iaas_instances.json').resolve()
+print(f'spec_file_path exists: {spec_file_path.exists()}, spec_file_path: {spec_file_path}')
+
+#### http://bravado.readthedocs.io/en/latest/advanced.html#loading-swagger-json-by-file-path
+## needed for: client = SwaggerClient.from_url('file:///some/path/swagger.json')
+spec_file_uri = f"file:///{spec_file_path}"
+print(f'spec_file_uri: {spec_file_path}')
 
 
-swagger_url= r'https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/compute/18.1.2/apis/Instances/canonical'
-requests_client = RequestsClient()
-# requests_client.set_basic_auth('apicatalog.oraclecloud.com', idm_username, opc_password)
-requests_client.set_basic_auth(rest_endpoint, idm_username, opc_password)
-requests_client.session.headers['Authorization'] = domain_auth_token
+# In[14]:
 
-# client_from_catalog = SwaggerClient.from_url(spec_url=swagger_url, http_client=requests_client)
-client_from_catalog = SwaggerClient.from_url(spec_url=swagger_url, http_client=requests_client, config={'also_return_response': True})
 
-# instance_list = client_from_catalog.Instances.listInstance(container=compute_container)
-instance_name = r'/Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1'
-instance_name = '/Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1/c17bb7ea-724b-4e51-ab72-1bd8714f07b7'
-# instance = client_from_catalog.Instances.getInstance(name='/Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1/c17bb7ea-724b-4e51-ab72-1bd8714f07b7').result()
-# instance = client_from_catalog.Instances.getInstance(name=r'/Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1').result()
-## https://bravado.readthedocs.io/en/latest/advanced.html#getting-access-to-the-http-response
-instance, http_response = client_from_catalog.Instances.getInstance(name=instance_name).result()
+spec_dict = load_file(spec_file_path)
+spec_dict['schemes']
+print(f"Original spec: spec_dict['schemes']: {spec_dict['schemes']}")
+spec_dict['schemes'] = ['https']
+print(f"Spec after scheme update: spec_dict['schemes']: {spec_dict['schemes']}")
 
-print('done.')
+# In[17]:
+
+
+swagger_spec = Spec.from_dict(spec_dict=spec_dict,
+                              origin_url=iaas_rest_endpoint,
+                              http_client=requests_client,
+
+                              )
+
+# In[18]:
+
+
+
+print(f"swagger_spec.api_url: {swagger_spec.api_url}")
+
+
+
+swagger_client = SwaggerClient.from_spec(spec_dict=spec_dict,
+                                         origin_url=iaas_rest_endpoint,
+                                         http_client=requests_client,
+                                         config={'also_return_response': True,
+                                                 'validate_responses': False,
+                                                 'validate_requests': False,
+                                                 'validate_swagger_spec': False})
+
+# In[20]:
+
+
+print(f"swagger_client: {swagger_client}, swagger_client.Instances.resource.operations: {swagger_client.Instances.resource.operations}")
+
+op = swagger_client.Instances.resource.operations['discoverInstance']
+op_api_url = op.swagger_spec.api_url
+print(f"discoverInstance Operation: {op}, discoverInstance.api_url: {op_api_url}")
+
+# In[22]:
+
+
+instances = swagger_client.Instances
+
+# In[23]:
+
+
+print(f"instances: {instances}, idm_service_instance_username: {idm_service_instance_username}")
+
+# In[25]:
+
+
+
+# In[36]:
+
+
+
+# In[37]:
+
+##  Fails, URL is /instance/%2FCompute-587626604%2Feric.harris%40oracle.com%2F -> /instance//Compute-587626604/eric.harris%40oracle.com/
+# discover_instance_result = discover_instance.result()
+
+## getting https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604%2Feric.harris%40oracle.com%2F
+## but want https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604/eric.harris@oracle.com/
+# container = f"{idm_service_instance_username[1:]}/"
+container = r"Compute-587626604/eric.harris@oracle.com/"
+print(f"container is: {container}")
+
+discover_instance = instances.discoverInstance(container=container)
+
+print(f"""discover_instance: {discover_instance}, 
+discover_instance.operation: {discover_instance.operation}, 
+discover_instance.operation.params: {discover_instance.operation.params}, 
+discover_instance.operation.operation_id: {discover_instance.operation.operation_id}""")
+
+# In[ ]:
+
+
+
+# In[ ]:
+
+
+discover_instance_result, discover_instance_response = discover_instance.result()
+
+# In[ ]:
+
+
+print(f"""discover_instance_result: {discover_instance_result}, 
+discover_instance_response: {discover_instance_response} 
+""")
 
 

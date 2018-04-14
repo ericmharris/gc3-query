@@ -1,0 +1,14 @@
+*.egg-info/
+*.egg
+*.pyc
+.cache/*
+.coverage
+cover/
+dist/
+nosetests.xml
+build
+*.swp
+*.tox
+.idea/
+*.iml
+.benchmarks/

@@ -1,0 +1,5 @@
+# Unit test dependencies
+mock
+pre-commit
+pytest
+pytest-benchmark[histogram]
