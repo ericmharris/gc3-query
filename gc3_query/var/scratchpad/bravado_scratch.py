@@ -10,6 +10,7 @@ from bravado.swagger_model import load_file
 from gc3_query.lib.requests_client import OPCRequestsClient
 from bravado.swagger_model import load_file
 from secrets import opc_username, opc_password
+from bravado_core.exception import MatchingResponseNotFound
 
 from tinydb import TinyDB, Query
 
@@ -142,6 +143,10 @@ print(f"swagger_spec.api_url: {swagger_spec.api_url}")
 swagger_client = SwaggerClient.from_spec(spec_dict=spec_dict,
                                          origin_url=iaas_rest_endpoint,
                                          http_client=requests_client,
+                                         # config={'also_return_response': True,
+                                         #         'validate_responses': True,
+                                         #         'validate_requests': True,
+                                         #         'validate_swagger_spec': True})
                                          config={'also_return_response': True,
                                                  'validate_responses': False,
                                                  'validate_requests': False,
@@ -214,7 +219,57 @@ print("instances_discovered:\n{}".format(pformat(instances_discovered)))
 instances_db = TinyDB('instances_db.json')
 pprint(f"instances_db: {instances_db}")
 instances_db.insert(instances_discovered)
-pprint(f"instances_db contents: {instances_db.all()}")
+pprint(f"instances_db contents: {instances_db.all()[0]}")
+
+
+swagger_client = SwaggerClient.from_spec(spec_dict=spec_dict,
+                                         origin_url=iaas_rest_endpoint,
+                                         http_client=requests_client,
+                                         # config={'also_return_response': True,
+                                         #         'validate_responses': True,
+                                         #         'validate_requests': True,
+                                         #         'validate_swagger_spec': True})
+                                         config={'also_return_response': True,
+                                                 'validate_responses': False,
+                                                 'validate_requests': False,
+                                                 'validate_swagger_spec': False})
+op = swagger_client.Instances.resource.operations['listInstance']
+op_api_url = op.swagger_spec.api_url
+instances = swagger_client.Instances
+
+try:
+    list_instances = instances.listInstance(container=container.rstrip('/'))
+    print(f"Service Operation URL: {list_instances.future.request.url}")
+    list_instances_result, list_instances_response = list_instances.result()
+except MatchingResponseNotFound:
+    print("Something failed")
+instances_details = json.loads(list_instances_result)
+print("instances_details:\n {}".format(pformat(instances_details)))
+
+
+
+
+
+
+
+
+instance_names = instances_db.all()
+instance_name = instance_names[0]['result'].pop(0)
+get_instance = instances.getInstance(container=instance_name)
+get_instance_result, get_instance_response = get_instance.result()
+instance_details = json.loads(get_instance_result)
+
+print(f"""discover_instance: {discover_instance}, 
+discover_instance.operation: {discover_instance.operation}, 
+discover_instance.operation.params: {discover_instance.operation.params}, 
+discover_instance.operation.operation_id: {discover_instance.operation.operation_id}""")
+
+# In[ ]:
+
+
+
+# In[ ]:
+
 
 
 
