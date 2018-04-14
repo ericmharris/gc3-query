@@ -1,6 +1,7 @@
 # coding: utf-8
 
 import os
+import json
 from pathlib import Path
 from bravado.client import SwaggerClient
 from bravado.client import SwaggerClient
@@ -9,6 +10,10 @@ from bravado.swagger_model import load_file
 from gc3_query.lib.requests_client import OPCRequestsClient
 from bravado.swagger_model import load_file
 from secrets import opc_username, opc_password
+
+
+from prettyprinter import pprint, pformat
+
 
 from urllib.parse import quote_plus, unquote_plus
 
@@ -194,12 +199,16 @@ discover_instance.operation.operation_id: {discover_instance.operation.operation
 
 
 discover_instance_result, discover_instance_response = discover_instance.result()
+instances_discovered = json.loads(discover_instance_result)
 
 # In[ ]:
 
 
-print(f"""discover_instance_result: {discover_instance_result}, 
-discover_instance_response: {discover_instance_response} 
+pprint(f"""
+discover_instance_result: {discover_instance_result}, 
+discover_instance_response: {discover_instance_response}, 
 """)
 
 
+print("instances_discovered:\n{}".format(pformat(instances_discovered)))
+print('done.')
