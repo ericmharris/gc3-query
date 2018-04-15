@@ -79,8 +79,14 @@ class OPCRequestsClient(RequestsClient):
         unqoted_path = unquote_plus(parsed_url.path)
         requoted_path = quote(unqoted_path)
         parsed_url_d = parsed_url._asdict()
-        parsed_url_d['path'] = requoted_path
+
+        ### https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604/eric.harris%40oracle.com/
+        # parsed_url_d['path'] = requoted_path
+        # new_url = urlunparse(parsed_url_d.values())
+        ### https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604/eric.harris@oracle.com/
+        parsed_url_d['path'] = unqoted_path
         new_url = urlunparse(parsed_url_d.values())
+
         request_params['url'] = new_url
         _debug(f"url={url} parsed_url={parsed_url}, unqoted_path={unqoted_path}, requoted_path={requoted_path}, new_url={new_url}")
         _debug(f"returned request_params={request_params}")

@@ -4,26 +4,20 @@ import os
 import json
 from pathlib import Path
 from bravado.client import SwaggerClient
-from bravado.client import SwaggerClient
-from bravado.swagger_model import load_file
 # from bravado.requests_client import RequestsClient
-from gc3_query.lib.requests_client import OPCRequestsClient
+from gc3_query.lib.bravado.requests_client import OPCRequestsClient
 from bravado.swagger_model import load_file
 from secrets import opc_username, opc_password
 from bravado_core.exception import MatchingResponseNotFound
+from bravado.exception import HTTPBadRequest
 
-from tinydb import TinyDB, Query
+from tinydb import TinyDB
 
 from prettyprinter import pprint, pformat
-
-
-from urllib.parse import quote_plus, unquote_plus
 
 ## https://medium.com/@betz.mark/validate-json-models-with-swagger-and-bravado-5fad6b21a825
 # Validate json models with swagger and bravado
 from bravado_core.spec import Spec
-from bravado_core.validate import validate_object
-from yaml import load, Loader, dump, Dumper
 
 # In[4]:
 
@@ -152,126 +146,705 @@ swagger_client = SwaggerClient.from_spec(spec_dict=spec_dict,
                                                  'validate_requests': False,
                                                  'validate_swagger_spec': False})
 
-# In[20]:
+######
+######
+######
+######
+######
+######
 
+# "/instance/": {
+#     "get": {
+#         "tags": ["Instances"],
+#         "summary": "Retrieve Names of Containers",
+#         "description": "Retrieves the names of containers that contain objects that you can access. You can use this information to construct the multipart name of an object.<p><b>Required Role: </b>To complete this task, you must have the <code>Compute_Monitor</code> or <code>Compute_Operations</code> role. If this role isn't assigned to you or you're not sure, then ask your system administrator to ensure that the role is assigned to you in Oracle Cloud My Services. See <a target=\"_blank\" href=\"http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6\">Modifying User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.",
+#         "operationId": "discoverRootInstance",
+#         "responses": {
+#             "200": {
+#                 "headers": {
+#                     "set-cookie": {
+#                         "type": "string",
+#                         "description": "The cookie value is returned if the session is extended"
+#                     }
+#                 },
+#                 "description": "OK. See <a class=\"xref\" href=\"Status%20Codes.html\">Status Codes</a> for information about other possible HTTP status codes.",
+#                 "schema": {
+#                     "$ref": "#/definitions/Instance-discover-response"
+#                 }
+#             }
+#         },
+#         "consumes": ["application/oracle-compute-v3+json"],
+#         "produces": ["application/oracle-compute-v3+directory+json"],
+#         "parameters": [{
+#             "name": "Cookie",
+#             "in": "header",
+#             "type": "string",
+#             "description": "The Cookie: header must be included with every request to the service. It must be set to the value of the set-cookie header in the response received to the POST /authenticate/ call."
+#         }]
+#     }
+# },
+#
+# "Instance-discover-response": {
+#     "properties": {
+#         "result": {
+#             "items": {
+#                 "type": "string"
+#             },
+#             "type": "array"
+#         }
+#     }
+# },
 
-print(f"swagger_client: {swagger_client}, swagger_client.Instances.resource.operations: {swagger_client.Instances.resource.operations}")
+# print("discoverRootInstance starting.")
+# instances_resource = swagger_client.Instances
+# try:
+#     operation = instances_resource.discoverRootInstance()
+#     url = operation.future.request.url
+#     print(f"REST url: {url}")
+#     operation_result, operation_response = operation.result()
+# except HTTPBadRequest:
+#     print("Request failed! ")
+#     print(f"URL: {operation.future.request.url}")
+#     raise
+# operation_details = json.loads(operation_result)
+# print("discoverRootInstance operation_details for {}:\n {}".format(url, pformat(operation_details)))
+# # operation_details for https://compute.uscom-central-1.oraclecloud.com/instance/:
+# # {'result': ['/Compute-587626604/']}
+# print("discoverRootInstance finished.")
 
-op = swagger_client.Instances.resource.operations['discoverInstance']
-op_api_url = op.swagger_spec.api_url
-print(f"discoverInstance Operation: {op}, discoverInstance.api_url: {op_api_url}")
+instances_resource = swagger_client.Instances
 
-# In[22]:
-
-
-instances = swagger_client.Instances
-
-# In[23]:
-
-
-print(f"instances: {instances}, idm_service_instance_username: {idm_service_instance_username}")
-
-# In[25]:
-
-
-
-# In[36]:
-
-
-
-# In[37]:
-
-##  Fails, URL is /instance/%2FCompute-587626604%2Feric.harris%40oracle.com%2F -> /instance//Compute-587626604/eric.harris%40oracle.com/
-# discover_instance_result = discover_instance.result()
-
-## getting https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604%2Feric.harris%40oracle.com%2F
-## but want https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604/eric.harris@oracle.com/
-# container = f"{idm_service_instance_username[1:]}/"
-container = r"Compute-587626604/eric.harris@oracle.com/"
-print(f"container is: {container}")
-
-discover_instance = instances.discoverInstance(container=container)
-
-print(f"""discover_instance: {discover_instance}, 
-discover_instance.operation: {discover_instance.operation}, 
-discover_instance.operation.params: {discover_instance.operation.params}, 
-discover_instance.operation.operation_id: {discover_instance.operation.operation_id}""")
-
-# In[ ]:
-
-
-
-# In[ ]:
-
-
-discover_instance_result, discover_instance_response = discover_instance.result()
-instances_discovered = json.loads(discover_instance_result)
-
-# In[ ]:
-
-
-pprint(f"discover_instance_result: {discover_instance_result}, discover_instance_response: {discover_instance_response}")
-
-
-print("instances_discovered:\n{}".format(pformat(instances_discovered)))
-
-#####  Store result in tinydb
-instances_db = TinyDB('instances_db.json')
-pprint(f"instances_db: {instances_db}")
-instances_db.insert(instances_discovered)
-pprint(f"instances_db contents: {instances_db.all()[0]}")
-
-
-swagger_client = SwaggerClient.from_spec(spec_dict=spec_dict,
-                                         origin_url=iaas_rest_endpoint,
-                                         http_client=requests_client,
-                                         # config={'also_return_response': True,
-                                         #         'validate_responses': True,
-                                         #         'validate_requests': True,
-                                         #         'validate_swagger_spec': True})
-                                         config={'also_return_response': True,
-                                                 'validate_responses': False,
-                                                 'validate_requests': False,
-                                                 'validate_swagger_spec': False})
-op = swagger_client.Instances.resource.operations['listInstance']
-op_api_url = op.swagger_spec.api_url
-instances = swagger_client.Instances
-
+operation_id = "discoverRootInstance"
+print(f"Operation {operation_id} starting.")
 try:
-    list_instances = instances.listInstance(container=container.rstrip('/'))
-    print(f"Service Operation URL: {list_instances.future.request.url}")
-    list_instances_result, list_instances_response = list_instances.result()
-except MatchingResponseNotFound:
-    print("Something failed")
-instances_details = json.loads(list_instances_result)
-print("instances_details:\n {}".format(pformat(instances_details)))
+    operation = getattr(instances_resource, operation_id)()
+    url = operation.future.request.url
+    print(f"REST url for {operation_id}: {url}")
+    operation_result, operation_response = operation.result()
+except HTTPBadRequest:
+    print("Request failed for {operation_id}! ")
+    print(f"URL: {operation.future.request.url}")
+    raise
+operation_details = json.loads(operation_result)
+print("\n{} operation_details:\nHTTP method: {}\nAPI url: {}:\n {}\n".format(operation_id, operation.operation.http_method, url, pformat(operation_details)))
+print(f"Operation {operation_id} finished.")
+# discoverRootInstance operation_details:
+# API url: https://compute.uscom-central-1.oraclecloud.com/instance/:
+#  {'result': ['/Compute-587626604/']}
+
+
+# "/instance/{container}": {
+#     "get": {
+#         "tags": ["Instances"],
+#         "summary": "Retrieve Names of all Instances and Subcontainers in a Container",
+#         "description": "Retrieves the names of objects and subcontainers that you can access in the specified container.<p><b>Required Role: </b>To complete this task, you must have the <code>Compute_Operations</code> role. If this role isn't assigned to you or you're not sure, then ask your system administrator to ensure that the role is assigned to you in Oracle Cloud My Services. See <a target=\"_blank\" href=\"http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6\">Modifying User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.",
+#         "operationId": "discoverInstance",
+#         "responses": {
+#             "200": {
+#                 "headers": {
+#                     "set-cookie": {
+#                         "type": "string",
+#                         "description": "The cookie value is returned if the session is extended"
+#                     }
+#                 },
+#                 "description": "OK. See <a class=\"xref\" href=\"Status%20Codes.html\">Status Codes</a> for information about other possible HTTP status codes.",
+#                 "schema": {
+#                     "$ref": "#/definitions/Instance-discover-response"
+#                 }
+#             }
+#         },
+#         "consumes": ["application/oracle-compute-v3+json"],
+#         "produces": ["application/oracle-compute-v3+directory+json"],
+#         "parameters": [{
+#             "name": "container",
+#             "in": "path",
+#             "description": "Specify <code>/Compute-<i>identityDomain</i>/<i>user</i>/</code> to retrieve the names of objects that you can access. Specify <code>/Compute-<i>identityDomain</i>/</code> to retrieve the names of containers that contain objects that you can access.",
+#             "required": true,
+#             "type": "string"
+#         }, {
+#             "name": "Cookie",
+#             "in": "header",
+#             "type": "string",
+#             "description": "The Cookie: header must be included with every request to the service. It must be set to the value of the set-cookie header in the response received to the POST /authenticate/ call."
+#         }]
+#     }
+# },
+
+
+operation_id = "discoverInstance"
+print(f"Operation {operation_id} starting.")
+try:
+    container = operation_details['result'][0].lstrip('/').rstrip('/')
+    container = f"{container}/{opc_username}"
+    print(f"container: {container}")
+    operation = getattr(instances_resource, operation_id)(container=container)
+    url = operation.future.request.url
+    print(f"REST url for {operation_id}: {url}")
+    operation_result, operation_response = operation.result()
+except HTTPBadRequest:
+    print("Request failed for {operation_id}! ")
+    print(f"URL: {operation.future.request.url}")
+    raise
+operation_details = json.loads(operation_result)
+print("\n{} operation_details:\nHTTP method: {}\nAPI url: {}:\n {}\n".format(operation_id, operation.operation.http_method, url, pformat(operation_details)))
+print(f"Operation {operation_id} finished.")
+####
+#### Specify /Compute-identityDomain/user/ to retrieve the names of objects that you can access.
+# Operation discoverInstance starting.
+# container: Compute-587626604/eric.harris@oracle.com
+# REST url for discoverInstance: https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604/eric.harris@oracle.com
+#
+# discoverInstance operation_details:
+# HTTP method: get
+# API url: https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604/eric.harris@oracle.com:
+#  {
+#     'result': [
+#         '/Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1/',
+#         '/Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-PSFTHR92/',
+#         '/Compute-587626604/eric.harris@oracle.com/dbaas/',
+#         '/Compute-587626604/eric.harris@oracle.com/paas/'
+#     ]
+# }
+####
+#### Specify /Compute-identityDomain/ to retrieve the names of containers that contain objects that you can access.
+# Operation discoverInstance starting.
+# container: Compute-587626604
+# REST url for discoverInstance: https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604
+#
+# discoverInstance operation_details:
+# API url: https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604:
+#  {
+#     'result': [
+#         '/Compute-587626604/dhiru.vallabhbhai@oracle.com/',
+#         '/Compute-587626604/eric.harris@oracle.com/',
+#         '/Compute-587626604/mayurnath.gokare@oracle.com/',
+#         '/Compute-587626604/ramesh.dadhania@oracle.com/',
+#         '/Compute-587626604/seetharaman.nandyal@oracle.com/',
+#         '/Compute-587626604/siva.subramani@oracle.com/'
+#     ]
+# }
+
+
+# "/instance/{container}/": {
+#     "get": {
+#         "tags": ["Instances"],
+#         "summary": "Retrieve Details of all Instances in a Container",
+#         "description": "Retrieves details of the instances that are in the specified container and match the specified query criteria. If you don't specify any query criteria, then details of all the instances in the container are displayed. To filter the search results, you can pass one or more of the following query parameters, by appending them to the URI in the following syntax:<p><code>?parameter1=value1&ampparameter2=value2&ampparameterN=valueN</code><p><b>Required Role: </b>To complete this task, you must have the <code>Compute_Monitor</code> or <code>Compute_Operations</code> role. If this role isn't assigned to you or you're not sure, then ask your system administrator to ensure that the role is assigned to you in Oracle Cloud My Services. See <a target=\"_blank\" href=\"http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6\">Modifying User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.",
+#         "operationId": "listInstance",
+#         "responses": {
+#             "200": {
+#                 "headers": {
+#                     "set-cookie": {
+#                         "type": "string",
+#                         "description": "The cookie value is returned if the session is extended"
+#                     }
+#                 },
+#                 "description": "OK. See <a class=\"xref\" href=\"Status%20Codes.html\">Status Codes</a> for information about other possible HTTP status codes.",
+#                 "schema": {
+#                     "$ref": "#/definitions/Instance-list-response"
+#                 }
+#             }
+#         },
+#         "consumes": ["application/oracle-compute-v3+json"],
+#         "produces": ["application/oracle-compute-v3+json"],
+#         "parameters": [{
+#             "name": "container",
+#             "in": "path",
+#             "description": "<code>/Compute-<em>identity_domain</em>/<em>user</em></code> or <p><code>/Compute-<em>identity_domain</em></code>",
+#             "required": true,
+#             "type": "string"
+#         }, {
+#             "name": "availability_domain",
+#             "in": "query",
+#             "description": "The availability domain the instance is in",
+#             "required": false,
+#             "type": "string"
+#         }, {
+#             "name": "tags",
+#             "in": "query",
+#             "description": "Strings used to tag the instance. When you specify tags, only instances tagged with the specified value are displayed.",
+#             "required": false,
+#             "type": "array",
+#             "items": {
+#                 "type": "string"
+#             }
+#         }, {
+#             "name": "Cookie",
+#             "in": "header",
+#             "type": "string",
+#             "description": "The Cookie: header must be included with every request to the service. It must be set to the value of the set-cookie header in the response received to the POST /authenticate/ call."
+#         }]
+#     }
+# },
+#
+# "Instance-list-response": {
+#     "properties": {
+#         "result": {
+#             "items": {
+#                 "$ref": "#/definitions/Instance-response"
+#             },
+#             "type": "array"
+#         }
+#     }
+# },
+#
+# "Instance-response": {
+#     "properties": {
+#         "account": {
+#             "type": "string",
+#             "description": "Shows the default account for your identity domain."
+#         },
+#         "attributes": {
+#             "additionalProperties": {
+#                 "type": "object"
+#             },
+#             "type": "object",
+#             "description": "A dictionary of attributes to be made available to the instance. A value with the key \"userdata\" will be made available in an EC2-compatible manner."
+#         },
+#         "availability_domain": {
+#             "type": "string",
+#             "description": "The availability domain the instance is in"
+#         },
+#         "boot_order": {
+#             "items": {
+#                 "type": "integer"
+#             },
+#             "type": "array",
+#             "description": "Boot order list."
+#         },
+#         "desired_state": {
+#             "type": "string",
+#             "description": "Desired state for the instance. The value can be <code>shutdown</code> or <code>running</code> to shutdown an instance or to restart a previously shutdown instance respectively."
+#         },
+#         "disk_attach": {
+#             "type": "string",
+#             "description": "A label assigned by the user to identify disks."
+#         },
+#         "domain": {
+#             "type": "string",
+#             "description": "The default domain to use for the hostname and for DNS lookups."
+#         },
+#         "entry": {
+#             "type": "integer",
+#             "description": "Optional imagelistentry number (default will be used if not specified)."
+#         },
+#         "error_reason": {
+#             "type": "string",
+#             "description": "The reason for the instance going to error state, if available."
+#         },
+#         "fingerprint": {
+#             "type": "string",
+#             "description": "SSH server fingerprint presented by the instance."
+#         },
+#         "hostname": {
+#             "type": "string",
+#             "description": "The hostname for this instance."
+#         },
+#         "hypervisor": {
+#             "additionalProperties": {
+#                 "type": "object"
+#             },
+#             "type": "object",
+#             "description": "A dictionary of hypervisor-specific attributes."
+#         },
+#         "image_format": {
+#             "type": "string",
+#             "description": "The format of the image."
+#         },
+#         "imagelist": {
+#             "type": "string",
+#             "description": "Name of imagelist to be launched."
+#         },
+#         "ip": {
+#             "type": "string",
+#             "description": "IP address of the instance."
+#         },
+#         "label": {
+#             "type": "string",
+#             "description": "A label assigned by the user, specifically for defining inter-instance relationships."
+#         },
+#         "name": {
+#             "type": "string",
+#             "description": "Multipart name of the instance."
+#         },
+#         "networking": {
+#             "additionalProperties": {
+#                 "type": "object"
+#             },
+#             "type": "object",
+#             "description": "Mapping of <device name> to network specifiers for virtual NICs to be attached to this instance."
+#         },
+#         "placement_requirements": {
+#             "items": {
+#                 "type": "string"
+#             },
+#             "type": "array",
+#             "description": "A list of strings specifying arbitrary tags on nodes to be matched on placement."
+#         },
+#         "platform": {
+#             "type": "string",
+#             "description": "The OS platform for the instance."
+#         },
+#         "priority": {
+#             "type": "string",
+#             "description": "The priority at which this instance will be run."
+#         },
+#         "quota": {
+#             "type": "string",
+#             "description": "Not used"
+#         },
+#         "relationships": {
+#             "items": {
+#                 "additionalProperties": {
+#                     "type": "object"
+#                 },
+#                 "type": "object"
+#             },
+#             "type": "array",
+#             "description": "A list of relationship specifications to be satisfied on this instance's placement"
+#         },
+#         "resolvers": {
+#             "items": {
+#                 "type": "string"
+#             },
+#             "type": "array",
+#             "description": "Resolvers to use instead of the default resolvers."
+#         },
+#         "reverse_dns": {
+#             "type": "boolean",
+#             "description": "Add PTR records for the hostname."
+#         },
+#         "shape": {
+#             "type": "string",
+#             "description": "A shape is a resource profile that specifies the number of CPU threads and the amount of memory (in MB) to be allocated to an instance."
+#         },
+#         "sshkeys": {
+#             "items": {
+#                 "type": "string"
+#             },
+#             "type": "array",
+#             "description": "SSH keys that will be exposed to the instance."
+#         },
+#         "start_time": {
+#             "type": "string",
+#             "description": "Start time of the instance."
+#         },
+#         "state": {
+#             "type": "string",
+#             "description": "State of the instance."
+#         },
+#         "storage_attachments": {
+#             "items": {
+#                 "type": "string"
+#             },
+#             "type": "array",
+#             "description": "List of dictionaries containing storage attachment Information."
+#         },
+#         "tags": {
+#             "items": {
+#                 "type": "string"
+#             },
+#             "type": "array",
+#             "description": "Comma-separated list of strings used to tag the instance."
+#         },
+#         "uri": {
+#             "type": "string",
+#             "description": "Uniform Resource Identifier"
+#         },
+#         "vcable_id": {
+#             "type": "string",
+#             "description": "vCable for this instance."
+#         },
+#         "vnc": {
+#             "type": "string",
+#             "description": "IP address and port of the VNC console for the instance."
+#         }
+#     }
+# },
+
+
+
+
+operation_id = "listInstance"
+print(f"Operation {operation_id} starting.")
+try:
+    # container = operation_details['result'][0].lstrip('/').rstrip('/')
+    # container = 'Compute-587626604/eric.harris@oracle.com'
+    container = 'Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1'
+    print(f"container: {container}")
+    operation = getattr(instances_resource, operation_id)(container=container)
+    url = operation.future.request.url
+    print(f"REST url for {operation_id}: {url}")
+    operation_result, operation_response = operation.result()
+except HTTPBadRequest:
+    print("Request failed for {operation_id}! ")
+    print(f"URL: {operation.future.request.url}")
+    raise
+operation_details = json.loads(operation_result)
+print("\n{} operation_details:\nHTTP method: {}\nAPI url: {}:\n {}\n".format(operation_id, operation.operation.http_method, url, pformat(operation_details)))
+print(f"Operation {operation_id} finished.")
+# Operation listInstance starting.
+# container: Compute-587626604/eric.harris@oracle.com
+# REST url for listInstance: https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604/eric.harris@oracle.com/
+#
+# listInstance operation_details:
+# API url: https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604/eric.harris@oracle.com/:
+#  {
+#     'result': [
+#         '/Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1/',
+#         '/Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-PSFTHR92/',
+#         '/Compute-587626604/eric.harris@oracle.com/dbaas/',
+#         '/Compute-587626604/eric.harris@oracle.com/paas/'
+#     ]
+# }
+#
+# Operation listInstance finished.
 
 
 
 
 
+# "/instance/{name}": {
+#     "put": {
+#         "tags": ["Instances"],
+#  ...
+#     "get": {
+#         "tags": ["Instances"],
+#         "summary": "Retrieve Details of an Instance",
+#         "description": "Retrieves details of the specified instance.<p><b>Required Role: </b>To complete this task, you must have the <code>Compute_Monitor</code> or <code>Compute_Operations</code> role. If this role isn't assigned to you or you're not sure, then ask your system administrator to ensure that the role is assigned to you in Oracle Cloud My Services. See <a target=\"_blank\" href=\"http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6\">Modifying User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.",
+#         "operationId": "getInstance",
+#         "responses": {
+#             "200": {
+#                 "headers": {
+#                     "set-cookie": {
+#                         "type": "string",
+#                         "description": "The cookie value is returned if the session is extended"
+#                     }
+#                 },
+#                 "description": "OK. See <a class=\"xref\" href=\"Status%20Codes.html\">Status Codes</a> for information about other possible HTTP status codes.",
+#                 "schema": {
+#                     "$ref": "#/definitions/Instance-response"
+#                 }
+#             }
+#         },
+#         "consumes": ["application/oracle-compute-v3+json"],
+#         "produces": ["application/oracle-compute-v3+json"],
+#         "parameters": [{
+#             "name": "name",
+#             "in": "path",
+#             "description": "<p>Multipart name of the object.",
+#             "required": true,
+#             "type": "string"
+#         }, {
+#             "name": "Cookie",
+#             "in": "header",
+#             "type": "string",
+#             "description": "The Cookie: header must be included with every request to the service. It must be set to the value of the set-cookie header in the response received to the POST /authenticate/ call."
+#         }]
+#     }
+# }
+# },
+
+
+operation_id = "getInstance"
+print(f"Operation {operation_id} starting.")
+try:
+    # name = operation_details['result'][0].lstrip('/').rstrip('/')
+
+    # name = 'Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1/c17bb7ea-724b-4e51-ab72-1bd8714f07b7'
+    # 'result': [
+    # ]
+
+    # name = 'Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1'
+    # 'result': [
+    #     '/Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1/'
+    #     'c17bb7ea-724b-4e51-ab72-1bd8714f07b7'
+    # ]
+
+    # name = 'Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1/'
+    # 'result': [
+    #     '/Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1/'
+    #     'c17bb7ea-724b-4e51-ab72-1bd8714f07b7'
+    # ]
+
+    # name = 'Compute-gc30003/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1'
+    # {'result': []}
+
+    print(f"name: {name}")
+    operation = getattr(instances_resource, operation_id)(name=name)
+    url = operation.future.request.url
+    print(f"REST url for {operation_id}: {url}")
+    operation_result, operation_response = operation.result()
+except HTTPBadRequest:
+    print("Request failed for {operation_id}! ")
+    print(f"URL: {operation.future.request.url}")
+    raise
+operation_details = json.loads(operation_result)
+print("\n{} operation_details:\nHTTP method: {}\nAPI url: {}:\n {}\n".format(operation_id, operation.operation.http_method, url, pformat(operation_details)))
+print(f"Operation {operation_id} finished.")
+# Operation getInstance starting.
+# name: Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1
+# REST url for getInstance: https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1
+#
+# getInstance operation_details:
+# API url: https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1:
+#  {
+#     'result': [
+#         '/Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1/'
+#         'c17bb7ea-724b-4e51-ab72-1bd8714f07b7'
+#     ]
+# }
+#
+# Operation getInstance finished.
+
+
+######
+######
+######
+######
+######
+######
 
 
 
-instance_names = instances_db.all()
-instance_name = instance_names[0]['result'].pop(0)
-get_instance = instances.getInstance(container=instance_name)
-get_instance_result, get_instance_response = get_instance.result()
-instance_details = json.loads(get_instance_result)
-
-print(f"""discover_instance: {discover_instance}, 
-discover_instance.operation: {discover_instance.operation}, 
-discover_instance.operation.params: {discover_instance.operation.params}, 
-discover_instance.operation.operation_id: {discover_instance.operation.operation_id}""")
-
-# In[ ]:
-
-
-
-# In[ ]:
-
-
-
-
+#
+#
+# print(f"swagger_client: {swagger_client}, swagger_client.Instances.resource.operations: {swagger_client.Instances.resource.operations}")
+#
+# op = swagger_client.Instances.resource.operations['discoverInstance']
+# op_api_url = op.swagger_spec.api_url
+# print(f"discoverInstance Operation: {op}, discoverInstance.api_url: {op_api_url}")
+#
+# # In[22]:
+#
+#
+# instances = swagger_client.Instances
+#
+# # In[23]:
+#
+#
+# print(f"instances: {instances}, idm_service_instance_username: {idm_service_instance_username}")
+#
+# # In[25]:
+#
+#
+#
+# # In[36]:
+#
+#
+#
+# # In[37]:
+#
+# ##  Fails, URL is /instance/%2FCompute-587626604%2Feric.harris%40oracle.com%2F -> /instance//Compute-587626604/eric.harris%40oracle.com/
+# # discover_instance_result = discover_instance.result()
+#
+# ## getting https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604%2Feric.harris%40oracle.com%2F
+# ## but want https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604/eric.harris@oracle.com/
+# # container = f"{idm_service_instance_username[1:]}/"
+# container = r"Compute-587626604/eric.harris@oracle.com/"
+# print(f"container is: {container}")
+#
+# discover_instance = instances.discoverInstance(container=container)
+#
+# print(f"""discover_instance: {discover_instance},
+# discover_instance.operation: {discover_instance.operation},
+# discover_instance.operation.params: {discover_instance.operation.params},
+# discover_instance.operation.operation_id: {discover_instance.operation.operation_id}""")
+#
+# # In[ ]:
+#
+#
+#
+# # In[ ]:
+#
+#
+# discover_instance_result, discover_instance_response = discover_instance.result()
+# instances_discovered = json.loads(discover_instance_result)
+#
+# # In[ ]:
+#
+#
+# pprint(f"discover_instance_result: {discover_instance_result}, discover_instance_response: {discover_instance_response}")
+#
+#
+# print("instances_discovered:\n{}".format(pformat(instances_discovered)))
+#
+# #####  Store result in tinydb
+# instances_db = TinyDB('instances_db.json')
+# pprint(f"instances_db: {instances_db}")
+# instances_db.insert(instances_discovered)
+# pprint(f"instances_db contents: {instances_db.all()[0]}")
+#
+#
+# swagger_client = SwaggerClient.from_spec(spec_dict=spec_dict,
+#                                          origin_url=iaas_rest_endpoint,
+#                                          http_client=requests_client,
+#                                          # config={'also_return_response': True,
+#                                          #         'validate_responses': True,
+#                                          #         'validate_requests': True,
+#                                          #         'validate_swagger_spec': True})
+#                                          config={'also_return_response': True,
+#                                                  'validate_responses': False,
+#                                                  'validate_requests': False,
+#                                                  'validate_swagger_spec': False})
+# op = swagger_client.Instances.resource.operations['listInstance']
+# op_api_url = op.swagger_spec.api_url
+# instances = swagger_client.Instances
+#
+# try:
+#     list_instances = instances.listInstance(container=container.rstrip('/'))
+#     print(f"Service Operation URL: {list_instances.future.request.url}")
+#     list_instances_result, list_instances_response = list_instances.result()
+# except MatchingResponseNotFound:
+#     print("Something failed")
+# list_instances_details = json.loads(list_instances_result)
+# print("instances_details:\n {}".format(pformat(list_instances_details)))
+#
+#
+#
+#
+#
+# swagger_client = SwaggerClient.from_spec(spec_dict=spec_dict,
+#                                          origin_url=iaas_rest_endpoint,
+#                                          http_client=requests_client,
+#                                          config={'also_return_response': True,
+#                                                  'validate_responses': True,
+#                                                  'validate_requests': True,
+#                                                  'validate_swagger_spec': True})
+#                                          # config={'also_return_response': True,
+#                                          #         'validate_responses': False,
+#                                          #         'validate_requests': False,
+#                                          #         'validate_swagger_spec': False})
+#
+#
+#
+# instance_names = instances_db.all()
+# instance_name = instance_names[0]['result'].pop(0)
+# # instance_name = r'Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1/c17bb7ea-724b-4e51-ab72-1bd8714f07b7'
+# try:
+#     get_instance = instances.getInstance(name=instance_name)
+#     url = get_instance.future.request.url
+#     print(f"REST url: {url}")
+#     get_instance_result, get_instance_response = get_instance.result()
+# except HTTPBadRequest:
+#     print("Request failed! ")
+#     print(f"URL: {get_instance.future.request.url}")
+#     raise
+# instance_details = json.loads(get_instance_result)
+#
+# print(f"""discover_instance: {discover_instance},
+# discover_instance.operation: {discover_instance.operation},
+# discover_instance.operation.params: {discover_instance.operation.params},
+# discover_instance.operation.operation_id: {discover_instance.operation.operation_id}""")
+#
+# # In[ ]:
+#
+#
+#
+# # In[ ]:
+#
+#
+#
+#
 print('done.')
 
