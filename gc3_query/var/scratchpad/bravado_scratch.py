@@ -3,6 +3,9 @@
 import os
 import json
 from pathlib import Path
+from typing import Dict
+
+import bravado
 from bravado.client import SwaggerClient
 # from bravado.requests_client import RequestsClient
 from gc3_query.lib.bravado.requests_client import OPCRequestsClient
@@ -10,6 +13,7 @@ from bravado.swagger_model import load_file
 from secrets import opc_username, opc_password
 from bravado_core.exception import MatchingResponseNotFound
 from bravado.exception import HTTPBadRequest
+from bravado.http_future import HttpFuture
 
 from tinydb import TinyDB
 
@@ -19,9 +23,6 @@ from prettyprinter import pprint, pformat
 # Validate json models with swagger and bravado
 from bravado_core.spec import Spec
 
-# In[4]:
-
-
 idm_domain_name = 'gc30003'
 idm_service_instance_id = '587626604'
 iaas_rest_endpoint = r'https://compute.uscom-central-1.oraclecloud.com'
@@ -29,8 +30,6 @@ iaas_auth_endpoint = f'{iaas_rest_endpoint}/authenticate/'
 
 print(f'iaas_rest_endpoint: {iaas_rest_endpoint}')
 print(f'iaas_auth_endpoint: {iaas_auth_endpoint}\n')
-
-# In[5]:
 
 
 ### Username/pass setup
@@ -49,102 +48,86 @@ print(f'username: {username}')
 json_data = {"user": username, "password": opc_password}
 print(f'\njson_data: {json_data}')
 
-files = None
-params = None
-
-
-headers = dict([('Content-Type', 'application/oracle-compute-v3+json'),
-                ('Accept', 'application/oracle-compute-v3+directory+json'),
-                ])
-
-print(f'headers: {headers}')
-
-# In[6]:
-
-
-requests_client = OPCRequestsClient()
-requests_client.session.headers.update(headers)
-
-print(f"requests_client.session.headers before update: {requests_client.session.headers}\n")
-requests_client.session.headers.update(headers)
-print(f"requests_client.session.headers after update: {requests_client.session.headers}\n")
-
-
-
-
-response = requests_client.session.post(url=iaas_auth_endpoint, json=json_data)
-
-print(f'Response OK: {response.ok}, Status Code: {response.status_code}, URL: {response.url}')
-if response.ok and 'Set-Cookie' in response.headers:
-    print(f"Auth request succeess.\n")
-    ### The auth cookie is already placed in the session ... nothing else needs to be done.
-    print(f"\nSession Cookies: {requests_client.session.cookies}")
-    print(f"\nResponse Headers['Set-Cookie']: {response.headers['Set-Cookie']}")
-
-else:
-    print(f'Something failed! Response OK: {response.ok}, Status Code: {response.status_code}')
-
-# In[10]:
-
-
-print(f"requests_client.session.headers before update: {requests_client.session.headers}\n")
-cookie_header = {'Cookie': response.headers['Set-Cookie']}
-print(f"cookie_header: {cookie_header}\n")
-requests_client.session.headers.update(cookie_header)
-print(f"requests_client.session.headers after update: {requests_client.session.headers}\n")
-
 #
-
-# In[11]:
-
-
-cwd = os.getcwd()
-spec_file_path = Path().joinpath('open_api_definitions/iaas_instances.json').resolve()
-print(f'spec_file_path exists: {spec_file_path.exists()}, spec_file_path: {spec_file_path}')
-
-#### http://bravado.readthedocs.io/en/latest/advanced.html#loading-swagger-json-by-file-path
-## needed for: client = SwaggerClient.from_url('file:///some/path/swagger.json')
-spec_file_uri = f"file:///{spec_file_path}"
-print(f'spec_file_uri: {spec_file_path}')
-
-
-# In[14]:
-
-
-spec_dict = load_file(spec_file_path)
-spec_dict['schemes']
-print(f"Original spec: spec_dict['schemes']: {spec_dict['schemes']}")
-spec_dict['schemes'] = ['https']
-print(f"Spec after scheme update: spec_dict['schemes']: {spec_dict['schemes']}")
-
-# In[17]:
-
-
-swagger_spec = Spec.from_dict(spec_dict=spec_dict,
-                              origin_url=iaas_rest_endpoint,
-                              http_client=requests_client,
-
-                              )
-
-# In[18]:
-
-
-
-print(f"swagger_spec.api_url: {swagger_spec.api_url}")
-
-
-
-swagger_client = SwaggerClient.from_spec(spec_dict=spec_dict,
-                                         origin_url=iaas_rest_endpoint,
-                                         http_client=requests_client,
-                                         # config={'also_return_response': True,
-                                         #         'validate_responses': True,
-                                         #         'validate_requests': True,
-                                         #         'validate_swagger_spec': True})
-                                         config={'also_return_response': True,
-                                                 'validate_responses': False,
-                                                 'validate_requests': False,
-                                                 'validate_swagger_spec': False})
+# headers: Dict[str, str] = dict([('Content-Type', 'application/oracle-compute-v3+json'),
+#                                 ('Accept', 'application/oracle-compute-v3+directory+json'), ])
+# print(f'headers: {headers}')
+#
+# # In[6]:
+#
+#
+# requests_client = OPCRequestsClient()
+# requests_client.session.headers.update(headers)
+#
+# print(f"requests_client.session.headers before update: {requests_client.session.headers}\n")
+# requests_client.session.headers.update(headers)
+# print(f"requests_client.session.headers after update: {requests_client.session.headers}\n")
+#
+#
+#
+#
+# response = requests_client.session.post(url=iaas_auth_endpoint, json=json_data)
+#
+# print(f'Response OK: {response.ok}, Status Code: {response.status_code}, URL: {response.url}')
+# if response.ok and 'Set-Cookie' in response.headers:
+#     print(f"Auth request succeess.\n")
+#     ### The auth cookie is already placed in the session ... nothing else needs to be done.
+#     print(f"\nSession Cookies: {requests_client.session.cookies}")
+#     print(f"\nResponse Headers['Set-Cookie']: {response.headers['Set-Cookie']}")
+#
+# else:
+#     print(f'Something failed! Response OK: {response.ok}, Status Code: {response.status_code}')
+#
+# # In[10]:
+#
+#
+# print(f"requests_client.session.headers before update: {requests_client.session.headers}\n")
+# cookie_header = {'Cookie': response.headers['Set-Cookie']}
+# print(f"cookie_header: {cookie_header}\n")
+# requests_client.session.headers.update(cookie_header)
+# print(f"requests_client.session.headers after update: {requests_client.session.headers}\n")
+#
+# #
+#
+# # In[11]:
+#
+#
+# cwd = os.getcwd()
+# spec_file_path = Path().joinpath('open_api_definitions/iaas_instances.json').resolve()
+# print(f'spec_file_path exists: {spec_file_path.exists()}, spec_file_path: {spec_file_path}')
+#
+# #### http://bravado.readthedocs.io/en/latest/advanced.html#loading-swagger-json-by-file-path
+# ## needed for: client = SwaggerClient.from_url('file:///some/path/swagger.json')
+# spec_file_uri = f"file:///{spec_file_path}"
+# print(f'spec_file_uri: {spec_file_path}')
+#
+#
+# # In[14]:
+#
+#
+# spec_dict = load_file(spec_file_path)
+# spec_dict['schemes']
+# print(f"Original spec: spec_dict['schemes']: {spec_dict['schemes']}")
+# spec_dict['schemes'] = ['https']
+# print(f"Spec after scheme update: spec_dict['schemes']: {spec_dict['schemes']}")
+#
+# # In[17]:
+#
+#
+# swagger_spec: Spec = Spec.from_dict(spec_dict=spec_dict,
+#                               origin_url=iaas_rest_endpoint,
+#                               http_client=requests_client,
+#
+#                               )
+#
+# # In[18]:
+#
+#
+#
+# print(f"swagger_spec.api_url: {swagger_spec.api_url}")
+#
+#
+#
 
 ######
 ######
@@ -199,12 +182,12 @@ swagger_client = SwaggerClient.from_spec(spec_dict=spec_dict,
 # instances_resource = swagger_client.Instances
 # try:
 #     operation = instances_resource.discoverRootInstance()
-#     url = operation.future.request.url
+#     url = operation_future.future.request.url
 #     print(f"REST url: {url}")
 #     operation_result, operation_response = operation.result()
 # except HTTPBadRequest:
 #     print("Request failed! ")
-#     print(f"URL: {operation.future.request.url}")
+#     print(f"URL: {operation_future.future.request.url}")
 #     raise
 # operation_details = json.loads(operation_result)
 # print("discoverRootInstance operation_details for {}:\n {}".format(url, pformat(operation_details)))
@@ -212,22 +195,80 @@ swagger_client = SwaggerClient.from_spec(spec_dict=spec_dict,
 # # {'result': ['/Compute-587626604/']}
 # print("discoverRootInstance finished.")
 
+
+##  Authenticate and get header token
+headers = dict([('Content-Type', 'application/oracle-compute-v3+json'),
+                ('Accept', 'application/oracle-compute-v3+directory+json'),
+                ])
+requests_client = OPCRequestsClient()
+requests_client.session.headers.update(headers)
+
+print(f"requests_client.session.headers before update: {requests_client.session.headers}\n")
+requests_client.session.headers.update(headers)
+print(f"requests_client.session.headers after update: {requests_client.session.headers}\n")
+
+response = requests_client.session.post(url=iaas_auth_endpoint, json=json_data)
+print(f'Response OK: {response.ok}, Status Code: {response.status_code}, URL: {response.url}')
+if response.ok and 'Set-Cookie' in response.headers:
+    print(f"Auth request succeess.\n")
+    ### The auth cookie is already placed in the session ... nothing else needs to be done.
+    print(f"\nSession Cookies: {requests_client.session.cookies}")
+    print(f"\nResponse Headers['Set-Cookie']: {response.headers['Set-Cookie']}")
+else:
+    print(f'Something failed! Response OK: {response.ok}, Status Code: {response.status_code}')
+
+print(f"requests_client.session.headers before update: {requests_client.session.headers}\n")
+cookie_header = {'Cookie': response.headers['Set-Cookie']}
+print(f"cookie_header: {cookie_header}\n")
+requests_client.session.headers.update(cookie_header)
+print(f"requests_client.session.headers after update: {requests_client.session.headers}\n")
+
+
+
+
+## Update the swagger spec to use https
+spec_file_path = Path().joinpath('open_api_definitions/iaas_instances.json').resolve()
+spec_dict = load_file(spec_file_path)
+spec_dict['schemes'] = ['https']
+
+headers = dict([('Content-Type', 'application/oracle-compute-v3+json'),
+                ('Accept', 'application/oracle-compute-v3+json'),
+                ('Accept', 'application/oracle-compute-v3+directory+json'),
+                ])
+requests_client = OPCRequestsClient()
+requests_client.session.headers.update(headers)
+requests_client.session.headers.update(cookie_header)
+swagger_client = SwaggerClient.from_spec(spec_dict=spec_dict,
+                                         origin_url=iaas_rest_endpoint,
+                                         http_client=requests_client,
+                                         # config={'also_return_response': True,
+                                         #         'validate_responses': True,
+                                         #         'validate_requests': True,
+                                         #         'validate_swagger_spec': True})
+                                         # config={'also_return_response': True,
+                                         #         'validate_responses': False,
+                                         #         'validate_requests': True,
+                                         #         'validate_swagger_spec': True})
+                                         config={'also_return_response': True,
+                                                 'validate_responses': False,
+                                                 'validate_requests': False,
+                                                 'validate_swagger_spec': False})
 instances_resource = swagger_client.Instances
 
 operation_id = "discoverRootInstance"
 print(f"Operation {operation_id} starting.")
 try:
-    operation = getattr(instances_resource, operation_id)()
-    url = operation.future.request.url
+    operation_future = getattr(instances_resource, operation_id)()
+    url = operation_future.future.request.url
     print(f"REST url for {operation_id}: {url}")
-    operation_result, operation_response = operation.result()
+    operation_result, operation_response = operation_future.result()
 except HTTPBadRequest:
     print("Request failed for {operation_id}! ")
-    print(f"URL: {operation.future.request.url}")
+    print(f"URL: {operation_future.future.request.url}")
     raise
 operation_details = json.loads(operation_result)
-print("\n{} operation_details:\nHTTP method: {}\nAPI url: {}:\n {}\n".format(operation_id, operation.operation.http_method, url, pformat(operation_details)))
-print(f"Operation {operation_id} finished.")
+print("\n{} operation_details:\nHTTP method: {}\nAPI url: {}:\n {}\n".format(operation_id, operation_future.operation.http_method, url, pformat(operation_details)))
+print(f"Operation {operation_id} finished.\n")
 # discoverRootInstance operation_details:
 # API url: https://compute.uscom-central-1.oraclecloud.com/instance/:
 #  {'result': ['/Compute-587626604/']}
@@ -274,20 +315,24 @@ print(f"Operation {operation_id} finished.")
 operation_id = "discoverInstance"
 print(f"Operation {operation_id} starting.")
 try:
+    # API url: https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604
     container = operation_details['result'][0].lstrip('/').rstrip('/')
-    container = f"{container}/{opc_username}"
+    # # API url: https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604/eric.harris@oracle.com
+    # container = f"{container}/{opc_username}"
+    # # API url: https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604/eric.harris@oracle.com/
+    container = f"{container}/{opc_username}/"
     print(f"container: {container}")
-    operation = getattr(instances_resource, operation_id)(container=container)
-    url = operation.future.request.url
+    operation_future = getattr(instances_resource, operation_id)(container=container)
+    url = operation_future.future.request.url
     print(f"REST url for {operation_id}: {url}")
-    operation_result, operation_response = operation.result()
+    operation_result, operation_response = operation_future.result()
 except HTTPBadRequest:
     print("Request failed for {operation_id}! ")
-    print(f"URL: {operation.future.request.url}")
+    print(f"URL: {operation_future.future.request.url}")
     raise
 operation_details = json.loads(operation_result)
-print("\n{} operation_details:\nHTTP method: {}\nAPI url: {}:\n {}\n".format(operation_id, operation.operation.http_method, url, pformat(operation_details)))
-print(f"Operation {operation_id} finished.")
+print("\n{} operation_details:\nHTTP method: {}\nAPI url: {}:\n {}\n".format(operation_id, operation_future.operation.http_method, url, pformat(operation_details)))
+print(f"Operation {operation_id} finished.\n")
 ####
 #### Specify /Compute-identityDomain/user/ to retrieve the names of objects that you can access.
 # Operation discoverInstance starting.
@@ -572,16 +617,16 @@ try:
     # container = 'Compute-587626604/eric.harris@oracle.com'
     container = 'Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1'
     print(f"container: {container}")
-    operation = getattr(instances_resource, operation_id)(container=container)
-    url = operation.future.request.url
+    operation_future = getattr(instances_resource, operation_id)(container=container)
+    url = operation_future.future.request.url
     print(f"REST url for {operation_id}: {url}")
-    operation_result, operation_response = operation.result()
+    operation_result, operation_response = operation_future.result()
 except HTTPBadRequest:
     print("Request failed for {operation_id}! ")
-    print(f"URL: {operation.future.request.url}")
+    print(f"URL: {operation_future.future.request.url}")
     raise
 operation_details = json.loads(operation_result)
-print("\n{} operation_details:\nHTTP method: {}\nAPI url: {}:\n {}\n".format(operation_id, operation.operation.http_method, url, pformat(operation_details)))
+print("\n{} operation_details:\nHTTP method: {}\nAPI url: {}:\n {}\n".format(operation_id, operation_future.operation.http_method, url, pformat(operation_details)))
 print(f"Operation {operation_id} finished.")
 # Operation listInstance starting.
 # container: Compute-587626604/eric.harris@oracle.com
@@ -599,10 +644,6 @@ print(f"Operation {operation_id} finished.")
 # }
 #
 # Operation listInstance finished.
-
-
-
-
 
 # "/instance/{name}": {
 #     "put": {
@@ -645,9 +686,57 @@ print(f"Operation {operation_id} finished.")
 # }
 # },
 
+# headers = dict([('Content-Type', 'application/oracle-compute-v3+json'),
+#                 ('Accept', 'application/oracle-compute-v3+directory+json, application/oracle-compute-v3+json, json')])
+# API url: https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1:
+#  {
+#     'result': [
+#         '/Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1/'
+#         'c17bb7ea-724b-4e51-ab72-1bd8714f07b7'
+#     ]
+# }
+
+# headers = dict([('Content-Type', 'application/oracle-compute-v3+json'),
+#                 ('Accept', 'application/oracle-compute-v3+json, application/oracle-compute-v3+directory+json, json')])
+# REST url for getInstance: https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1
+# Accept Header=[application/oracle-compute-v3+json, application/oracle-compute-v3+directory+json, json], Content-Type Header=[application/oracle-compute-v3+json]
+# getInstance operation_details:
+# HTTP method: get
+# API url: https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1:
+#  {
+#     'result': [
+#         '/Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1/'
+#         'c17bb7ea-724b-4e51-ab72-1bd8714f07b7'
+#     ]
+# }
+
+
+headers = dict([('Content-Type', 'application/oracle-compute-v3+json'),
+                ('Accept', 'application/oracle-compute-v3+json, json, text/html')])
+
+
+requests_client = OPCRequestsClient()
+requests_client.session.headers.update(headers)
+requests_client.session.headers.update(cookie_header)
+swagger_client = SwaggerClient.from_spec(spec_dict=spec_dict,
+                                         origin_url=iaas_rest_endpoint,
+                                         http_client=requests_client,
+                                         # config={'also_return_response': True,
+                                         #         'validate_responses': True,
+                                         #         'validate_requests': True,
+                                         #         'validate_swagger_spec': True})
+                                         # config={'also_return_response': True,
+                                         #         'validate_responses': False,
+                                         #         'validate_requests': True,
+                                         #         'validate_swagger_spec': True})
+                                         config={'also_return_response': True,
+                                                 'validate_responses': False,
+                                                 'validate_requests': False,
+                                                 'validate_swagger_spec': False})
+instances_resource = swagger_client.Instances
 
 operation_id = "getInstance"
-print(f"Operation {operation_id} starting.")
+print(f"\nOperation {operation_id} starting.")
 try:
     # name = operation_details['result'][0].lstrip('/').rstrip('/')
 
@@ -670,17 +759,29 @@ try:
     # name = 'Compute-gc30003/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1'
     # {'result': []}
 
+
+    # name = 'Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1'
+    #  This 404'ed because the name is actually
+    #  Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1/c17bb7ea-724b-4e51-ab72-1bd8714f07b7
+    #   instead of
+    #  Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1
+    name = 'Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1/c17bb7ea-724b-4e51-ab72-1bd8714f07b7'
     print(f"name: {name}")
-    operation = getattr(instances_resource, operation_id)(name=name)
-    url = operation.future.request.url
+    operation_future: HttpFuture = getattr(instances_resource, operation_id)(name=name)
+    url = operation_future.future.request.url
     print(f"REST url for {operation_id}: {url}")
-    operation_result, operation_response = operation.result()
-except HTTPBadRequest:
+    print(f"Accept Header=[{operation_future.future.session.headers['Accept']}], Content-Type Header=[{operation_future.future.session.headers['Content-Type']}]")
+    operation_result, operation_response = operation_future.result()
+except bravado.exception.HTTPBadRequest:
     print("Request failed for {operation_id}! ")
-    print(f"URL: {operation.future.request.url}")
+    print(f"URL: {operation_future.future.request.url}")
     raise
+# except bravado.exception.HTTPNotFound:
+#     print("Request failed for {operation_id}! ")
+#     print(f"URL: {operation_future.future.request.url}")
+#     raise
 operation_details = json.loads(operation_result)
-print("\n{} operation_details:\nHTTP method: {}\nAPI url: {}:\n {}\n".format(operation_id, operation.operation.http_method, url, pformat(operation_details)))
+print("\n{} operation_details:\nHTTP method: {}\nAPI url: {}:\n {}\n".format(operation_id, operation_future.operation.http_method, url, pformat(operation_details)))
 print(f"Operation {operation_id} finished.")
 # Operation getInstance starting.
 # name: Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1
@@ -706,145 +807,5 @@ print(f"Operation {operation_id} finished.")
 ######
 
 
-
-#
-#
-# print(f"swagger_client: {swagger_client}, swagger_client.Instances.resource.operations: {swagger_client.Instances.resource.operations}")
-#
-# op = swagger_client.Instances.resource.operations['discoverInstance']
-# op_api_url = op.swagger_spec.api_url
-# print(f"discoverInstance Operation: {op}, discoverInstance.api_url: {op_api_url}")
-#
-# # In[22]:
-#
-#
-# instances = swagger_client.Instances
-#
-# # In[23]:
-#
-#
-# print(f"instances: {instances}, idm_service_instance_username: {idm_service_instance_username}")
-#
-# # In[25]:
-#
-#
-#
-# # In[36]:
-#
-#
-#
-# # In[37]:
-#
-# ##  Fails, URL is /instance/%2FCompute-587626604%2Feric.harris%40oracle.com%2F -> /instance//Compute-587626604/eric.harris%40oracle.com/
-# # discover_instance_result = discover_instance.result()
-#
-# ## getting https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604%2Feric.harris%40oracle.com%2F
-# ## but want https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604/eric.harris@oracle.com/
-# # container = f"{idm_service_instance_username[1:]}/"
-# container = r"Compute-587626604/eric.harris@oracle.com/"
-# print(f"container is: {container}")
-#
-# discover_instance = instances.discoverInstance(container=container)
-#
-# print(f"""discover_instance: {discover_instance},
-# discover_instance.operation: {discover_instance.operation},
-# discover_instance.operation.params: {discover_instance.operation.params},
-# discover_instance.operation.operation_id: {discover_instance.operation.operation_id}""")
-#
-# # In[ ]:
-#
-#
-#
-# # In[ ]:
-#
-#
-# discover_instance_result, discover_instance_response = discover_instance.result()
-# instances_discovered = json.loads(discover_instance_result)
-#
-# # In[ ]:
-#
-#
-# pprint(f"discover_instance_result: {discover_instance_result}, discover_instance_response: {discover_instance_response}")
-#
-#
-# print("instances_discovered:\n{}".format(pformat(instances_discovered)))
-#
-# #####  Store result in tinydb
-# instances_db = TinyDB('instances_db.json')
-# pprint(f"instances_db: {instances_db}")
-# instances_db.insert(instances_discovered)
-# pprint(f"instances_db contents: {instances_db.all()[0]}")
-#
-#
-# swagger_client = SwaggerClient.from_spec(spec_dict=spec_dict,
-#                                          origin_url=iaas_rest_endpoint,
-#                                          http_client=requests_client,
-#                                          # config={'also_return_response': True,
-#                                          #         'validate_responses': True,
-#                                          #         'validate_requests': True,
-#                                          #         'validate_swagger_spec': True})
-#                                          config={'also_return_response': True,
-#                                                  'validate_responses': False,
-#                                                  'validate_requests': False,
-#                                                  'validate_swagger_spec': False})
-# op = swagger_client.Instances.resource.operations['listInstance']
-# op_api_url = op.swagger_spec.api_url
-# instances = swagger_client.Instances
-#
-# try:
-#     list_instances = instances.listInstance(container=container.rstrip('/'))
-#     print(f"Service Operation URL: {list_instances.future.request.url}")
-#     list_instances_result, list_instances_response = list_instances.result()
-# except MatchingResponseNotFound:
-#     print("Something failed")
-# list_instances_details = json.loads(list_instances_result)
-# print("instances_details:\n {}".format(pformat(list_instances_details)))
-#
-#
-#
-#
-#
-# swagger_client = SwaggerClient.from_spec(spec_dict=spec_dict,
-#                                          origin_url=iaas_rest_endpoint,
-#                                          http_client=requests_client,
-#                                          config={'also_return_response': True,
-#                                                  'validate_responses': True,
-#                                                  'validate_requests': True,
-#                                                  'validate_swagger_spec': True})
-#                                          # config={'also_return_response': True,
-#                                          #         'validate_responses': False,
-#                                          #         'validate_requests': False,
-#                                          #         'validate_swagger_spec': False})
-#
-#
-#
-# instance_names = instances_db.all()
-# instance_name = instance_names[0]['result'].pop(0)
-# # instance_name = r'Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1/c17bb7ea-724b-4e51-ab72-1bd8714f07b7'
-# try:
-#     get_instance = instances.getInstance(name=instance_name)
-#     url = get_instance.future.request.url
-#     print(f"REST url: {url}")
-#     get_instance_result, get_instance_response = get_instance.result()
-# except HTTPBadRequest:
-#     print("Request failed! ")
-#     print(f"URL: {get_instance.future.request.url}")
-#     raise
-# instance_details = json.loads(get_instance_result)
-#
-# print(f"""discover_instance: {discover_instance},
-# discover_instance.operation: {discover_instance.operation},
-# discover_instance.operation.params: {discover_instance.operation.params},
-# discover_instance.operation.operation_id: {discover_instance.operation.operation_id}""")
-#
-# # In[ ]:
-#
-#
-#
-# # In[ ]:
-#
-#
-#
-#
 print('done.')
 
