@@ -44,6 +44,8 @@ requirements = [
     'selenium',
     'cookiecutter',
     'beautifulsoup4',
+    'tinydb',
+    'ujson',
     # 'sortedcontainers',
     # 'openpyxl',
     # 'psutil',
