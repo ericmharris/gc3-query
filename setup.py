@@ -46,6 +46,8 @@ requirements = [
     'beautifulsoup4',
     'tinydb',
     'ujson',
+    'pymongo',
+    'mongoengine',
     # 'sortedcontainers',
     # 'openpyxl',
     # 'psutil',

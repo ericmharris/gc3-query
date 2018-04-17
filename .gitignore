@@ -84,3 +84,5 @@ target/
 # pyenv python configuration file
 .python-version
 /gc3_query/var/scratchpad/instances_db.json
+/gc3_query/var/mongodb/data
+/gc3_query/var/mongodb/logs

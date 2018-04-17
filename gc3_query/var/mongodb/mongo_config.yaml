@@ -1,0 +1,13 @@
+net:
+    # MongoDB server listening port
+    port: 27018
+storage:
+    # Data store directory
+    dbPath: "C:\\Users\\emharris\\devel\\gc3-query\\gc3_query\\var\\mongodb\\data"
+    mmapv1:
+        # Reduce data files size and journal files size
+        smallFiles: true
+systemLog:
+    # Write logs to log file
+    destination: file
+    path: "C:\\Users\\emharris\\devel\\gc3-query\\gc3_query\\var\\mongodb\\logs\\mongodb.log"

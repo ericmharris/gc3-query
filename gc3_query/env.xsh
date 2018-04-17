@@ -25,7 +25,14 @@ aliases['dev'] = r'cd $DEVEL_DIR'
 aliases['Gh'] = r'cd $DEVEL_DIR/gc3-query/gc3_query'
 
 
+
+
+
 if 'win' in sys.platform:
+
+    mongodb_bin = Path(r'C:\Program Files\MongoDB\Server\3.6\bin')
+    if mongodb_bin.exists():
+        $PATH.append(mongodb_bin)
 
     # aliases['dev'] = r'cd $DEVEL_DIR'
     # aliases['Gh'] = r'cd $DEVEL_DIR/gc3-query/gc3_query'
