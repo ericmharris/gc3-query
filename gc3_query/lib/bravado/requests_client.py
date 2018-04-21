@@ -24,8 +24,7 @@ _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
 
-# class OPCRequestsClient(HttpClient):
-class OPCRequestsClient(RequestsClient):
+class OCRequestsClient(RequestsClient):
     """Synchronous HTTP client implementation with tweaks for Oracle Cloud.
     """
 

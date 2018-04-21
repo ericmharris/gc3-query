@@ -8,7 +8,7 @@ from typing import Dict
 import bravado
 from bravado.client import SwaggerClient
 # from bravado.requests_client import RequestsClient
-from gc3_query.lib.bravado.requests_client import OPCRequestsClient
+from gc3_query.lib.bravado.requests_client import OCRequestsClient
 from bravado.swagger_model import load_file
 from secrets import opc_username, opc_password
 from bravado_core.exception import MatchingResponseNotFound
@@ -200,7 +200,7 @@ print(f'\njson_data: {json_data}')
 headers = dict([('Content-Type', 'application/oracle-compute-v3+json'),
                 ('Accept', 'application/oracle-compute-v3+directory+json'),
                 ])
-requests_client = OPCRequestsClient()
+requests_client = OCRequestsClient()
 requests_client.session.headers.update(headers)
 
 print(f"requests_client.session.headers before update: {requests_client.session.headers}\n")
@@ -235,7 +235,7 @@ headers = dict([('Content-Type', 'application/oracle-compute-v3+json'),
                 ('Accept', 'application/oracle-compute-v3+json'),
                 ('Accept', 'application/oracle-compute-v3+directory+json'),
                 ])
-requests_client = OPCRequestsClient()
+requests_client = OCRequestsClient()
 requests_client.session.headers.update(headers)
 requests_client.session.headers.update(cookie_header)
 swagger_client = SwaggerClient.from_spec(spec_dict=spec_dict,
@@ -715,7 +715,7 @@ headers = dict([('Content-Type', 'application/oracle-compute-v3+json'),
                 ('Accept', 'application/oracle-compute-v3+json, json, text/html')])
 
 
-requests_client = OPCRequestsClient()
+requests_client = OCRequestsClient()
 requests_client.session.headers.update(headers)
 requests_client.session.headers.update(cookie_header)
 swagger_client = SwaggerClient.from_spec(spec_dict=spec_dict,
