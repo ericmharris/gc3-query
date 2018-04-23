@@ -4,16 +4,17 @@ import os
 import json
 from pathlib import Path
 from typing import Dict
+import keyring
 
 import bravado
 from bravado.client import SwaggerClient
 # from bravado.requests_client import RequestsClient
 from gc3_query.lib.bravado.requests_client import OCRequestsClient
 from bravado.swagger_model import load_file
-from secrets import opc_username, opc_password
 from bravado_core.exception import MatchingResponseNotFound
 from bravado.exception import HTTPBadRequest
 from bravado.http_future import HttpFuture
+
 
 from tinydb import TinyDB
 
@@ -23,6 +24,8 @@ from prettyprinter import pprint, pformat
 # Validate json models with swagger and bravado
 from bravado_core.spec import Spec
 
+opc_username = "eric.harris@oracle.com"
+opc_password = keyring.get_password("OPC", "gc30003")
 idm_domain_name = 'gc30003'
 idm_service_instance_id = '587626604'
 iaas_rest_endpoint = r'https://compute.uscom-central-1.oraclecloud.com'
@@ -31,7 +34,7 @@ iaas_auth_endpoint = f'{iaas_rest_endpoint}/authenticate/'
 print(f'iaas_rest_endpoint: {iaas_rest_endpoint}')
 print(f'iaas_auth_endpoint: {iaas_auth_endpoint}\n')
 
-
+proxies = { 'http': 'http://www-proxy-ash7.us.oracle.com:80', 'https': 'https://www-proxy-ash7.us.oracle.com:80' }
 ### Username/pass setup
 idm_domain_username = f'/Compute-{idm_domain_name}/{opc_username}'
 idm_service_instance_username = f'/Compute-{idm_service_instance_id}/{opc_username}'
@@ -202,6 +205,8 @@ headers = dict([('Content-Type', 'application/oracle-compute-v3+json'),
                 ])
 requests_client = OCRequestsClient()
 requests_client.session.headers.update(headers)
+requests_client.session.proxies.update(proxies)
+
 
 print(f"requests_client.session.headers before update: {requests_client.session.headers}\n")
 requests_client.session.headers.update(headers)
@@ -237,6 +242,7 @@ headers = dict([('Content-Type', 'application/oracle-compute-v3+json'),
                 ])
 requests_client = OCRequestsClient()
 requests_client.session.headers.update(headers)
+requests_client.session.proxies.update(proxies)
 requests_client.session.headers.update(cookie_header)
 swagger_client = SwaggerClient.from_spec(spec_dict=spec_dict,
                                          origin_url=iaas_rest_endpoint,
@@ -717,6 +723,7 @@ headers = dict([('Content-Type', 'application/oracle-compute-v3+json'),
 
 requests_client = OCRequestsClient()
 requests_client.session.headers.update(headers)
+requests_client.session.proxies.update(proxies)
 requests_client.session.headers.update(cookie_header)
 swagger_client = SwaggerClient.from_spec(spec_dict=spec_dict,
                                          origin_url=iaas_rest_endpoint,
