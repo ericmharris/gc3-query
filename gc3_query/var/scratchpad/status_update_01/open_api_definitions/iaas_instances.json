@@ -5,7 +5,7 @@
     "description" : "A Compute Classic instance is a virtual machine running a specific operating system and with CPU and memory resources that you specify. See <a target=\"_blank\" href=\"http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=STCSG-GUID-F928F362-2DB6-4E45-843F-C269E0740A36\">About Instances</a> in <em>Using Oracle Cloud Infrastructure Compute Classic</em>.<p>You can view and delete instances using the HTTP requests listed below.",
     "title" : "Instances"
   },
-  "schemes" : [ "http" ],
+  "schemes" : [ "https" ],
   "consumes" : [ "application/oracle-compute-v3+json", "application/oracle-compute-v3+directory+json" ],
   "produces" : [ "application/oracle-compute-v3+json", "application/oracle-compute-v3+directory+json" ],
   "paths" : {
