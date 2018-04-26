@@ -7,6 +7,8 @@ etc/config/secrets.py
 /**/secrets.py
 .ipynb_checkpoints
 
+mongodb-for-python-for-developers
+
 # Pycharm
 .idea
 
