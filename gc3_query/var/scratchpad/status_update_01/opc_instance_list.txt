@@ -1,0 +1,113 @@
+[root@eharris-lnxobi-01:master ~]# opc -f json compute instance list '/Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1/c17bb7ea-724b-4e51-ab72-1bd8714f07b7'
+{
+ "result": [
+  {
+   "account": "/Compute-587626604/default",
+   "attributes": {
+    "dns": {
+     "domain": "compute-587626604.oraclecloud.internal.",
+     "hostname": "gc3naac-cdmt-lws1.compute-587626604.oraclecloud.internal.",
+     "nimbula_vcable-eth0": "gc3naac-cdmt-lws1.compute-587626604.oraclecloud.internal."
+    },
+    "network": {
+     "nimbula_vcable-eth0": {
+      "address": [
+       "c6:b0:6d:06:65:04",
+       "10.19.0.246"
+      ],
+      "dhcp_options": [],
+      "id": "/Compute-587626604/eric.harris@oracle.com/2043e3fa-682b-48a5-8b21-e163a54e7611",
+      "model": "",
+      "vethernet": "/oracle/public/default",
+      "vethernet_id": "0",
+      "vethernet_type": "vlan"
+     }
+    },
+    "nimbula_orchestration": "/Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1",
+    "oracle_metadata": {
+     "v1": {
+      "object": "/Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1/instance",
+      "orchestration": "/Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1"
+     }
+    },
+    "sshkeys": [
+     "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDkl16+TS1DB5jFwxr8tRMfztjLCHK2+wpfqy2eKeUzDJx8oGlasmBTAdwPX9cH3bfPRLJzru6SG2fJWsow4sU0d2clcwLRtqVdFMAdA3MSpIqayQMQJJ7NE5omkucF0pf0RG2p5cT3mBZDw/9IrSKnIAzaescUi72QOtcVSVgOiBcvJeQVn75GFQ0+JVKnVooh4pL2xDwTUj4EeSn5aLSA4ycqpBqvFFzrGsfDjDn55HiL0Dwwo9uM6VasAPHatqVIRA4EXGMu+QU6iw0m75e5n5CzEoL5ut4D2Og6MqrAVHTmtwf3WhPlDIzLu5OZbILydPq3/u58g6IVUHeB/wBd",
+     "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCq7YIWjLtijvvaNOpvIK8JcYToewxyX4Zvpdb1Dyqmr8Kvns7t4fDOucGV6M+YaD5mNYvwjEGGjdZjyX4ygW3f4rMoZMOLLKlb2ofZtdCWppIPIhT7DwhPitGK0nasi7hAXpdW9Xgdd/i6Uq7VoFezCya5i5cz1Z1PEgpi+Usm4wxSKrGCz/7ndBjgSwvxxKKy9sFmLo2+kh5K+K5/d6NtbniH02M/1v4C+wuCCcNTyk4D5oqx8CF59FIPw0PQwVibvNMdOA+G3FIhGIUuP66W9k8SPOMGfpJzupNgauBnvhq32PQqvUj44Nb5wWvx8YjYdfgb7FtUquxnDovJ1jKG7V+yk+gujoViZHD20glermEULUAkUIKELGsSRPLTPmGMUla4+6uWTyOKXof7X0gcIDjEoMbC/DBbxhApj+GZ2WfU9z0tNkllidXaJIBsXwJNHruGN+VWbsPBDxhjTgg+XCOGphaZkAUZ7ex1jnqQqVFDoxAJ6gcQ0rLZRHkpupt7MkarAu5hXDjyUrU3yV6DFhznUyIpHAvqgp2SfNMg3dTdzE7ZRGiqdKlB3VJSw/FanbzWVyij5f4YsOyCIbujAmzxMulH3SRvoOqIFwRMlk7qxwKu9cFUw4Lgd30/L7yEE0llbzedfSopxHU0jvdZKneFBXSPP0srU3VeEvQDUw=="
+    ]
+   },
+   "availability_domain": "/uscom-central-1a",
+   "boot_order": [
+    1
+   ],
+   "desired_state": "running",
+   "disk_attach": "",
+   "domain": "compute-587626604.oraclecloud.internal.",
+   "entry": null,
+   "error_reason": "",
+   "fingerprint": "34:a7:bb:00:67:50:85:f4:09:ef:8d:81:90:e7:46:72",
+   "hostname": "gc3naac-cdmt-lws1.compute-587626604.oraclecloud.internal.",
+   "hypervisor": {
+    "mode": "hvm"
+   },
+   "image_format": "raw",
+   "imagelist": null,
+   "ip": "10.19.0.246",
+   "label": "GC3NAAC-CDMT-LWS1",
+   "name": "/Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1/c17bb7ea-724b-4e51-ab72-1bd8714f07b7",
+   "networking": {
+    "eth0": {
+     "dns": [
+      "gc3naac-cdmt-lws1.compute-587626604.oraclecloud.internal."
+     ],
+     "model": "",
+     "nat": "ipreservation:/Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1",
+     "seclists": [
+      "/Compute-587626604/eric.harris@oracle.com/GC3NAACCDMT_PSFT"
+     ],
+     "vethernet": "/oracle/public/default"
+    }
+   },
+   "placement_requirements": [
+    "/system/compute/placement/default",
+    "/oracle/compute/dedicated/fcbaed9f-242b-42ce-ac77-dd727f9710eb",
+    "/system/compute/allow_instances"
+   ],
+   "platform": "linux",
+   "priority": "/oracle/public/default",
+   "quota": "/Compute-587626604",
+   "quota_reservation": null,
+   "relationships": [],
+   "resolvers": [],
+   "reverse_dns": true,
+   "shape": "oc4",
+   "site": "",
+   "sshkeys": [
+    "/Compute-587626604/eric.harris@oracle.com/eric_harris-cloud-01",
+    "/Compute-587626604/eric.harris@oracle.com/naaccdmt"
+   ],
+   "start_time": "2017-11-29T18:06:06Z",
+   "state": "running",
+   "storage_attachments": [
+    {
+     "index": 1,
+     "name": "/Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1/c17bb7ea-724b-4e51-ab72-1bd8714f07b7/befe2a3b-bc58-4de3-ab6a-277e64b585b2",
+     "storage_volume_name": "/Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1_storage"
+    },
+    {
+     "index": 2,
+     "name": "/Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1/c17bb7ea-724b-4e51-ab72-1bd8714f07b7/30683f98-4680-4738-b2bf-38e3539188fe",
+     "storage_volume_name": "/Compute-587626604/eric.harris@oracle.com/GC3NAAC-CDMT-LWS1_application"
+    }
+   ],
+   "tags": [
+    "CDMT"
+   ],
+   "uri": "https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604/eric.harris%40oracle.com/GC3NAAC-CDMT-LWS1/c17bb7ea-724b-4e51-ab72-1bd8714f07b7",
+   "vcable_id": "/Compute-587626604/eric.harris@oracle.com/2043e3fa-682b-48a5-8b21-e163a54e7611",
+   "virtio": null,
+   "vnc": "10.19.0.245:5900"
+  }
+ ]
+}
+[root@eharris-lnxobi-01:master ~]#
+
