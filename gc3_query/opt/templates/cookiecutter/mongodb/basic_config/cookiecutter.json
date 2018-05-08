@@ -1,7 +1,7 @@
 {
     "project_name": "mongodb",
     "project_slug": "{{cookiecutter.project_name.lower().strip().replace(' ', '-')}}",
-    "creator": "eric.harris",
+    "mongodb_bin": "C:\tools\MongoDB\Server\3.6\bin",
     "created_on": "{% now 'local' %}",
     "favorite_color": ["blue", "green", "yellow", "black"],
     "_extensions": [
