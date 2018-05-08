@@ -1,8 +1,10 @@
 {
-    "project_name": "my_game",
-    "full_name": "",
-    "game_type": ["hilo", "pacman", "pong"],
-    "_copy_without_render": [
-        ".DS_Store"
+    "project_name": "mongodb",
+    "project_slug": "{{cookiecutter.project_name.lower().strip().replace(' ', '-')}}",
+    "creator": "eric.harris",
+    "created_on": "{% now 'local' %}",
+    "favorite_color": ["blue", "green", "yellow", "black"],
+    "_extensions": [
+        "jinja2_time.TimeExtension"
     ]
 }
