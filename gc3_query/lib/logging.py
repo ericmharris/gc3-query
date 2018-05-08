@@ -3,63 +3,18 @@
 import sys
 from logbook import Logger, StreamHandler
 
-from gc3_query.lib import Tuple, Callable
+from gc3_query.lib import *
+from gc3_query.lib import Tuple, Callable, Union
 
 
-# class Logging:
-#     default_logging_level = 'warning'
-#     # default_logging_level = 'debug'
-#     logging_levels = {'debug': logging.DEBUG,
-#                       'info': logging.INFO,
-#                       'warning': logging.WARN,
-#                       'error': logging.ERROR,
-#                       'critical': logging.CRITICAL}
-#
-#     def __init__(self, level=None):
-#         """Configure logging and store runtime default_logging_level in class variable
-#
-#         :param level: One of debug, info, warning, error, critical.
-#         :type level: str
-#         """
-#         self.logger: RootLogger = None
-#         self.logging_level = level if level else self.default_logging_level
-#         logging.basicConfig(level=Logging.logging_levels[self.logging_level])
-#
-#
-#     def get_logging(self, name: str, level=None) -> Tuple[Callable]:
-#         """Returns logging functions properly configured.
-#         _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
-#
-#         :param name:  Usually __main__
-#         :type name: str
-#         :param level: Desired logging level (will update all logging to that level)
-#         :type level: str
-#         :return: Callable
-#         :rtype:
-#         """
-#         self.logger = logging.getLogger(name=name)
-#         if level:
-#             self.logger.setLevel(Logging.logging_levels[level])
-#         else:
-#             self.logger.setLevel(Logging.logging_levels[self.default_logging_level])
-#         debug, info, warning, error, critical = self.logger.debug, self.logger.info, self.logger.warning, self.logger.error, self.logger.critical
-#         return debug, info, warning, error, critical
-#
-#     @classmethod
-#     def set_default_logging_level(cls, level: str) -> str:
-#         """Sets the logging level used by all logging"""
-#         cls.default_logging_level = level
-#         return level
-
-
-
-def get_logging(name: str, level=None) -> Tuple[Callable]:
+def get_logging(name: str, level: Union[int, str]='WARNING') -> Tuple[Callable]:
     """Returns logging functions properly configured.
-    _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
+
+    _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
     :param name:  Usually __main__
     :type name: str
-    :param level: Desired logging level (will update all logging to that level)
+    :param level: {'CRITICAL': 15, 'ERROR': 14, 'WARNING': 13, 'NOTICE': 12, 'INFO': 11, 'DEBUG': 10, 'TRACE': 9, 'NOTSET': 0}
     :type level: str
     :return: Callable
     :rtype:

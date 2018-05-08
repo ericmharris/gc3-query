@@ -5,7 +5,7 @@ import sys
 import click
 
 from gc3_query.lib import *
-from gc3_query.lib.gc3admincli import cli
+from gc3_query.lib.cli.gc3admin import cli
 from gc3_query.lib.logging import get_logging
 from gc3_query.lib.gc3adminlib import *
 from gc3_query.lib.cli.gc3admin import *

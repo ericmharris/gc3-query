@@ -3,11 +3,7 @@ import pytest
 
 from collections import namedtuple
 
-from click.testing import CliRunner
-from gc3_query.lib import *
-from gc3_query.lib import BASE_DIR
 from gc3_query.lib.logging import get_logging
-from gc3_query.lib.gc3querycli import cli
 from gc3_query.lib.gc3querylib import TestCase
 
 
@@ -18,7 +14,7 @@ TestCase = namedtuple('TestCase', 'username password env_name')
 
 @pytest.fixture(scope='module')
 def session_setup() -> TestCase:
-    from .secrets import username, password, new_password
+    from .secrets import username, password
     test_data = TestCase(username=username, password=password, env_name='hcmx-test')
     # cs = TestCase(username=username, password=password, new_password=new_password, env_name=test_data.env_name, headless=False, clean_profile=True)
     cs = TestCase(username=username, password=password, identity_domain_name=test_data.env_name, headless=False)
