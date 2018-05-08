@@ -87,7 +87,8 @@ setup(
     packages=find_packages(include=['gc3_query']),
     entry_points={
         'console_scripts': [
-            'gc3query=gc3_query.bin.gc3query:cli'
+            'gc3query=gc3_query.bin.gc3query:cli',
+            'gc3admin=gc3_query.sbin.gc3admin:cli'
         ]
     },
     include_package_data=True,
@@ -103,6 +104,7 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
     ],
     extras_require={
         'testing': ['pytest'],
