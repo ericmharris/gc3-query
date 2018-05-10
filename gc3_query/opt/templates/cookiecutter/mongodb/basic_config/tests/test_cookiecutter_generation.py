@@ -14,7 +14,7 @@ RE_OBJ = re.compile(PATTERN)
 @pytest.fixture
 def context():
     return {
-        'project_name': 'My Test Project',
+        'mongodb_dir_name': 'My Test Project',
         'project_slug': 'my_test_project',
         'author_name': 'Test Author',
         'email': 'test@example.com',

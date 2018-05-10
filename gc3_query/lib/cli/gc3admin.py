@@ -55,16 +55,13 @@ def cli(ctx, debug, help):
 
 
 @cli.command(help="Help for util_hello", short_help="Short help for util_hello", epilog="Epilog for util_hello")
-@click.option('--target-dir', '-d', help="Help for taget dir")
+@click.option('--mongodb-bin-dir', '-b', help="Directory containing mongodb executables, eg. mongod.exe")
 @click.pass_context
-def setup_mongodb(ctx: click.core.Context, target_dir: str=None) -> None:
-    if not target_dir:
-        target_dir = BASE_DIR
-    click.echo(click.style(f'gc3admin.setup_mongodb(): target_dir={target_dir}', fg='green'))
+def setup_mongodb(ctx: click.core.Context, mongodb_bin_dir: str = None) -> None:
+    click.echo(click.style(f'gc3admin.setup_mongodb(): target_dir={mongodb_bin_dir}', fg='green'))
     _warning(f'Test logging for gc3admin.')
     print(f'context: {ctx.parent.gc3_config}')
-
-    setup_mongo_db = SetupMongoDB(ctx=ctx)
+    setup_mongo_db = SetupMongoDB(ctx=ctx, mongodb_bin_dir=mongodb_bin_dir)
 
 
 

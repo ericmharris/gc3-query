@@ -1,9 +1,14 @@
 {
-    "project_name": "mongodb",
-    "project_slug": "{{cookiecutter.project_name.lower().strip().replace(' ', '-')}}",
-    "mongodb_bin": "C:\tools\MongoDB\Server\3.6\bin",
+    "mongodb_dir_name": "mongodb",
+    "project_slug": "{{cookiecutter.mongodb_dir_name.lower().strip().replace(' ', '-')}}",
+    "mongodb_bin_dir": "C:\\Program Files\\MongoDB\\Server\\3.6\\bin",
     "created_on": "{% now 'local' %}",
-    "favorite_color": ["blue", "green", "yellow", "black"],
+    "mongodb_data_dir": "mongodb_data_dir",
+    "mongodb_log_file": "mongodb_log_file",
+    "mongodb_config_file": "mongodb_config_file",
+    "mongod_bin": "mongod_bin",
+    "listen_port": 7117,
+    "listen_ip": "127.0.0.1",
     "_extensions": [
         "jinja2_time.TimeExtension"
     ]

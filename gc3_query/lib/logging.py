@@ -6,8 +6,10 @@ from logbook import Logger, StreamHandler
 from gc3_query.lib import *
 from gc3_query.lib import Tuple, Callable, Union
 
+LOG_LEVEL='WARNING'
+LOG_LEVEL='DEBUG'
 
-def get_logging(name: str, level: Union[int, str]='WARNING') -> Tuple[Callable]:
+def get_logging(name: str, level: Union[int, str]=LOG_LEVEL) -> Tuple[Callable]:
     """Returns logging functions properly configured.
 
 

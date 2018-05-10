@@ -1,18 +1,27 @@
 import sys
+from pathlib import Path
 
+import cookiecutter
+import cookiecutter.main
+import cookiecutter.config
+# from cookiecutter.main import cookiecutter
+# from cookiecutter import main, config
+from prettyprinter import pprint, pformat
 
-def validate():
-    creator = '{{ cookiecutter.creator }}'
-
-    if not creator.strip():
-        print("You must specify a creator to use this template.")
-        sys.exit(1)
-
-    favorite_color = '{{ cookiecutter.favorite_color }}'
-    if favorite_color == 'black':
-        print("Currently black is actually not implemented!")
-        sys.exit(7)
 
 
 if __name__ == '__main__':
-    validate()
+    print("\n\n********** Pre-Generation Hook Running **********")
+    print("************** Locals ********************")
+    pprint(locals())
+    print("************** Locals ********************")
+
+    cc_user_config = cookiecutter.config.get_user_config()
+    cc_default_ctx = cc_user_config.get('default_context')
+    print("cc_user_config=")
+    pprint(cc_user_config)
+    print("cc_default_ctx=")
+    pprint(cc_default_ctx)
+
+
+    print("********** Pre-Generation Hook Ended **********\n\n")

@@ -23,7 +23,7 @@ gc3_query/var/*.zip
 !gc3_query/lib/
 !gc3_query/lib64/
 !gc3_query/etc/
-!gc3_query/var/
+# !gc3_query/var/
 !gc3_query/bin/
 
 # Byte-compiled / optimized / DLL files
