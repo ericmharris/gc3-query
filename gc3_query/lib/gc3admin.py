@@ -73,13 +73,13 @@ class SetupMongoDB():
     template_name: str = 'basic_config'
     template_path: str = str(BASE_DIR.joinpath(f'opt/templates/cookiecutter/mongodb/{template_name}'))
 
-    def __init__(self, ctx: click.core.Context, mongodb_bin_dir: str = None):
+    def __init__(self, ctx: click.core.Context, mongodb_bin_dir: str = None, listen_port: int=7117, force: bool=False):
         self.mongodb_bin_dir = Path(mongodb_bin_dir) if mongodb_bin_dir else mongodb_bin_dir
-        self.user_inputs = self.gather_inputs(ctx=ctx, mongodb_bin_dir=self.mongodb_bin_dir)
-        self.proj_dir = self.deploy(user_inputs=self.user_inputs)
+        self.user_inputs = self.gather_inputs(ctx=ctx, mongodb_bin_dir=self.mongodb_bin_dir, listen_port=listen_port)
+        self.proj_dir = self.deploy(user_inputs=self.user_inputs, force=force)
 
 
-    def gather_inputs(self, ctx: click.core.Context, mongodb_bin_dir: Path=None):
+    def gather_inputs(self, ctx: click.core.Context, mongodb_bin_dir: Path=None, listen_port: int=7117):
         user_inputs = {}
         cc_user_config = cookiecutter.config.get_user_config()
         cc_default_ctx = cc_user_config.get('default_context')
@@ -113,28 +113,30 @@ class SetupMongoDB():
         mongodb_setup_dir = gc3_var_dir.joinpath('mongodb')
         mongodb_data_dir = mongodb_setup_dir.joinpath('data')
         mongodb_logs_dir = mongodb_setup_dir.joinpath('logs')
-        mongodb_configs_dir = mongodb_setup_dir.joinpath('configs')
-        mongodb_log_file = mongodb_logs_dir.joinpath('mongo-service.log')
-        mongodb_config_file = mongodb_configs_dir.joinpath('mongo-service.config')
+        mongodb_configs_dir = mongodb_setup_dir.joinpath('config')
+        mongodb_service_log_file = mongodb_logs_dir.joinpath('mongo-service.log')
+        mongodb_service_config_file = mongodb_configs_dir.joinpath('mongo-service.config')
+        mongodb_cmd_config_file = mongodb_configs_dir.joinpath('mongo-cmd.config')
 
         _debug(f"gc3_var_dir={gc3_var_dir}, mongodb_setup_dir={mongodb_setup_dir}")
         user_inputs['gc3_var_dir'] = str(gc3_var_dir)
         user_inputs['mongodb_setup_dir'] = str(mongodb_setup_dir)
         user_inputs['mongodb_data_dir'] = str(mongodb_data_dir)
         user_inputs['mongodb_logs_dir'] = str(mongodb_logs_dir)
-        user_inputs['mongodb_log_file'] = str(mongodb_log_file)
-        user_inputs['mongodb_config_file'] = str(mongodb_config_file)
+        user_inputs['mongodb_service_log_file'] = str(mongodb_service_log_file)
+        user_inputs['mongodb_service_config_file'] = str(mongodb_service_config_file)
+        user_inputs['mongodb_cmd_config_file'] = str(mongodb_cmd_config_file)
         # user_inputs['ASDF'] = str(ASDF)
 
         user_inputs["mongodb_dir_name"] =  "mongodb"
         user_inputs["mongodb_bin_dir"] = str(mongod_bin)
-        user_inputs["listen_port"] = 9000
+        user_inputs["listen_port"] = listen_port
 
         return user_inputs
 
 
 
-    def deploy(self, user_inputs: Dict[str, Any]):
+    def deploy(self, user_inputs: Dict[str, Any], force: bool):
         """
 
         :param user_inputs:
@@ -172,7 +174,8 @@ class SetupMongoDB():
         proj_dir = cookiecutter.main.cookiecutter(
             template=SetupMongoDB.template_path,
             no_input=True,
-            output_dir=user_inputs['mongodb_setup_dir'],
+            overwrite_if_exists=force,
+            output_dir=user_inputs['gc3_var_dir'],
             extra_context=user_inputs
         )
 

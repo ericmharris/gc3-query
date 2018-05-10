@@ -8,20 +8,10 @@ import cookiecutter.config
 # from cookiecutter import main, config
 from prettyprinter import pprint, pformat
 
-
-
 if __name__ == '__main__':
     print("\n\n********** Pre-Generation Hook Running **********")
-    print("************** Locals ********************")
-    pprint(locals())
-    print("************** Locals ********************")
-
     cc_user_config = cookiecutter.config.get_user_config()
     cc_default_ctx = cc_user_config.get('default_context')
     print("cc_user_config=")
     pprint(cc_user_config)
-    print("cc_default_ctx=")
-    pprint(cc_default_ctx)
-
-
     print("********** Pre-Generation Hook Ended **********\n\n")
