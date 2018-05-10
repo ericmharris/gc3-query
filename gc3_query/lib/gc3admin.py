@@ -75,11 +75,13 @@ class SetupMongoDB():
 
     def __init__(self, ctx: click.core.Context, mongodb_bin_dir: str = None, listen_port: int=7117, force: bool=False):
         self.mongodb_bin_dir = Path(mongodb_bin_dir) if mongodb_bin_dir else mongodb_bin_dir
+        self.listen_port = listen_port
+        self.force = force
         self.user_inputs = self.gather_inputs(ctx=ctx, mongodb_bin_dir=self.mongodb_bin_dir, listen_port=listen_port)
         self.proj_dir = self.deploy(user_inputs=self.user_inputs, force=force)
 
 
-    def gather_inputs(self, ctx: click.core.Context, mongodb_bin_dir: Path=None, listen_port: int=7117):
+    def gather_inputs(self, ctx: click.core.Context, mongodb_bin_dir: Path, listen_port:int):
         user_inputs = {}
         cc_user_config = cookiecutter.config.get_user_config()
         cc_default_ctx = cc_user_config.get('default_context')
@@ -172,6 +174,7 @@ class SetupMongoDB():
         template = os.path.join(working_dir, 'templates', 'cookiecutter-use-api')
         _debug(f"user_inputs={user_inputs}, template={SetupMongoDB.template_path}, output_dir={user_inputs['mongodb_setup_dir']}")
         _debug(f"extra_context={user_inputs}")
+        _debug(f"force={force}")
 
         proj_dir = cookiecutter.main.cookiecutter(
             template=SetupMongoDB.template_path,

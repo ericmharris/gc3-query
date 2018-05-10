@@ -57,13 +57,13 @@ def cli(ctx, debug, help):
 @cli.command(help="Setup MongoDB.", short_help="Setup MongoDB.", epilog="Setup Mongo")
 @click.option('--mongodb-bin-dir', '-b', prompt='Please enter full path to MongoDB bin directory', help="Directory containing mongodb executables, eg. mongod.exe")
 @click.option('--listen-port', '-p', help="TCP port mongod should listen on.", default=7117)
-@click.option('--force', '-f', help="Force, overwrite files if they exist.", default=False)
+@click.option('--force', '-f', help="Force, overwrite files if they exist.", default=False, is_flag=True)
 @click.pass_context
 def setup_mongodb(ctx: click.core.Context, mongodb_bin_dir: str = None, listen_port: int=7117, force: bool=False) -> None:
     click.echo(click.style(f'gc3admin.setup_mongodb(): target_dir={mongodb_bin_dir}', fg='green'))
     _warning(f'Test logging for gc3admin.')
     print(f'context: {ctx.parent.gc3_config}')
-    setup_mongo_db = SetupMongoDB(ctx=ctx, mongodb_bin_dir=mongodb_bin_dir)
+    setup_mongo_db = SetupMongoDB(ctx=ctx, mongodb_bin_dir=mongodb_bin_dir, listen_port=listen_port, force=force)
 
 
 
