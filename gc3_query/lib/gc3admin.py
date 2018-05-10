@@ -115,6 +115,7 @@ class SetupMongoDB():
         mongodb_logs_dir = mongodb_setup_dir.joinpath('logs')
         mongodb_configs_dir = mongodb_setup_dir.joinpath('config')
         mongodb_service_log_file = mongodb_logs_dir.joinpath('mongo-service.log')
+        mongodb_cmd_log_file = mongodb_logs_dir.joinpath('mongo-cmd.log')
         mongodb_service_config_file = mongodb_configs_dir.joinpath('mongo-service.config')
         mongodb_cmd_config_file = mongodb_configs_dir.joinpath('mongo-cmd.config')
 
@@ -124,6 +125,7 @@ class SetupMongoDB():
         user_inputs['mongodb_data_dir'] = str(mongodb_data_dir)
         user_inputs['mongodb_logs_dir'] = str(mongodb_logs_dir)
         user_inputs['mongodb_service_log_file'] = str(mongodb_service_log_file)
+        user_inputs['mongodb_cmd_log_file'] = str(mongodb_cmd_log_file)
         user_inputs['mongodb_service_config_file'] = str(mongodb_service_config_file)
         user_inputs['mongodb_cmd_config_file'] = str(mongodb_cmd_config_file)
         # user_inputs['ASDF'] = str(ASDF)
