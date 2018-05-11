@@ -28,7 +28,22 @@ aliases['ppp'] = _pretty_print_psm_data
 aliases['dev'] = r'cd $DEVEL_DIR'
 aliases['Gh'] = r'cd $DEVEL_DIR/gc3-query/gc3_query'
 
+aliases['Ghb'] = r'cd $DEVEL_DIR/gc3-query/gc3_query/bin'
+aliases['Ghe'] = r'cd $DEVEL_DIR/gc3-query/gc3_query/etc'
+aliases['Ghl'] = r'cd $DEVEL_DIR/gc3-query/gc3_query/lib'
+aliases['Ghs'] = r'cd $DEVEL_DIR/gc3-query/gc3_query/sbin'
 
+aliases['Gho'] = r'cd $DEVEL_DIR/gc3-query/gc3_query/opt'
+aliases['Ghor'] = r'cd $DEVEL_DIR/gc3-query/gc3_query/opt/reference'
+aliases['Ghot'] = r'cd $DEVEL_DIR/gc3-query/gc3_query/opt/templates'
+aliases['Ghotc'] = r'cd $DEVEL_DIR/gc3-query/gc3_query/opt/templates/cookiecutter'
+
+aliases['Ghv'] = r'cd $DEVEL_DIR/gc3-query/gc3_query/var'
+aliases['Ghvm'] = r'cd $DEVEL_DIR/gc3-query/gc3_query/var/mongodb'
+aliases['Ghvmc'] = r'cd $DEVEL_DIR/gc3-query/gc3_query/var/mongodb/config'
+aliases['Ghvml'] = r'cd $DEVEL_DIR/gc3-query/gc3_query/var/mongodb/logs'
+aliases['Ghvms'] = r'cd $DEVEL_DIR/gc3-query/gc3_query/var/mongodb/scripts'
+aliases['Ghvs'] = r'cd $DEVEL_DIR/gc3-query/gc3_query/var/scratchpad'
 
 
 
