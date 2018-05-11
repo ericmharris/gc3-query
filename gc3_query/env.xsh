@@ -49,9 +49,13 @@ aliases['Ghvs'] = r'cd $DEVEL_DIR/gc3-query/gc3_query/var/scratchpad'
 
 if 'win' in sys.platform:
 
-    mongodb_bin = Path(r'C:\Program Files\MongoDB\Server\3.6\bin')
-    if mongodb_bin.exists():
-        $PATH.append(mongodb_bin)
+    for p in [r'C:\Program Files\MongoDB\Server\3.6\bin',
+             r'C:\tools\MongoDB\Server\3.6\bin']:
+        mongodb_bin_dir = Path(p)
+        if mongodb_bin_dir.exists():
+            s = str(mongodb_bin_dir)
+            print(f"Appending {s} to PATH")
+            $PATH.append(s)
 
     # aliases['dev'] = r'cd $DEVEL_DIR'
     # aliases['Gh'] = r'cd $DEVEL_DIR/gc3-query/gc3_query'

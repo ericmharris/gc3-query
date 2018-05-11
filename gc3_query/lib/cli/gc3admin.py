@@ -6,17 +6,11 @@
 
 """
 import sys
-import os
-import pathlib
-
 import click
 
-
 from gc3_query import __version__
-from gc3_query.lib import *
-from gc3_query.lib import BASE_DIR
-from gc3_query.lib.logging import get_logging
-from gc3_query.lib.gc3admin import *
+from gc3_query.lib.gc3admin.gc3admin import *
+from gc3_query.lib.gc3admin.setup_mongodb import SetupMongoDB
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
