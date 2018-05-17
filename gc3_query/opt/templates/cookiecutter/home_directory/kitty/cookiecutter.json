@@ -1,0 +1,9 @@
+{
+    "project_slug": "{{cookiecutter.kitty_dir_name.lower().strip().replace(' ', '-')}}",
+    "created_on": "{% now 'local' %}",
+    "kitty_dir_name": ".kitty",
+    "home_directory": "C:\\Users\\eharris",
+    "_extensions": [
+        "jinja2_time.TimeExtension"
+    ]
+}
