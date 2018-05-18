@@ -11,6 +11,7 @@ import click
 from gc3_query import __version__
 from gc3_query.lib.gc3admin.gc3admin import *
 from gc3_query.lib.gc3admin.setup_mongodb import SetupMongoDB
+from gc3_query.lib.gc3admin.setup_home_kitty import SetupHomeKitty
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
@@ -58,9 +59,22 @@ def setup_mongodb(ctx: click.core.Context, mongodb_bin_dir: str = None, listen_p
     _warning(f'Test logging for gc3admin.')
     print(f'context: {ctx.parent.gc3_config}')
     setup_mongo_db = SetupMongoDB(ctx=ctx, mongodb_bin_dir=mongodb_bin_dir, listen_port=listen_port, force=force)
+    sys.exit(0)
+
+
+
+@cli.command(help="Setup Kitty.", short_help="Setup Kitty.", epilog="Setup Mongo")
+@click.option('--kitty-bin-dir', '-b', prompt='Please enter full path to Kitty bin directory', help="Directory containing kitty executables, eg. kittyd.exe")
+@click.option('--listen-port', '-p', help="TCP port kittyd should listen on.", default=7117)
+@click.option('--force', '-f', help="Force, overwrite files if they exist.", default=False, is_flag=True)
+@click.pass_context
+def setup_kitty(ctx: click.core.Context, kitty_bin_dir: str = None, listen_port: int=7117, force: bool=False) -> None:
+    click.echo(click.style(f'gc3admin.setup_kitty(): target_dir={kitty_bin_dir}', fg='green'))
+    _warning(f'Test logging for gc3admin.')
+    print(f'context: {ctx.parent.gc3_config}')
+    setup_kitty_db = SetupHomeKitty(ctx=ctx, kitty_bin_dir=kitty_bin_dir, listen_port=listen_port, force=force)
 
 
 
     sys.exit(0)
-
 
