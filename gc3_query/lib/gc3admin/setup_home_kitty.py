@@ -11,12 +11,17 @@ import cookiecutter.config
 from gc3_query.lib import BASE_DIR
 from gc3_query.lib.gc3admin.gc3admin import _debug
 
-CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help', '-?'], # help_option_names sets tokens that come after a command that'll trigger help.
-                        ignore_unknown_options=True)
+CONTEXT_SETTINGS = dict(
+    help_option_names=[
+        "-h",
+        "--help",
+        "-?",
+    ],  # help_option_names sets tokens that come after a command that'll trigger help.
+    ignore_unknown_options=True,
+)
 
 
-
-class SetupHomeKitty():
+class SetupHomeKitty:
     """
 
 
@@ -60,25 +65,25 @@ class SetupHomeKitty():
 	kitty.ini
     [emharris@win10x64-emharris:master .kitty]# kitty.exe -convert-dir
     """
-    template_name: str = 'basic_config'
-    template_path: str = str(BASE_DIR.joinpath(f'opt/templates/cookiecutter/kitty/{template_name}'))
+    template_name: str = "basic_config"
+    template_path: str = str(BASE_DIR.joinpath(f"opt/templates/cookiecutter/kitty/{template_name}"))
 
-    def __init__(self, ctx: click.core.Context, kitty_bin_dir: str = None, listen_port: int=7117, force: bool=False):
+    def __init__(
+        self, ctx: click.core.Context, kitty_bin_dir: str = None, listen_port: int = 7117, force: bool = False
+    ):
         self.kitty_bin_dir = Path(kitty_bin_dir) if kitty_bin_dir else kitty_bin_dir
         self.listen_port = listen_port
         self.force = force
         self.user_inputs = self.gather_inputs(ctx=ctx, kitty_bin_dir=self.kitty_bin_dir, listen_port=listen_port)
         self.proj_dir = self.deploy(user_inputs=self.user_inputs, force=force)
 
-
-    def gather_inputs(self, ctx: click.core.Context, kitty_bin_dir: Path, listen_port:int):
+    def gather_inputs(self, ctx: click.core.Context, kitty_bin_dir: Path, listen_port: int):
         user_inputs = {}
         cc_user_config = cookiecutter.config.get_user_config()
-        cc_default_ctx = cc_user_config.get('default_context')
+        cc_default_ctx = cc_user_config.get("default_context")
 
         _debug(f"cc_user_config={cc_user_config}")
         _debug("cc_default_ctx={cc_default_ctx}")
-
 
         # full_name = cc_user_config.get('full_name')
         # if not full_name:
@@ -92,43 +97,39 @@ class SetupHomeKitty():
         #     working_dir = input('Full path where to create the project [must exist]? ')
         # return GameCreateInfo(package_name, full_name, game_type, working_dir)
 
-
-
         if kitty_bin_dir is None:
-            kitty_bin_dir = Path(click.prompt('Please enter full path to Kitty bin directory', type=str))
-        mongod_bin_name = 'mongod.exe' if 'win' in sys.platform else 'mongod'
+            kitty_bin_dir = Path(click.prompt("Please enter full path to Kitty bin directory", type=str))
+        mongod_bin_name = "mongod.exe" if "win" in sys.platform else "mongod"
         mongod_bin = kitty_bin_dir.joinpath(mongod_bin_name)
-        _debug(f'kitty_bin_dir={kitty_bin_dir}, mongod_bin={mongod_bin}')
-        user_inputs['mongod_bin'] = str(mongod_bin)
+        _debug(f"kitty_bin_dir={kitty_bin_dir}, mongod_bin={mongod_bin}")
+        user_inputs["mongod_bin"] = str(mongod_bin)
 
-        gc3_var_dir = BASE_DIR.joinpath('var')
-        kitty_setup_dir = gc3_var_dir.joinpath('kitty')
-        kitty_data_dir = kitty_setup_dir.joinpath('data')
-        kitty_logs_dir = kitty_setup_dir.joinpath('logs')
-        kitty_configs_dir = kitty_setup_dir.joinpath('config')
-        kitty_service_log_file = kitty_logs_dir.joinpath('mongo-service.log')
-        kitty_cmd_log_file = kitty_logs_dir.joinpath('mongo-cmd.log')
-        kitty_service_config_file = kitty_configs_dir.joinpath('mongo-service.config')
-        kitty_cmd_config_file = kitty_configs_dir.joinpath('mongo-cmd.config')
+        gc3_var_dir = BASE_DIR.joinpath("var")
+        kitty_setup_dir = gc3_var_dir.joinpath("kitty")
+        kitty_data_dir = kitty_setup_dir.joinpath("data")
+        kitty_logs_dir = kitty_setup_dir.joinpath("logs")
+        kitty_configs_dir = kitty_setup_dir.joinpath("config")
+        kitty_service_log_file = kitty_logs_dir.joinpath("mongo-service.log")
+        kitty_cmd_log_file = kitty_logs_dir.joinpath("mongo-cmd.log")
+        kitty_service_config_file = kitty_configs_dir.joinpath("mongo-service.config")
+        kitty_cmd_config_file = kitty_configs_dir.joinpath("mongo-cmd.config")
 
         _debug(f"gc3_var_dir={gc3_var_dir}, kitty_setup_dir={kitty_setup_dir}")
-        user_inputs['gc3_var_dir'] = str(gc3_var_dir)
-        user_inputs['kitty_setup_dir'] = str(kitty_setup_dir)
-        user_inputs['kitty_data_dir'] = str(kitty_data_dir)
-        user_inputs['kitty_logs_dir'] = str(kitty_logs_dir)
-        user_inputs['kitty_service_log_file'] = str(kitty_service_log_file)
-        user_inputs['kitty_cmd_log_file'] = str(kitty_cmd_log_file)
-        user_inputs['kitty_service_config_file'] = str(kitty_service_config_file)
-        user_inputs['kitty_cmd_config_file'] = str(kitty_cmd_config_file)
+        user_inputs["gc3_var_dir"] = str(gc3_var_dir)
+        user_inputs["kitty_setup_dir"] = str(kitty_setup_dir)
+        user_inputs["kitty_data_dir"] = str(kitty_data_dir)
+        user_inputs["kitty_logs_dir"] = str(kitty_logs_dir)
+        user_inputs["kitty_service_log_file"] = str(kitty_service_log_file)
+        user_inputs["kitty_cmd_log_file"] = str(kitty_cmd_log_file)
+        user_inputs["kitty_service_config_file"] = str(kitty_service_config_file)
+        user_inputs["kitty_cmd_config_file"] = str(kitty_cmd_config_file)
         # user_inputs['ASDF'] = str(ASDF)
 
-        user_inputs["kitty_dir_name"] =  "kitty"
+        user_inputs["kitty_dir_name"] = "kitty"
         user_inputs["kitty_bin_dir"] = str(mongod_bin)
         user_inputs["listen_port"] = listen_port
 
         return user_inputs
-
-
 
     def deploy(self, user_inputs: Dict[str, Any], force: bool):
         """
@@ -158,12 +159,11 @@ class SetupHomeKitty():
             :param password: The password to use when extracting the repository.
     """
 
-
-
         working_dir = os.path.abspath(os.path.dirname(__file__))
-        template = os.path.join(working_dir, 'templates', 'cookiecutter-use-api')
+        template = os.path.join(working_dir, "templates", "cookiecutter-use-api")
         _debug(
-            f"user_inputs={user_inputs}, template={SetupHomeKitty.template_path}, output_dir={user_inputs['kitty_setup_dir']}")
+            f"user_inputs={user_inputs}, template={SetupHomeKitty.template_path}, output_dir={user_inputs['kitty_setup_dir']}"
+        )
         _debug(f"extra_context={user_inputs}")
         _debug(f"force={force}")
 
@@ -171,8 +171,8 @@ class SetupHomeKitty():
             template=SetupHomeKitty.template_path,
             no_input=True,
             overwrite_if_exists=force,
-            output_dir=user_inputs['gc3_var_dir'],
-            extra_context=user_inputs
+            output_dir=user_inputs["gc3_var_dir"],
+            extra_context=user_inputs,
         )
 
         return proj_dir

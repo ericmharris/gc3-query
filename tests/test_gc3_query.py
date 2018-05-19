@@ -33,15 +33,20 @@ def test_command_line_interface():
     runner = CliRunner()
     result = runner.invoke(cli.main)
     assert result.exit_code == 0
-    assert 'gc3_query.cli.main' in result.output
-    help_result = runner.invoke(cli.main, ['--help'])
+    assert "gc3_query.cli.main" in result.output
+    help_result = runner.invoke(cli.main, ["--help"])
     assert help_result.exit_code == 0
-    assert '--help  Show this message and exit.' in help_result.output
+    assert "--help  Show this message and exit." in help_result.output
 
 
 def test_gc3_query_click_function():
     from .secrets import username, current_password, new_password
-    test_data = TestCase(username=username, current_password=current_password, new_password=new_password, env_name='hcmx-test')
+
+    test_data = TestCase(
+        username=username, current_password=current_password, new_password=new_password, env_name="hcmx-test"
+    )
     runner = CliRunner()
-    result = runner.invoke(change_password, args=['-u', username, '-c', current_password, '-n', new_password, '-e', test_data.env_name])
+    result = runner.invoke(
+        change_password, args=["-u", username, "-c", current_password, "-n", new_password, "-e", test_data.env_name]
+    )
     assert result.exit_code == 0

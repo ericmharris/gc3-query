@@ -17,8 +17,15 @@ from gc3_query.lib.logging import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
-CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help', '-?'], # help_option_names sets tokens that come after a command that'll trigger help.
-                        ignore_unknown_options=True)
+CONTEXT_SETTINGS = dict(
+    help_option_names=[
+        "-h",
+        "--help",
+        "-?",
+    ],  # help_option_names sets tokens that come after a command that'll trigger help.
+    ignore_unknown_options=True,
+)
+
 
 class BaseException(Exception):
     """
@@ -42,6 +49,7 @@ class BaseException(Exception):
 
 class UnexpectedThingHappenedException(BaseException):
     """Thrown when an unexpected thing happend . """
+
     def __init__(self, msg=None, thing=None, other_thing=None, alert_text=None):
         super().__init__(msg, thing, other_thing)
         self.alert_text = alert_text

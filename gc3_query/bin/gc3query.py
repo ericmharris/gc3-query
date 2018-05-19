@@ -11,5 +11,5 @@ if __name__ == "__main__":
     try:
         cli()
     except KeyboardInterrupt:
-        print(f'Caught KeyboardInterrupt, shutting down.')
+        print(f"Caught KeyboardInterrupt, shutting down.")
         sys.exit(0)

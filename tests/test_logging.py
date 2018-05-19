@@ -48,8 +48,9 @@ from change_cloud_pass.lib.logging import get_logging
 #
 #
 
+
 def test_set_default_logging():
-    l = 'debug'
+    l = "debug"
     level = Logging.set_default_logging_level(l)
     assert level == l
     assert Logging.default_logging_level == l
@@ -57,12 +58,10 @@ def test_set_default_logging():
 
 def test_get_default_logging():
     from change_cloud_pass.lib import get_logging
-    l = 'critical'
+
+    l = "critical"
     level = Logging.set_default_logging_level(l)
     assert level == l
     assert Logging.default_logging_level == l
     _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
     assert Logging.default_logging_level == l
-
-
-
