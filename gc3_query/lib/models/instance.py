@@ -2,7 +2,7 @@ import uuid
 import mongoengine
 
 from gc3_query.lib import *
-from gc3_query.lib.models.model_base import GC3MetaData
+from gc3_query.lib.models.gc3_meta_data import GC3MetaData
 from gc3_query.lib.logging import get_logging
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
@@ -10,7 +10,7 @@ _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 class Instance(mongoengine.DynamicDocument):
     account = mongoengine.StringField()
-    gc3_meta = mongoengine.EmbeddedDocumentField(GC3MetaData, required=True)
+    gc3_meta_data = mongoengine.EmbeddedDocumentField(GC3MetaData, required=True)
     # make = mongoengine.StringField(required=True)
     # year = mongoengine.IntField(required=True)
     # mileage = mongoengine.IntField(default=0)
@@ -24,15 +24,6 @@ class Instance(mongoengine.DynamicDocument):
     meta = {
         "db_alias": "core",
         "collection": "instances",
-        'indexes': [
-            'mileage',
-            'year',
-            'service_history.price',
-            'service_history.customer_rating',
-            'service_history.description',
-            {'fields': ['service_history.price', 'service_history.description']},
-            {'fields': ['service_history.price', 'service_history.customer_rating']},
-        ]
         "indexes": [
             "account",
             "identity_domain",

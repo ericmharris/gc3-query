@@ -1,0 +1,6 @@
+
+[1mDESCRIPTION[0m
+  Update psm client to latest version
+
+[1mSYNOPSIS[0m
+  psm update

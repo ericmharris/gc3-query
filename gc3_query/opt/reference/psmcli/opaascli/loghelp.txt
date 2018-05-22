@@ -1,0 +1,14 @@
+
+[1mDESCRIPTION[0m
+  View or update psm client log level
+
+[1mSYNOPSIS[0m
+  psm log [parameter]
+       [-l, --level  <value>]
+       
+[1mAVAILABLE PARAMETERS[0m
+  [1m-l, --level[0m     (string)
+       Specify the log level to be updated. Valid values are ['debug', 'info', 'warning', 'error', 'critical']
+
+[1mEXAMPLES[0m
+  psm log -l debug

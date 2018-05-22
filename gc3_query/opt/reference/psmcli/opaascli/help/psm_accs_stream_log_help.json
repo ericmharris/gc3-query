@@ -1,0 +1,17 @@
+{      
+    "view-logs":{  
+        "description":"View logs from the application",
+        "method":"GET",
+        "uri":"/paas/service/apaas/api/v1.1/apps/{identityDomainId}/{name}/logViewAT",
+        "example":"psm accs view-logs -n appName",
+        "parameters":{
+          "name":{
+            "alias":"n",
+            "type":"String",
+            "description":"Name of the application",
+            "paramType":"path",
+            "required":true
+          }
+        }
+     }
+}

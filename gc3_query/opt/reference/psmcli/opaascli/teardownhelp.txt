@@ -1,0 +1,14 @@
+
+[1mDESCRIPTION[0m
+  Remove configured psm client options
+
+[1mSYNOPSIS[0m
+  psm cleanup [parameter]
+       [-f, --force  <value>]
+       
+[1mAVAILABLE PARAMETERS[0m
+  [1m-f, --force[0m     (boolean)
+       Remove configured psm client options without confirmation. Valid values are ['true', 'false']
+
+[1mEXAMPLES[0m
+  psm cleanup

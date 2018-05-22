@@ -1,0 +1,32 @@
+{      
+	 "archivePath" : {
+              "alias" : "p",
+              "type" : "String",
+              "description" : "Specify fully qualified archive file or directory path on local disk for the application. The usage of this parameter is recommended for archive sizes upto 250 MB. For archive sizes greater than 250 MB, uploading the archive to Oracle Storage Cloud and specifying --archive-url parameter is recommended. One of archive path or archive URL is required.",
+              "paramType" : "body",
+              "required" : false
+	 },
+	 "gitRepoUrl": {
+	 		  "alias":"g",
+			  "type":"String",
+			  "description":"Specify the git repository URL for the application",
+			  "paramType":"body",
+			  "required":false
+	 },
+	 "gitUserName": {
+		      "alias": "gu",
+		      "type": "String",
+		      "description": "Specify the username for the git repository",
+		      "paramType": "body",
+		      "required": false,
+		      "hiddenConstant" : null
+	 },
+	 "gitPassword": {
+		      "alias": "gp",
+		      "type": "String",
+		      "description": "Specify the password for the git repository",
+		      "paramType": "body",
+		      "required": false,
+		      "hiddenConstant" : null
+	 }
+}

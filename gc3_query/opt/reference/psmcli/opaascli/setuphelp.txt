@@ -1,0 +1,66 @@
+
+[1mDESCRIPTION[0m
+  Configure the PaaS CLI options
+
+[1mSYNOPSIS[0m
+  psm setup [parameters]
+       [-c, --config-payload <value>]
+
+[1mAVAILABLE PARAMETERS[0m
+  [1m-c, --config-payload[0m    (file)  
+       Path to JSON file containing payload for this command. A sample payload is included
+       in EXAMPLES below.
+
+  If psm setup is invoked without -c option, then user will be prompted for following parameters.
+  
+  [1mUsername[0m
+       Username for your Oracle Public Cloud account
+ 
+  [1mPassword[0m
+       Password for your Oracle Public Cloud account
+  
+  [1mIdentity domain[0m
+       - Traditional Cloud Account: Enter the identity domain ID.
+       - Account with Identity Cloud Service:  Enter the identity service ID. This ID is in 
+         the format, idcs-<32-character-GUID>. Example: idcs-6666bbbb11114becad9e649bfa144444.
+       To find out your identity domain ID or identity service ID, sign in to Oracle Cloud My Services, 
+       and click any Service Type (such as Java or Application Container). On the resulting Service Overview 
+       page, look for the ?Identity Domain Id? or "Identity Service Id" field, depending on your account type.
+  
+  [1mRegion [us][0m
+       Valid values are [us, emea, aucom]. Default is 'us'.
+       
+  [1mOutput format [json][0m
+       Desired output format. Valid values are [short, json, html]. Default is 'short'. 
+
+  [1mUse OAuth? [n][0m
+       Whether to use OAuth for authentication. Valid values are [y, n]. Default is 'n'.       
+   
+  [1mClient ID[0m
+       Client ID from IDCS. Will be used for OAuth.
+  
+  [1mClient Secret[0m
+       Client secret from IDCS. Will be used for OAuth. 
+
+  [1mAccess Token Server [default][0m
+       Will be used for OAuth. Defaults to https://{identityDomainId}.identity.oraclecloud.com/oauth/v1/token
+ 
+[1mEXAMPLES[0m
+  psm setup
+  psm setup -c /home/templates/psm-setup-payload.json
+ 
+[1mSAMPLE PAYLOAD[0m
+Required properties are indicated as "required". Replace in the actual payload with real values.
+{  
+    "username":"required",
+    "password":"required",
+    "identityDomain":"required",
+    "region":"",
+    "outputFormat":"",
+    "oAuth":{  
+        "clientId":"",
+        "clientSecret":"",
+        "accessTokenServer":""
+    }
+}
+       

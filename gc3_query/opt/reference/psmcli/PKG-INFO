@@ -1,0 +1,47 @@
+Metadata-Version: 1.0
+Name: psmcli
+Version: 1.1.23
+Summary: Oracle Platform Service Manager Command Line Interface
+Home-page: https://cloud.oracle.com
+Author: Oracle
+Author-email: oraclesales_us@oracle.com
+License: ('License :: OSI Approved :: Common Public License',)
+Description: ******************************************************
+        Oracle Platform Service Manager Command Line Interface
+        ******************************************************
+        
+        Prerequisite
+        *************
+        Python 3.3+
+        
+            .. code-block :: c
+                
+                # Verify Python 3.3+
+                $ python ?-version
+                Python 3.4.3
+        
+        PSM Client Installation
+        ***********************
+        
+            .. code-block :: c
+            
+                $ sudo -H pip/pip3 install -U psmcli-1.1.2.zip
+        
+        It does following -
+        
+         - Install missing Python package dependencies (if any) from *requests*, *colorama* and *keyring*.
+         - Download and install psm client.
+         - Create a symlink */bin/psm* to the main executable.
+        
+        PSM Client Setup
+        ****************
+        Before using psm client, complete the setup using *psm setup* command.
+        
+Keywords: opc,psmcli,psm,paas,oracle,cloud
+Platform: UNKNOWN
+Classifier: Natural Language :: English
+Classifier: License :: OSI Approved :: Common Public License
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python :: 3.3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5

@@ -1,0 +1,4 @@
+include opaascli/*.txt
+include opaascli/help/*.json
+include opaascli/*.json
+include README.rst

@@ -1,7 +1,7 @@
 import pytest
 
 
-from gc3_query.lib.models.model_base import GC3MetaData
+from gc3_query.lib.models.gc3_meta_data import GC3MetaData
 from gc3_query.lib.models.instance import Instance
 
 @pytest.fixture()

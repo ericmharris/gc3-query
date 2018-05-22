@@ -1,0 +1,8 @@
+{
+	"defaultURI":"https://psm.region.oraclecloud.com",
+	"regions" : {
+		"us" : "us",
+		"emea" : "europe",
+		"aucom" : "aucom"
+	}
+}

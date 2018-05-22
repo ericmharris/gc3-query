@@ -50,7 +50,7 @@ requirements = [
     'mongoengine',
     'jinja2-time',
     'Logbook',
-    # 'ASDF',
+    'msgpack',
     # 'ASDF',
     # 'ASDF',
     'sortedcontainers',
