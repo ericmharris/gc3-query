@@ -9,7 +9,7 @@ from click.testing import CliRunner
 
 from gc3_query import gc3_query
 from gc3_query import cli
-from gc3_query.lib.gc3querylib import test_gc3_query_click_function
+from gc3_query.lib.gc3load import test_gc3_query_click_function
 
 
 @pytest.fixture

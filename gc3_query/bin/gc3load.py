@@ -3,7 +3,7 @@
 """Console script for gc3query."""
 import sys
 
-from gc3_query.lib.cli.gc3query import *
+from gc3_query.lib.cli.gc3load import *
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 

@@ -85,7 +85,8 @@ setup(
     packages=find_packages(include=['gc3_query']),
     entry_points={
         'console_scripts': [
-            'gc3query=gc3_query.bin.gc3query:cli',
+            'gc3load=gc3_query.bin.gc3load:cli',
+            'gc3scan=gc3_query.bin.gc3scan:cli',
             'gc3admin=gc3_query.sbin.gc3admin:cli'
         ]
     },
