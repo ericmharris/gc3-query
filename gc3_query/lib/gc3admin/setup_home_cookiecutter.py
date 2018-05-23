@@ -57,13 +57,16 @@ class SetupHomeCCutter:
         #     working_dir = input('Full path where to create the project [must exist]? ')
         # return GameCreateInfo(package_name, full_name, game_type, working_dir)
 
-
         if CCutter_bin_dir is None:
             CCutter_bin_dir_choco = Path(r"C:\ProgramData\chocolatey\lib\CCutter\tools\CCutter.exe")
-            CCutter_bin_dir_default = str(CCutter_bin_dir_choco) if CCutter_bin_dir_choco.exists() else r'C:\Program Files'
-            CCutter_bin_dir = Path(click.prompt("Please enter full path to CCutter bin directory",
-                                              default=CCutter_bin_dir_default,
-                                              type=str))
+            CCutter_bin_dir_default = (
+                str(CCutter_bin_dir_choco) if CCutter_bin_dir_choco.exists() else r"C:\Program Files"
+            )
+            CCutter_bin_dir = Path(
+                click.prompt(
+                    "Please enter full path to CCutter bin directory", default=CCutter_bin_dir_default, type=str
+                )
+            )
         mongod_bin_name = "mongod.exe" if "win" in sys.platform else "mongod"
         mongod_bin = CCutter_bin_dir.joinpath(mongod_bin_name)
         _debug(f"CCutter_bin_dir={CCutter_bin_dir}, mongod_bin={mongod_bin}")

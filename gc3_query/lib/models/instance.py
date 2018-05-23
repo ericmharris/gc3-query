@@ -29,11 +29,11 @@ class Instance(mongoengine.DynamicDocument):
             "identity_domain",
             "region",
             "rest_endpoint",
-            'service_history.price',
-            'service_history.customer_rating',
-            'service_history.description',
-            {'fields': ['service_history.price', 'service_history.description']},
-            {'fields': ['service_history.price', 'service_history.customer_rating']},
+            "service_history.price",
+            "service_history.customer_rating",
+            "service_history.description",
+            {"fields": ["service_history.price", "service_history.description"]},
+            {"fields": ["service_history.price", "service_history.customer_rating"]},
         ],
     }
     # meta = {
@@ -49,7 +49,6 @@ class Instance(mongoengine.DynamicDocument):
     #         {'fields': ['service_history.price', 'service_history.customer_rating']},
     #     ]
     # }
-
 
     def __init__(self, *args, **values):
         super().__init__(*args, **values)

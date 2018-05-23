@@ -14,16 +14,10 @@ class GC3MetaData(mongoengine.DynamicEmbeddedDocument):
     region = mongoengine.StringField(default=cfg.region)
     rest_endpoint = mongoengine.StringField(default=cfg.rest_endpoint)
 
-
-    def __init__(self,  *args, **values):
+    def __init__(self, *args, **values):
         super().__init__(*args, **values)
         _debug(f"{self.__class__.__name__}.__init__(args={args}, values={values}):")
         self.username: str = "eric.harris@oracle.com"
         self.identity_domain: str = "gc30003"
         self.region: str = "us2"
         self.rest_endpoint: str = "gc30003"
-
-
-
-
-

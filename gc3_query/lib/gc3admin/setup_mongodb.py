@@ -28,7 +28,9 @@ class SetupMongoDB:
     def __init__(
         self, ctx: click.core.Context, mongodb_bin_dir: str = None, listen_port: int = 7117, force: bool = False
     ):
-        self.mongodb_bin_dir = Path(mongodb_bin_dir) if mongodb_bin_dir else Path(r'C:\Program Files\MongoDB\Server\3.6\bin')
+        self.mongodb_bin_dir = (
+            Path(mongodb_bin_dir) if mongodb_bin_dir else Path(r"C:\Program Files\MongoDB\Server\3.6\bin")
+        )
         self.listen_port = listen_port
         self.force = force
         self.user_inputs = self.gather_inputs(ctx=ctx, mongodb_bin_dir=self.mongodb_bin_dir, listen_port=listen_port)

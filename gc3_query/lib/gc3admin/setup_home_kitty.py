@@ -97,13 +97,12 @@ class SetupHomeKitty:
         #     working_dir = input('Full path where to create the project [must exist]? ')
         # return GameCreateInfo(package_name, full_name, game_type, working_dir)
 
-
         if kitty_bin_dir is None:
             kitty_bin_dir_choco = Path(r"C:\ProgramData\chocolatey\lib\kitty\tools\kitty.exe")
-            kitty_bin_dir_default = str(kitty_bin_dir_choco) if kitty_bin_dir_choco.exists() else r'C:\Program Files'
-            kitty_bin_dir = Path(click.prompt("Please enter full path to Kitty bin directory",
-                                              default=kitty_bin_dir_default,
-                                              type=str))
+            kitty_bin_dir_default = str(kitty_bin_dir_choco) if kitty_bin_dir_choco.exists() else r"C:\Program Files"
+            kitty_bin_dir = Path(
+                click.prompt("Please enter full path to Kitty bin directory", default=kitty_bin_dir_default, type=str)
+            )
         mongod_bin_name = "mongod.exe" if "win" in sys.platform else "mongod"
         mongod_bin = kitty_bin_dir.joinpath(mongod_bin_name)
         _debug(f"kitty_bin_dir={kitty_bin_dir}, mongod_bin={mongod_bin}")
