@@ -13,7 +13,7 @@ NAME = "psmcli"
 DESCRIPTION = "Oracle Platform Service Manager Command Line Interface"
 LICENSE = "License :: OSI Approved :: Common Public License", # ** Check with Oracle Legal! **
 URL = "https://cloud.oracle.com"
-INSTALL_REQUIRES = ["requests>=2.8.1,<=2.18.4", "keyring>=5.4,<=5.6", "colorama==0.3.3", "PyYAML==3.11"]
+INSTALL_REQUIRES = ["requests", "keyring", "colorama", "PyYAML"]
 KEYWORDS = ["opc", "psmcli","psm", "paas", "oracle", "cloud"]
 PACKAGES = ["opaascli", "opaascli/internal"]
 PACKAGE_DATA={'opaascli': ['help/*.json']}

@@ -1,0 +1,11 @@
+{
+    "psm_home_dir_name": ".psm",
+    "psm_bin_dir": "C:\\ProgramData\\chocolatey\\lib\\psm\\tools",
+    "psm_bin": "C:\\ProgramData\\chocolatey\\lib\\psm\\tools\\psm.exe",
+    "home_directory": "C:\\Users\\eharris",
+    "created_on": "{% now 'local' %}",
+    "project_slug": "{{cookiecutter.psm_home_dir_name.lower().strip().replace(' ', '-').replace('.', '')}}",
+    "_extensions": [
+        "jinja2_time.TimeExtension"
+    ]
+}

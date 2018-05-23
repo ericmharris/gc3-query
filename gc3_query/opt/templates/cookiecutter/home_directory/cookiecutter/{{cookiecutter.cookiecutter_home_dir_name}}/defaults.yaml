@@ -1,0 +1,19 @@
+### 
+# Provides default values in any template using these variable names listed in default_context.
+# $ cookiecutter --config-file ~/.cookiecutters/defaults-eharris.yaml cookiecutter-pyproject 
+# or set COOKIECUTTER_CONFIG environment var
+# 
+default_context:
+  full_name: "Eric Harris"
+  fullName: "Eric Harris"
+  username: "eharris"
+  home_directory: "C:\Users\EHARRIS"
+  email: "eric.harris@oracle.com"
+  oracle_cloud_username: "eric.harris@oracle.com"
+
+cookiecutters_dir: "C:\Users\emharris\.cookiecutter\cookiecutters"
+replay_dir: "C:\Users\emharris\.cookiecutter\cookiecutter_replay"
+abbreviations:
+  gh: https://github.com/{0}.git
+  bb: https://bitbucket.org/{0}
+

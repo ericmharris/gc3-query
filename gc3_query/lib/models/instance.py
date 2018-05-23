@@ -36,7 +36,6 @@ class Instance(mongoengine.DynamicDocument):
             {'fields': ['service_history.price', 'service_history.customer_rating']},
         ],
     }
-
     # meta = {
     #     'db_alias': 'core',
     #     'collection': 'cars',
@@ -50,8 +49,6 @@ class Instance(mongoengine.DynamicDocument):
     #         {'fields': ['service_history.price', 'service_history.customer_rating']},
     #     ]
     # }
-
-
 
 
     def __init__(self, *args, **values):

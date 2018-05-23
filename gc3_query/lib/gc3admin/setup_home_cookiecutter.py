@@ -21,20 +21,23 @@ CONTEXT_SETTINGS = dict(
 )
 
 
-class SetupMongoDB:
-    template_name: str = "basic_config"
-    template_path: str = str(BASE_DIR.joinpath(f"opt/templates/cookiecutter/mongodb/{template_name}"))
+class SetupHomeCCutter:
+    """
+
+    """
+    template_name: str = "cookiecutter"
+    template_path: str = str(BASE_DIR.joinpath(f"opt/templates/cookiecutter/home_directory/{template_name}"))
 
     def __init__(
-        self, ctx: click.core.Context, mongodb_bin_dir: str = None, listen_port: int = 7117, force: bool = False
+        self, ctx: click.core.Context, CCutter_bin_dir: str = None, listen_port: int = 7117, force: bool = False
     ):
-        self.mongodb_bin_dir = Path(mongodb_bin_dir) if mongodb_bin_dir else Path(r'C:\Program Files\MongoDB\Server\3.6\bin')
+        self.CCutter_bin_dir = Path(CCutter_bin_dir) if CCutter_bin_dir else CCutter_bin_dir
         self.listen_port = listen_port
         self.force = force
-        self.user_inputs = self.gather_inputs(ctx=ctx, mongodb_bin_dir=self.mongodb_bin_dir, listen_port=listen_port)
+        self.user_inputs = self.gather_inputs(ctx=ctx, CCutter_bin_dir=self.CCutter_bin_dir, listen_port=listen_port)
         self.proj_dir = self.deploy(user_inputs=self.user_inputs, force=force)
 
-    def gather_inputs(self, ctx: click.core.Context, mongodb_bin_dir: Path, listen_port: int):
+    def gather_inputs(self, ctx: click.core.Context, CCutter_bin_dir: Path, listen_port: int):
         user_inputs = {}
         cc_user_config = cookiecutter.config.get_user_config()
         cc_default_ctx = cc_user_config.get("default_context")
@@ -54,36 +57,41 @@ class SetupMongoDB:
         #     working_dir = input('Full path where to create the project [must exist]? ')
         # return GameCreateInfo(package_name, full_name, game_type, working_dir)
 
-        if not mongodb_bin_dir.exists():
-            mongodb_bin_dir = Path(click.prompt("Please enter full path to MongoDB bin directory", type=str))
+
+        if CCutter_bin_dir is None:
+            CCutter_bin_dir_choco = Path(r"C:\ProgramData\chocolatey\lib\CCutter\tools\CCutter.exe")
+            CCutter_bin_dir_default = str(CCutter_bin_dir_choco) if CCutter_bin_dir_choco.exists() else r'C:\Program Files'
+            CCutter_bin_dir = Path(click.prompt("Please enter full path to CCutter bin directory",
+                                              default=CCutter_bin_dir_default,
+                                              type=str))
         mongod_bin_name = "mongod.exe" if "win" in sys.platform else "mongod"
-        mongod_bin = mongodb_bin_dir.joinpath(mongod_bin_name)
-        _debug(f"mongodb_bin_dir={mongodb_bin_dir}, mongod_bin={mongod_bin}")
+        mongod_bin = CCutter_bin_dir.joinpath(mongod_bin_name)
+        _debug(f"CCutter_bin_dir={CCutter_bin_dir}, mongod_bin={mongod_bin}")
         user_inputs["mongod_bin"] = str(mongod_bin)
 
         gc3_var_dir = BASE_DIR.joinpath("var")
-        mongodb_setup_dir = gc3_var_dir.joinpath("mongodb")
-        mongodb_data_dir = mongodb_setup_dir.joinpath("data")
-        mongodb_logs_dir = mongodb_setup_dir.joinpath("logs")
-        mongodb_configs_dir = mongodb_setup_dir.joinpath("config")
-        mongodb_service_log_file = mongodb_logs_dir.joinpath("mongo-service.log")
-        mongodb_cmd_log_file = mongodb_logs_dir.joinpath("mongo-cmd.log")
-        mongodb_service_config_file = mongodb_configs_dir.joinpath("mongo-service.config")
-        mongodb_cmd_config_file = mongodb_configs_dir.joinpath("mongo-cmd.config")
+        CCutter_setup_dir = gc3_var_dir.joinpath("CCutter")
+        CCutter_data_dir = CCutter_setup_dir.joinpath("data")
+        CCutter_logs_dir = CCutter_setup_dir.joinpath("logs")
+        CCutter_configs_dir = CCutter_setup_dir.joinpath("config")
+        CCutter_service_log_file = CCutter_logs_dir.joinpath("mongo-service.log")
+        CCutter_cmd_log_file = CCutter_logs_dir.joinpath("mongo-cmd.log")
+        CCutter_service_config_file = CCutter_configs_dir.joinpath("mongo-service.config")
+        CCutter_cmd_config_file = CCutter_configs_dir.joinpath("mongo-cmd.config")
 
-        _debug(f"gc3_var_dir={gc3_var_dir}, mongodb_setup_dir={mongodb_setup_dir}")
+        _debug(f"gc3_var_dir={gc3_var_dir}, CCutter_setup_dir={CCutter_setup_dir}")
         user_inputs["gc3_var_dir"] = str(gc3_var_dir)
-        user_inputs["mongodb_setup_dir"] = str(mongodb_setup_dir)
-        user_inputs["mongodb_data_dir"] = str(mongodb_data_dir)
-        user_inputs["mongodb_logs_dir"] = str(mongodb_logs_dir)
-        user_inputs["mongodb_service_log_file"] = str(mongodb_service_log_file)
-        user_inputs["mongodb_cmd_log_file"] = str(mongodb_cmd_log_file)
-        user_inputs["mongodb_service_config_file"] = str(mongodb_service_config_file)
-        user_inputs["mongodb_cmd_config_file"] = str(mongodb_cmd_config_file)
+        user_inputs["CCutter_setup_dir"] = str(CCutter_setup_dir)
+        user_inputs["CCutter_data_dir"] = str(CCutter_data_dir)
+        user_inputs["CCutter_logs_dir"] = str(CCutter_logs_dir)
+        user_inputs["CCutter_service_log_file"] = str(CCutter_service_log_file)
+        user_inputs["CCutter_cmd_log_file"] = str(CCutter_cmd_log_file)
+        user_inputs["CCutter_service_config_file"] = str(CCutter_service_config_file)
+        user_inputs["CCutter_cmd_config_file"] = str(CCutter_cmd_config_file)
         # user_inputs['ASDF'] = str(ASDF)
 
-        user_inputs["mongodb_dir_name"] = "mongodb"
-        user_inputs["mongodb_bin_dir"] = str(mongod_bin)
+        user_inputs["CCutter_dir_name"] = "CCutter"
+        user_inputs["CCutter_bin_dir"] = str(mongod_bin)
         user_inputs["listen_port"] = listen_port
 
         return user_inputs
@@ -119,13 +127,13 @@ class SetupMongoDB:
         working_dir = os.path.abspath(os.path.dirname(__file__))
         template = os.path.join(working_dir, "templates", "cookiecutter-use-api")
         _debug(
-            f"user_inputs={user_inputs}, template={SetupMongoDB.template_path}, output_dir={user_inputs['mongodb_setup_dir']}"
+            f"user_inputs={user_inputs}, template={SetupHomeCCutter.template_path}, output_dir={user_inputs['CCutter_setup_dir']}"
         )
         _debug(f"extra_context={user_inputs}")
         _debug(f"force={force}")
 
         proj_dir = cookiecutter.main.cookiecutter(
-            template=SetupMongoDB.template_path,
+            template=SetupHomeCCutter.template_path,
             no_input=True,
             overwrite_if_exists=force,
             output_dir=user_inputs["gc3_var_dir"],
