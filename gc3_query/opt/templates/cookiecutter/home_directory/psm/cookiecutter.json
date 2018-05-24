@@ -1,4 +1,9 @@
 {
+    "home_directory": "C:\\Users\\EHARRIS",
+    "cookiecutter_home_dir": ".cookiecutter",
+    "cookiecutters_dir": "{{cookiecutter.home_directory}}\\{{cookiecutter.cookiecutter_home_dir}}\\cookiecutters",
+    "cookiecutters_replay_dir": "{{cookiecutter.home_directory}}\\{{cookiecutter.cookiecutter_home_dir}}\\cookiecutter_replay",
+    "cookiecutter_defaults_file": "defaults.yaml",
     "psm_home_dir_name": ".psm",
     "psm_bin_dir": "C:\\ProgramData\\chocolatey\\lib\\psm\\tools",
     "psm_bin": "C:\\ProgramData\\chocolatey\\lib\\psm\\tools\\psm.exe",

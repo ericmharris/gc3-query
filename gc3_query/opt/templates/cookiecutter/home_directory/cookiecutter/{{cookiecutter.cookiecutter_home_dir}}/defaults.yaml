@@ -4,12 +4,12 @@
 # or set COOKIECUTTER_CONFIG environment var
 # 
 default_context:
-  full_name: "Eric Harris"
-  fullName: "Eric Harris"
-  username: "eharris"
-  home_directory: "C:\Users\EHARRIS"
-  email: "eric.harris@oracle.com"
-  oracle_cloud_username: "eric.harris@oracle.com"
+  full_name: "{{cookiecutter.full_name}}"
+  fullName: "{{cookiecutter.full_name}}"
+  username: "{{cookiecutter.username}}"
+  home_directory: "{{cookiecutter.home_directory}}"
+  email: "{{cookiecutter.email}}"
+  oracle_cloud_username:  "{{cookiecutter.email}}"
 
 cookiecutters_dir: "C:\Users\emharris\.cookiecutter\cookiecutters"
 replay_dir: "C:\Users\emharris\.cookiecutter\cookiecutter_replay"

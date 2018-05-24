@@ -1,10 +1,14 @@
 {
-    "psm_home_dir_name": ".psm",
-    "psm_bin_dir": "C:\\ProgramData\\chocolatey\\lib\\psm\\tools",
-    "psm_bin": "C:\\ProgramData\\chocolatey\\lib\\psm\\tools\\psm.exe",
-    "home_directory": "C:\\Users\\eharris",
+    "full_name": "Eric Harris",
+    "username": "eharris",
+    "email": "eric.harris@oracle.com",
+    "home_directory": "C:\\Users\\EHARRIS",
+    "cookiecutter_home_dir": ".cookiecutter",
+    "cookiecutters_dir": "{{cookiecutter.home_directory}}\\{{cookiecutter.cookiecutter_home_dir}}\\cookiecutters",
+    "cookiecutters_replay_dir": "{{cookiecutter.home_directory}}\\{{cookiecutter.cookiecutter_home_dir}}\\cookiecutter_replay",
+    "cookiecutter_defaults_file": "defaults.yaml",
     "created_on": "{% now 'local' %}",
-    "project_slug": "{{cookiecutter.psm_home_dir_name.lower().strip().replace(' ', '-').replace('.', '')}}",
+    "project_slug": "{{cookiecutter.cookiecutter_home_dir.lower().strip().replace(' ', '-').replace('.', '')}}",
     "_extensions": [
         "jinja2_time.TimeExtension"
     ]
