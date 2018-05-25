@@ -13,5 +13,5 @@ def session_setup() -> Instance:
 
 def test_username(session_setup):
     instance = session_setup
-    assert instance.username == "eric.harris@oracle.com"
+    assert instance.gc3_meta_data.username == "eric.harris@oracle.com"
 

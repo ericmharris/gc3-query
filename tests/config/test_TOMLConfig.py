@@ -1,13 +1,13 @@
 import pytest
 
 from gc3_query.lib.config import cfg
-from gc3_query.lib.config.config_factory import ConfigFactory
+from gc3_query.lib.config.toml_config_loader import TOMLConfig
 
 from gc3_query.lib.models.gc3_meta_data import GC3MetaData
 
 @pytest.fixture()
-def session_setup() -> ConfigFactory:
-    config = ConfigFactory()
+def session_setup() -> TOMLConfig:
+    config = TOMLConfig()
     yield config
     print(f"setup_session closing Session...")
 

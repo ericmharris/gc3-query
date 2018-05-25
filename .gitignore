@@ -6,6 +6,7 @@ etc/config/secrets.py
 **/secrets.py
 /**/secrets.py
 .ipynb_checkpoints
+.pytest_cache
 
 mongodb-for-python-for-developers
 
