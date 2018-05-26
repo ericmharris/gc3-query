@@ -1,20 +1,17 @@
-[user]
+[idm_domains]
 first_name = 'Eric'
 last_name = 'Harris'
 email = 'eric.harris@oracle.com'
 cloud_username = 'eric.harris@oracle.com'
 os_username = 'eharris'
-home_directory = 'C:\Users\eharris'
+home_directory = 'C:\Users\{{user.os_username}}'
 password_storage = 'keyring'
 default_idm_domain = 'gc3pilot'
 
 
-[user._meta]
-title = 'User Information'
-file = 'user_info.toml'
-decription = 'Basic user information'
+[idm_domains._meta]
+title = 'IDM Domains'
+file = 'idm_domains.toml'
+decription = 'Oracle Cloud IDM domains used with the GC3 project.'
 dependencies = ''
 default_type = 'str'
-
-
-

@@ -1,0 +1,12 @@
+title = '__init__'
+decription = 'GC3 Configuration Data'
+
+[__init__]
+project_name = 'GC3'
+
+[__init__._meta]
+title = '__init__'
+file = '__init__.toml'
+decription = 'GC3 Configuration Data'
+dependencies = ''
+default_type = 'str'
