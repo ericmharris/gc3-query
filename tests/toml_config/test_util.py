@@ -2,7 +2,7 @@ import pytest
 from pathlib import Path
 
 from gc3_query.lib.toml_cfg import cfg
-from gc3_query.lib.toml_cfg.toml_file import TOMLFile
+from gc3_query.lib.toml_cfg.util import quote_key
 
 from gc3_query.lib.models.gc3_meta_data import GC3MetaData
 TEST_BASE_DIR: Path = Path(__file__).parent
@@ -37,10 +37,6 @@ CONFIG_DIR: Path = Path(__file__).parent.joinpath('config')
 
 
 
-def test_open_missing_file():
-    missing_file = CONFIG_DIR.joinpath('not_there.toml')
-    with pytest.raises(RuntimeError) as excinfo:
-        cfgf = TOMLFile(path=missing_file)
 
 
 def test_quote_key():
