@@ -129,7 +129,7 @@ class Spec(object):
     def _validate_config(self):
         """
         Validates the correctness of the configurations injected and makes sure that:
-        - no extra config keys are available on the config dictionary
+        - no extra toml_cfg keys are available on the toml_cfg dictionary
         - dependent configs are checked
 
         :return: True if the initial configs are valid, False otherwise
@@ -142,7 +142,7 @@ class Spec(object):
             are_config_changed = True
             for key in extraneous_keys:
                 warnings.warn(
-                    message='config {} is not a recognized config key'.format(key),
+                    message='toml_cfg {} is not a recognized toml_cfg key'.format(key),
                     category=Warning,
                 )
 
@@ -150,7 +150,7 @@ class Spec(object):
             are_config_changed = True
             self.config['internally_dereference_refs'] = False
             warnings.warn(
-                message='internally_dereference_refs config disabled because validate_swagger_spec has to be enabled',
+                message='internally_dereference_refs toml_cfg disabled because validate_swagger_spec has to be enabled',
                 category=Warning,
             )
 

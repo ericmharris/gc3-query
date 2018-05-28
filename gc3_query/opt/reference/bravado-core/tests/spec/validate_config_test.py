@@ -8,7 +8,7 @@ from tests.conftest import get_url
 
 
 @pytest.mark.parametrize(
-    'config',
+    'toml_cfg',
     [
         {},
         CONFIG_DEFAULTS,
@@ -21,17 +21,17 @@ def test_validate_config_succeed(minimal_swagger_dict, minimal_swagger_abspath, 
 
 
 @pytest.mark.parametrize(
-    'config, expected_different_config, expected_warnings_call',
+    'toml_cfg, expected_different_config, expected_warnings_call',
     [
         (
             {'this_is_an_extra_key': True},
             False,
-            'config this_is_an_extra_key is not a recognized config key',
+            'toml_cfg this_is_an_extra_key is not a recognized toml_cfg key',
         ),
         (
             {'validate_swagger_spec': False, 'internally_dereference_refs': True},
             True,
-            'internally_dereference_refs config disabled because validate_swagger_spec has to be enabled',
+            'internally_dereference_refs toml_cfg disabled because validate_swagger_spec has to be enabled',
         ),
     ]
 )

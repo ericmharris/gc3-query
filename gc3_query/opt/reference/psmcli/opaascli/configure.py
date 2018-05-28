@@ -6,13 +6,13 @@ import sys
 import os
 from argparse import ArgumentParser
 import base64
-import getpass 
+import getpass
 import keyring
 import requests
-import pip 
+import pip
 import subprocess
-import logging 
-import json 
+import logging
+import json
 from requests.auth import _basic_auth_str
 from collections import OrderedDict
 try:
@@ -37,54 +37,54 @@ NO_MATCHES_FOUND = 23
 # Logger
 logger = logging.getLogger(__name__)
 
-class Configure(object):    
+class Configure(object):
     """
        It is called on 'psm setup' to configure the credentials
     """
 
-    def __init__(self):        
+    def __init__(self):
         self.utils = Utils()
         # check to maintain this list from the utils.
-        self.setupList = self.utils.getsetuplist 
+        self.setupList = self.utils.getsetuplist
         self.setupTable = {}
 
         self.opcDir = self.utils.opcDir
         self.subOpcDir = self.utils.subOpcDir
 
-        self.confFileName = self.utils.conf_file_name 
-        self.dataFileName = self.utils.data_file_name     
+        self.confFileName = self.utils.conf_file_name
+        self.dataFileName = self.utils.data_file_name
         self._service = OPCService()
-        
+
         self.MAX_RETRIES = 2
-        
+
         self.isOauth = False
         self.isSetupProfileBased = False
-        
+
     def configureCredentials(self):
         # prompt the user with credentials
-        user, passwd = self.login()                
+        user, passwd = self.login()
         # get the input for the other setup values.
-        self._prompt_setup_values()        
+        self._prompt_setup_values()
         # continue setup for OAuth
         self._prompt_setup_oauth()
         # continue to execute setup
-        return self.execute_setup(user=user, passwd=passwd)        
-                        
+        return self.execute_setup(user=user, passwd=passwd)
+
     def execute_setup(self, user=None, passwd=None):
         access_token = None
-        # Get the current log level. if doesnt exist default the log level to Info 
+        # Get the current log level. if doesnt exist default the log level to Info
         self.setupTable[self.utils.log_level] = get_log_level()
-        
+
         # replace the Identity URL with the identity domain.
         if self.isOauth:
             self.setupTable[self.utils._oauth_idcs_url] = self.setupTable[self.utils._oauth_idcs_url].format(self.setupTable[self.utils.identity_domain])
-        
+
         # create the directory for .opaas if it does not exists
         if not os.path.exists(self.opcDir):
             os.makedirs(self.opcDir)
         for dirname in self.subOpcDir:
             os.makedirs(self.opcDir + "/" + dirname, exist_ok=True)
-                
+
         # validate the user credentials
         urlHostName = self.setupTable[self.utils.default_uri]
         identityDomain = self.setupTable[self.utils.identity_domain]
@@ -92,11 +92,11 @@ class Configure(object):
             access_token, expires_in = self._service.get_oauth_access_token(self.setupTable, user, passwd, False)
             access_token = "Bearer " + access_token
             self.setupTable[self.utils.access_token_expiry] = self.utils.get_token_expiration_time(expires_in)
-        validationResult, user, passwd = self.getValidationCode(user, passwd, identityDomain, urlHostName, access_token)  
-        
+        validationResult, user, passwd = self.getValidationCode(user, passwd, identityDomain, urlHostName, access_token)
+
         # to get the value of the client_version if setup is run multiple times
         client_version = self.utils.get_existing_cli_version()
-        
+
         # if validation is successful then write conf file. else return
         if validationResult:
             # if successful add the token to the keyring
@@ -104,11 +104,11 @@ class Configure(object):
             if self.isOauth:
                 token = access_token
             else:
-                token = self.createToken(user, passwd) 
+                token = self.createToken(user, passwd)
             # get the list of service catalogs
             # True is when the setup is run explicitly
             rest_request_status,cli_artifacts_versions = self._service.callRestApiGetServiceTypes(True,token,self.setupTable)
-            
+
             if rest_request_status:
                 if client_version is not None:
                     new_client_version, new_last_updated_time, catalog_build_version = self.utils.parse_cli_artifacts_versions(cli_artifacts_versions)
@@ -121,22 +121,22 @@ class Configure(object):
                 # add the passwd to the keyring if its OAUTH. This is used
                 # for refreshing OAuth token after expiring.
                 if self.isOauth:
-                    keyring.set_password(self.utils.cli_keyring_name, self.utils._cli_user_passwd, passwd) 
-                # add the user to the config file: open with append mode or write new mode.
+                    keyring.set_password(self.utils.cli_keyring_name, self.utils._cli_user_passwd, passwd)
+                # add the user to the toml_cfg file: open with append mode or write new mode.
                 mode = 'w' if os.path.exists(self.confFileName) else 'a'
                 with open(self.confFileName, mode) as f:
                     f.write("%s=%s\n" % (self.utils.username, user))
                     for key, value in self.setupTable.items():
-                       f.write("%s=%s\n" % (key, value))                
+                       f.write("%s=%s\n" % (key, value))
                 f.close()
             else:
                 # debug msg
                 logger.debug(ErrorMessages.OPAAS_CLI_CONFIG_DOWNLOAD_CATALOG_ERROR)
-                sys.exit(1) 
-            
+                sys.exit(1)
+
         else:
-            sys.exit(1)        
-    
+            sys.exit(1)
+
     def _prompt_setup_values(self):
         # setup for identity domain, region and output format
         for inputKey in self.setupList:
@@ -168,10 +168,10 @@ class Configure(object):
                     if inpStr is None:
                         print(ErrorMessages.OPAAS_CLI_REGION_ERR_DISPLAY % (self.utils.get_region_values, self.utils.region))
                     else:
-                        break             
-                        
-            self.setupTable[inputKey] = inpStr         
-     
+                        break
+
+            self.setupTable[inputKey] = inpStr
+
     def _prompt_setup_oauth(self):
         # prompt for clientId and Client Secret
         oauthInpStr = None
@@ -188,7 +188,7 @@ class Configure(object):
                     sys.stdout.write(Messages.OPAAS_CLI_TEAR_DOWN_RESPONE_MSG.format(oauthInpStr, \
                                         self.utils.getStringFromList(self.utils._response_list)))
                     oauthInpStr = oauthinp_prompt()
-                    
+
         if oauthInpStr.lower() == self.utils._response_yes:
             for ipKey in self.utils.setup_oauth_details:
                 ip_prompt = lambda: (input(ipKey + ": "))
@@ -199,14 +199,14 @@ class Configure(object):
                     while not ipStr:
                         sys.stdout.write(ErrorMessages.OPAAS_CLI_FIELD_EMPTY_ERROR_DISPLAY % ipKey)
                         ipStr = ip_prompt()
-                    self.setupTable[self.utils._oauth_details[ipKey]] = ipStr 
-                self.isOauth = True        
-        
+                    self.setupTable[self.utils._oauth_details[ipKey]] = ipStr
+                self.isOauth = True
+
     def login(self, get_identity_domain=False):
         # prompts the user to enter the credentials.
         userPrompt = lambda: (input("%s: " % self.utils.username_lbl))
         user = userPrompt()
-        # username cannot be empty. 
+        # username cannot be empty.
         while not user:
             print(ErrorMessages.OPAAS_CLI_FIELD_EMPTY_ERROR_DISPLAY % self.utils.username_lbl)  # user = getpass.getuser()
             user = userPrompt()
@@ -218,56 +218,56 @@ class Configure(object):
                 print(ErrorMessages.OPAAS_CLI_FIELD_EMPTY_ERROR_DISPLAY % self.utils._pwd_lbl)
             else:
                 print(ErrorMessages.OPAAS_CLI_PWD_MATCH_ERROR_DISPLAY)
-            passwd, passwd2 = pprompt()   
+            passwd, passwd2 = pprompt()
         # Get identity Domain if required.
         if get_identity_domain:
-            identity_domain = self.getIdentityDomain(None) 
+            identity_domain = self.getIdentityDomain(None)
             return user, passwd, identity_domain
-        return user, passwd 
+        return user, passwd
 
     # Get SM URL from 'Region [us]' input value entered in psm setup.
     def getRegion(self, inpStr=None):
         # Invoke cmd prompt for Region if input is None
         if inpStr is None:
             inpStr = input(self.utils.region + ": ")
-        
+
         if not inpStr:
             # the default will be US.
             inpStr = self.utils.get_public_domain_url('us')
         else:
             inpStr = self.utils.get_public_domain_url(inpStr)
-        
+
         self.setupTable[self.utils.default_uri] = inpStr
-        
-        return inpStr   
-    
-    # Get Identity URL to retrieve the access token for OAuth 
-    def getIdentityURL(self, inpStr=None):     
-        if not inpStr: 
+
+        return inpStr
+
+    # Get Identity URL to retrieve the access token for OAuth
+    def getIdentityURL(self, inpStr=None):
+        if not inpStr:
             # the default will be production url for US.
             inpStr = self.utils.get_public_identity_domain_url()
-        
-        self.setupTable[self.utils.oauth_idcs_url] = inpStr 
-        
+
+        self.setupTable[self.utils.oauth_idcs_url] = inpStr
+
         return inpStr
-        
+
     # Get IdentityDomain
     def getIdentityDomain(self, inpStr=None):
         input_prompt = lambda: (input(self.utils._identity_domain_lbl + ": "))
         # invoke cmd input prompt if inpStr is None.
         if inpStr is None:
             inpStr = input_prompt()
-        
+
         # identity domain cannot be empty.
         while not inpStr:
             print(ErrorMessages.OPAAS_CLI_FIELD_EMPTY_ERROR_DISPLAY % self.utils._identity_domain_lbl)
             inpStr = input_prompt()
-        
+
         # update the main table, that actually stores the values in the conf file.
         self.setupTable[self.utils.identity_domain] = inpStr
-        
+
         return inpStr
-    
+
     def checkCredentials(self, user, passwd, identityDomain, urlHostName, access_token):
         token = None
         # check if its OAUTH
@@ -277,16 +277,16 @@ class Configure(object):
             # if not, use basic auth
             if user and passwd:
                 token = self.createToken(user, passwd)
-            
-        # return true if validation successful 
-        return self._service.checkCredentials(token, identityDomain, urlHostName)  
-    
+
+        # return true if validation successful
+        return self._service.checkCredentials(token, identityDomain, urlHostName)
+
     def getValidationCode(self, user, passwd, identityDomain, urlHostName, access_token, counter=0):
         # check for valid credentials at this point.
         validationCode = self.checkCredentials(user, passwd, identityDomain, urlHostName, access_token)
         if validationCode == True:
             return True, user, passwd
-        else: 
+        else:
             if validationCode == 400:
                 # bad request error
                 self._display_error(ErrorMessages.OPAAS_CLI_DEFAULT_URI_ERROR_DISPLAY)
@@ -303,25 +303,25 @@ class Configure(object):
                     print(ErrorMessages.OPAAS_CLI_UNAME_PWD_ERR_DISPLAY)
                     user, passwd, identityDomain = self.login(get_identity_domain=True)
                     return self.getValidationCode(user, passwd, identityDomain, urlHostName, access_token, counter=counter)
-                    #return True, user, passwd 
+                    #return True, user, passwd
                 else:
                     self._display_error(ErrorMessages.OPAAS_CLI_GENERIC_ERR_DISPLAY)
             elif validationCode == 403:
                 # Identity domain error
                 self._display_error(ErrorMessages.OPAAS_CLI_INVALID_IDENTITY_DOMAIN_ERR_DISPLAY % (identityDomain, self.utils._identity_domain_lbl))
             elif validationCode == False:
-                self._display_error(ErrorMessages.OPAAS_CLI_GENERIC_ERR_DISPLAY) 
+                self._display_error(ErrorMessages.OPAAS_CLI_GENERIC_ERR_DISPLAY)
             elif validationCode >= 300:
                 self._display_error(ErrorMessages.OPAAS_CLI_GENERIC_ERR_DISPLAY)
-            
-            # return false                
+
+            # return false
             return False, user, passwd
-   
+
     def _display_error(self, msg):
-        print('\n--------------------------------------------------------------------------------') 
+        print('\n--------------------------------------------------------------------------------')
         print(msg)
         logger.error(msg)
-        print('--------------------------------------------------------------------------------') 
+        print('--------------------------------------------------------------------------------')
 
 
     def createToken(self, username, password):
@@ -347,15 +347,15 @@ class Configure(object):
                                                                     self.utils.getStringFromList(self.utils._response_list)))
         else:
             inpStr = self.utils._response_yes
-            
+
         if inpStr.lower() == self.utils._response_yes:
             try:
                 user = self.utils.getValueFromConfigFile(self.utils.username)
                 keyring.delete_password(self.utils.cli_keyring_name, user)
             except Exception as e:
                 logger.error(ErrorMessages.OPAAS_CLI_TEAR_DOWN_CRED_ERROR.format(e))
-            
-            # remove the config directories:
+
+            # remove the toml_cfg directories:
             for dirname in self.subOpcDir:
                 if dirname != self.utils.opc_log_dir_name:
                     self.utils.remove_config_dirs(self.opcDir + os.sep + dirname)
@@ -363,23 +363,23 @@ class Configure(object):
             sys.stdout.write(Messages.OPAAS_CLI_TEAR_DOWN_SUCCESS_DISPLAY)
             logger.info(Messages.OPAAS_CLI_TEAR_DOWN_SUCCESS_MSG)
 
-        return 
+        return
 
     def execute_profile_based_setup(self, profile_file_name):
         if os.path.exists(profile_file_name):
             try:
                 with open(profile_file_name) as json_file:
                     data = json.load(json_file, object_pairs_hook=OrderedDict)
-                
+
                 if not all(key in data for key in [self.utils.username, self.utils.password, self.utils.identity_domain]):
                     sys.stdout.write(ErrorMessages.OPAAS_CLI_PROFILE_BASED_MISSING_VALUES_ERR_DISPLAY % (self.utils.username, self.utils.password, self.utils.identity_domain))
                     return
-                
+
                 # read the required setup values.
                 username = data[self.utils.username]
                 password = data[self.utils.password]
                 self.setupTable[self.utils.identity_domain] = data[self.utils.identity_domain]
-                
+
                 # get the defaultURI
                 region = self.utils.get_public_domain_url('us')
                 # check if the payload has the region.
@@ -391,7 +391,7 @@ class Configure(object):
                         return
                 # store the defaultURI into the setupTable.
                 self.setupTable[self.utils.default_uri] = region
-                
+
                 # get the default outputformat.
                 output_format = self.utils.default_output_value
                 # check if the payload has the output format.
@@ -401,9 +401,9 @@ class Configure(object):
                         print(ErrorMessages.OPAAS_CLI_OUTPUT_FORMAT_ERROR_MSG % (self.utils.getStringFromList(self.utils.get_output_format_values), \
                                                                                      self.utils.output_format))
                         return
-                    output_format = data[self.utils.output_format] 
-                self.setupTable[self.utils.output_format] = output_format 
-                
+                    output_format = data[self.utils.output_format]
+                self.setupTable[self.utils.output_format] = output_format
+
                 if 'oAuth' in data:
                     oauth_details = data['oAuth']
                     # check if client Id and client secret are present.
@@ -411,11 +411,11 @@ class Configure(object):
                         sys.stdout.write(ErrorMessages.OPAAS_CLI_PROFILE_BASED_MISSING_VALUES_OAUTH_ERR_DISPLAY % \
                                             (self.utils.oauth_client_id, self.utils.oauth_client_secret))
                         return
-                    
+
                     # Read the clientId and Client secret into setupTable.
                     self.setupTable[self.utils.oauth_client_id] = oauth_details[self.utils.oauth_client_id]
                     self.setupTable[self.utils.oauth_client_secret] = oauth_details[self.utils.oauth_client_secret]
-                    
+
                     # check access token server if its in the payload.
                     # get the default value.
                     access_token_server = self.utils.get_public_identity_domain_url()
@@ -426,20 +426,20 @@ class Configure(object):
                             sys.stdout.write(ErrorMessages.OPAAS_CLI_PROFILE_BASED_INVALID_ACCESS_TOKEN_ERR_DISPLAY)
                             return
                     self.setupTable[self.utils.oauth_idcs_url] = access_token_server
-                    
+
                     self.isOauth = True
-                    
-                # execute the setup.  
+
+                # execute the setup.
                 self.isSetupProfileBased = True
                 return self.execute_setup(user=username, passwd=password)
-            
+
             except ValueError as e:
                 sys.stdout.write(ErrorMessages.OPAAS_CLI_PROFILE_BASED_INVALID_PAYLOAD_ERR_DISPLAY % e)
                 sys.exit(1)
         else:
             sys.stdout.write(ErrorMessages.OPAAS_CLI_PROFILE_BASED_FILE_NOT_FOUND_ERR_DISPLAY.format(msg=profile_file_name))
             sys.exit(1)
-                
+
 class SetupParser(object):
     """
     The setup parser which handles the setup functions and teardown functions
@@ -449,13 +449,13 @@ class SetupParser(object):
         self.service_description = service_description
         self._configure = Configure()
         self._utils = Utils()
-    
+
     def __call__(self, args_extras, args_parsed):
         if Messages.OPAAS_CLI_HELP_KEY in args_extras:
             if self.service_name == Messages.OPAAS_CLI_TEAR_DOWN_KEY:
                 self._display_teardown_help()
             else:
-                self._display_setup_help()        
+                self._display_setup_help()
         elif args_extras:
             # additional check for teardown if they have specified force parameter.
             if len(args_extras) == 2 and args_extras[0] in self._utils.teardown_params and self.service_name == Messages.OPAAS_CLI_TEAR_DOWN_KEY:
@@ -464,7 +464,7 @@ class SetupParser(object):
                     sys.stdout.write(Messages.OPAAS_CLI_WARN_TEARDOWN_FORCE_MSG % self._utils.teardown_force_param_values)
                 else:
                     force_value = True if force_value.lower() == 'true' else False
-                    self._configure.undo_configureCredentials(force=force_value)                    
+                    self._configure.undo_configureCredentials(force=force_value)
             elif len(args_extras) == 2 and args_extras[0] in self._utils.config_payload_params and self.service_name == Messages.OPAAS_CLI_SETUP_KEY:
                 config_param_value = args_extras[1]
                 self._configure.execute_profile_based_setup(config_param_value)
@@ -476,10 +476,10 @@ class SetupParser(object):
                 raise UnknownArgumentError(arguments=' '.join(args_extras), cmd_struct=Messages.OPAAS_CLI_TOP_LEVEL_SCRIPT_NAME + self.service_name)
         else:
             if self.service_name == Messages.OPAAS_CLI_TEAR_DOWN_KEY:
-                self._configure.undo_configureCredentials()    
+                self._configure.undo_configureCredentials()
             else:
                 self._configure.configureCredentials()
-    
+
     def _display_setup_help(self):
         script_dir = os.path.dirname(__file__)
         fileName = "setuphelp.txt"
@@ -487,10 +487,10 @@ class SetupParser(object):
         if os.path.exists(rel_path):
             with open(rel_path, "r") as f:
                 print(f.read())
-        else: 
+        else:
             logger.error(ErrorMessages.OPAAS_CLI_SETUP_HELP_ERROR)
             print(ErrorMessages.OPAAS_CLI_SETUP_GENERIC_DISPLAY)
-    
+
     def _display_teardown_help(self):
         script_dir = os.path.dirname(__file__)
         fileName = "teardownhelp.txt"
@@ -498,19 +498,19 @@ class SetupParser(object):
         if os.path.exists(rel_path):
             with open(rel_path, "r") as f:
                 print(f.read())
-        else: 
+        else:
             logger.error(ErrorMessages.OPAAS_CLI_TEARDOWN_HELP_ERROR)
-   
+
 class OpaasSync(object):
     """
-    This upgrades to the latest client on psm upgrade. 
+    This upgrades to the latest client on psm upgrade.
     """
     def __init__(self, service_name, service_description):
         self.service_name = service_name
         self.service_description = service_description
         self._opcservice = OPCService()
         self._utils = Utils()
-    
+
     def __call__(self, args_extras, args_parsed):
         if Messages.OPAAS_CLI_HELP_KEY in args_extras:
             self._display_help()
@@ -520,7 +520,7 @@ class OpaasSync(object):
         else:
             # check the version and determine whether to upgrade or not.
             self._check_version_and_upgrade()
-            
+
     def _display_help(self):
         script_dir = os.path.dirname(__file__)
         fileName = "upgradehelp.txt"
@@ -528,14 +528,14 @@ class OpaasSync(object):
         if os.path.exists(rel_path):
             with open(rel_path, "r") as f:
                 print(f.read())
-        else: 
+        else:
             logger.error(ErrorMessages.OPAAS_CLI_UPGRADE_HELP_ERROR)
             print(ErrorMessages.OPAAS_CLI_UPGRADE_GENERIC_DISPLAY)
-    
+
     def _install(self, package):
         # call the pip main to run the install for the upgrade command.
         return_code = pip.main(['install', '-U', package])
-        
+
         if return_code == SUCCESS:
             logging.config.dictConfig(LOGGING_CONFIG)
             logger.info(Messages.OPAAS_CLI_UPGRADE_LOG_SUCCESS)
@@ -552,7 +552,7 @@ class OpaasSync(object):
 
     def _install_root(self, package):
         logger.info(Messages.OPAAS_CLI_UPGRADE_SUDO_PROMPT)
-        sys.stdout.write(Messages.OPAAS_CLI_UPGRADE_SUDO_PROMPT)        
+        sys.stdout.write(Messages.OPAAS_CLI_UPGRADE_SUDO_PROMPT)
         success = True
         sudo_opts = '-HE' if self._utils.isMac() else '-H'
         p = subprocess.Popen(['sudo', sudo_opts, 'pip3', 'install', '-U', package], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -562,22 +562,22 @@ class OpaasSync(object):
         err_cmd_not_found_code = 1
         if err:
             err_cmd_not_found_code = self._check_err_msg(err)
-        
+
         # check for error_code. if 2, then re-run the upgrade with pip3.
         if err_cmd_not_found_code == 2:
             # rerun the upgrade using pip3.
             p2 = subprocess.Popen(['sudo', sudo_opts, 'pip', 'install', '-U', package], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            out, err = p2.communicate()            
+            out, err = p2.communicate()
             # check for err and success msgs. if error code is 1, then its true implicitly
             if err:
                 err_code = self._check_err_msg(err, upgrade_using_pip3=False)
                 if err_code == 3 or err_code == 2:
                     success = False
-      
-        # check for other exceptions if failed.    
+
+        # check for other exceptions if failed.
         elif err_cmd_not_found_code == 3:
-            success = False   
-        
+            success = False
+
         # if no exception display the output for the upgrade using pip.
         if out:
             output = out.splitlines()
@@ -588,7 +588,7 @@ class OpaasSync(object):
             logging.config.dictConfig(LOGGING_CONFIG)
             logger.info(Messages.OPAAS_CLI_UPGRADE_LOG_SUCCESS)
         return success
-    
+
     def _check_err_msg(self, err, upgrade_using_pip3=True):
         # success codes - 1 : success. 2 : pip command not found. 3 : Other exceptions
         success = 1;
@@ -606,29 +606,29 @@ class OpaasSync(object):
                     logger.error(ErrorMessages.OPAAS_CLI_UPGRADE_PIP_NOT_FOUND_ERROR)
                     sys.stderr.write(ErrorMessages.OPAAS_CLI_UPGRADE_PIP_NOT_FOUND_ERROR)
             if any(error_msg in decode_msg.lower() for error_msg in ['exception:', 'exception', 'traceback', 'command not found', \
-                                                                     'invalid password', 'incorrect password']): 
+                                                                     'invalid password', 'incorrect password']):
                 logger.error(ErrorMessages.OPAAS_CLI_UPGRADE_PIP_ERROR % decode_msg)
                 success=3
             sys.stderr.write('%s\n' % decode_msg)
-        return success                    
-    
+        return success
+
     def _check_version_and_upgrade(self):
         # update the cli_artifacts_version in the conf.
         defaultUri = self._utils.getValueFromConfigFile(self._utils.default_uri)
         # check if the access token is expired
-        refresh_token = self._utils.isAccessTokenExpired() 
+        refresh_token = self._utils.isAccessTokenExpired()
         # if token is expired, refresh the access token
         if refresh_token:
             access_token, expires_in = self._opcservice.get_oauth_access_token(refresh_token=refresh_token)
             self._utils.persistTokenAndExpiryTime(access_token, expires_in)
-        
+
         cli_artifacts_version = self._opcservice.checkCredentials(self._utils.getAuthToken(), self._utils.getValueFromConfigFile(self._utils.identity_domain), \
                                                                   defaultUri, return_cli_artifacts_upgrade=True)
-        
+
         if cli_artifacts_version is not None and self._utils._version_split_token in str(cli_artifacts_version):
             existing_client_version, existing_last_updated_time, existing_catalog_build_version = self._utils.get_existing_cli_artifacts_versions()
             new_client_version, new_last_updated_time, catalog_build_version = self._utils.parse_cli_artifacts_versions(cli_artifacts_version)
-              
+
             # check if the client versions are the same, if same there is no need to upgrade.
             if (new_client_version is not None and existing_last_updated_time is not None) and \
                               (self._utils.checkVersionEquality(existing_client_version, new_client_version) or \
@@ -636,10 +636,10 @@ class OpaasSync(object):
                 logger.info(Messages.OPAAS_CLI_LATEST_VERSION_EXISTS)
                 sys.stdout.write('%s: %s\n' % (FormatText.bold(Messages.OPAAS_CLI_INFO_MSG), Messages.OPAAS_CLI_LATEST_VERSION_EXISTS))
                 return
-            
+
             # upgrade to the latest.
             success = self._upgrade_to_latest(existing_client_version, new_client_version)
-        
+
             # write the value to the conf
             if success:
                 self._utils.writeValueToConfigFile(self._utils.build_version_key, \
@@ -657,12 +657,12 @@ class OpaasSync(object):
                 sys.stderr.write(ErrorMessages.OPAAS_CLI_UPGRADE_DNS_ERROR_DISPLAY % defaultUri)
             else:
                 logger.error(ErrorMessages.OPAAS_CLI_UPGRADE_GENERIC_ERROR % (cli_artifacts_version))
-            
-            logger.info(ErrorMessages.OPAAS_CLI_UPGRADE_FAILED_ERR_DISPLAY)    
-            sys.stdout.write(ErrorMessages.OPAAS_CLI_UPGRADE_FAILED_ERR_DISPLAY)    
-            sys.exit(1)    
-                
-    
+
+            logger.info(ErrorMessages.OPAAS_CLI_UPGRADE_FAILED_ERR_DISPLAY)
+            sys.stdout.write(ErrorMessages.OPAAS_CLI_UPGRADE_FAILED_ERR_DISPLAY)
+            sys.exit(1)
+
+
     def _upgrade_to_latest(self, existing_client_version, new_client_version):
         logger.info(Messages.OPAAS_CLI_UPGRADE_DOWNLOAD_KIT % new_client_version)
         sys.stdout.write(Messages.OPAAS_CLI_UPGRADE_DOWNLOAD_KIT % new_client_version)
@@ -671,16 +671,16 @@ class OpaasSync(object):
             logger.error(ErrorMessages.OPAAS_CLI_UPGRADE_DOWNLOAD_KIT_LOCATION_ERROR)
             raise OpaasDownloadFileError()
         try:
-            logger.info(Messages.OPAAS_CLI_UPGRADE_DOWNLOAD_KIT_UPGRADING % (existing_client_version, new_client_version))            
+            logger.info(Messages.OPAAS_CLI_UPGRADE_DOWNLOAD_KIT_UPGRADING % (existing_client_version, new_client_version))
             sys.stdout.write(Messages.OPAAS_CLI_UPGRADE_DOWNLOAD_KIT_UPGRADING % (existing_client_version, new_client_version))
-            
-            # upgrade the clientkit.    
+
+            # upgrade the clientkit.
             if self._utils.isWindows():
                 return self._install(tmp_file_loc)
             else:
-               return self._install_root(tmp_file_loc)  
-           
-            return False      
+               return self._install_root(tmp_file_loc)
+
+            return False
         finally:
             # remove the downloaded kit
             if os.path.exists(tmp_file_loc):
@@ -697,14 +697,14 @@ class OpaasLogLevel(object):
         self.service_name = service_name
         self.service_description = service_description
         self._utils = Utils()
-    
+
     def __call__(self, args_extras, args_parsed):
         if Messages.OPAAS_CLI_HELP_KEY in args_extras:
             self._display_help()
         else:
-            current_level = self._utils.getValueFromConfigFile(self._utils.log_level).lower()        
+            current_level = self._utils.getValueFromConfigFile(self._utils.log_level).lower()
             if len(args_extras) == 0:
-                sys.stdout.write(Messages.OPAAS_CLI_INFO_CURRENT_LOG_LEVEL_MSG % current_level)        
+                sys.stdout.write(Messages.OPAAS_CLI_INFO_CURRENT_LOG_LEVEL_MSG % current_level)
             elif len(args_extras) == 2 and args_extras[0] in self._utils.log_level_argument:
                    level = args_extras[1]
                    if level not in self._utils.get_available_log_levels:
@@ -716,7 +716,7 @@ class OpaasLogLevel(object):
                            sys.stdout.write(Messages.OPAAS_CLI_INFO_LOG_LEVEL_UPDATE_MSG % level)
             else:
                 raise UnknownArgumentError(arguments=' '.join(args_extras), cmd_struct=Messages.OPAAS_CLI_TOP_LEVEL_SCRIPT_NAME + self.service_name)
-   
+
     def _display_help(self):
         script_dir = os.path.dirname(__file__)
         fileName = "loghelp.txt"
@@ -724,7 +724,7 @@ class OpaasLogLevel(object):
         if os.path.exists(rel_path):
             with open(rel_path, "r") as f:
                 print(f.read())
-        else: 
+        else:
             logger.error(ErrorMessages.OPAAS_CLI_LOG_LEVEL_HELP_ERROR)
-            sys.stdout.write(ErrorMessages.OPAAS_CLI_LOG_LEVEL_GENERIC_DISPLAY)     
-    
+            sys.stdout.write(ErrorMessages.OPAAS_CLI_LOG_LEVEL_GENERIC_DISPLAY)
+

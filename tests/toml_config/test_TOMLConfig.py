@@ -1,7 +1,7 @@
 import pytest
 
-from gc3_query.lib.config import cfg
-from gc3_query.lib.config.toml_config_loader import TOMLConfig
+from gc3_query.lib.toml_cfg import cfg
+from gc3_query.lib.toml_cfg.toml_config import TOMLConfig
 
 from gc3_query.lib.models.gc3_meta_data import GC3MetaData
 

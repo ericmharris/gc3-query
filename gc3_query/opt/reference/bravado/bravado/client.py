@@ -121,7 +121,7 @@ class SwaggerClient(object):
         """
         http_client = http_client or RequestsClient()
 
-        # Apply bravado config defaults
+        # Apply bravado toml_cfg defaults
         config = dict(CONFIG_DEFAULTS, **(config or {}))
 
         also_return_response = config.pop('also_return_response', False)
@@ -244,7 +244,7 @@ class CallableOperation(object):
 
         http_client = self.operation.swagger_spec.http_client
 
-        # Per-request config overrides client wide config
+        # Per-request toml_cfg overrides client wide toml_cfg
         also_return_response = request_options.get(
             'also_return_response',
             self.also_return_response,

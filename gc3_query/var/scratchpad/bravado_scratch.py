@@ -247,11 +247,11 @@ requests_client.session.headers.update(cookie_header)
 swagger_client = SwaggerClient.from_spec(spec_dict=spec_dict,
                                          origin_url=iaas_rest_endpoint,
                                          http_client=requests_client,
-                                         # config={'also_return_response': True,
+                                         # toml_cfg={'also_return_response': True,
                                          #         'validate_responses': True,
                                          #         'validate_requests': True,
                                          #         'validate_swagger_spec': True})
-                                         # config={'also_return_response': True,
+                                         # toml_cfg={'also_return_response': True,
                                          #         'validate_responses': False,
                                          #         'validate_requests': True,
                                          #         'validate_swagger_spec': True})
@@ -728,11 +728,11 @@ requests_client.session.headers.update(cookie_header)
 swagger_client = SwaggerClient.from_spec(spec_dict=spec_dict,
                                          origin_url=iaas_rest_endpoint,
                                          http_client=requests_client,
-                                         # config={'also_return_response': True,
+                                         # toml_cfg={'also_return_response': True,
                                          #         'validate_responses': True,
                                          #         'validate_requests': True,
                                          #         'validate_swagger_spec': True})
-                                         # config={'also_return_response': True,
+                                         # toml_cfg={'also_return_response': True,
                                          #         'validate_responses': False,
                                          #         'validate_requests': True,
                                          #         'validate_swagger_spec': True})

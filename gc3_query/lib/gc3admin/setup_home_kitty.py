@@ -112,11 +112,11 @@ class SetupHomeKitty:
         kitty_setup_dir = gc3_var_dir.joinpath("kitty")
         kitty_data_dir = kitty_setup_dir.joinpath("data")
         kitty_logs_dir = kitty_setup_dir.joinpath("logs")
-        kitty_configs_dir = kitty_setup_dir.joinpath("config")
+        kitty_configs_dir = kitty_setup_dir.joinpath("toml_cfg")
         kitty_service_log_file = kitty_logs_dir.joinpath("mongo-service.log")
         kitty_cmd_log_file = kitty_logs_dir.joinpath("mongo-cmd.log")
-        kitty_service_config_file = kitty_configs_dir.joinpath("mongo-service.config")
-        kitty_cmd_config_file = kitty_configs_dir.joinpath("mongo-cmd.config")
+        kitty_service_config_file = kitty_configs_dir.joinpath("mongo-service.toml_cfg")
+        kitty_cmd_config_file = kitty_configs_dir.joinpath("mongo-cmd.toml_cfg")
 
         _debug(f"gc3_var_dir={gc3_var_dir}, kitty_setup_dir={kitty_setup_dir}")
         user_inputs["gc3_var_dir"] = str(gc3_var_dir)
@@ -159,7 +159,7 @@ class SetupHomeKitty:
                 if it exists
             :param output_dir: Where to output the generated project dir into.
             :param config_file: User configuration file path.
-            :param default_config: Use default values rather than a config file.
+            :param default_config: Use default values rather than a toml_cfg file.
             :param password: The password to use when extracting the repository.
     """
 
