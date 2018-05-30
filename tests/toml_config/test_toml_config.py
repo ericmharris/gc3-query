@@ -5,6 +5,7 @@ from gc3_query.lib.toml_cfg.toml_config import TOMLConfig
 
 from gc3_query.lib.models.gc3_meta_data import GC3MetaData
 
+
 @pytest.fixture()
 def session_setup() -> TOMLConfig:
     config = TOMLConfig()
@@ -15,7 +16,6 @@ def session_setup() -> TOMLConfig:
 def test_username(session_setup):
     config = session_setup
     assert config.username == "eric.harris@oracle.com"
-
 
 
 # def test_get_requestium_session(session_setup):

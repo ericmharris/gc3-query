@@ -5,8 +5,9 @@ from gc3_query.lib.toml_cfg import cfg
 from gc3_query.lib.toml_cfg.toml_file import TOMLFile
 
 from gc3_query.lib.models.gc3_meta_data import GC3MetaData
+
 TEST_BASE_DIR: Path = Path(__file__).parent
-CONFIG_DIR: Path = Path(__file__).parent.joinpath('config')
+CONFIG_DIR: Path = Path(__file__).parent.joinpath("config")
 
 # @pytest.fixture()
 # def session_setup() -> TOMLConfig:
@@ -18,7 +19,6 @@ CONFIG_DIR: Path = Path(__file__).parent.joinpath('config')
 # def test_username(session_setup):
 #     config = session_setup
 #     assert config.username == "eric.harris@oracle.com"
-
 
 
 # def test_get_requestium_session(session_setup):
@@ -36,15 +36,12 @@ CONFIG_DIR: Path = Path(__file__).parent.joinpath('config')
 #     assert logout.text=='LOGOUT'
 
 
-
 def test_open_missing_file():
-    missing_file = CONFIG_DIR.joinpath('not_there.toml')
+    missing_file = CONFIG_DIR.joinpath("not_there.toml")
     with pytest.raises(RuntimeError) as excinfo:
         cfgf = TOMLFile(path=missing_file)
 
 
 def test_quote_key():
-    toml_file = CONFIG_DIR.joinpath('_quote_key.toml')
+    toml_file = CONFIG_DIR.joinpath("_quote_key.toml")
     cfgf = TOMLFile(path=toml_file)
-
-

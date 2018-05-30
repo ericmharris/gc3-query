@@ -8,5 +8,5 @@ def quote_key(s: str) -> str:
 
     :param s:
     """
-    pass
+
 

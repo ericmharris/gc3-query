@@ -4,6 +4,7 @@ import pytest
 from gc3_query.lib.models.gc3_meta_data import GC3MetaData
 from gc3_query.lib.models.instance import Instance
 
+
 @pytest.fixture()
 def session_setup() -> Instance:
     instance = Instance()
@@ -14,4 +15,3 @@ def session_setup() -> Instance:
 def test_username(session_setup):
     instance = session_setup
     assert instance.gc3_meta_data.username == "eric.harris@oracle.com"
-
