@@ -1,0 +1,3 @@
+[submodule "gc3_query/opt/reference/toml"]
+	path = gc3_query/opt/reference/toml
+	url = https://github.com/uiri/toml.git
