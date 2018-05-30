@@ -14,6 +14,11 @@ _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
 class TOMLFile:
+
+    @classmethod
+    def quote_key(cls, s):
+        return quote_key(s)
+
     def __init__(self, path: Path):
         """
 
@@ -21,14 +26,19 @@ class TOMLFile:
         """
         self._name = self.__class__.__name__
         self.path = path.resolve()
-        if self.path.is_dir():
-            self._init_file = self.path.joinpath('__init__.toml') if self.path.joinpath('__init__.toml').exists() else None
-        else:
-            self._init_file = self.path.parent.joinpath('__init__.toml') if self.path.parent.joinpath('__init__.toml').exists() else None
+        self.text = self.load(self.path)
 
 
-        if not self.path.exists():
-            raise RuntimeError(f"{self._name} created with file or directory that does not exist: {self.path}")
+
+    def load(self, path: Path) -> str:
+
+        if not path.exists():
+            raise RuntimeError(f"{self._name} created with file that does not exist: {self.path}")
+        if not path.is_file():
+            raise RuntimeError(f"{self._name} created with something other than a file (eg. directory): {self.path}")
+        with path.open().readlines() as _lines:
+           lines_w_qkeys = [self.quote_key(l) for l in _lines]
+           _debug(f"lines_w_qkeys={lines_w_qkeys}")
 
 
 

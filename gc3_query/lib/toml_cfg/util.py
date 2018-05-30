@@ -8,5 +8,9 @@ def quote_key(s: str) -> str:
 
     :param s:
     """
+    first_eq_loc = s.find('=')
+    lhs = s[0:first_eq_loc-1].strip()
+    rhs = s[first_eq_loc+1:].strip()
+    return f"'{lhs}' = {rhs}"
 
 
