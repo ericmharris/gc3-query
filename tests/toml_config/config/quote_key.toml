@@ -21,7 +21,7 @@ default_idm_domain = 'gc3pilot'
 
 # [invalid_without_quotes]
 # -title = 'User Information'
-# has spaces in key = 'user_info.toml'
+# has spaces in key = 'user_info.toml_text'
 # has unknown escapses  \e \C \A = 'Basic user information'
 # invalid+caracters = yep, it does
 

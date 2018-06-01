@@ -1,7 +1,9 @@
+
 import pytest
+import toml
 from pathlib import Path
 
-from gc3_query.lib.toml_cfg import cfg
+from gc3_query.lib import *
 from gc3_query.lib.toml_cfg.toml_file import TOMLFile
 
 from gc3_query.lib.models.gc3_meta_data import GC3MetaData
@@ -9,39 +11,68 @@ from gc3_query.lib.models.gc3_meta_data import GC3MetaData
 TEST_BASE_DIR: Path = Path(__file__).parent
 CONFIG_DIR: Path = Path(__file__).parent.joinpath("config")
 
-# @pytest.fixture()
-# def session_setup() -> TOMLConfig:
-#     config = TOMLConfig()
-#     yield config
-#     print(f"setup_session closing Session...")
-#
-#
-# def test_username(session_setup):
-#     config = session_setup
-#     assert config.username == "eric.harris@oracle.com"
 
 
-# def test_get_requestium_session(session_setup):
-#     s = session_setup
-#     r = s.get('http://www.google.com')
-#     assert r.ok
-#     s.transfer_session_cookies_to_driver()
-#     # r = s.driver.get('http://www.google.com')
-#     assert 'browserName' in s.driver.capabilities
-#
-#
-# def test_login_bm_profile(session_setup):
-#     s = login_bm_profile( username='carolyn_eide_pdx', password='Thumper!', dry_run=False, session=session_setup)
-#     logout = s.driver.find_element_by_link_text('LOGOUT')
-#     assert logout.text=='LOGOUT'
 
 
-def test_open_missing_file():
-    missing_file = CONFIG_DIR.joinpath("not_there.toml")
-    with pytest.raises(RuntimeError) as excinfo:
-        cfgf = TOMLFile(path=missing_file)
+@pytest.fixture()
+def pre_process_line_setup() -> List[str]:
+
+    valid_toml = [
+        "first = Eric",
+        "  last_name  =   Harris",
+        "role = primary=admin",
+        "email = eric.harris@oracle.com",
+        r"home_directory = C:\Users\eharris"]
 
 
-def test_quote_key():
-    toml_file = CONFIG_DIR.joinpath("_quote_key.toml")
-    cfgf = TOMLFile(path=toml_file)
+    annotated_toml = {
+        "first: str = Eric": "str",
+        "last name: str = Harris": "str",
+        "emplid: int = 12345": "int",
+        " role: Role   = primary=admin": "Role",
+        "primary@address: email = eric.harris@oracle.com": "email"
+    }
+
+    one_off_cases_toml = {
+        # "first: str = Eric": "str",
+        "last name = Harris": "None",
+        " role: Role   = primary=admin": "Role",
+        "primary@address: email = eric.harris@oracle.com": "email",
+        "line with no eq in it": "None"
+    }
+
+    yield (valid_toml, annotated_toml, one_off_cases_toml)
+
+
+def test_toml_file_with_valid(pre_process_line_setup):
+    valid_toml, annotated_toml, one_off_cases_toml = pre_process_line_setup
+    for s in valid_toml:
+        pre_proc_line = TOMLFile.pre_process_line(s)
+        assert pre_proc_line.type is None
+        assert pre_proc_line.input in valid_toml
+
+
+def test_with_annotations(pre_process_line_setup):
+    valid_toml, annotated_toml, one_off_cases_toml = pre_process_line_setup
+    for s, type in annotated_toml.items():
+        pre_proc_line = TOMLFile.pre_process_line(s)
+        assert pre_proc_line.type in s
+        assert pre_proc_line.type==type
+        assert pre_proc_line.type not in pre_proc_line.toml
+
+
+def test_one_off_cases_toml(pre_process_line_setup):
+    valid_toml, annotated_toml, one_off_cases_toml = pre_process_line_setup
+    for s, type in one_off_cases_toml.items():
+        pre_proc_line = TOMLFile.pre_process_line(s)
+        assert pre_proc_line.type==type
+
+
+
+@pytest.fixture()
+def test_load_file_setup():
+
+
+
+    yield None

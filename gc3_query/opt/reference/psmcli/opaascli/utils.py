@@ -51,7 +51,7 @@ class ReadConfigFile(ConfigParser.RawConfigParser):
     def hasoption(self, option):
         """
         return True if an option is available, False otherwise.
-        (NOTE: do not confuse with the original has_option)
+        (NOTE: do not confuse with the input has_option)
         """
         return self.has_option(NOSECTION, option)
 
