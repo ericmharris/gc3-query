@@ -34,7 +34,7 @@ except:
     from .handlers import RequestParamHandler,AdditionalResponseValues
     from .executor import RequestExecutor
     from .exceptions import UnknownArgumentError
-    from .utils import Utils 
+    from .utils import Utils
     from .messages import Messages, ErrorMessages, LocalizationConstants
     from .customexecutor import CUSTOM_IMPL_MAP
 
@@ -49,10 +49,10 @@ def change_title_of_arguments(parser, req_title, opt_title):
         elif grp.title == 'optional arguments':
             grp.title = opt_title
 
-# a custom boolean type for the parser to parse the boolean values.
+# a custom boolean type_name for the parser to parse the boolean values.
 def custom_bool_type(v):
   # BUG FIX: 26557045: fixing the boolean parameter to accept
-  # true, false. If the value is not in true or false send the 
+  # true, false. If the value is not in true or false send the
   # value as is to the API.
   if v.lower() in ('true'):
       return True
@@ -68,9 +68,9 @@ def custom_bool_with_validation_type(v):
         return False
     else:
         raise argparse.ArgumentTypeError("invalid choice: '%s' (choose from 'true', 'false')" % v)
- 
 
-# a Case Insensitive list type to check for values in a case 
+
+# a Case Insensitive list type_name to check for values in a case
 # sensitive format: Bug fix: 23333311
 class CaseInsensitiveList(list):
     # override the __contains__ method for custom rendering.
@@ -80,7 +80,7 @@ class CaseInsensitiveList(list):
                 return True
         return False
 
-# A custom Action for CLI version. # Bug Fix: 23525276. 
+# A custom Action for CLI version. # Bug Fix: 23525276.
 # Honoring the -v/--version argument.
 class CLIVersionAction(argparse.Action):
 
@@ -111,55 +111,55 @@ class CLIVersionAction(argparse.Action):
         #formatter.add_text(version)
         #parser._print_message(formatter.format_help(), _sys.stdout)
         parser.exit()
-            
-# the psm parser which is the base parser for all the service, command, 
-# parameter|options (argument) parsers.    
+
+# the psm parser which is the base parser for all the service, command,
+# parameter|options (argument) parsers.
 class OPCParser(argparse.ArgumentParser):
     """ PSM Client parser """
-    
+
     Formatter = OPCHelpCommand  # argparse.RawDescriptionHelpFormatter
     Usage = Messages.OPAAS_CLI_USAGE
     helplist = ['h']
     versionList = ['-v', '--version']
-    
-    @property 
+
+    @property
     def version_parser(self):
         # needs to be implemented by the sub classes. Default is False.
         # this is used to parse the special case of -v and --version handling.
         return False
-    
+
     @property
     def command_list(self):
         # needs to be implemented by the sub classes otherwise it will return None.
         # this is returns a list of services/commands and their descriptions for help.
-        return None   
-    
+        return None
+
     @property
     def parameter_dict(self):
-        # ER: 23711216. to support deprecated parameter. This is used to decide 
+        # ER: 23711216. to support deprecated parameter. This is used to decide
         # if the parameter is deprecated or not. To be implemented by the sub classes
         # mainly used by OPCArgumentParser
         return None
-    
-    @property 
+
+    @property
     def get_examples(self):
-        # needs to be implemented by the sub classes. This returns examples associated with 
+        # needs to be implemented by the sub classes. This returns examples associated with
         # each command or service if there is one. If no examples, returns None.
         return None
-    
-    @property 
+
+    @property
     def get_payload(self):
-        # needs to be implemented by the sub classes. this will return a sample payload 
+        # needs to be implemented by the sub classes. this will return a sample payload
         # that will be displayed with the examples.
         return None
-    
+
     def parse_known_args(self, args, namespace=None):
-        helpvalue = list(set(self.helplist) & set(args)) 
+        helpvalue = list(set(self.helplist) & set(args))
         if helpvalue and len(helpvalue) == 1 and len(args) >= 1:
-            loc = args.index(helpvalue[0])            
+            loc = args.index(helpvalue[0])
             args.remove(helpvalue[0])
             args.insert(loc, Messages.OPAAS_CLI_HELP_KEY)  # substituting help if entered 'h'
-        
+
         # Bug Fix: 23525276. Honoring the -v/--version argument.
         if self.version_parser:
             versionExists = list(set(self.versionList) & set(args))
@@ -168,9 +168,9 @@ class OPCParser(argparse.ArgumentParser):
                 versionIndex = args.index(versionExists[0])
                 if (versionIndex + 1) < len(args):
                     versionValue = args[versionIndex + 1]
-                
+
         parsed, options = self.custom_parse_known_args(args, namespace)
-        
+
         # Bug Fix: 23525276. Honoring the -v/--version argument.
         if self.version_parser and versionExists and len(versionExists) == 1:
             if versionValue is not None:
@@ -180,10 +180,10 @@ class OPCParser(argparse.ArgumentParser):
                 options.append(versionExists[0])
         # print (parsed, options)
         return parsed, options
- 
-    # BUG FIX: 26561690. Argparse to support deprecated param and ignore 
+
+    # BUG FIX: 26561690. Argparse to support deprecated param and ignore
     # the required parameter if the deprecated param is given.
-    # NOTE: Please dont manipulate these methods : 
+    # NOTE: Please dont manipulate these methods :
     #     - custom_parse_known_args(self, args=None, namespace=None)
     #     - _custom_parse_known_args(self, arg_strings, namespace)
     # START : BUG FIX: 26561690
@@ -434,8 +434,8 @@ class OPCParser(argparse.ArgumentParser):
             if action not in seen_actions:
                 # BUG FIX: 26561690
                 # NOTE: action is an object which will contain the details of the parameter
-                # check if the seen action is present in the parameter dict 
-                # if present check if the superseded by value is the same as 
+                # check if the seen action is present in the parameter dict
+                # if present check if the superseded by value is the same as
                 # action.dest in the set of listed actions. If its same then bypass
                 # adding that action into the required_actions if the action was required.
                 deprecatedParam = False
@@ -447,7 +447,7 @@ class OPCParser(argparse.ArgumentParser):
                             if action.dest == superseded_by_param:
                                 deprecatedParam = True
                                 break
-                            
+
                 if action.required and not deprecatedParam:
                     required_actions.append(_get_action_name(action))
                 else:
@@ -483,14 +483,14 @@ class OPCParser(argparse.ArgumentParser):
 
         # return the updated namespace and the extra arguments
         return namespace, extras
- 
-    # END. BUG FIX: 26561690 
- 
-        
+
+    # END. BUG FIX: 26561690
+
+
     def format_help(self):
-        formatter = self._get_formatter()        
+        formatter = self._get_formatter()
         # the list of descriptions for the commands are passed to the formatter
-        formatter.command_list_description = self.command_list           
+        formatter.command_list_description = self.command_list
         # usage
         formatter.add_usage(self.usage, self._actions,
                             self._mutually_exclusive_groups)
@@ -499,19 +499,19 @@ class OPCParser(argparse.ArgumentParser):
         # positionals, optionals and user-defined groups
         for action_group in self._action_groups:
             formatter.start_section(action_group.title)
-            formatter.add_text(action_group.description)            
+            formatter.add_text(action_group.description)
             formatter.add_arguments(action_group._group_actions)
             formatter.end_section()
         # epilog
         formatter.add_text(self.epilog)
         # determine help from format above
-        return formatter.format_help()      
-    
-# the below three sub classes of the main opcparser that will 
-# be used for services, commands and parameters    
+        return formatter.format_help()
+
+# the below three sub classes of the main opcparser that will
+# be used for services, commands and parameters
 class OPCServiceParser(OPCParser):
     # the parser which builds the initial <service> command list
-    Formatter = OPCHelpCommand  # argparse.RawTextHelpFormatter    
+    Formatter = OPCHelpCommand  # argparse.RawTextHelpFormatter
     def __init__ (self, description, service_commands, service_list_descriptions):
         super().__init__(formatter_class=self.Formatter,
             conflict_handler='resolve',
@@ -521,38 +521,38 @@ class OPCServiceParser(OPCParser):
         # _command_list will be used by the help formatter to display the description
         # for the available services.
         self._command_list = service_list_descriptions
-        self._version_parser = True  
+        self._version_parser = True
         self._build_arguments(service_commands)
-    
+
     @property
     def version_parser(self):
         return self._version_parser
-        
+
     @property
     def command_list(self):
         return self._command_list
-    
+
     @command_list.setter
     def command_list(self, value):
         self._command_list = value
-        
-    def _build_arguments(self, service_commands):        
+
+    def _build_arguments(self, service_commands):
         # Place to add any other commands
         self.add_argument("service", choices=CaseInsensitiveList(list(service_commands.keys())))
 
 
 class OPCCommandParser(OPCParser):
-    Formatter = OPCHelpCommand  # argparse.RawTextHelpFormatter    
-    
+    Formatter = OPCHelpCommand  # argparse.RawTextHelpFormatter
+
     def __init__(self, command_list, service_desc, service_name):
         """
-            :type command_list: dict
+            :type_name command_list: dict
             :param command_list: holds the list of commands and  commandexecutor for a particular service
-            
-            :type service_desc: str
+
+            :type_name service_desc: str
             :param servcie_desc: the description of the service
-            
-            :type servcie_name: str
+
+            :type_name servcie_name: str
             :param servcie_name: the name of the service for which the command parser is built.
         """
         Usage = Messages.OPAAS_CLI_TOP_LEVEL_SCRIPT_NAME + service_name + " <command> [parameters]"
@@ -572,43 +572,43 @@ class OPCCommandParser(OPCParser):
     @property
     def command_list(self):
         return self._service_commands_description
-    
-    @command_list.setter 
+
+    @command_list.setter
     def command_list(self, value):
-        self._service_commands_description = value 
-    
+        self._service_commands_description = value
+
     @property
     def get_examples(self):
         return self._example_for_service
-    
+
     @get_examples.setter
     def get_examples(self, value):
         self._example_for_service = value
-        
+
     def _build(self, command_list):
         self.add_argument('command', choices=list(command_list.keys()))
-    
 
-class OPCArgumentParser(OPCParser):       
+
+class OPCArgumentParser(OPCParser):
     def __init__(self, argument_list, cmd_dict, service_name, cmd_name, cmd_list=None, additional_response_values=None):
         """
-           :type argument_list: dict
+           :type_name argument_list: dict
            :param argument_list: the argumenttypes to be added to the argument parser.
-           
-           :type cmd_dict: dict
+
+           :type_name cmd_dict: dict
            :param cmd_dict: holds the description for the specified command
-           
-           :type service_name: str
-           :param service_name: the service name that is in scope.  
-           
-           :type cmd_name: str
-           :param cmd_name: the cmd name that is in scope         
+
+           :type_name service_name: str
+           :param service_name: the service name that is in scope.
+
+           :type_name cmd_name: str
+           :param cmd_name: the cmd name that is in scope
         """
         self.utils = Utils()
         # command_list is an optional subcommand_list.  If it's passed
         # in, then we'll update the argparse to parse a 'subcommand' argument
         # and populate the choices field with the command list keys.
-        command_structure = Messages.OPAAS_CLI_TOP_LEVEL_SCRIPT_NAME + service_name + " " + cmd_name 
+        command_structure = Messages.OPAAS_CLI_TOP_LEVEL_SCRIPT_NAME + service_name + " " + cmd_name
         # the if, is to add the parameters in the usage if it exsits in the catalog dict.
         usage = command_structure + (" [parameters]" if 'parameters' in cmd_dict else '')
         super().__init__(
@@ -617,12 +617,12 @@ class OPCArgumentParser(OPCParser):
             description=cmd_dict['description'],
             conflict_handler='resolve',
             add_help=False)
-        # register the custom type for parsing the boolean values.
-        self.register('type','bool', custom_bool_type)
-        self.register('type', 'custom_bool', custom_bool_with_validation_type)
+        # register the custom type_name for parsing the boolean values.
+        self.register('type_name','bool', custom_bool_type)
+        self.register('type_name', 'custom_bool', custom_bool_with_validation_type)
         # add the example and payload if present for a particular command.
         self._example_for_command = cmd_dict['example'] if 'example' in cmd_dict else None
-        self._payload_for_example = cmd_dict['samplePayload'] if 'samplePayload' in cmd_dict else None        
+        self._payload_for_example = cmd_dict['samplePayload'] if 'samplePayload' in cmd_dict else None
         # TBD: if this cmd_list is needed.
         if cmd_list is None:
             cmd_list = {}
@@ -635,42 +635,42 @@ class OPCArgumentParser(OPCParser):
     @property
     def parameter_dict(self):
         return self._param_dict
-    
+
     @property
     def get_examples(self):
         return self._example_for_command
-    
+
     @get_examples.setter
     def get_examples(self, value):
         self._example_for_command = value
-    
-    @property 
+
+    @property
     def get_payload(self):
         return self._payload_for_example
-    
-    @get_payload.setter 
+
+    @get_payload.setter
     def get_payload(self, value):
-        self._payload_for_example = value 
-    
+        self._payload_for_example = value
+
     def _build(self, argument_list, cmd_list=None):
         for parameter_name in argument_list:
             optionArgument = argument_list[parameter_name]
             # self will this class parser
             optionArgument.add_arg_to_parser(self)
-        
+
         # add default output format overriding at cmd level for every command:
         self.add_argument('-of','--output-format', type=str, dest=self.utils.output_format_override, metavar='',\
                            action='store', \
                            help=Messages.OPAAS_CLI_OUTPUT_FORMAT_HELP_DESC % self.utils.getStringFromList(self.utils.get_output_format_values) , \
                            choices = self.utils.get_output_format_values )
-        
-        # check if it's a NON-GET command, if yes then add "wait-until-complete" argument 
+
+        # check if it's a NON-GET command, if yes then add "wait-until-complete" argument
         if self._command_dict["method"] != "GET" and self._additional_response_values.operation_status_uri is not None \
                             and self._additional_response_values.operation_status_uri:
             # add default 'wait-until-complete' for every command:
             self.add_argument('-wc','--wait-until-complete', type='custom_bool', dest=self.utils.wait_until_complete, metavar='',\
                            action='store', \
-                           help=Messages.OPAAS_CLI_WAIT_UNTIL_COMPLETE_DESC % self.utils.getStringFromList(self.utils.get_wait_until_complete_values) ) 
+                           help=Messages.OPAAS_CLI_WAIT_UNTIL_COMPLETE_DESC % self.utils.getStringFromList(self.utils.get_wait_until_complete_values) )
 
     def parse_known_args(self, args, namespace=None):
         if len(args) == 1 and args[0] == Messages.OPAAS_CLI_HELP_KEY:
@@ -680,38 +680,38 @@ class OPCArgumentParser(OPCParser):
         else:
             return super().parse_known_args(
                     args, namespace)
-    
+
 
 class OPCServiceCmdExecutor (object):
     """ the class to hold the <service> commands """
-    
+
     def __init__ (self, service_cmd_name, opcdir, service_description, original_service_file_name=None):
         """
-           :type service_cmd_name: str
+           :type_name service_cmd_name: str
            :param service_cmd_name: the name of the service that is keyed in.
-           
-           :type opcdir: str
+
+           :type_name opcdir: str
            :param opcdir: this is the base directory from where the service json resides
-           
-           :type service_description: str
+
+           :type_name service_description: str
            :param service_description: the description that goes for each command parser.
         """
-        # the service_cmd_name is the name that the CLI user types 
+        # the service_cmd_name is the name that the CLI user types
         # after the base psm command. for eg: psm jcs / psm setup
         self._name = service_cmd_name
         self._original_service_file_name = original_service_file_name
-        self._servicepath = opcdir 
+        self._servicepath = opcdir
         self._service_commands = None
         # to be passed to the OPCCommandparser for parser description
         self._service_description = service_description
-        # this is used to display the description for each command 
+        # this is used to display the description for each command
         self._service_commands_description = OrderedDict()
         # this is to store the example for the service leve help.
         self._service_example = None
         # ths is to store the payload for the example if exists for help.
         self._service_example_payload = None
         self._additional_response_values = AdditionalResponseValues()
-    
+
     @property
     def name(self):
         return self._name
@@ -719,44 +719,44 @@ class OPCServiceCmdExecutor (object):
     @name.setter
     def name(self, value):
         self._name = value
-    
-    @property     
+
+    @property
     def service_commands_description(self):
         return self._service_commands_description
-    
-    @service_commands_description.setter 
+
+    @service_commands_description.setter
     def service_commands_description(self, value):
-        self._service_commands_description = value 
-    
+        self._service_commands_description = value
+
     @property
     def service_example(self):
         return self._service_example
-    
+
     @service_example.setter
     def service_example(self, value):
         self._service_example = value
-    
-    @property 
+
+    @property
     def get_service_description(self):
         return self._service_description
-    
+
     @property
     def service_commands(self):
         # build the service commands from <service>.json
         if self._service_commands is None:
-            self._service_commands = self._build_service_cmd_list()            
+            self._service_commands = self._build_service_cmd_list()
         return self._service_commands
-    
+
     def _build_service_cmd_list(self):
         # builds the list of commands associated with a particular
         # service. for eg: if the service is 'jcs', it builds all the
         # commands for jcs.
-        service_commands = OrderedDict()        
+        service_commands = OrderedDict()
         with open(self._servicepath + "/" + self._original_service_file_name + ".json") as jf:
-            data = json.load(jf, object_pairs_hook=OrderedDict)        
-        commands = data[self._original_service_file_name]['commands']   
+            data = json.load(jf, object_pairs_hook=OrderedDict)
+        commands = data[self._original_service_file_name]['commands']
         self.service_example = data[self._original_service_file_name]['example'] if 'example' in data[self._original_service_file_name] else None
-        
+
         # Add Custom Command to the service catalog. From ER:27411048
         if self._original_service_file_name in LocalizationConstants.AddCustomCommandToCatalog:
             for command_name, service_command_help_file_name in LocalizationConstants.AddCustomCommandToCatalog[self._original_service_file_name].items():
@@ -764,15 +764,15 @@ class OPCServiceCmdExecutor (object):
                 with open(path_service_command_help_file_name) as af:
                     command_help_data = json.load(af, object_pairs_hook=OrderedDict)
                 commands[command_name] = command_help_data[command_name]
-                 
+
         # check if 'operation-status' is present in the commands
         # if yes, then populate the operation_status_uri
         if 'operation-status' in commands:
-            self._additional_response_values.operation_status_uri = commands['operation-status'].get('uri',{})    
-       
-        # for each command in the specified service build the command executor 
+            self._additional_response_values.operation_status_uri = commands['operation-status'].get('uri',{})
+
+        # for each command in the specified service build the command executor
         # which builds the parser for the parameters (options) associated with
-        # that command. Passing the value, the rest of the dict for reference to 
+        # that command. Passing the value, the rest of the dict for reference to
         # opccommandexecutor.
         for command, value in commands.items():
             # check our any service with custom command implementation
@@ -784,40 +784,40 @@ class OPCServiceCmdExecutor (object):
                 with open(path_to_command_help_file) as f:
                     help_data = json.load(f, object_pairs_hook=OrderedDict)
                 for k,v in help_data.items():
-                    value['parameters'][k] = v 
-                    
-            service_commands[command] = OPCCommandExecutor(self.name, command, value,self._additional_response_values, original_service_type_name=self._original_service_file_name)         
+                    value['parameters'][k] = v
+
+            service_commands[command] = OPCCommandExecutor(self.name, command, value,self._additional_response_values, original_service_type_name=self._original_service_file_name)
             # build the description for each command to be displayed on help
             self.service_commands_description[command] = value['description']
         # add help
         service_commands[Messages.OPAAS_CLI_HELP_KEY] = OPCCustomHelpFormatter(isServiceOrCommand=False, argumentParserParameter=False, service_type_name=self._original_service_file_name )  # HELPTAG
         self.service_commands_description[Messages.OPAAS_CLI_HELP_KEY] = Messages.OPAAS_CLI_HELP_DESC  # HELPTAG
         return service_commands
-    
+
     def __call__(self, args_extras, args_parsed):
         # to create the OPCCommand Parser by calling the create command
-        # parser which is used to check the arguments for the service 
-        # and then invoke the OPC Command Executor which builds the 
+        # parser which is used to check the arguments for the service
+        # and then invoke the OPC Command Executor which builds the
         # OPCArgumentParser.
         # print ("OPCServiceCommandExecutor call function")
         parser = self._create_command_parser()
-        service_commands = self.service_commands 
+        service_commands = self.service_commands
         try:
             cmd_args_parsed, command_args_extras = parser.parse_known_args(args_extras)
             return service_commands[cmd_args_parsed.command](command_args_extras, cmd_args_parsed, service_commands)
         except argparse.ArgumentError:
-            parser.print_help()                
-    
+            parser.print_help()
+
     def _create_command_parser(self):
         # creates the OPCCommandParser for the list of services
-        service_commands = self.service_commands  
+        service_commands = self.service_commands
         parser = OPCCommandParser(service_commands, self.get_service_description, self.name)
         # pass the service_command description to the parser for help formatter to use.
         parser.command_list = self.service_commands_description
         # pass the service level example to the parser for help formatter to use.
         parser.get_examples = self.service_example
         service_commands[Messages.OPAAS_CLI_HELP_KEY].parser = parser  # HELPTAG
-        change_title_of_arguments(parser, 'Available commands', 'Optional arguments') 
+        change_title_of_arguments(parser, 'Available commands', 'Optional arguments')
         return parser
 
 class OPCCommandExecutor(object):
@@ -827,71 +827,71 @@ class OPCCommandExecutor(object):
     """
     def __init__(self, service_name, cmd_name, cmd_dict, additional_response_values=None, original_service_type_name=None):
         """
-            :type service_name: str
+            :type_name service_name: str
             :param service_name: the name of the <service>
- 
-            :type cmd_name: str
+
+            :type_name cmd_name: str
             :param cmd_name: the name of the <command>
-            
-            :type cmd_dict: dict
+
+            :type_name cmd_dict: dict
             :param cmd_dict: holds the dict values for a given command
-            
-            :type additional_response_values: object
+
+            :type_name additional_response_values: object
             :param additional_response_values: object containing additional response values
         """
         self._cmd_name = cmd_name
         self._service_name = service_name
         # TODO: TBD if this command_list will be used later or not
         self._command_list = None
-        self._argument_list = None 
+        self._argument_list = None
         self._arg_parameter_list = None
-        # the dict for command from the json 
+        # the dict for command from the json
         self._cmd_dict = cmd_dict
         self._additional_response_values = additional_response_values
         self._original_service_type_name = original_service_type_name
 
-        
+
     @property
     def cmd_name(self):
         return self._cmd_name
-    
+
     @cmd_name.setter
     def cmd_name(self, value):
-        self._cmd_name = value 
-        
+        self._cmd_name = value
+
     @property
     def service_name(self):
         return self._service_name
-    
+
     @service_name.setter
     def service_name(self, value):
         self._service_name = value
-    
-    @property 
+
+    @property
     def command_list(self):
         return self._command_list
-    
+
     @command_list.setter
     def command_list(self, value):
         self._command_list = value
-        
-    @property 
+
+    @property
     def cmd_list_dict(self):
         return self._cmd_dict
-    
+
     @cmd_list_dict.setter
     def cmd_list_dict(self, value):
-        self._cmd_dict = value 
-    
-    @property 
+        self._cmd_dict = value
+
+    @property
     def arg_parameter_list(self):
         return self.arg_parameter_list
-    
-    @arg_parameter_list.setter 
+
+    @arg_parameter_list.setter
     def arg_parameter_list(self, value):
-        self._arg_parameter_list = value 
-        
-    @property 
+        self._arg_parameter_list = value
+
+    @property
     def original_service_type(self):
         return self._original_service_type_name
 
@@ -900,28 +900,28 @@ class OPCCommandExecutor(object):
         if self._argument_list is None:
             self._argument_list = self._build_argument_list()
         return self._argument_list
-    
-    def _build_argument_list(self): 
+
+    def _build_argument_list(self):
         # build the list of arguments based on the command name
         # cmd_list = self._command_list[self.cmd_name]
         cmd_list_dict = self.cmd_list_dict
         argument_list = cmd_list_dict['parameters'] if 'parameters' in cmd_list_dict else None
         return argument_list
-    
+
     def __call__(self, args_extras, args_parsed, command_list):
         # TODO: TBD if this command_list will be used later or not.
         self.command_list = command_list
-        parser = self._create_argument_parser()   
-        options_args_parsed, options_args_extras = parser.parse_known_args(args_extras) 
-        
+        parser = self._create_argument_parser()
+        options_args_parsed, options_args_extras = parser.parse_known_args(args_extras)
+
         # the parameter ArgParser is processed differently for Help:
         if Messages.OPAAS_CLI_HELP_KEY in options_args_parsed:
             if options_args_parsed.help == Messages.OPAAS_CLI_HELP_KEY:
                 parameter_help = self._create_help(parser)
                 return parameter_help(options_args_extras, options_args_parsed)
-        
+
         if options_args_extras:
-            logger.error("Unknown Argument: %s"% ' '.join(options_args_extras)) 
+            logger.error("Unknown Argument: %s"% ' '.join(options_args_extras))
             raise UnknownArgumentError(arguments = ' '.join(options_args_extras), cmd_struct=parser._command_structure)
         else:
             # parse the values entered in the cmd line and build the requests
@@ -933,7 +933,7 @@ class OPCCommandExecutor(object):
                                                 self._cmd_dict,
                                                 self.argument_list,
                                                 self._additional_response_values)
-            
+
             # Build HTTP request --> Call REST endpoint --> Process response --> Display output
             if (self.service_name in LocalizationConstants.CustomCommandForService and \
                             self.cmd_name in LocalizationConstants.CustomCommandForService[self.service_name]) or \
@@ -941,38 +941,38 @@ class OPCCommandExecutor(object):
                             self.cmd_name in LocalizationConstants.AddCustomCommandToCatalog[self.service_name]):
                 CUSTOM_IMPL_MAP[self.service_name][self.cmd_name](options_for_request_builder, parser.usage, parser.prog).pre_execute_request()
             else:
-                RequestExecutor(options_for_request_builder).execute_request() 
-    
+                RequestExecutor(options_for_request_builder).execute_request()
+
     def _create_help(self, parser):
-        # the custom help formatter is created with a flag to indicate that 
+        # the custom help formatter is created with a flag to indicate that
         # it is for parameter to display the help for parameters.
         parameter_help = OPCCustomHelpFormatter(isServiceOrCommand=False, argumentParserParameter=True, service_type_name=self.original_service_type)
         # add the parser for formatting the help
         parameter_help.parser = parser
         return parameter_help
-    
+
     def _create_argument_parser(self):
         # creates the parser for the optional arguments associated with
         # the specified <command>
         # the command_list: TBD if needed.
         command_list = self.command_list
         self._arg_parameter_list = self._build_parameter_list()
-        parser = OPCArgumentParser(self._arg_parameter_list, self.cmd_list_dict, self.service_name, self.cmd_name, None, self._additional_response_values) 
-        change_title_of_arguments(parser, 'Required parameters', 'Optional parameters') 
+        parser = OPCArgumentParser(self._arg_parameter_list, self.cmd_list_dict, self.service_name, self.cmd_name, None, self._additional_response_values)
+        change_title_of_arguments(parser, 'Required parameters', 'Optional parameters')
         return parser
-        
+
     def _build_parameter_list(self):
         # this is the create a list of OPCArgument object from the argument_list
         arg_parameter_list = OrderedDict()
         argument_list = self.argument_list
         if argument_list is not None:
             for parameter, value in argument_list.items():
-                # Dont add the hiddenconstant parameter to the argparse. 
+                # Dont add the hiddenconstant parameter to the argparse.
                 # this is processed internally in handlers.
                 if 'hiddenConstant' not in value:
                     # keep the arg_name and dest name the same. Look __init__ in OPCArgument for details
                     alias_name = value['alias'] if 'alias' in value else None
                     choices_list = value['choices'] if 'choices' in value else None
-                    arg_parameter_list[parameter] = OPCArgument(parameter, value['type'], value['description'],
-                         parameter, value['required'], 'store', alias_name, choices_list) 
-        return arg_parameter_list    
+                    arg_parameter_list[parameter] = OPCArgument(parameter, value['type_name'], value['description'],
+                         parameter, value['required'], 'store', alias_name, choices_list)
+        return arg_parameter_list

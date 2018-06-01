@@ -68,7 +68,7 @@ def is_dict_like(spec):
     :rtype: boolean
     """
     # Calling isinstance(spec, Mapping) is relatively slow. As this function
-    # gets usually called with a dict type argument we optimize for that case
+    # gets usually called with a dict type_name argument we optimize for that case
     # by executing a much cheaper isinstance(spec, dict) check before the more
     # expensive isinstance(spec, Mapping) check.
     return isinstance(spec, (dict, Mapping))
@@ -158,7 +158,7 @@ def collapsed_properties(model_spec, swagger_spec):
     of properties properly.
 
     :param model_spec: model specification (must be dereferenced already)
-    :type model_spec: dict
+    :type_name model_spec: dict
     :param swagger_spec: :class:`bravado_core.spec.Spec`
     :returns: dict
     """

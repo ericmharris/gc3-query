@@ -25,10 +25,10 @@ def to_wire(swagger_spec, primitive_spec, value):
     """Converts a python primitive or object to a reasonable wire
     representation if it has an associated Swagger `format`.
 
-    :type swagger_spec: :class:`bravado_core.spec.Spec`
-    :param primitive_spec: spec for a primitive type as a dict
+    :type_name swagger_spec: :class:`bravado_core.spec.Spec`
+    :param primitive_spec: spec for a primitive type_name as a dict
     :param value: primitive to convert to wire representation
-    :type value: int, long, float, boolean, string, unicode, object, etc
+    :type_name value: int, long, float, boolean, string, unicode, object, etc
     :rtype: int, long, float, boolean, string, unicode, etc
     :raises: SwaggerMappingError when format.to_wire raises an exception
     """
@@ -41,8 +41,8 @@ def to_wire(swagger_spec, primitive_spec, value):
         return formatter.to_wire(value) if formatter else value
     except Exception as e:
         raise SwaggerMappingError(
-            'Error while marshalling value={} to type={}{}.'.format(
-                value, primitive_spec['type'],
+            'Error while marshalling value={} to type_name={}{}.'.format(
+                value, primitive_spec['type_name'],
                 '/{}'.format(primitive_spec['format']) if 'format' in primitive_spec else '',
             ),
             e,
@@ -53,9 +53,9 @@ def to_python(swagger_spec, primitive_spec, value):
     """Converts a value in wire format to its python representation if
      it has an associated Swagger `format`.
 
-    :type swagger_spec: :class:`bravado_core.spec.Spec`
-    :param primitive_spec: spec for a primitive type as a dict
-    :type value: int, long, float, boolean, string, unicode, etc
+    :type_name swagger_spec: :class:`bravado_core.spec.Spec`
+    :param primitive_spec: spec for a primitive type_name as a dict
+    :type_name value: int, long, float, boolean, string, unicode, etc
     :rtype: int, long, float, boolean, string, object, etc
     """
     if value is None or not schema.has_format(swagger_spec, primitive_spec):
@@ -69,7 +69,7 @@ class SwaggerFormat(namedtuple('SwaggerFormat',
                                'format to_python to_wire validate description')):
     """User-defined format which can be registered with a
     :class:`bravado_core.spec.Spec` to handle marshalling to wire format,
-    unmarshalling to a python type, and format specific validation.
+    unmarshalling to a python type_name, and format specific validation.
 
     :param format: Name for the user-defined format.
     :param to_python: function to unmarshal a value of this format.

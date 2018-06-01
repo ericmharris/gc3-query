@@ -8,28 +8,28 @@ from tests.validate.conftest import email_address_format
 
 @pytest.fixture
 def integer_spec():
-    return {'type': 'integer'}
+    return {'type_name': 'integer'}
 
 
 @pytest.fixture
 def number_spec():
-    return {'type': 'number'}
+    return {'type_name': 'number'}
 
 
 @pytest.fixture
 def string_spec():
-    return {'type': 'string'}
+    return {'type_name': 'string'}
 
 
 @pytest.fixture
 def boolean_spec():
-    return {'type': 'boolean'}
+    return {'type_name': 'boolean'}
 
 
 @pytest.fixture
 def sensitive_string_spec():
     return {
-        'type': 'string',
+        'type_name': 'string',
         'x-sensitive': True,
     }
 
@@ -42,7 +42,7 @@ def test_integer_success(minimal_swagger_spec, integer_spec):
 def test_integer_failure(minimal_swagger_spec, integer_spec):
     with pytest.raises(ValidationError) as excinfo:
         validate_primitive(minimal_swagger_spec, integer_spec, 'i am a string')
-    assert "is not of type 'integer'" in str(excinfo.value)
+    assert "is not of type_name 'integer'" in str(excinfo.value)
 
 
 def test_integer_multipleOf_success(minimal_swagger_spec, integer_spec):
@@ -117,7 +117,7 @@ def test_boolean_success(minimal_swagger_spec, boolean_spec):
 def test_boolean_falure(minimal_swagger_spec, boolean_spec):
     with pytest.raises(ValidationError) as excinfo:
         validate_primitive(minimal_swagger_spec, boolean_spec, "foo")
-    assert "is not of type 'boolean'" in str(excinfo.value)
+    assert "is not of type_name 'boolean'" in str(excinfo.value)
 
 
 def test_number_success(minimal_swagger_spec, number_spec):
@@ -127,7 +127,7 @@ def test_number_success(minimal_swagger_spec, number_spec):
 def test_number_failure(minimal_swagger_spec, number_spec):
     with pytest.raises(ValidationError) as excinfo:
         validate_primitive(minimal_swagger_spec, number_spec, "foo")
-    assert "is not of type 'number'" in str(excinfo.value)
+    assert "is not of type_name 'number'" in str(excinfo.value)
 
 
 def test_number_multipleOf_success(minimal_swagger_spec, number_spec):
@@ -150,13 +150,13 @@ def test_string_success(minimal_swagger_spec, string_spec):
 def test_string_failure(minimal_swagger_spec, string_spec):
     with pytest.raises(ValidationError) as excinfo:
         validate_primitive(minimal_swagger_spec, string_spec, 999)
-    assert "is not of type 'string'" in str(excinfo.value)
+    assert "is not of type_name 'string'" in str(excinfo.value)
 
 
 def test_sensitive_string(minimal_swagger_spec, sensitive_string_spec):
     with pytest.raises(ValidationError) as excinfo:
         validate_primitive(minimal_swagger_spec, sensitive_string_spec, 999)
-    assert "is not of type 'string'" in str(excinfo.value)
+    assert "is not of type_name 'string'" in str(excinfo.value)
     assert '999' not in str(excinfo.value)
 
 
@@ -224,7 +224,7 @@ def test_string_datetime_invalid_exception(minimal_swagger_spec, string_spec):
 
 def test_doesnt_blow_up_when_spec_has_a_required_key(minimal_swagger_spec):
     string_spec = {
-        'type': 'string',
+        'type_name': 'string',
         'required': True,
     }
     validate_primitive(minimal_swagger_spec, string_spec, 'foo')
@@ -233,7 +233,7 @@ def test_doesnt_blow_up_when_spec_has_a_required_key(minimal_swagger_spec):
 @pytest.fixture
 def email_address_spec():
     return {
-        'type': 'string',
+        'type_name': 'string',
         'format': 'email_address',
     }
 
@@ -258,7 +258,7 @@ def test_user_defined_format_failure(minimal_swagger_spec, email_address_spec):
 def test_builtin_format_still_works_when_user_defined_format_used(
         minimal_swagger_spec):
     ipaddress_spec = {
-        'type': 'string',
+        'type_name': 'string',
         'format': 'ipv4',
     }
     request_body = 'not_an_ip_address'
@@ -297,4 +297,4 @@ def test_nullable_fail(minimal_swagger_spec, string_spec):
     string_spec['x-nullable'] = False
     with pytest.raises(ValidationError) as excinfo:
         validate_primitive(minimal_swagger_spec, string_spec, None)
-    assert excinfo.value.message == "None is not of type 'string'"
+    assert excinfo.value.message == "None is not of type_name 'string'"

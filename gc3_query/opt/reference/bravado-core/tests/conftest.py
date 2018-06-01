@@ -172,10 +172,10 @@ def node_spec():
     """Used in tests that have recursive $refs
     """
     return {
-        'type': 'object',
+        'type_name': 'object',
         'properties': {
             'name': {
-                'type': 'string'
+                'type_name': 'string'
             },
             'child': {
                 '$ref': '#/definitions/Node',

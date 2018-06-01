@@ -13,11 +13,11 @@ class HttpClient(object):
         """
         :param request_params: complete request data. e.g. url, method,
             headers, body, params, connect_timeout, timeout, etc.
-        :type request_params: dict
+        :type_name request_params: dict
         :param operation: operation that this http request is for. Defaults
             to None - in which case, we're obviously just retrieving a Swagger
             Spec.
-        :type operation: :class:`bravado_core.operation.Operation`
+        :type_name operation: :class:`bravado_core.operation.Operation`
         :param response_callbacks: List of callables to post-process the
             incoming response. Expects args incoming_response and operation.
         :param also_return_response: Consult the constructor documentation for

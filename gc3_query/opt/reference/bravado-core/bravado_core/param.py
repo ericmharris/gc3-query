@@ -36,9 +36,9 @@ class Param(object):
     """Thin wrapper around a param_spec dict that provides convenience functions
     for commonly requested parameter information.
 
-    :type swagger_spec: :class:`bravado_core.spec.Spec`
-    :type op: :class:`bravado_core.operation.Operation`
-    :type param_spec: parameter specification in dict form
+    :type_name swagger_spec: :class:`bravado_core.spec.Spec`
+    :type_name op: :class:`bravado_core.operation.Operation`
+    :type_name param_spec: parameter specification in dict form
     """
 
     def __init__(self, swagger_spec, op, param_spec):
@@ -72,14 +72,14 @@ class Param(object):
 
 
 def get_param_type_spec(param):
-    """The spec for the parameter 'type' is not always in the same place for a
+    """The spec for the parameter 'type_name' is not always in the same place for a
     parameter. The notable exception is when the location is 'body' and the
-    spec for the type is in param_spec['schema']
+    spec for the type_name is in param_spec['schema']
 
-    :type param: :class:`bravado_core.param.Param`
+    :type_name param: :class:`bravado_core.param.Param`
 
     :rtype: dict
-    :returns: the param spec that contains 'type'
+    :returns: the param spec that contains 'type_name'
     :raises: SwaggerMappingError when param location is not valid
     """
     location = param.location
@@ -100,12 +100,12 @@ def marshal_param(param, value, request):
         - path - can accept primitive and array of primitive types
         - query - can accept primitive and array of primitive types
         - header - can accept primitive and array of primitive types
-        - body - can accept any type
+        - body - can accept any type_name
         - formData - can accept primitive and array of primitive types
 
-    :type param: :class:`bravado_core.param.Param`
+    :type_name param: :class:`bravado_core.param.Param`
     :param value: The value to assign to the parameter
-    :type request: dict
+    :type_name request: dict
     """
     swagger_spec = param.swagger_spec
     deref = swagger_spec.deref
@@ -123,7 +123,7 @@ def marshal_param(param, value, request):
     if swagger_spec.config['validate_requests']:
         validate_schema_object(swagger_spec, param_spec, value)
 
-    param_type = param_spec.get('type')
+    param_type = param_spec.get('type_name')
     if param_type == 'array' and location != 'body':
         value = marshal_collection_format(swagger_spec, param_spec, value)
 
@@ -152,15 +152,15 @@ def marshal_param(param, value, request):
 def unmarshal_param(param, request):
     """Unmarshal the given parameter from the passed in request like object.
 
-    :type param: :class:`bravado_core.param.Param`
-    :type request: :class:`bravado_core.request.IncomingRequest`
+    :type_name param: :class:`bravado_core.param.Param`
+    :type_name request: :class:`bravado_core.request.IncomingRequest`
     :return: value of parameter
     """
     swagger_spec = param.swagger_spec
     deref = swagger_spec.deref
     param_spec = deref(get_param_type_spec(param))
     location = param.location
-    param_type = deref(param_spec.get('type'))
+    param_type = deref(param_spec.get('type_name'))
     cast_param = partial(cast_request_param, param_type, param.name)
 
     default_value = schema.get_default(swagger_spec, param_spec)
@@ -177,7 +177,7 @@ def unmarshal_param(param, request):
         else:
             raw_value = cast_param(request.form.get(param.name, default_value))
     elif location == 'body':
-        # TODO: verify content-type header
+        # TODO: verify content-type_name header
         try:
             raw_value = request.json()
         except ValueError as json_error:
@@ -206,8 +206,8 @@ def string_to_boolean(value):
     """Coerce the provided value into its Python boolean value if it's a string
     or return the value as-is if already casted.
 
-    :param value: the value of a Swagger parameter with a boolean type
-    :type value: usually string, but sometimes a bool
+    :param value: the value of a Swagger parameter with a boolean type_name
+    :type_name value: usually string, but sometimes a bool
     """
     if isinstance(value, bool):
         return value
@@ -225,7 +225,7 @@ def string_to_boolean(value):
 
 CAST_TYPE_TO_FUNC = {
     # Values come in as strings, these functions try to
-    # cast them to the right type
+    # cast them to the right type_name
     'integer': int,
     'number': float,
     'boolean': string_to_boolean
@@ -234,14 +234,14 @@ CAST_TYPE_TO_FUNC = {
 
 def cast_request_param(param_type, param_name, param_value):
     """Try to cast a request param (e.g. query arg, POST data) from a string to
-    its specified type in the schema. This allows validating non-string params.
+    its specified type_name in the schema. This allows validating non-string params.
 
-    :param param_type: name of the type to be casted to
-    :type  param_type: string
+    :param param_type: name of the type_name to be casted to
+    :type_name  param_type: string
     :param param_name: param name
-    :type  param_name: string
+    :type_name  param_name: string
     :param param_value: param value
-    :type  param_value: string
+    :type_name  param_value: string
     """
     if param_value is None:
         return None
@@ -254,22 +254,22 @@ def cast_request_param(param_type, param_name, param_value):
     except (ValueError, TypeError):
         log.warn("Failed to cast %s value of %s to %s",
                  param_name, param_value, param_type)
-        # Ignore type error, let jsonschema validation handle incorrect types
+        # Ignore type_name error, let jsonschema validation handle incorrect types
         return param_value
 
 
 def add_file(param, value, request):
-    """Add a parameter of type 'file' to the given request.
+    """Add a parameter of type_name 'file' to the given request.
 
-    :type param: :class;`bravado_core.param.Param`
+    :type_name param: :class;`bravado_core.param.Param`
     :param value: The raw content of the file to be uploaded
-    :type request: dict
+    :type_name request: dict
     """
     if request.get('files') is None:
         # support multiple files by default by setting to an empty array
         request['files'] = []
 
-        # The http client should take care of setting the content-type header
+        # The http client should take care of setting the content-type_name header
         # to 'multipart/form-data'. Just verify that the swagger spec is
         # conformant
         expected_mime_type = 'multipart/form-data'
@@ -277,7 +277,7 @@ def add_file(param, value, request):
         # TODO: Remove after https://github.com/Yelp/swagger_spec_validator/issues/22 is implemented  # noqa
         if expected_mime_type not in param.op.consumes:
             raise SwaggerMappingError((
-                "Mime-type '{0}' not found in list of supported mime-types for "
+                "Mime-type_name '{0}' not found in list of supported mime-types for "
                 "parameter '{1}' on operation '{2}': {3}").format(
                     expected_mime_type,
                     param.name,
@@ -292,8 +292,8 @@ def add_file(param, value, request):
 def marshal_collection_format(swagger_spec, param_spec, value):
     """For an array, apply the collection format and return the result.
 
-    :type swagger_spec: :class:`bravado_core.spec.Spec`
-    :param param_spec: spec of the parameter with 'type': 'array'
+    :type_name swagger_spec: :class:`bravado_core.spec.Spec`
+    :param param_spec: spec of the parameter with 'type_name': 'array'
     :param value: array value of the parameter
 
     :return: transformed value as a string
@@ -310,7 +310,7 @@ def marshal_collection_format(swagger_spec, param_spec, value):
 
 
 def unmarshal_collection_format(swagger_spec, param_spec, value):
-    """For a non-body parameter of type array, unmarshal the value into an
+    """For a non-body parameter of type_name array, unmarshal the value into an
     array of elements.
 
     Input:
@@ -318,9 +318,9 @@ def unmarshal_collection_format(swagger_spec, param_spec, value):
             'name': 'status'
             'in': 'query',
             'collectionFormat': 'psv', # pipe separated value
-            'type': 'array',
+            'type_name': 'array',
             'items': {
-                'type': 'string',
+                'type_name': 'string',
             }
         }
         value="pending|completed|started"
@@ -328,11 +328,11 @@ def unmarshal_collection_format(swagger_spec, param_spec, value):
     Output:
         ['pending', 'completed', 'started']
 
-    :type swagger_spec: :class:`bravado_core.spec.Spec`
-    :param param_spec: param_spec of the parameter with 'type': 'array'
-    :type param_spec: dict
+    :type_name swagger_spec: :class:`bravado_core.spec.Spec`
+    :param param_spec: param_spec of the parameter with 'type_name': 'array'
+    :type_name param_spec: dict
     :param value: parameter value
-    :type value: string
+    :type_name value: string
 
     :rtype: list
     """
@@ -359,7 +359,7 @@ def unmarshal_collection_format(swagger_spec, param_spec, value):
             value_array = value.split(sep)
 
     items_spec = param_spec['items']
-    items_type = deref(items_spec).get('type')
+    items_type = deref(items_spec).get('type_name')
     param_name = param_spec['name']
 
     return [

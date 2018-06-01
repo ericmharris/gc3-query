@@ -28,23 +28,23 @@ def sample_model():
 def swagger_dict():
     models = {
         "School": {
-            "type": "object",
+            "type_name": "object",
             "properties": {
                 "name": {
-                    "type": "string"
+                    "type_name": "string"
                 }
             },
             "required": ["name"]
         },
         "User": {
-            "type": "object",
+            "type_name": "object",
             "properties": {
                 "id": {
-                    "type": "integer",
+                    "type_name": "integer",
                     "format": "int64"
                 },
                 "schools": {
-                    "type": "array",
+                    "type_name": "array",
                     "items": {
                         "$ref": "#/definitions/School"
                     }
@@ -146,7 +146,7 @@ def test_invalid_type_in_response_raises_ValidationError(
     register_get("http://localhost/test_http", body='"NOT_COMPLEX_TYPE"')
     with pytest.raises(ValidationError) as excinfo:
         SwaggerClient.from_url(API_DOCS_URL).api_test.testHTTP().result()
-    assert "'NOT_COMPLEX_TYPE' is not of type" in str(excinfo.value)
+    assert "'NOT_COMPLEX_TYPE' is not of type_name" in str(excinfo.value)
 
 
 def test_error_on_wrong_type_inside_complex_type(
@@ -156,7 +156,7 @@ def test_error_on_wrong_type_inside_complex_type(
     register_get("http://localhost/test_http", body=json.dumps(sample_model))
     with pytest.raises(ValidationError) as excinfo:
         SwaggerClient.from_url(API_DOCS_URL).api_test.testHTTP().result()
-    assert "'Not Integer' is not of type" in str(excinfo.value)
+    assert "'Not Integer' is not of type_name" in str(excinfo.value)
 
 
 def test_error_on_missing_type_in_model(

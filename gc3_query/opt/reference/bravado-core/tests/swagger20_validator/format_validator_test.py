@@ -15,7 +15,7 @@ def test_skip_when_validating_a_parameter_schema_and_parameter_value_is_None(
     param_schema = {
         'name': 'foo',
         'in': 'query',
-        'type': 'string',
+        'type_name': 'string',
         'format': 'url',
     }
     list(format_validator(
@@ -33,7 +33,7 @@ def test_validate_when_parameter_schema_and_parameter_value_is_not_None(
     param_schema = {
         'name': 'foo',
         'in': 'query',
-        'type': 'string',
+        'type_name': 'string',
         'format': 'url',
     }
     args = (None, param_schema['format'], 'foo',
@@ -47,7 +47,7 @@ def test_validate_when_not_a_parameter_schema(m_format_validator,
                                               minimal_swagger_spec):
     string_schema = {
         'name': 'foo',
-        'type': 'string',
+        'type_name': 'string',
         'format': 'url',
     }
     args = (None, string_schema['format'], 'foo',
@@ -61,7 +61,7 @@ def test_skip_when_nullable_property_schema_and_value_is_None(
         m_format_validator, minimal_swagger_spec):
     prop_schema = {
         'x-nullable': True,
-        'type': 'string',
+        'type_name': 'string',
         'format': 'url',
     }
     list(format_validator(
@@ -78,7 +78,7 @@ def test_validate_when_not_nullable_property_schema_and_value_is_None(
         m_format_validator, minimal_swagger_spec):
     prop_schema = {
         'x-nullable': False,
-        'type': 'string',
+        'type_name': 'string',
         'format': 'url',
     }
     args = (None, prop_schema['format'], None, prop_schema)
@@ -114,7 +114,7 @@ def test_validate_object_with_different_format_configurations(
     minimal_swagger_spec.spec_dict['definitions']['obj'] = {
         'properties': {
             'prop': {
-                'type': 'string',
+                'type_name': 'string',
                 'format': format_,
                 'x-nullable': x_nullable
             }
@@ -136,5 +136,5 @@ def test_validate_object_with_different_format_configurations(
     else:
         assert (
             captured_exception.message == '{0} is not a \'dummy\''.format(repr(value['prop'])) or
-            captured_exception.message == '{0} is not of type \'string\''.format(repr(value['prop']))
+            captured_exception.message == '{0} is not of type_name \'string\''.format(repr(value['prop']))
         )

@@ -16,7 +16,7 @@ def _register_exception(exception_class):
     """Store an HTTP exception class with a status code into a mapping
     of status codes to exception classes.
     :param exception_class: A subclass of HTTPError
-    :type exception_class: :class:`HTTPError`
+    :type_name exception_class: :class:`HTTPError`
     """
     status_map[exception_class.status_code] = exception_class
 
@@ -37,7 +37,7 @@ class HTTPError(with_metaclass(HTTPErrorType, IOError)):
 
     def __init__(self, response, message=None, swagger_result=None):
         """
-        :type response: :class:`bravado_core.response.IncomingResponse`
+        :type_name response: :class:`bravado_core.response.IncomingResponse`
         :param message: Optional string message
         :param swagger_result: If the response for this HTTPError is
             documented in the swagger spec, then this should be the result
@@ -64,7 +64,7 @@ def make_http_exception(response, message=None, swagger_result=None):
     Return an HTTP exception class  based on the response. If a specific
     class doesn't exist for a particular HTTP status code, a more
     general :class:`HTTPError` class will be returned.
-    :type response: :class:`bravado_core.response.IncomingResponse`
+    :type_name response: :class:`bravado_core.response.IncomingResponse`
     :param message: Optional string message
     :param swagger_result: If the response for this HTTPError is
         documented in the swagger spec, then this should be the result

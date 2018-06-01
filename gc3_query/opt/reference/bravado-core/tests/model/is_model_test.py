@@ -9,7 +9,7 @@ from bravado_core.spec import Spec
 @pytest.fixture
 def model_spec():
     return {
-        'type': 'object',
+        'type_name': 'object',
         'x-model': 'Address',
         'additionalProperties': True,
     }
@@ -18,7 +18,7 @@ def model_spec():
 @pytest.fixture
 def object_spec():
     return {
-        'type': 'object',
+        'type_name': 'object',
         'additionalProperties': True,
     }
 

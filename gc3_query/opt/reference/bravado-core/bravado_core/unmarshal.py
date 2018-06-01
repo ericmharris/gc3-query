@@ -20,20 +20,20 @@ def unmarshal_schema_object(swagger_spec, schema_object_spec, value):
     Unmarshaling includes:
     - transform the value according to 'format' if available
     - return the value in a form suitable for use. e.g. conversion to a Model
-      type.
+      type_name.
 
-    :type swagger_spec: :class:`bravado_core.spec.Spec`
-    :type schema_object_spec: dict
-    :type value: int, float, long, string, unicode, boolean, list, dict, etc
+    :type_name swagger_spec: :class:`bravado_core.spec.Spec`
+    :type_name schema_object_spec: dict
+    :type_name value: int, float, long, string, unicode, boolean, list, dict, etc
 
     :return: unmarshaled value
     :rtype: int, float, long, string, unicode, boolean, list, dict, object (in
-        the case of a 'format' conversion', or Model type
+        the case of a 'format' conversion', or Model type_name
     """
     deref = swagger_spec.deref
     schema_object_spec = deref(schema_object_spec)
 
-    obj_type = schema_object_spec.get('type')
+    obj_type = schema_object_spec.get('type_name')
 
     if 'allOf' in schema_object_spec:
         obj_type = 'object'
@@ -53,7 +53,7 @@ def unmarshal_schema_object(swagger_spec, schema_object_spec, value):
     if swagger_spec.config['use_models'] and \
             is_model(swagger_spec, schema_object_spec):
         # It is important that the 'model' check comes before 'object' check.
-        # Model specs also have type 'object' but also have the additional
+        # Model specs also have type_name 'object' but also have the additional
         # MODEL_MARKER key for identification.
         return unmarshal_model(swagger_spec, schema_object_spec, value)
 
@@ -64,16 +64,16 @@ def unmarshal_schema_object(swagger_spec, schema_object_spec, value):
         return value
 
     raise SwaggerMappingError(
-        "Don't know how to unmarshal value {0} with a type of {1}"
+        "Don't know how to unmarshal value {0} with a type_name of {1}"
         .format(value, obj_type))
 
 
 def unmarshal_primitive(swagger_spec, primitive_spec, value):
-    """Unmarshal a jsonschema primitive type into a python primitive.
+    """Unmarshal a jsonschema primitive type_name into a python primitive.
 
-    :type swagger_spec: :class:`bravado_core.spec.Spec`
-    :type primitive_spec: dict
-    :type value: int, long, float, boolean, string, unicode, etc
+    :type_name swagger_spec: :class:`bravado_core.spec.Spec`
+    :type_name primitive_spec: dict
+    :type_name value: int, long, float, boolean, string, unicode, etc
 
     :rtype: int, long, float, boolean, string, unicode, or an object
         based on 'format'
@@ -87,11 +87,11 @@ def unmarshal_primitive(swagger_spec, primitive_spec, value):
 
 
 def unmarshal_array(swagger_spec, array_spec, array_value):
-    """Unmarshal a jsonschema type of 'array' into a python list.
+    """Unmarshal a jsonschema type_name of 'array' into a python list.
 
-    :type swagger_spec: :class:`bravado_core.spec.Spec`
-    :type array_spec: dict
-    :type array_value: list
+    :type_name swagger_spec: :class:`bravado_core.spec.Spec`
+    :type_name array_spec: dict
+    :type_name array_value: list
     :rtype: list
     :raises: SwaggerMappingError
     """
@@ -99,7 +99,7 @@ def unmarshal_array(swagger_spec, array_spec, array_value):
         return handle_null_value(swagger_spec, array_spec)
 
     if not is_list_like(array_value):
-        raise SwaggerMappingError('Expected list like type for {0}:{1}'.format(
+        raise SwaggerMappingError('Expected list like type_name for {0}:{1}'.format(
             type(array_value), array_value))
 
     item_spec = swagger_spec.deref(array_spec).get('items')
@@ -110,11 +110,11 @@ def unmarshal_array(swagger_spec, array_spec, array_value):
 
 
 def unmarshal_object(swagger_spec, object_spec, object_value):
-    """Unmarshal a jsonschema type of 'object' into a python dict.
+    """Unmarshal a jsonschema type_name of 'object' into a python dict.
 
-    :type swagger_spec: :class:`bravado_core.spec.Spec`
-    :type object_spec: dict
-    :type object_value: dict
+    :type_name swagger_spec: :class:`bravado_core.spec.Spec`
+    :type_name object_spec: dict
+    :type_name object_value: dict
     :rtype: dict
     :raises: SwaggerMappingError
     """
@@ -124,7 +124,7 @@ def unmarshal_object(swagger_spec, object_spec, object_value):
         return handle_null_value(swagger_spec, object_spec)
 
     if not is_dict_like(object_value):
-        raise SwaggerMappingError('Expected dict like type for {0}:{1}'.format(
+        raise SwaggerMappingError('Expected dict like type_name for {0}:{1}'.format(
             type(object_value), object_value))
 
     object_spec = deref(object_spec)
@@ -158,9 +158,9 @@ def unmarshal_object(swagger_spec, object_spec, object_value):
 def unmarshal_model(swagger_spec, model_spec, model_value):
     """Unmarshal a dict into a Model instance.
 
-    :type swagger_spec: :class:`bravado_core.spec.Spec`
-    :type model_spec: dict
-    :type model_value: dict
+    :type_name swagger_spec: :class:`bravado_core.spec.Spec`
+    :type_name model_spec: dict
+    :type_name model_value: dict
     :rtype: Model instance
     :raises: SwaggerMappingError
     """
@@ -178,7 +178,7 @@ def unmarshal_model(swagger_spec, model_spec, model_value):
 
     if not is_dict_like(model_value):
         raise SwaggerMappingError(
-            "Expected type to be dict for value {0} to unmarshal to a {1}."
+            "Expected type_name to be dict for value {0} to unmarshal to a {1}."
             "Was {2} instead."
             .format(model_value, model_type, type(model_value)))
 

@@ -57,8 +57,8 @@ def test_missing_object_spec(petstore_dict):
     category_spec = copy.deepcopy(
         petstore_spec.spec_dict['definitions']['Category']
     )
-    # without a type, do no validation
-    category_spec['properties']['id'].pop('type')
+    # without a type_name, do no validation
+    category_spec['properties']['id'].pop('type_name')
 
     # so id can be a string...
     result = unmarshal_schema_object(
@@ -86,8 +86,8 @@ def test_missing_object_spec_defaulting_on(petstore_dict):
         petstore_spec.spec_dict['definitions']['Category']
     )
 
-    # now a missing type will default to object type
-    category_spec['properties']['id'].pop('type')
+    # now a missing type_name will default to object type_name
+    category_spec['properties']['id'].pop('type_name')
 
     result = unmarshal_schema_object(
         petstore_spec,
@@ -96,7 +96,7 @@ def test_missing_object_spec_defaulting_on(petstore_dict):
 
     assert result == {'id': {'foo': 'bar'}, 'name': 'short-hair'}
 
-    # so a different type will fail
+    # so a different type_name will fail
     with pytest.raises(SwaggerMappingError):
         result = unmarshal_schema_object(
             petstore_spec,
@@ -110,7 +110,7 @@ def test_invalid_type(petstore_dict):
         petstore_spec.spec_dict['definitions']['Category']
     )
 
-    category_spec['properties']['id']['type'] = 'notAValidType'
+    category_spec['properties']['id']['type_name'] = 'notAValidType'
 
     with pytest.raises(SwaggerMappingError):
         unmarshal_schema_object(

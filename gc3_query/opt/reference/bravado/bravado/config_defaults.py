@@ -11,8 +11,8 @@ REQUEST_OPTIONS_DEFAULTS = {
     #
     # The callback should expect two arguments:
     #   param : incoming_response
-    #   type  : subclass of class:`bravado_core.response.IncomingResponse`
+    #   type_name  : subclass of class:`bravado_core.response.IncomingResponse`
     #   param : operation
-    #   type  : class:`bravado_core.operation.Operation`
+    #   type_name  : class:`bravado_core.operation.Operation`
     'response_callbacks': [],
 }

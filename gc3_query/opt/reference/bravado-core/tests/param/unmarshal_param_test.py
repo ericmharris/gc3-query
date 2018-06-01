@@ -16,7 +16,7 @@ def string_param_spec():
         'name': 'username',
         'in': 'query',
         'description': 'Short name of the user',
-        'type': 'string',
+        'type_name': 'string',
     }
 
 
@@ -26,9 +26,9 @@ def array_param_spec():
         'name': 'animals',
         'in': 'query',
         'description': 'List of animals',
-        'type': 'array',
+        'type_name': 'array',
         'items': {
-            'type': 'string'
+            'type_name': 'string'
         },
         'collectionFormat': 'multi',
     }
@@ -40,9 +40,9 @@ def int_array_param_spec():
         'name': 'numbers',
         'in': 'query',
         'description': 'List of numbers',
-        'type': 'array',
+        'type_name': 'array',
         'items': {
-            'type': 'integer',
+            'type_name': 'integer',
             'format': 'int64'
         },
         'collectionFormat': 'multi',
@@ -54,7 +54,7 @@ def param_spec():
     return {
         'name': 'petId',
         'description': 'ID of pet that needs to be fetched',
-        'type': 'integer',
+        'type_name': 'integer',
         'format': 'int64',
     }
 
@@ -65,7 +65,7 @@ def boolean_param_spec():
         'name': 'isPet',
         'in': 'query',
         'description': 'True if resource is a pet, False otherwise.',
-        'type': 'boolean',
+        'type_name': 'boolean',
     }
 
 
@@ -175,7 +175,7 @@ def test_query_string_boolean_values(empty_swagger_spec, boolean_param_spec):
 
 def test_header_string(empty_swagger_spec, param_spec):
     param_spec['in'] = 'header'
-    param_spec['type'] = 'string'
+    param_spec['type_name'] = 'string'
     param_spec['name'] = 'X-Source-ID'
     del param_spec['format']
     param = Param(empty_swagger_spec, Mock(spec=Operation), param_spec)
@@ -185,7 +185,7 @@ def test_header_string(empty_swagger_spec, param_spec):
 
 def test_optional_header_string_with_default(empty_swagger_spec, param_spec):
     param_spec['in'] = 'header'
-    param_spec['type'] = 'string'
+    param_spec['type_name'] = 'string'
     param_spec['name'] = 'X-Source-ID'
     param_spec['required'] = False
     param_spec['default'] = 'bar'
@@ -213,7 +213,7 @@ def test_optional_formData_integer_with_default(empty_swagger_spec, param_spec):
 
 def test_formData_file(empty_swagger_spec, param_spec):
     param_spec['in'] = 'formData'
-    param_spec['type'] = 'file'
+    param_spec['type_name'] = 'file'
     param_spec['name'] = 'selfie'
     param = Param(
         empty_swagger_spec,
@@ -227,9 +227,9 @@ def test_formData_file(empty_swagger_spec, param_spec):
 def test_body(empty_swagger_spec, param_spec):
     param_spec['in'] = 'body'
     param_spec['schema'] = {
-        'type': 'integer'
+        'type_name': 'integer'
     }
-    del param_spec['type']
+    del param_spec['type_name']
     del param_spec['format']
     param = Param(empty_swagger_spec, Mock(spec=Operation), param_spec)
     request = Mock(spec=IncomingRequest, json=Mock(return_value=34))

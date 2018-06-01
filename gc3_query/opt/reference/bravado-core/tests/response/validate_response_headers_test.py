@@ -39,7 +39,7 @@ def test_valid_headers(op):
         'description': 'I have one header',
         'headers': {
             'X-Foo': {
-                'type': 'string'
+                'type_name': 'string'
             }
         },
     }
@@ -53,11 +53,11 @@ def test_invalid_headers(op):
         'description': 'I have one header',
         'headers': {
             'X-Foo': {
-                'type': 'integer'
+                'type_name': 'integer'
             }
         },
     }
     response = Mock(spec=OutgoingResponse, headers={'X-Foo': 'bar'})
     with pytest.raises(ValidationError) as excinfo:
         validate_response_headers(op, response_spec, response)
-    assert "is not of type 'integer'" in str(excinfo.value)
+    assert "is not of type_name 'integer'" in str(excinfo.value)

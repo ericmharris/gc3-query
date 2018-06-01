@@ -69,9 +69,9 @@ def test_build_with_internally_dereference_refs(petstore_dict, internally_derefe
 
 def test_not_object_x_models_are_not_generating_models(minimal_swagger_dict):
     minimal_swagger_dict['definitions']['Pets'] = {
-        'type': 'array',
+        'type_name': 'array',
         'items': {
-            'type': 'string'
+            'type_name': 'string'
         },
         'x-model': 'Pets'
     }
@@ -86,7 +86,7 @@ def test_not_object_x_models_are_not_generating_models(minimal_swagger_dict):
         (
             {
                 'model1': {
-                    'type': 'object',
+                    'type_name': 'object',
                     'x-model': 'x-model_model1'
                 }
             },
@@ -95,7 +95,7 @@ def test_not_object_x_models_are_not_generating_models(minimal_swagger_dict):
         (
             {
                 'model1': {
-                    'type': 'object',
+                    'type_name': 'object',
                     'title': 'title_model1'
                 }
             },
@@ -104,7 +104,7 @@ def test_not_object_x_models_are_not_generating_models(minimal_swagger_dict):
         (
             {
                 'model1': {
-                    'type': 'object',
+                    'type_name': 'object',
                 }
             },
             {'model1'},
@@ -121,7 +121,7 @@ def test_model_naming_uses_title_if_present(minimal_swagger_dict):
     """This test ensures that inline schemas gets tagged as models they have title attribute"""
     response_schema = {
         'title': 'model_title',
-        'type': 'object',
+        'type_name': 'object',
     }
     minimal_swagger_dict['paths'] = {
         '/endpoint': {
@@ -146,10 +146,10 @@ def test_build_raises_in_case_of_duplicated_models_in_definitions(minimal_swagge
 
     minimal_swagger_dict['definitions'] = {
         'model': {
-            'type': 'object',
+            'type_name': 'object',
         },
         'duplicated_model': {
-            'type': 'object',
+            'type_name': 'object',
             'title': 'model',
         },
     }
@@ -170,12 +170,12 @@ def test_build_raises_in_case_of_duplicated_models_in_paths(minimal_swagger_dict
     """This test ensures that inline schemas gets tagged as models they have title attribute"""
     model_name = 'model'
     model_200 = {
-        'type': 'object',
+        'type_name': 'object',
         'x-location': '200',
         'x-model': model_name,
     }
     model_201 = {
-        'type': 'object',
+        'type_name': 'object',
         'x-location': '201',
         'x-model': model_name,
     }
@@ -219,11 +219,11 @@ def test_build_raises_in_case_of_duplicated_models_between_paths_and_definitions
     """This test ensures that inline schemas gets tagged as models they have title attribute"""
     model_name = 'model'
     definition_model = {
-        'type': 'object',
+        'type_name': 'object',
         'x-location': 'definitions',
     }
     response_model = {
-        'type': 'object',
+        'type_name': 'object',
         'x-location': 'paths',
         'x-model': model_name,
     }

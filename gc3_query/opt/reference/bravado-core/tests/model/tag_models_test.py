@@ -10,10 +10,10 @@ from bravado_core.spec import Spec
 @pytest.fixture
 def pet_model_spec():
     return {
-        'type': 'object',
+        'type_name': 'object',
         'properties': {
             'name': {
-                'type': 'string'
+                'type_name': 'string'
             }
         }
     }
@@ -32,7 +32,7 @@ def test_tags_model(minimal_swagger_dict, pet_model_spec):
 
 
 def test_type_missing(minimal_swagger_dict, pet_model_spec):
-    del pet_model_spec['type']
+    del pet_model_spec['type_name']
     minimal_swagger_dict['definitions']['Pet'] = pet_model_spec
     swagger_spec = Spec(minimal_swagger_dict)
     tag_models(
@@ -46,9 +46,9 @@ def test_type_missing(minimal_swagger_dict, pet_model_spec):
 
 def test_model_not_object(minimal_swagger_dict):
     minimal_swagger_dict['definitions']['Pet'] = {
-        'type': 'array',
+        'type_name': 'array',
         'items': {
-            'type': 'string'
+            'type_name': 'string'
         },
     }
     swagger_spec = Spec(minimal_swagger_dict)

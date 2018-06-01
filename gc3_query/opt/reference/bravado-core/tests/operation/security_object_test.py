@@ -142,7 +142,7 @@ def test_security_parameter_cannot_override_path_or_operation_parameter(
         'description': 'sec1 as query parameter',
         'required': True,
         'in': 'query',
-        'type': 'integer',
+        'type_name': 'integer',
         'name': 'apiKey1',
     }]
 

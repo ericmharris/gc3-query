@@ -7,12 +7,12 @@ from bravado_core.unmarshal import unmarshal_primitive
 
 
 def test_integer(minimal_swagger_spec):
-    integer_spec = {'type': 'integer'}
+    integer_spec = {'type_name': 'integer'}
     assert 10 == unmarshal_primitive(minimal_swagger_spec, integer_spec, 10)
 
 
 def test_string(minimal_swagger_spec):
-    string_spec = {'type': 'string'}
+    string_spec = {'type_name': 'string'}
     assert 'foo' == unmarshal_primitive(
         minimal_swagger_spec, string_spec, 'foo')
     assert u'Ümlaut' == unmarshal_primitive(
@@ -20,7 +20,7 @@ def test_string(minimal_swagger_spec):
 
 
 def test_boolean(minimal_swagger_spec):
-    boolean_spec = {'type': 'boolean'}
+    boolean_spec = {'type_name': 'boolean'}
     result = unmarshal_primitive(minimal_swagger_spec, boolean_spec, True)
     assert isinstance(result, bool)
     assert result
@@ -31,14 +31,14 @@ def test_boolean(minimal_swagger_spec):
 
 
 def test_number(minimal_swagger_spec):
-    number_spec = {'type': 'number'}
+    number_spec = {'type_name': 'number'}
     assert 3.1 == unmarshal_primitive(minimal_swagger_spec, number_spec, 3.1)
 
 
 def test_datetime_string(minimal_swagger_spec):
     from datetime import datetime
     date_spec = {
-        'type': 'string',
+        'type_name': 'string',
         'format': 'date-time'
     }
     # the validator requires a time zone, but that's a pain to scaffold:
@@ -51,7 +51,7 @@ def test_datetime_string(minimal_swagger_spec):
 
 def test_required_success(minimal_swagger_spec):
     integer_spec = {
-        'type': 'integer',
+        'type_name': 'integer',
         'required': True,
     }
     assert 10 == unmarshal_primitive(minimal_swagger_spec, integer_spec, 10)
@@ -59,7 +59,7 @@ def test_required_success(minimal_swagger_spec):
 
 def test_required_failure(minimal_swagger_spec):
     integer_spec = {
-        'type': 'integer',
+        'type_name': 'integer',
         'required': True,
     }
     with pytest.raises(SwaggerMappingError) as excinfo:
@@ -69,7 +69,7 @@ def test_required_failure(minimal_swagger_spec):
 
 def test_default(minimal_swagger_spec):
     integer_spec = {
-        'type': 'integer',
+        'type_name': 'integer',
         'default': 42,
     }
 
@@ -77,7 +77,7 @@ def test_default(minimal_swagger_spec):
 
 
 def test_ref(minimal_swagger_dict):
-    minimal_swagger_dict['definitions']['SpecialInteger'] = {'type': 'integer'}
+    minimal_swagger_dict['definitions']['SpecialInteger'] = {'type_name': 'integer'}
     special_integer_spec = {'$ref': '#/definitions/SpecialInteger'}
     swagger_spec = Spec.from_dict(minimal_swagger_dict)
     assert 10 == unmarshal_primitive(swagger_spec, special_integer_spec, 10)
@@ -87,7 +87,7 @@ def test_ref(minimal_swagger_dict):
                          [(False, 'x'), (True, 'x'), (True, None)])
 def test_nullable(minimal_swagger_spec, value, nullable):
     string_spec = {
-        'type': 'string',
+        'type_name': 'string',
         'x-nullable': nullable,
     }
     result = unmarshal_primitive(minimal_swagger_spec, string_spec, value)

@@ -20,7 +20,7 @@ def response_spec():
     return {
         'description': "Day of the week",
         'schema': {
-            'type': 'string',
+            'type_name': 'string',
         }
     }
 
@@ -53,7 +53,7 @@ def test_json_content(mock_get_response_spec, empty_swagger_spec, response_spec)
     response = mock.Mock(
         spec=IncomingResponse,
         status_code=200,
-        headers={'content-type': APP_JSON},
+        headers={'content-type_name': APP_JSON},
         json=mock.Mock(return_value='Monday'),
     )
 
@@ -67,7 +67,7 @@ def test_msgpack_content(mock_get_response_spec, empty_swagger_spec, response_sp
     response = mock.Mock(
         spec=IncomingResponse,
         status_code=200,
-        headers={'content-type': APP_MSGPACK},
+        headers={'content-type_name': APP_MSGPACK},
         raw_bytes=msgpack.dumps(message),
     )
 
@@ -80,7 +80,7 @@ def test_text_content(mock_get_response_spec, empty_swagger_spec, response_spec)
     response = mock.Mock(
         spec=IncomingResponse,
         status_code=200,
-        headers={'content-type': 'text/plain'},
+        headers={'content-type_name': 'text/plain'},
         text='Monday',
     )
 
@@ -94,7 +94,7 @@ def test_skips_validation(mock_validate_schema_object, mock_get_response_spec, e
     response = mock.Mock(
         spec=IncomingResponse,
         status_code=200,
-        headers={'content-type': APP_JSON},
+        headers={'content-type_name': APP_JSON},
         json=mock.Mock(return_value='Monday'),
     )
 
@@ -109,7 +109,7 @@ def test_performs_validation(mock_validate_schema_object, mock_get_response_spec
     response = mock.Mock(
         spec=IncomingResponse,
         status_code=200,
-        headers={'content-type': APP_JSON},
+        headers={'content-type_name': APP_JSON},
         json=mock.Mock(return_value='Monday'),
     )
 

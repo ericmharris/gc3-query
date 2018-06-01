@@ -15,7 +15,7 @@ from tests.functional.conftest import register_spec
 
 def test_invalid_spec_raises_SwaggerValidationError(
         httprettified, swagger_dict):
-    swagger_dict['paths']['/test_http']['get']['parameters'][0]['type'] = 'X'
+    swagger_dict['paths']['/test_http']['get']['parameters'][0]['type_name'] = 'X'
     register_spec(swagger_dict)
     with pytest.raises(SwaggerValidationError) as excinfo:
         SwaggerClient.from_url(API_DOCS_URL)

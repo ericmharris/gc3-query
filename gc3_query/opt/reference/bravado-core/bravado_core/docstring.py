@@ -29,7 +29,7 @@ def operation_docstring_wrapper(operation):
         Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error conditions  # noqa
 
         :param petId: ID of pet that needs to be fetched
-        :type petId: integer
+        :type_name petId: integer
         :returns: 200: successful operation
         :rtype: #/definitions/Pet
         :returns: 400: Invalid ID supplied
@@ -64,9 +64,9 @@ def create_operation_docstring(op):
         Multiple status values can be provided with comma seperated strings
 
         :param status: Statuses to be considered for filter
-        :type status: str
+        :type_name status: str
         :param from_date: Start date filter
-        :type from_date: str
+        :type_name from_date: str
         :rtype: list
     """
     # TODO: remove once lazy docstrings implemented
@@ -109,7 +109,7 @@ def create_param_docstring(param_spec):
 
     Example: ::
         :param status: Status to be considered for filter
-        :type status: string
+        :type_name status: string
     """
     name = param_spec.get('name')
     desc = param_spec.get('description', 'Document your spec, yo!')
@@ -128,15 +128,15 @@ def create_param_docstring(param_spec):
     if location == 'body':
         param_type = formatted_type(param_spec.get('schema'))
     else:
-        param_type = param_spec.get('type')
-    s += u':type {0}: {1}\n'.format(name, param_type)
+        param_type = param_spec.get('type_name')
+    s += u':type_name {0}: {1}\n'.format(name, param_type)
 
     # TODO: Lot more stuff can go in here - see "Parameter Object" in 2.0 Spec.
     return s
 
 
 def formatted_type(spec):
-    """Returns the swagger type from a spec in a colon separated format.
+    """Returns the swagger type_name from a spec in a colon separated format.
 
     Example:
 
@@ -144,9 +144,9 @@ def formatted_type(spec):
 
         {
             ...
-            "type": "array",
+            "type_name": "array",
             "items": {
-                 "type": "integer",
+                 "type_name": "integer",
                  "format": "int64"
                  }
             ...
@@ -162,7 +162,7 @@ def formatted_type(spec):
     :param spec: object spec in dict form
     :rtype: str
     """
-    obj_type = spec.get('type')
+    obj_type = spec.get('type_name')
     obj_format = spec.get('format')
     ref = spec.get('$ref')
     if obj_format and obj_type:
@@ -174,5 +174,5 @@ def formatted_type(spec):
     elif obj_type:
         return obj_type
     else:  # not obj_type
-        # if 'default_type_to_object' toml_cfg is True, then this is defaulted to object type
+        # if 'default_type_to_object' toml_cfg is True, then this is defaulted to object type_name
         return 'notype'

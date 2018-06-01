@@ -45,7 +45,7 @@ def test_with_not_string_headers(
         'name': header_name,
         'in': 'header',
         'required': False,
-        'type': swagger_type,
+        'type_name': swagger_type,
     }
     if swagger_format:
         parameter['format'] = swagger_format

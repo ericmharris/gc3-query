@@ -13,9 +13,9 @@ def test_multiple_jsonschema_calls_if_enum_items_present_as_array():
     swagger_spec = Mock(spec=Spec)
     enums = ['a1', 'b2', 'c3']
     param_schema = {
-        'type': 'array',
+        'type_name': 'array',
         'items': {
-            'type': 'string'
+            'type_name': 'string'
         },
         'enum': enums
     }
@@ -45,7 +45,7 @@ def test_skip_validation_for_optional_enum_with_None_value(
         jsonschema_enum_validator):
     enums = ['encrypted', 'plaintext']
     param_schema = {
-        'type': 'string',
+        'type_name': 'string',
         'in': 'query',
         'required': False,
         'enum': enums
@@ -68,7 +68,7 @@ def test_validate_object_with_different_enum_configurations(minimal_swagger_spec
     minimal_swagger_spec.spec_dict['definitions']['obj'] = {
         'properties': {
             'prop': {
-                'type': 'string',
+                'type_name': 'string',
                 'enum': enum_values,
                 'x-nullable': True
             }

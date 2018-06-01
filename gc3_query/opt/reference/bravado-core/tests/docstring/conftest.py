@@ -21,9 +21,9 @@ def op_spec():
                 "in": "query",
                 "description": "the status, yo!",
                 "required": False,
-                "type": "array",
+                "type_name": "array",
                 "items": {
-                    "type": "string"
+                    "type_name": "string"
                 },
                 "collectionFormat": "multi",
                 "default": "available"
@@ -33,7 +33,7 @@ def op_spec():
             "200": {
                 "description": "successful operation",
                 "schema": {
-                    "type": "array",
+                    "type_name": "array",
                     "items": {
                         "$ref": "#/definitions/Pet"
                     }

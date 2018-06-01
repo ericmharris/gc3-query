@@ -38,23 +38,23 @@ def format_validator(swagger_spec, validator, format, instance, schema):
 
 
 def type_validator(swagger_spec, validator, types, instance, schema):
-    """Skip the `type` validator when a Swagger parameter value is None.
-    Otherwise it will fail with a "None is not a valid type" failure instead
+    """Skip the `type_name` validator when a Swagger parameter value is None.
+    Otherwise it will fail with a "None is not a valid type_name" failure instead
     of letting the downstream `required_validator` do its job.
     Also skip when a Swagger property value is None and the schema contains
     the extension field `x-nullable` set to True.
-    In all other cases, delegate to the existing Draft4 `type` validator.
+    In all other cases, delegate to the existing Draft4 `type_name` validator.
 
     :param swagger_spec: needed for access to deref()
-    :type swagger_spec: :class:`bravado_core.spec.Spec`
+    :type_name swagger_spec: :class:`bravado_core.spec.Spec`
     :param validator: Validator class used to validate the object
-    :type validator: :class:`Swagger20Validator` or
+    :type_name validator: :class:`Swagger20Validator` or
         :class:`jsonschema.validators.Draft4Validator`
     :param types: validate types
-    :type types: string or list
+    :type_name types: string or list
     :param instance: object instance value
     :param schema: swagger spec for the object
-    :type schema: dict
+    :type_name schema: dict
     """
     if (is_param_spec(swagger_spec, schema) or
             is_prop_nullable(swagger_spec, schema)) and instance is None:
@@ -69,15 +69,15 @@ def required_validator(swagger_spec, validator, required, instance, schema):
     but a list of properties everywhere else.
 
     :param swagger_spec: needed for access to deref()
-    :type swagger_spec: :class:`bravado_core.spec.Spec`
+    :type_name swagger_spec: :class:`bravado_core.spec.Spec`
     :param validator: Validator class used to validate the object
-    :type validator: :class:`Swagger20Validator` or
+    :type_name validator: :class:`Swagger20Validator` or
         :class:`jsonschema.validators.Draft4Validator`
     :param required: value of `required` field
-    :type required: boolean or list or None
+    :type_name required: boolean or list or None
     :param instance: object instance value
     :param schema: swagger spec for the object
-    :type schema: dict
+    :type_name schema: dict
     """
     if is_param_spec(swagger_spec, schema):
         if required and instance is None:
@@ -90,25 +90,25 @@ def required_validator(swagger_spec, validator, required, instance, schema):
 
 
 def enum_validator(swagger_spec, validator, enums, instance, schema):
-    """Swagger 2.0 allows enums to be validated against objects of type
+    """Swagger 2.0 allows enums to be validated against objects of type_name
     arrays, like query parameter (collectionFormat: multi)
 
     :param swagger_spec: needed for access to deref()
-    :type swagger_spec: :class:`bravado_core.spec.Spec`
+    :type_name swagger_spec: :class:`bravado_core.spec.Spec`
     :param validator: Validator class used to validate the object
-    :type validator: :class: `Swagger20Validator` or
+    :type_name validator: :class: `Swagger20Validator` or
         :class: `jsonschema.validators.Draft4Validator`
     :param enums: allowed enum values
-    :type enums: list
+    :type_name enums: list
     :param instance: enum instance value
     :param schema: swagger spec for the object
-    :type schema: dict
+    :type_name schema: dict
     """
 
     if is_prop_nullable(swagger_spec, schema) and instance is None:
         return
 
-    if schema.get('type') == 'array':
+    if schema.get('type_name') == 'array':
         for element in instance:
             for error in _validators.enum(validator, enums, element, schema):
                 yield error
@@ -128,21 +128,21 @@ def discriminator_validator(swagger_spec, validator, discriminator_attribute, in
     Validates instance against the schema defined by the discriminator attribute.
 
     [Swagger 2.0 Schema Object](http://swagger.io/specification/#schemaObject) allows discriminator field to be defined.
-    discriminator field defines the attribute that will be used to discriminate the object type.
+    discriminator field defines the attribute that will be used to discriminate the object type_name.
 
     NOTE: discriminator_validator assumes that discriminator_attribute is not None or empty
 
     :param swagger_spec: needed for access to deref()
-    :type swagger_spec: :class:`bravado_core.spec.Spec`
+    :type_name swagger_spec: :class:`bravado_core.spec.Spec`
     :param validator: Validator class used to validate the object
-    :type validator: :class: `Swagger20Validator` or
+    :type_name validator: :class: `Swagger20Validator` or
         :class: `jsonschema.validators.Draft4Validator`
     :param discriminator_attribute: name of the discriminator attribute
-    :type discriminator_attribute: str
+    :type_name discriminator_attribute: str
     :param instance: object instance value
-    :type instance: dict
+    :type_name instance: dict
     :param schema: swagger spec for the object
-    :type schema: dict
+    :type_name schema: dict
     """
 
     discriminator_value = instance[discriminator_attribute]
@@ -189,14 +189,14 @@ def ref_validator(validator, ref, instance, schema):
      ingestion (see post_process_spec in spec.py).
 
     :param validator: Validator class used to validate the object
-    :type validator: :class: `Swagger20Validator` or
+    :type_name validator: :class: `Swagger20Validator` or
         :class: `jsonschema.validators.Draft4Validator`
     :param ref: the target of the ref. eg. #/foo/bar/Baz
-    :type ref: string
+    :type_name ref: string
     :param instance: the object being validated
     :param schema: swagger spec that contains the ref.
         eg {'$ref': '#/foo/bar/Baz'}
-    :type schema: dict
+    :type_name schema: dict
     """
     # This is a copy of jsonscehama._validators.ref(..) with the
     # in_scope(..) context manager applied before any refs are resolved.
@@ -229,7 +229,7 @@ def get_validator_type(swagger_spec):
             '$ref': ref_validator,
             'required': functools.partial(required_validator, swagger_spec),
             'enum': functools.partial(enum_validator, swagger_spec),
-            'type': functools.partial(type_validator, swagger_spec),
+            'type_name': functools.partial(type_validator, swagger_spec),
             'format': functools.partial(format_validator, swagger_spec),
             'discriminator': functools.partial(discriminator_validator, swagger_spec),
         })

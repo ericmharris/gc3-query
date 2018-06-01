@@ -7,7 +7,7 @@ from bravado_core.schema import handle_null_value
 
 def test_default(empty_swagger_spec):
     spec = {
-        'type': 'integer',
+        'type_name': 'integer',
         'default': 42
     }
 
@@ -16,7 +16,7 @@ def test_default(empty_swagger_spec):
 
 def test_nullable(empty_swagger_spec):
     spec = {
-        'type': 'integer',
+        'type_name': 'integer',
         'x-nullable': True,
     }
 
@@ -25,7 +25,7 @@ def test_nullable(empty_swagger_spec):
 
 def test_raise(empty_swagger_spec):
     spec = {
-        'type': 'integer',
+        'type_name': 'integer',
     }
 
     with pytest.raises(SwaggerMappingError):

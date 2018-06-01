@@ -4,7 +4,7 @@
 import os
 import sys
 import json
-import logging 
+import logging
 import textwrap
 from collections import OrderedDict
 try:
@@ -21,34 +21,34 @@ NUM_PROP_LIST = 5
 
 class OutputFormatter(object):
     """
-       a generic formatter which needs to implemented in order to get the 
+       a generic formatter which needs to implemented in order to get the
        desired output format specified in the conf file.
     """
     def __init__(self, content=None, \
                  cmd_dict=None, \
                  cmd_name=None, \
                  response_headers=None):
-        self._cmd_dict = cmd_dict 
+        self._cmd_dict = cmd_dict
         self._content = content
         self._cmd_name = cmd_name
         self._response_headers = response_headers
         self._max_props = NUM_PROP_LIST
         self._utils = Utils()
-    
+
     @property
     def content(self):
         return self._content
-    
+
     def _format_content(self):
         raise NotImplementedError("Not Implemented")
-    
+
     def _format_error_content(self):
         raise NotImplementedError("Not Implemented")
 
     def _parse_yaml_output(self, output_data):
         import yaml
         try:
-            # if the response output is of type str and json compatible,
+            # if the response output is of type_name str and json compatible,
             # a json dict obj is returned, otherwise a string,
             # object is returned.
             output_data = yaml.load(output_data)
@@ -60,7 +60,7 @@ class OutputFormatter(object):
         return output_data
 
 class JSONFormatter(OutputFormatter):
-    
+
     def _format_content(self):
         data = self.content
         # BUG FIX: 25350442, Convert YAML response output to json
@@ -69,25 +69,25 @@ class JSONFormatter(OutputFormatter):
         # commented the sort keys. To maintain the order from the REST response
         json_formatted = json.dumps(data, indent=4, separators=(',',':')) #,sort_keys=True)
         return json_formatted
-    
+
     def _format_error_content(self):
         data = self.content
         json_formatted = json.dumps(data, indent=4, separators=(',',':'))
         return json_formatted
-        
+
 class TextFormatter(OutputFormatter):
-    
+
     def _format_content(self):
         # to replace any string if it has \r\n for linux
         data = self.content.replace('\r','') if self._utils.isLinux() else self.content
-        return data 
+        return data
 
 class ConciseOutputFormatter(OutputFormatter):
-        
+
     def _format_content(self):
         offset_data = self.content
         if CatalogConstants.OUTPUT_FILTER in self._cmd_dict and \
-                        any(param in self._cmd_dict[CatalogConstants.OUTPUT_FILTER] for param in 
+                        any(param in self._cmd_dict[CatalogConstants.OUTPUT_FILTER] for param in
                             [CatalogConstants.INCLUDE_PROPERTIES, \
                             CatalogConstants.OFFSET]):
             try:
@@ -97,17 +97,17 @@ class ConciseOutputFormatter(OutputFormatter):
                 property_list = None
                 # if offset is given and the resulting value json for
                 # the offset is a dict where the include properties are
-                # present in the first level of the JSON - Typically for POST 
+                # present in the first level of the JSON - Typically for POST
                 parse_offset_first_level = False
                 show_properties_dynamically = False
                 # Read offset data for additional processing
                 if CatalogConstants.OFFSET in self._cmd_dict[CatalogConstants.OUTPUT_FILTER]:
-                    offset_data = offset_data[self._cmd_dict[CatalogConstants.OUTPUT_FILTER][CatalogConstants.OFFSET]]    
+                    offset_data = offset_data[self._cmd_dict[CatalogConstants.OUTPUT_FILTER][CatalogConstants.OFFSET]]
                     offset = True
-                
+
                 if CatalogConstants.SHOW_TABLE in self._cmd_dict[CatalogConstants.OUTPUT_FILTER]:
                     show_table = self._cmd_dict[CatalogConstants.OUTPUT_FILTER][CatalogConstants.SHOW_TABLE]
-                
+
                 if CatalogConstants.INCLUDE_PROPERTIES in self._cmd_dict[CatalogConstants.OUTPUT_FILTER]:
                     property_list = self._cmd_dict[CatalogConstants.OUTPUT_FILTER][CatalogConstants.INCLUDE_PROPERTIES]
                     # a special case, where include properties is [], then return empty
@@ -120,33 +120,33 @@ class ConciseOutputFormatter(OutputFormatter):
                 # maintain the count. if counter is 1 show block
                 # if counter is more than 1 then show table.
                 counter = 0
-                
+
                 # limit the property list to max_props = 5 and if show as list is false
-                # restrict the property list to max_props for table output. 
+                # restrict the property list to max_props for table output.
                 if len(property_list) > self._max_props and show_table:
                     property_list = property_list[:self._max_props]
-                
+
                 if not offset and (len(offset_data) == 1 if isinstance(offset_data, list) else True):
                     # if offset_data was not through offset property.
                     concise_json = OrderedDict()
                     if isinstance(offset_data, list):
                         offset_data = offset_data[0]
-                    
+
                     concise_json = self._populate_dict_for_short_output(show_properties_dynamically, \
                                                                         offset_data, property_list)
                     counter = 1
-                    output = concise_json                   
+                    output = concise_json
                 elif isinstance(offset_data, (dict,list)):
                     concise_list = []
                     # create a common iterable for dict and list
                     common_iterable = offset_data.keys() if isinstance(offset_data, dict) else range(len(offset_data))
-                    # Loop over the common iterable to build the output.                                           
+                    # Loop over the common iterable to build the output.
                     for index_key in common_iterable:
                         # custom rendering for commands like 'services' to show LS output
                         #if self._cmd_name in self._utils.specific_commands and isinstance(offset_data, (dict,list)):
                             #concise_list.append(index_key)
                         #    self._build_services_output(index_key, offset_data, property_list, concise_list)
-                        if offset_data[index_key] and isinstance(offset_data[index_key], dict): 
+                        if offset_data[index_key] and isinstance(offset_data[index_key], dict):
                             temp_dict = self._populate_dict_for_short_output(show_properties_dynamically, \
                                                                              offset_data[index_key], property_list)
                             concise_list.append(temp_dict)
@@ -154,17 +154,17 @@ class ConciseOutputFormatter(OutputFormatter):
                         else:
                             # for POST requests
                             parse_offset_first_level = True
-                            break      
+                            break
                     if not concise_list and parse_offset_first_level:
                         temp_dict = self._populate_dict_for_short_output(show_properties_dynamically, \
                                                                         offset_data, property_list)
                         concise_list.append(temp_dict)
-                    
+
                     output = concise_list
                     # sort only for services/apps
                     if self._cmd_name in self._utils.specific_commands and output:
                         output.sort(key = lambda user: user[property_list[0][CatalogConstants.INCLUDE_PROP_DISP_NAME]])
-                        
+
                 # invoke the appropriate format to display short output
                 if counter <= 1 and not show_table:
                     return self._display_block_output(output)
@@ -173,21 +173,21 @@ class ConciseOutputFormatter(OutputFormatter):
                         return TableFormatter(content=output, initialSection=True, num_prop_list=len(property_list))._format_content()
                     else:
                         return ErrorMessages.OPAAS_CLI_NO_DATA_FOUND
-                    
+
             except Exception as e:
-                logger.error(ErrorMessages.OPAAS_CLI_SHORT_OUTPUT_PARSING_ERROR_DISPLAY.format(e))      
-        
+                logger.error(ErrorMessages.OPAAS_CLI_SHORT_OUTPUT_PARSING_ERROR_DISPLAY.format(e))
+
         # output filter is given but no offset / includeProperties:
         #by default, show the first level properties.
         return self._show_first_level_props(self.content)
-    
+
     def _build_services_output(self, index_key, offset_data, property_list, concise_list):
         if isinstance(property_list, range):
             concise_list.append(index_key)
         else:
             if property_list[0][CatalogConstants.INCLUDE_PROP_NAME] in offset_data[index_key]:
                 concise_list.append(offset_data[index_key][property_list[0][CatalogConstants.INCLUDE_PROP_NAME]])
-    
+
     def _show_first_level_props(self, data):
         temp_dict = OrderedDict()
         if isinstance(data, dict):
@@ -203,7 +203,7 @@ class ConciseOutputFormatter(OutputFormatter):
         else:
             # by default return the Json formatted output
             return JSONFormatter(content=data)._format_content()
-    
+
     def _iterate_over_dict(self, data_dict):
         temp_dict = OrderedDict()
         counter = 0
@@ -219,10 +219,10 @@ class ConciseOutputFormatter(OutputFormatter):
             counter += 1
             if counter == self._max_props:
                 break
-        
+
         return temp_dict
-            
-    
+
+
     def _populate_dict_for_short_output(self, show_properties_dynamically, orig_op_dict, property_list):
         temp_dict = OrderedDict()
         if show_properties_dynamically:
@@ -249,9 +249,9 @@ class ConciseOutputFormatter(OutputFormatter):
                         temp_dict[item[CatalogConstants.INCLUDE_PROP_DISP_NAME]] = job_id
                     else:
                         temp_dict[item[CatalogConstants.INCLUDE_PROP_DISP_NAME]] = "N/A"
-        
+
         return temp_dict
-    
+
     def _convert_nested_json_to_name_value(self, value):
         if isinstance(value, list) and len(value) > 1:
             return self._utils._json_object
@@ -259,8 +259,8 @@ class ConciseOutputFormatter(OutputFormatter):
             value = value[0]
         data = "{0}".format(", ".join(["{0}: {1}".format(k, self._utils._json_object if isinstance(v, (dict, list)) else v) for k, v in value.items()]))
         return data
-            
-    
+
+
     def _display_block_output(self, output):
         if isinstance(output, dict):
             return self._format_block_output(output)
@@ -268,11 +268,11 @@ class ConciseOutputFormatter(OutputFormatter):
             op_dict = output[0] if output else output
             if isinstance(op_dict, dict):
                 return self._format_block_output(op_dict)
-            else: 
+            else:
                 return self._format_block_output(output)
         # Return text formatted output as the output might be a string.
         return TextFormatter(content=output)._format_content()
-    
+
     def _format_block_output(self, output):
         if output:
             maxlen = len(max(output, key=len))
@@ -280,8 +280,8 @@ class ConciseOutputFormatter(OutputFormatter):
         else:
             data = ErrorMessages.OPAAS_CLI_NO_DATA_FOUND
         return TextFormatter(content=data)._format_content()
-        
-        
+
+
 class HtmlFormatter(OutputFormatter):
     def _format_content(self):
         data = self.content
@@ -300,7 +300,7 @@ class JsonToHtml(object):
         global table_attributes
         table_attributes = ''
         htmlFormatter = formatter
-        
+
         if 'table_attributes' in args:
             table_attributes = args['table_attributes']
         else:
@@ -330,11 +330,11 @@ class JsonToHtml(object):
             # The json_input (which is the output) is a string and is not Json serializable
             logger.error("The response output cannot be converted to HTML.")
             return self.json_input
-        
-        # Fix for BUG 22506411 and 22760139: Added html parsing for List type Jsons.
+
+        # Fix for BUG 22506411 and 22760139: Added html parsing for List type_name Jsons.
         if not isinstance(ordered_json,(dict,list)):
-            return ordered_json 
-        
+            return ordered_json
+
         # To sort the values in the json before converting to html.
         # commenting the HTML sorting too.
         #try:
@@ -343,7 +343,7 @@ class JsonToHtml(object):
         #except:
         #    pass
 
-        # this is invoked only if the response content is a type of dict, json or list. 
+        # this is invoked only if the response content is a type_name of dict, json or list.
         return self.iterJson(ordered_json)
 
     def columnHeadersFromListOfDicts(self, ordered_json):
@@ -399,7 +399,7 @@ class JsonToHtml(object):
 
             #safety: don't do recursion over anything that we don't know about - items() will most probably fail
             return ''
-        
+
         def buildHtml(json_value, htmlOutput):
             for k,v in json_value.items():
                 htmlOutput = htmlOutput + '<tr>'
@@ -407,10 +407,10 @@ class JsonToHtml(object):
                 # Transposing only the dictionary keys into separate rows.
                 if isinstance(v, dict):
                     htmlOutput = htmlOutput + '<th colspan="2" align="center">'+ markup(k) +'</th>'
-                    htmlOutput = htmlOutput + '</tr>'  
-                else: 
+                    htmlOutput = htmlOutput + '</tr>'
+                else:
                     htmlOutput = htmlOutput + '<th align="center">'+ markup(k) +'</th>'
-                
+
                 if (v == None):
                     v = str('')
                 if(isinstance(v,list)):
@@ -425,47 +425,47 @@ class JsonToHtml(object):
                         htmlOutput = htmlOutput + '</td>'
                         htmlOutput = htmlOutput + '</tr>'
                         continue
-                # Transposing only the dictionary keys into separate rows.                    
+                # Transposing only the dictionary keys into separate rows.
                 if isinstance(v, dict):
                     htmlOutput = htmlOutput + '<tr>'
                     htmlOutput = htmlOutput + '<td colspan="2" align="center">' + markup(v) + '</td>'
                 else:
-                    htmlOutput = htmlOutput + '<td align="center">' + markup(v) + '</td>' 
+                    htmlOutput = htmlOutput + '<td align="center">' + markup(v) + '</td>'
                 #htmlOutput = htmlOutput + '<td>' + markup(v) + '</td>'
-                htmlOutput = htmlOutput + '</tr>'      
+                htmlOutput = htmlOutput + '</tr>'
             return htmlOutput
-        
+
         htmlOutput = ''
 
         global table_attributes
         table_init_markup = "<table %s>" %(table_attributes)
         htmlOutput = htmlOutput + table_init_markup
-        
-        # Fix: Bug 22760139: added support for converting a list type json into html.
+
+        # Fix: Bug 22760139: added support for converting a list type_name json into html.
         if isinstance(ordered_json, list):
             for item in ordered_json:
                 if (isinstance(item, dict)):
                     htmlOutput = htmlOutput + buildHtml(item, htmlOutput)
         else:
             htmlOutput = htmlOutput + buildHtml(ordered_json, htmlOutput)
-                
+
         htmlOutput = htmlOutput + '</table>'
         return htmlOutput
-        
+
 class TableFormatter(OutputFormatter):
     '''
         Table Formatter which displays the JSON as a Table on the Console output.
     '''
     def __init__(self, content=None, initialSection=False, srv_name=None, num_prop_list=NUM_PROP_LIST):
         '''
-            @type initialSection : bool
+            @type_name initialSection : bool
             @param initialSection : create a default section in the psmTable
         '''
         self._srv_name = srv_name
         super().__init__(content=content)
         self._psmtable = PSMTable(initial_section=initialSection,
                                   column_separator = ' ', num_prop_list=num_prop_list)
-        
+
     def _format_content(self):
         if isinstance(self._content, (list, dict)):
             if self._build_table(self._srv_name, self._content):
@@ -477,15 +477,15 @@ class TableFormatter(OutputFormatter):
                     # print(str(e))
                 return EMPTY_STRING
         return self._content
-    
+
     def _build_table(self, title, content, indent_level=0):
         # Recursively invoke the build_table to build the table from the given
-        # content, which can be a dict or list of dicts. 
+        # content, which can be a dict or list of dicts.
         if title is not None:
-            self._psmtable.new_section(title, indent_level) 
+            self._psmtable.new_section(title, indent_level)
         if not content:
             return False
-        
+
         if isinstance(content, list):
             if isinstance(content[0], dict):
                 self._build_table_from_list(title, content, indent_level)
@@ -498,10 +498,10 @@ class TableFormatter(OutputFormatter):
                     else:
                         self._build_table(title=None, content=item)
         elif isinstance(content, dict):
-            self._build_table_from_dict(content, indent_level) 
-        
+            self._build_table_from_dict(content, indent_level)
+
         return True
-    
+
     def _build_table_from_list(self, title, current_dict, indent_level):
         headers, nested = self._parse_single_nested_value_keys_from_list(current_dict)
         self._psmtable.add_section_header(headers)
@@ -520,8 +520,8 @@ class TableFormatter(OutputFormatter):
                 # check this condition before recursing.
                 if nested_key in element:
                     self._build_table(nested_key, element[nested_key],
-                                    indent_level=indent_level + 1)    
-                    
+                                    indent_level=indent_level + 1)
+
     def _build_table_from_dict(self, current_dict, indent_level):
         # parse the current dicts key/value into header / row values
         # if its a single key-value. if the value is a list of dict or
@@ -531,14 +531,14 @@ class TableFormatter(OutputFormatter):
             # if a dict has a single key/value pair.
         #    self._psmtable.add_section_rows([headers[0], current_dict[headers[0]]])
         if headers:
-            # Add the headers and its values (into rows) 
+            # Add the headers and its values (into rows)
             self._psmtable.add_section_header(headers)
             self._psmtable.add_section_rows([current_dict[k] for k in headers])
         for nested_key in nested_headers:
             # Call the build table to parse the nested dicts into table.
             self._build_table(nested_key, current_dict[nested_key],
                               indent_level = indent_level + 1)
-    
+
     def _parse_single_nested_value_keys_from_list(self, list_of_dicts):
         # We want to make sure we catch all the keys in the list of dicts.
         # Most of the time each list element has the same keys, but sometimes
@@ -559,60 +559,60 @@ class TableFormatter(OutputFormatter):
         headers = headers.keys() #list(headers)
         nested = nested.keys() #nested = list(nested)
         return headers, nested
-    
+
     def _parse_single_nested_value_keys(self, current_dict):
         # Parse the current dict into headers with just the value
-        # and into nested headers which has a value that can be 
+        # and into nested headers which has a value that can be
         # a list of dicts or dict
         headers = []
         nested = []
         for item in current_dict:
             if self._isQuantifiable(current_dict[item]):
-                headers.append(item) 
+                headers.append(item)
             else:
                 nested.append(item)
-        
+
         return headers, nested
-        
+
     def _isQuantifiable(self, value):
         # Sometimes the value can a dict or list of dict.
         # hence we need to build a table for those values.
         # Return True if its a single key value pair.
-        return not isinstance(value, (list, dict)) 
+        return not isinstance(value, (list, dict))
 
 class PSMTable(object):
     '''
         PSM Table
     '''
     def __init__(self, initial_section=False, column_separator = ' ', num_prop_list=NUM_PROP_LIST):
-        self._table_utils = TableUtils(num_prop_list=num_prop_list)    
+        self._table_utils = TableUtils(num_prop_list=num_prop_list)
         if initial_section:
             self._current_section = PSMTableSection(self._table_utils)
             self._all_sections = [self._current_section]
-        else: 
+        else:
             self._all_sections = []
             self._current_section = None
-        self._column_separator = column_separator   
+        self._column_separator = column_separator
         self._terminal_width_size = self._table_utils.get_terminal_size
-    
+
     def add_section_title(self, title):
         # Add the title to the current section
         self._current_section.title = title
-        
+
     def add_section_header(self, headers):
         # add the headers for that section and indent level
-        self._current_section.headers = headers 
-    
+        self._current_section.headers = headers
+
     def add_section_rows(self, rows):
         # add the values into the rows.
-        self._current_section.rows = rows 
-    
+        self._current_section.rows = rows
+
     def new_section(self, title, indent_level=0):
         self._current_section = PSMTableSection(self._table_utils)
         self._all_sections.append(self._current_section)
         self._current_section.title = title
         self._current_section.indent_level = indent_level
-    
+
     def display(self):
         # Display the table on the console output
         max_width = self._calculate_max_width() #self._terminal_width_size #
@@ -624,14 +624,14 @@ class PSMTable(object):
                 # if the max width is still greater than calculate manually
                 if (self._terminal_width_size - 80) >= 40:
                     max_width = 80 + 40
-                else:    
+                else:
                     max_width = self._terminal_width_size
-        
-        # Comment the below line, as of now we are not showing the first level key as header.        
+
+        # Comment the below line, as of now we are not showing the first level key as header.
         #sys.stdout.write('-' * max_width + '\n')
         for section in self._all_sections:
             self._display_section(section, max_width)
-        
+
     def _determine_conversion_needed(self, max_width):
         # If we don't know the width of the controlling terminal,
         # then we don't try to resize the table.
@@ -640,14 +640,14 @@ class PSMTable(object):
         if max_width > self._terminal_width_size:
             return True
             #return False
-                    
+
     def _calculate_max_width(self):
         # Calculate the max width of the rows / headers for building the table.
         max_width = max(s.total_widths(padding=2, with_border=True,
                                       outer_padding=s.indent_level)
                         for s in self._all_sections)
         return max_width
-    
+
     def _display_section(self, table_section, max_width):
         stream = TableOutputStream(table_section.indent_level,
                                 ' ',' ')
@@ -655,10 +655,10 @@ class PSMTable(object):
         self._parse_and_display_title(table_section, max_width, stream)
         self._parse_and_display_column_titles(table_section, max_width, stream)
         self._parse_and_display_rows(table_section, max_width, stream)
-    
+
     def _parse_and_display_title(self, section, max_width, stream):
         # The title example
-        #     title      
+        #     title
         # ---------------
         if section.title:
             title = section.title
@@ -667,7 +667,7 @@ class PSMTable(object):
                                                            len(section.title)) + '\n')
             if not section.headers and not section.rows:
                 stream.write(' %s ' % ('-' * (max_width - 2)) + '\n')
-                
+
     def _parse_and_display_column_titles(self, section, max_width, stream):
         if not section.headers:
             return
@@ -682,7 +682,7 @@ class PSMTable(object):
         first = True
         for width, header in zip(widths, section.headers):
             if first:
-                left_edge = ' ' 
+                left_edge = ' '
             else:
                 left_edge = ''
             current += self._table_utils.align_left_header(text=FormatText.bold(header), length=width,
@@ -709,7 +709,7 @@ class PSMTable(object):
         stream.write(''.join(parts))
 
     def _parse_and_display_rows(self, section, max_width, stream):
-        # The first cell needs both left and right edges '  value  ' 
+        # The first cell needs both left and right edges '  value  '
         # while subsequent cells only need right edges '  value   '.
         if not section.rows:
             return
@@ -721,10 +721,10 @@ class PSMTable(object):
         print_line_break_list = 0
         #self._write_line_break(stream, widths)
         for row in section.rows:
-            # if the row is of nested list type iterate over 
+            # if the row is of nested list type_name iterate over
             # the row to parse the header and value of the row
             if isinstance(row[0], list):
-                print_line_break_list += 1 
+                print_line_break_list += 1
                 for el in row:
                     current = ''
                     length_so_far = 0
@@ -772,13 +772,13 @@ class PSMTable(object):
                 self._write_to_stream(stream, current)
         # Comment for concise output format
         #self._write_line_break(stream, widths)
-    
+
     def _write_to_stream(self, stream, current):
         if isinstance(current, list):
             stream.write(current)
         else:
             stream.write(current + '\n')
-                                       
+
 class PSMTableSection(object):
     '''
         A wrapper class which wraps the header and row information for a particular Section.
@@ -794,41 +794,41 @@ class PSMTableSection(object):
         self._max_widths_headers_rows = []
         self._no_of_cols_one_row = None
         self._table_util = table_util
-      
+
     @property
     def title(self):
         return self._title
-    
-    @title.setter 
+
+    @title.setter
     def title(self, title):
         self._title = title
-  
-    @property 
+
+    @property
     def headers(self):
         return self._headers
 
     @headers.setter
     def headers(self, headers):
-        self._headers = headers 
+        self._headers = headers
         self._update_max_widths(headers)
-            
-    @property 
+
+    @property
     def rows(self):
-        return self._rows   
-    
-    @rows.setter 
+        return self._rows
+
+    @rows.setter
     def rows(self, row):
         self._rows.append(row)
-        self._update_max_widths(row)  
-    
+        self._update_max_widths(row)
+
     @property
     def indent_level(self):
         return self._indent_level
-    
-    @indent_level.setter 
+
+    @indent_level.setter
     def indent_level(self, indent_level):
         self._indent_level = indent_level
-        
+
     def _update_max_widths(self, row):
         # This is to calculate the max width of the header and corresponding
         # header value in the row. Store the one that is maximum of the two.
@@ -850,19 +850,19 @@ class PSMTableSection(object):
             else:
                 for i, el in enumerate(row):
                     self._max_widths_headers_rows[i] = max(len(str(el)), self._max_widths_headers_rows[i])
-        
+
         if self._max_widths_headers_rows:
             iter_range = range(len(self._max_widths_headers_rows))
             for i in iter_range:
                 if self._max_widths_headers_rows[i] > self._table_util.get_row_max_width: #ROW_MAX_WIDTH:
                     self._max_widths_headers_rows[i] = self._table_util.get_row_max_width #ROW_MAX_WIDTH
-    
+
     def _isNestedLists(self, content):
         for elem in content:
             if isinstance(elem, list):
                 return True
-        return False                    
-    
+        return False
+
     def calculate_column_widths(self, padding=0, max_width=None):
         # postcondition: sum(widths) == max_width
         unscaled_widths = [w + padding for w in self._max_widths_headers_rows]
@@ -876,7 +876,7 @@ class PSMTableSection(object):
             scaled = [int(round(scale_factor * w)) if w >= 25 and scale_factor >= 1 else w for w in unscaled_widths]
             # Once we've scaled the columns, we may be slightly over/under
             # the amount we need so we have to adjust the columns.
-            diff = sum(scaled) - max_width            
+            diff = sum(scaled) - max_width
             while diff != 0:
                 iter_order = range(len(scaled))
                 #if diff < 0:
@@ -890,7 +890,7 @@ class PSMTableSection(object):
                         diff += 1
                     if diff == 0:
                         break
-                
+
             return scaled
 
     def total_widths(self, padding=0, with_border=False, outer_padding=0):
@@ -905,7 +905,7 @@ class PSMTableSection(object):
         total += outer_padding + outer_padding
         return max(len(self._title) + border_padding + outer_padding +
                    outer_padding, total)
-    
+
     def __repr__(self):
         return ("PSMTableSection(title=%s, headers=%s, indent_level=%s, no_of_rows=%s)" %
                 (self._title, self._headers, self._indent_level, len(self._rows)))
@@ -933,22 +933,22 @@ class TableOutputStream(object):
                 self._stream.write('\n')
             else:
                 self._stream.write(text)
-            
+
 class TableUtils(object):
-    
+
     def __init__(self, num_prop_list=NUM_PROP_LIST):
         self._terminal_width_size = self.getTerminalSize()
         self._row_max_width = round(self._terminal_width_size / num_prop_list) if self._terminal_width_size else ROW_MAX_WIDTH
         self._row_wrap_width = self._row_max_width - 3
-    
-    @property 
+
+    @property
     def get_terminal_size(self):
         return self._terminal_width_size
-    
+
     @property
     def get_row_max_width(self):
         return self._row_max_width
-    
+
     def getTerminalSize(self):
         default_width = 80
         try:
@@ -959,10 +959,10 @@ class TableUtils(object):
         except:
             logger.debug("Returning default Terminal Width: %s.\n" % default_width)
         return default_width
-        
+
     def getTerminalSizeOLD(self):
         '''
-            Returns the width of the Terminal. Based on the size of the terminal 
+            Returns the width of the Terminal. Based on the size of the terminal
             build the Table.
         '''
         env = os.environ
@@ -981,12 +981,12 @@ class TableUtils(object):
         height, width = ioctl_GWINSZ()
         # return the width of the terminal.
         return width
-    
+
     def center_text(self, text, length=80, left_edge=' ', right_edge=' ',
                 text_length=None):
         '''
             Center text with specified edge chars.
-    
+
             You can pass in the length of the text as an arg, otherwise it is computed
             automatically for you. center a string not based
             on it's length.
@@ -1002,7 +1002,7 @@ class TableUtils(object):
         output.append(right_edge)
         final = ''.join(output)
         return final
-    
+
     def align_left_header(self, text, length=80, left_edge=' ', right_edge=' ',
                 text_length=None, first=False):
         if text_length is None:
@@ -1019,7 +1019,7 @@ class TableUtils(object):
         output.append(right_edge)
         final = ''.join(output)
         return final
-    
+
     def convert_to_vertical_table(self, sections):
         # Horizontal table to vertical table
         for i, section in enumerate(sections):
@@ -1063,7 +1063,7 @@ class TableUtils(object):
             # scale_value is a number assumed in order to add left and righ padding.
             scale_value = 6
             padding = 2
-            output_split = self._split_by_length(text, (length - scale_value)) 
+            output_split = self._split_by_length(text, (length - scale_value))
             add_left_edge = False
             for te in output_split:
                 output_formatted = []
@@ -1072,7 +1072,7 @@ class TableUtils(object):
                     # Append | and length so far to accomodate the row header place holder
                     # for multiple lines of text.
                     output_formatted.append(' ')
-                    # length_so_far - 2: as we are adding left and right edge for 
+                    # length_so_far - 2: as we are adding left and right edge for
                     # the place holder value of row header
                     output_formatted.append(' ' * (length_so_far - 2))
                     # append the border of the row value with left edge = ' '
@@ -1092,8 +1092,8 @@ class TableUtils(object):
                 length_added += len(te)
                 output_formatted.append(' ' * (length - length_added - len(right_edge)))
                 output_formatted.append(right_edge)
-                
-                output.append(''.join(output_formatted)) 
+
+                output.append(''.join(output_formatted))
                 add_left_edge = True
             return output
         else:
@@ -1109,14 +1109,14 @@ class TableUtils(object):
             output.append(right_edge)
             current += ''.join(output)
 
-        return current 
-    
+        return current
+
     def _split_by_length(self, text, length):
         w=[]
         n=len(text)
         for i in range(0,n,length):
             w.append(text[i:i+length])
-        return w          
+        return w
 
 #======= CONSTANTS ===============================================================
 OUTPUT_FORMATTER = {
@@ -1127,7 +1127,7 @@ OUTPUT_FORMATTER = {
     'table' : TableFormatter
 }
 
-ROW_MAX_WIDTH = 20 
-ROW_WRAP_WIDTH = ROW_MAX_WIDTH - 3 
+ROW_MAX_WIDTH = 20
+ROW_WRAP_WIDTH = ROW_MAX_WIDTH - 3
 EMPTY_STRING = ""
 logger = logging.getLogger(__name__)

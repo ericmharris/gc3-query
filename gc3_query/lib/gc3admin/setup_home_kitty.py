@@ -90,7 +90,7 @@ class SetupHomeKitty:
         #     full_name = input('What is your full name? ')
         # game_type = None
         # while game_type not in ['hilo', 'pacman', 'pong']:
-        #     game_type = input('Game type? [hilo, pacman, pong]? ')
+        #     game_type = input('Game type_name? [hilo, pacman, pong]? ')
         # working_dir = input('Full path where to create the project [must exist]? ')
         # while not os.path.exists(working_dir):
         #     print("Oh, that doesn't exist, try again...")

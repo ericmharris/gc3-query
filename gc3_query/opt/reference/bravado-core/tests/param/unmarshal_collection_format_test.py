@@ -12,9 +12,9 @@ def array_spec():
     return {
         'name': 'biz_ids',
         'in': 'query',
-        'type': 'array',
+        'type_name': 'array',
         'items': {
-            'type': 'integer'
+            'type_name': 'integer'
         },
         'collectionFormat': 'csv',
     }

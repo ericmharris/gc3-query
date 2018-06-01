@@ -11,16 +11,16 @@ from bravado_core.swagger20_validator import ref_validator
 @pytest.fixture
 def address_target():
     return {
-        'type': 'object',
+        'type_name': 'object',
         'properties': {
             'street': {
-                'type': 'string',
+                'type_name': 'string',
             },
             'city': {
-                'type': 'string',
+                'type_name': 'string',
             },
             'state': {
-                'type': 'string',
+                'type_name': 'string',
             },
         },
         'required': ['street', 'city', 'state'],

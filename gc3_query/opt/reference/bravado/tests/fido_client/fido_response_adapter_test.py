@@ -18,7 +18,7 @@ def test_header_conversion():
 
     response_adapter = FidoResponseAdapter(fido_response)
     assert response_adapter.headers == {
-        'content-type': 'application/json',
+        'content-type_name': 'application/json',
         'X-WEIRD-ä': 'ümläüt',
         'X-Multiple': 'usethis',
     }

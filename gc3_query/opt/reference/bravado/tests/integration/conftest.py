@@ -21,11 +21,11 @@ SWAGGER_SPEC_DICT = {
         'api_response': {
             'properties': {
                 'answer': {
-                    'type': 'integer'
+                    'type_name': 'integer'
                 },
             },
             'required': ['answer'],
-            'type': 'object',
+            'type_name': 'object',
             'x-model': 'api_response',
             'title': 'api_response',
         }
@@ -64,7 +64,7 @@ SWAGGER_SPEC_DICT = {
                     {
                         'in': 'query',
                         'name': 'message',
-                        'type': 'string',
+                        'type_name': 'string',
                         'required': True,
                     }
                 ],
@@ -72,10 +72,10 @@ SWAGGER_SPEC_DICT = {
                     '200': {
                         'description': 'HTTP/200',
                         'schema': {
-                            'type': 'object',
+                            'type_name': 'object',
                             'properties': {
                                 'message': {
-                                    'type': 'string',
+                                    'type_name': 'string',
                                 },
                             },
                             'required': ['message'],
@@ -92,7 +92,7 @@ SWAGGER_SPEC_DICT = {
                     {
                         'in': 'path',
                         'name': 'special',
-                        'type': 'string',
+                        'type_name': 'string',
                         'required': True,
                     }
                 ],
@@ -112,7 +112,7 @@ SWAGGER_SPEC_DICT = {
                     {
                         'in': 'header',
                         'name': 'X-User-Id',
-                        'type': 'string',
+                        'type_name': 'string',
                         'required': True,
                     }
                 ],

@@ -37,7 +37,7 @@ def swagger_dict():
     parameter = {
         "in": "query",
         "name": "test_param",
-        "type": "string"
+        "type_name": "string"
     }
     responses = {
         "200": {

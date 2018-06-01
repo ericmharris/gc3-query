@@ -5,19 +5,19 @@ from six import iteritems
 SECURITY_DEFINITIONS = {
     'basic': {
         'basic': {
-            'type': 'basic',
+            'type_name': 'basic',
         },
     },
     'apiKey': {
         'apiKey': {
-            'type': 'apiKey',
+            'type_name': 'apiKey',
             'name': 'api_key',
             'in': 'header',
         },
     },
     'oauth2': {
         'oauth2': {
-            'type': 'oauth2',
+            'type_name': 'oauth2',
             'authorizationUrl': 'http://petstore.swagger.io/api/oauth/dialog',
             'flow': 'implicit',
             'scopes': {
@@ -38,12 +38,12 @@ SECURITY_OBJECTS = {
 def definitions_spec():
     return {
         'Pet': {
-            'type': 'object',
+            'type_name': 'object',
             'required': ['name'],
             'properties': {
-                'name': {'type': 'string'},
-                'age': {'type': 'integer'},
-                'breed': {'type': 'string'}
+                'name': {'type_name': 'string'},
+                'age': {'type_name': 'integer'},
+                'breed': {'type_name': 'string'}
             }
         }
     }
@@ -71,9 +71,9 @@ def _paths_spec():
                         'in': 'query',
                         'description': 'Status values that need to be considered for filter',  # noqa
                         'required': False,
-                        'type': 'array',
+                        'type_name': 'array',
                         'items': {
-                            'type': 'string'
+                            'type_name': 'string'
                         },
                         'collectionFormat': 'multi',
                         'default': 'available'
@@ -83,7 +83,7 @@ def _paths_spec():
                     '200': {
                         'description': 'successful operation',
                         'schema': {
-                            'type': 'array',
+                            'type_name': 'array',
                             'items': {
                                 '$ref': '#/definitions/Pet'
                             }

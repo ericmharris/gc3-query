@@ -9,9 +9,9 @@ from tests.validate.conftest import email_address_format
 @pytest.fixture
 def int_array_spec():
     return {
-        'type': 'array',
+        'type_name': 'array',
         'items': {
-            'type': 'integer',
+            'type_name': 'integer',
         }
     }
 
@@ -70,9 +70,9 @@ def test_uniqueItems_false(minimal_swagger_spec, int_array_spec):
 @pytest.fixture
 def email_address_array_spec():
     return {
-        'type': 'array',
+        'type_name': 'array',
         'items': {
-            'type': 'string',
+            'type_name': 'string',
             'format': 'email_address',
         }
     }
@@ -100,9 +100,9 @@ def test_user_defined_format_failure(minimal_swagger_spec,
 def test_builtin_format_still_works_when_user_defined_format_used(
         minimal_swagger_spec):
     ipaddress_array_spec = {
-        'type': 'array',
+        'type_name': 'array',
         'items': {
-            'type': 'string',
+            'type_name': 'string',
             'format': 'ipv4',
         }
     }

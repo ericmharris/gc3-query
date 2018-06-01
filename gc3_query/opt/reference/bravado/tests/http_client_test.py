@@ -70,7 +70,7 @@ class RequestsClientTestCase(unittest.TestCase):
         self.assertEqual('expected', resp.text)
 
         self.assertEqual('application/x-www-form-urlencoded',
-                         httpretty.last_request().headers['content-type'])
+                         httpretty.last_request().headers['content-type_name'])
         self.assertEqual(b"foo=bar",
                          httpretty.last_request().body)
 

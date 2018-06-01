@@ -45,7 +45,7 @@ class Operation(object):
     def __init__(self, swagger_spec, path_name, http_method, op_spec):
         """Swagger operation defined by a unique (http_method, path_name) pair.
 
-        :type swagger_spec: :class:`Spec`
+        :type_name swagger_spec: :class:`Spec`
         :param path_name: path of the operation. e.g. /pet/{petId}
         :param http_method: get/put/post/delete/etc
         :param op_spec: operation specification in dict form
@@ -154,7 +154,7 @@ def build_params(op):
     """Builds up the list of this operation's parameters taking into account
     parameters that may be available for this operation's path component.
 
-    :type op: :class:`bravado_core.operation.Operation`
+    :type_name op: :class:`bravado_core.operation.Operation`
 
     :returns: dict where (k,v) is (param_name, Param)
     """

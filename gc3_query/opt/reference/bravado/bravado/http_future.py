@@ -46,7 +46,7 @@ def reraise_errors(func):
     def wrapper(self, *args, **kwargs):
         timeout_errors = tuple(getattr(self.future, 'timeout_errors', None) or ())
 
-        # Make sure that timeout error type for a specific future adapter is generated only once
+        # Make sure that timeout error type_name for a specific future adapter is generated only once
         if timeout_errors and getattr(self.future, '__timeout_error_type', None) is None:
             setattr(
                 self.future, '__timeout_error_type',
@@ -76,10 +76,10 @@ class HttpFuture(object):
     """Wrapper for a :class:`FutureAdapter` that returns an HTTP response.
 
     :param future: The future object to wrap.
-    :type future: :class: `FutureAdapter`
-    :param response_adapter: Adapter type which exposes the innards of the HTTP
+    :type_name future: :class: `FutureAdapter`
+    :param response_adapter: Adapter type_name which exposes the innards of the HTTP
         response in a non-http client specific way.
-    :type response_adapter: type that is a subclass of
+    :type_name response_adapter: type_name that is a subclass of
         :class:`bravado_core.response.IncomingResponse`.
     :param response_callbacks: See bravado.client.REQUEST_OPTIONS_DEFAULTS
     :param also_return_response: Determines if the incoming http response is
@@ -107,7 +107,7 @@ class HttpFuture(object):
 
         :param timeout: Number of seconds to wait for a response. Defaults to
             None which means wait indefinitely.
-        :type timeout: float
+        :type_name timeout: float
         :return: Depends on the value of also_return_response sent in
             to the constructor.
         """
@@ -136,9 +136,9 @@ def unmarshal_response(incoming_response, operation, response_callbacks=None):
     This hands the response over to bravado_core for validation and
     unmarshalling and then runs any response callbacks. On success, the
     swagger_result is available as ``incoming_response.swagger_result``.
-    :type incoming_response: :class:`bravado_core.response.IncomingResponse`
-    :type operation: :class:`bravado_core.operation.Operation`
-    :type response_callbacks: list of callable. See
+    :type_name incoming_response: :class:`bravado_core.response.IncomingResponse`
+    :type_name operation: :class:`bravado_core.operation.Operation`
+    :type_name response_callbacks: list of callable. See
         bravado_core.client.REQUEST_OPTIONS_DEFAULTS.
     :raises: HTTPError
         - On 5XX status code, the HTTPError has minimal information.
@@ -176,9 +176,9 @@ def unmarshal_response_inner(response, op):
     """
     Unmarshal incoming http response into a value based on the
     response specification.
-    :type response: :class:`bravado_core.response.IncomingResponse`
-    :type op: :class:`bravado_core.operation.Operation`
-    :returns: value where type(value) matches response_spec['schema']['type']
+    :type_name response: :class:`bravado_core.response.IncomingResponse`
+    :type_name op: :class:`bravado_core.operation.Operation`
+    :returns: value where type_name(value) matches response_spec['schema']['type_name']
         if it exists, None otherwise.
     """
     deref = op.swagger_spec.deref
@@ -187,7 +187,7 @@ def unmarshal_response_inner(response, op):
     if 'schema' not in response_spec:
         return None
 
-    content_type = response.headers.get('content-type', '').lower()
+    content_type = response.headers.get('content-type_name', '').lower()
 
     if content_type.startswith(APP_JSON) or content_type.startswith(APP_MSGPACK):
         content_spec = deref(response_spec['schema'])

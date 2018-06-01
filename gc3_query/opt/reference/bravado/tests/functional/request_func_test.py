@@ -16,12 +16,12 @@ def test_form_params_in_request(httprettified, swagger_dict):
     param1_spec = {
         'in': 'formData',
         'name': 'param_id',
-        'type': 'integer'
+        'type_name': 'integer'
     }
     param2_spec = {
         'in': 'formData',
         'name': 'param_name',
-        'type': 'string'
+        'type_name': 'string'
     }
     path_spec = swagger_dict['paths']['/test_http']
     path_spec['post'] = path_spec.pop('get')
@@ -30,7 +30,7 @@ def test_form_params_in_request(httprettified, swagger_dict):
     httpretty.register_uri(httpretty.POST, 'http://localhost/test_http?')
     resource = SwaggerClient.from_url(API_DOCS_URL).api_test
     resource.testHTTP(param_id=42, param_name='foo').result()
-    content_type = httpretty.last_request().headers['content-type']
+    content_type = httpretty.last_request().headers['content-type_name']
     assert 'application/x-www-form-urlencoded' == content_type
     body = urlparse.parse_qs(httpretty.last_request().body)
     assert {b'param_name': [b'foo'], b'param_id': [b'42']} == body
@@ -40,12 +40,12 @@ def test_file_upload_in_request(httprettified, swagger_dict):
     param1_spec = {
         'in': 'formData',
         'name': 'param_id',
-        'type': 'integer'
+        'type_name': 'integer'
     }
     param2_spec = {
         'in': 'formData',
         'name': 'file_name',
-        'type': 'file'
+        'type_name': 'file'
     }
     path_spec = swagger_dict['paths']['/test_http']
     path_spec['post'] = path_spec.pop('get')
@@ -55,7 +55,7 @@ def test_file_upload_in_request(httprettified, swagger_dict):
     httpretty.register_uri(httpretty.POST, 'http://localhost/test_http?')
     resource = SwaggerClient.from_url(API_DOCS_URL).api_test
     resource.testHTTP(param_id=42, file_name=cStringIO('boo')).result()
-    content_type = httpretty.last_request().headers['content-type']
+    content_type = httpretty.last_request().headers['content-type_name']
 
     assert content_type.startswith('multipart/form-data')
     assert b'42' in httpretty.last_request().body
@@ -67,7 +67,7 @@ def test_parameter_in_path_of_request(httprettified, swagger_dict):
         'in': 'path',
         'name': 'param_id',
         'required': True,
-        'type': 'string',
+        'type_name': 'string',
     }
     paths_spec = swagger_dict['paths']
     paths_spec['/test_http/{param_id}'] = paths_spec.pop('/test_http')
@@ -95,9 +95,9 @@ def test_array_with_collection_format_in_path_of_request(
     path_param_spec = {
         'in': 'path',
         'name': 'param_ids',
-        'type': 'array',
+        'type_name': 'array',
         'items': {
-            'type': 'integer'
+            'type_name': 'integer'
         },
         'collectionFormat': 'csv',
         'required': True,

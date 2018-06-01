@@ -7,12 +7,12 @@ from bravado_core.spec import Spec
 
 @pytest.fixture
 def required_true():
-    return {'type': 'integer', 'required': True}
+    return {'type_name': 'integer', 'required': True}
 
 
 @pytest.fixture
 def required_false():
-    return {'type': 'integer', 'required': False}
+    return {'type_name': 'integer', 'required': False}
 
 
 def test_true(minimal_swagger_spec, required_true):
@@ -24,7 +24,7 @@ def test_false(minimal_swagger_spec, required_false):
 
 
 def test_defaults_to_false(minimal_swagger_spec):
-    assert not is_required(minimal_swagger_spec, {'type': 'integer'})
+    assert not is_required(minimal_swagger_spec, {'type_name': 'integer'})
 
 
 def test_ref_true(minimal_swagger_dict, required_true):
@@ -40,6 +40,6 @@ def test_ref_false(minimal_swagger_dict, required_false):
 
 
 def test_ref_default_to_false(minimal_swagger_dict):
-    minimal_swagger_dict['definitions']['Foo'] = {'type': 'integer'}
+    minimal_swagger_dict['definitions']['Foo'] = {'type_name': 'integer'}
     swagger_spec = Spec.from_dict(minimal_swagger_dict)
     assert not is_required(swagger_spec, {'$ref': '#/definitions/Foo'})

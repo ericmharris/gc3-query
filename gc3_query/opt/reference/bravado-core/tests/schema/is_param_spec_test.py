@@ -7,7 +7,7 @@ def test_true(minimal_swagger_spec):
     param_spec = {
         'in': 'path',
         'name': 'petId',
-        'type': 'integer',
+        'type_name': 'integer',
     }
     assert is_param_spec(minimal_swagger_spec, param_spec)
 
@@ -22,7 +22,7 @@ def test_ref_true(minimal_swagger_dict):
         'PetId': {
             'in': 'path',
             'name': 'petId',
-            'type': 'integer',
+            'type_name': 'integer',
             'required': True,
         }
     }

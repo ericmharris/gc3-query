@@ -110,12 +110,12 @@ def test_marshal_as_dict_recursive(polymorphic_spec, recursive):
         'list': [
             {
                 'name': 'a dog name',
-                'type': 'Dog',
+                'type_name': 'Dog',
                 'birth_date': '2017-03-09',
             },
             {
                 'name': 'a cat name',
-                'type': 'Cat',
+                'type_name': 'Cat',
                 'color': 'white',
             },
         ]
@@ -156,7 +156,7 @@ def test_model_as_dict_additional_property(definitions_spec, user_type, user_kwa
         [
             {
                 'name': 'a generic pet name',
-                'type': 'GenericPet',
+                'type_name': 'GenericPet',
             },
             'GenericPet',
             ['GenericPet'],
@@ -164,7 +164,7 @@ def test_model_as_dict_additional_property(definitions_spec, user_type, user_kwa
         [
             {
                 'name': 'a dog name',
-                'type': 'Dog',
+                'type_name': 'Dog',
                 'birth_date': '2017-03-09',
             },
             'Dog',
@@ -190,7 +190,7 @@ def test_model_isinstance(polymorphic_spec, instance_dict, object_type, possible
 def test_ensure_polymorphic_objects_are_correctly_build_in_case_of_fully_dereferenced_specs(
     polymorphic_dict, validate_responses, use_models, internally_dereference_refs,
 ):
-    raw_response = [{'name': 'name', 'type': 'Dog', 'birth_date': '2017-11-02'}]
+    raw_response = [{'name': 'name', 'type_name': 'Dog', 'birth_date': '2017-11-02'}]
 
     spec = Spec.from_dict(
         spec_dict=polymorphic_dict,
@@ -205,13 +205,13 @@ def test_ensure_polymorphic_objects_are_correctly_build_in_case_of_fully_derefer
     response = Mock(
         spec=IncomingResponse,
         status_code=200,
-        headers={'content-type': APP_JSON},
+        headers={'content-type_name': APP_JSON},
         json=Mock(return_value=raw_response),
     )
 
     unmarshaled_response = unmarshal_response(response, spec.resources['pets'].get_pets)
     if use_models:
-        assert repr(unmarshaled_response) == "[Dog(birth_date=datetime.date(2017, 11, 2), name='name', type='Dog')]"
+        assert repr(unmarshaled_response) == "[Dog(birth_date=datetime.date(2017, 11, 2), name='name', type_name='Dog')]"
     else:
         assert unmarshaled_response == raw_response
 

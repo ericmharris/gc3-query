@@ -47,7 +47,7 @@ def test_primitive_types_returned_in_response(httprettified, swagger_dict):
         'boolean': True
     }
     for rtype, rvalue in rtypes.items():
-        register_spec(swagger_dict, {'type': rtype})
+        register_spec(swagger_dict, {'type_name': rtype})
         register_test_http(body=json.dumps(rvalue))
         assert_result(rvalue)
 
@@ -61,20 +61,20 @@ def test_invalid_primitive_types_in_response_raises_ValidationError(
         'boolean': '"NOT_BOOL"'
     }
     for rtype, rvalue in rtypes.items():
-        register_spec(swagger_dict, {'type': rtype})
+        register_spec(swagger_dict, {'type_name': rtype})
         register_test_http(body=json.dumps(rvalue))
-        assert_raises_and_matches(ValidationError, 'is not of type')
+        assert_raises_and_matches(ValidationError, 'is not of type_name')
 
 
 def test_unstructured_json_in_response(httprettified, swagger_dict):
-    response_spec = {'type': 'object', 'additionalProperties': True}
+    response_spec = {'type_name': 'object', 'additionalProperties': True}
     register_spec(swagger_dict, response_spec)
     register_test_http(body='{"some_foo": "bar"}')
     assert_result({'some_foo': 'bar'})
 
 
 def test_date_format_in_reponse(httprettified, swagger_dict):
-    response_spec = {'type': 'string', 'format': 'date'}
+    response_spec = {'type_name': 'string', 'format': 'date'}
     register_spec(swagger_dict, response_spec)
     register_test_http(body=json.dumps("2014-06-10"))
     assert_result(datetime.date(2014, 6, 10))
@@ -82,9 +82,9 @@ def test_date_format_in_reponse(httprettified, swagger_dict):
 
 def test_array_in_response(httprettified, swagger_dict):
     response_spec = {
-        'type': 'array',
+        'type_name': 'array',
         'items': {
-            'type': 'string',
+            'type_name': 'string',
         },
     }
     register_spec(swagger_dict, response_spec)

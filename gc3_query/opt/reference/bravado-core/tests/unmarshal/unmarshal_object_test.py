@@ -11,16 +11,16 @@ from bravado_core.unmarshal import unmarshal_object
 @pytest.fixture
 def address_spec():
     return {
-        'type': 'object',
+        'type_name': 'object',
         'properties': {
             'number': {
-                'type': 'number'
+                'type_name': 'number'
             },
             'street_name': {
-                'type': 'string'
+                'type_name': 'string'
             },
             'street_type': {
-                'type': 'string',
+                'type_name': 'string',
                 'enum': [
                     'Street',
                     'Avenue',
@@ -40,13 +40,13 @@ def business_address_spec():
                 '$ref': '#/definitions/Address'
             },
             {
-                'type': 'object',
+                'type_name': 'object',
                 'properties': {
                     'name': {
-                        'type': 'string'
+                        'type_name': 'string'
                     },
                     'floor': {
-                        'type': 'integer',
+                        'type_name': 'integer',
                         'x-nullable': True,
                     },
                 },
@@ -58,14 +58,14 @@ def business_address_spec():
 @pytest.fixture
 def location_spec():
     return {
-        'type': 'object',
+        'type_name': 'object',
         'required': ['longitude', 'latitude'],
         'properties': {
             'longitude': {
-                'type': 'number'
+                'type_name': 'number'
             },
             'latitude': {
-                'type': 'number'
+                'type_name': 'number'
             },
         }
     }
@@ -140,9 +140,9 @@ def test_missing_with_default(empty_swagger_spec, address_spec, address):
 
 def test_with_array(empty_swagger_spec, address_spec):
     tags_spec = {
-        'type': 'array',
+        'type_name': 'array',
         'items': {
-            'type': 'string'
+            'type_name': 'string'
         }
     }
     address_spec['properties']['tags'] = tags_spec
@@ -217,7 +217,7 @@ def test_with_model_composition(business_address_swagger_spec, address_spec, bus
 def test_with_model(minimal_swagger_dict, address_spec, location_spec):
     minimal_swagger_dict['definitions']['Location'] = location_spec
 
-    # The Location model type won't be built on schema ingestion unless
+    # The Location model type_name won't be built on schema ingestion unless
     # something actually references it. Create a throwaway response for this
     # purpose.
     location_response = {
@@ -261,7 +261,7 @@ def test_with_model(minimal_swagger_dict, address_spec, location_spec):
 
 def test_self_property_with_model(minimal_swagger_dict):
     link_spec = {
-        'type': 'object',
+        'type_name': 'object',
         'required': ['_links'],
         'properties': {
             '_links': {
@@ -271,15 +271,15 @@ def test_self_property_with_model(minimal_swagger_dict):
     }
 
     self_spec = {
-        'type': 'object',
+        'type_name': 'object',
         'required': ['self'],
         'properties': {
             'self': {
-                'type': 'object',
+                'type_name': 'object',
                 'required': ['href'],
                 'properties': {
                     'href': {
-                        'type': 'string',
+                        'type_name': 'string',
                     },
                 },
             },
@@ -353,7 +353,7 @@ def test_pass_through_additionalProperties_with_no_spec(
 
 def test_pass_through_property_with_no_spec(
         empty_swagger_spec, address_spec, address):
-    del address_spec['properties']['street_name']['type']
+    del address_spec['properties']['street_name']['type_name']
     result = unmarshal_object(empty_swagger_spec, address_spec, address)
     assert result == address
 
@@ -402,17 +402,17 @@ def test_recursive_ref_with_depth_n(recursive_swagger_spec):
 
 def nullable_spec_factory(required, nullable, property_type):
     content_spec = {
-        'type': 'object',
+        'type_name': 'object',
         'required': ['x'] if required else [],
         'properties': {
             'x': {
-                'type': property_type,
+                'type_name': property_type,
                 'x-nullable': nullable,
             }
         }
     }
     if property_type == 'array':
-        content_spec['properties']['x']['items'] = {'type': 'string'}
+        content_spec['properties']['x']['items'] = {'type_name': 'string'}
     return content_spec
 
 
@@ -480,12 +480,12 @@ def test_unmarshal_object_polymorphic_specs(polymorphic_spec):
         'list': [
             {
                 'name': 'a dog name',
-                'type': 'Dog',
+                'type_name': 'Dog',
                 'birth_date': '2017-03-09',
             },
             {
                 'name': 'a cat name',
-                'type': 'Cat',
+                'type_name': 'Cat',
                 'color': 'white',
             },
         ]

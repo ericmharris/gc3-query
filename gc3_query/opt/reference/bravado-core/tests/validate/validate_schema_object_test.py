@@ -7,8 +7,8 @@ from bravado_core.validate import validate_schema_object
 
 def test_unknown_type(minimal_swagger_spec):
     with pytest.raises(SwaggerMappingError) as excinfo:
-        validate_schema_object(minimal_swagger_spec, {'type': 'unknown'}, 'foo')
-    assert 'Unknown type' in str(excinfo.value)
+        validate_schema_object(minimal_swagger_spec, {'type_name': 'unknown'}, 'foo')
+    assert 'Unknown type_name' in str(excinfo.value)
 
 
 def test_allOf_with_ref(composition_spec):

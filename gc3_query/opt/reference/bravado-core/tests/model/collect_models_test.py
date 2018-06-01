@@ -10,10 +10,10 @@ from bravado_core.spec import Spec
 def pet_model_spec():
     return {
         'x-model': 'Pet',
-        'type': 'object',
+        'type_name': 'object',
         'properties': {
             'name': {
-                'type': 'string'
+                'type_name': 'string'
             }
         }
     }
@@ -35,17 +35,17 @@ def test_simple(minimal_swagger_dict, pet_model_spec):
 
 def test_no_model_type_generation_for_not_object_type(minimal_swagger_dict):
     """
-    Ensure that models types are generated only for swagger objects (type: object)
+    Ensure that models types are generated only for swagger objects (type_name: object)
 
-    This is needed because even if "x-model" is present it could be related to a not object type
-    (ie. array or string) and for those cases it does not make sense to generate a python model type.
-    Additionally, even if this type has been generated it won't be used by bravado-core during
+    This is needed because even if "x-model" is present it could be related to a not object type_name
+    (ie. array or string) and for those cases it does not make sense to generate a python model type_name.
+    Additionally, even if this type_name has been generated it won't be used by bravado-core during
     marshaling/unmarshaling process.
 
-    Ensuring that for those cases a model type is not generated simplifies type checking.
+    Ensuring that for those cases a model type_name is not generated simplifies type_name checking.
     """
     minimal_swagger_dict['definitions']['Pets'] = {
-        'type': 'array',
+        'type_name': 'array',
         'items': {
             '$ref': '#/definitions/Pet'
         },

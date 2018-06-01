@@ -7,12 +7,12 @@ from bravado_core.spec import Spec
 
 @pytest.fixture
 def int32_spec():
-    return {'type': 'integer', 'format': 'int32'}
+    return {'type_name': 'integer', 'format': 'int32'}
 
 
 @pytest.fixture
 def int_spec():
-    return {'type': 'integer'}
+    return {'type_name': 'integer'}
 
 
 def test_found(minimal_swagger_spec, int32_spec):

@@ -39,7 +39,7 @@ def build_resources(swagger_spec):
     """Transforms the REST resources in the json-like swagger_spec into rich
     :Resource: objects that have associated :Operation:s.
 
-    :type swagger_spec: :class:`bravado_core.spec.Spec`
+    :type_name swagger_spec: :class:`bravado_core.spec.Spec`
     :returns: dict where (key,value) = (resource name, Resource)
     """
     # Map operations to resources using operation tags if available.
@@ -84,9 +84,9 @@ class Resource(object):
     """A Swagger resource is associated with multiple operations.
 
     :param name: resource name
-    :type name: str
+    :type_name name: str
     :param ops: operations associated with this resource (by tag)
-    :type ops: dict where (key, value) = (op_name, Operation)
+    :type_name ops: dict where (key, value) = (op_name, Operation)
     """
 
     def __init__(self, name, ops):

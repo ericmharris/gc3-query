@@ -17,7 +17,7 @@ def body_param_spec():
         'description': 'pet id',
         'required': True,
         'schema': {
-            'type': 'string'
+            'type_name': 'string'
         }
     }
 
@@ -34,7 +34,7 @@ def test_location_is_not_body(empty_swagger_spec):
             'in': location,
             'description': 'ID of pet that needs to be updated',
             'required': True,
-            'type': 'string',
+            'type_name': 'string',
         }
         param = Param(empty_swagger_spec, Mock(spec=Operation), param_spec)
         assert param_spec == get_param_type_spec(param)
@@ -56,4 +56,4 @@ def test_ref(minimal_swagger_dict, body_param_spec):
     param_ref_spec = {'$ref': '#/parameters/PetIdParam'}
     swagger_spec = Spec(minimal_swagger_dict)
     param = Param(swagger_spec, Mock(spec=Operation), param_ref_spec)
-    assert {'type': 'string'} == get_param_type_spec(param)
+    assert {'type_name': 'string'} == get_param_type_spec(param)

@@ -4,14 +4,14 @@ from bravado_core.docstring import formatted_type
 
 def test_type_only():
     schema_obj = {
-        'type': 'integer',
+        'type_name': 'integer',
     }
     assert 'integer' == formatted_type(schema_obj)
 
 
 def test_format_and_type():
     schema_obj = {
-        'type': 'integer',
+        'type_name': 'integer',
         'format': 'int64',
     }
     assert 'integer:int64' == formatted_type(schema_obj)
@@ -19,9 +19,9 @@ def test_format_and_type():
 
 def test_array():
     schema_obj = {
-        'type': 'array',
+        'type_name': 'array',
         'items': {
-            'type': 'string',
+            'type_name': 'string',
         }
     }
     assert 'array:string' == formatted_type(schema_obj)

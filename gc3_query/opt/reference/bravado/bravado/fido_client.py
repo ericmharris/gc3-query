@@ -22,7 +22,7 @@ class FidoResponseAdapter(IncomingResponse):
     """Wraps a fido.fido.Response object to provide a uniform interface
     to the response innards.
 
-    :type fido_response: :class:`fido.fido.Response`
+    :type_name fido_response: :class:`fido.fido.Response`
     """
 
     def __init__(self, fido_response):
@@ -78,11 +78,11 @@ class FidoClient(HttpClient):
         Sets up crochet and triggers the API request in background
 
         :param request_params: request parameters for the http request.
-        :type request_params: dict
+        :type_name request_params: dict
         :param operation: operation that this http request is for. Defaults
             to None - in which case, we're obviously just retrieving a Swagger
             Spec.
-        :type operation: :class:`bravado_core.operation.Operation`
+        :type_name operation: :class:`bravado_core.operation.Operation`
         :param response_callbacks: List of callables to post-process the
             incoming response. Expects args incoming_response and operation.
         :param also_return_response: Consult the constructor documentation for
@@ -111,7 +111,7 @@ class FidoClient(HttpClient):
 
         :return: dictionary in the form
             {
-                'body': string,  # (can represent any content-type i.e. json,
+                'body': string,  # (can represent any content-type_name i.e. json,
                     file, multipart..),
                 'headers': dictionary,  # headers->values
                 'method': string,  # can be 'GET', 'POST' etc.

@@ -26,7 +26,7 @@ def string_param_spec():
         'name': 'username',
         'in': 'query',
         'description': 'Short name of the user',
-        'type': 'string',
+        'type_name': 'string',
     }
 
 
@@ -36,9 +36,9 @@ def array_param_spec():
         'name': 'animals',
         'in': 'query',
         'description': 'List of animals',
-        'type': 'array',
+        'type_name': 'array',
         'items': {
-            'type': 'string'
+            'type_name': 'string'
         }
     }
 
@@ -48,7 +48,7 @@ def param_spec():
     return {
         'name': 'petId',
         'description': 'ID of pet that needs to be fetched',
-        'type': 'integer',
+        'type_name': 'integer',
         'format': 'int64',
     }
 
@@ -107,7 +107,7 @@ def test_path_integer(empty_swagger_spec, param_spec):
 )
 def test_path_string(empty_swagger_spec, param_spec, string_param, expected_path):
     param_spec['in'] = 'path'
-    param_spec['type'] = 'string'
+    param_spec['type_name'] = 'string'
     del param_spec['format']
     param = Param(empty_swagger_spec, Mock(spec=Operation), param_spec)
     request = {'url': '/pet/{petId}'}
@@ -117,7 +117,7 @@ def test_path_string(empty_swagger_spec, param_spec, string_param, expected_path
 
 def test_header_string(empty_swagger_spec, param_spec):
     param_spec['in'] = 'header'
-    param_spec['type'] = 'string'
+    param_spec['type_name'] = 'string'
     del param_spec['format']
     param = Param(empty_swagger_spec, Mock(spec=Operation), param_spec)
     request = {
@@ -129,7 +129,7 @@ def test_header_string(empty_swagger_spec, param_spec):
 
 def test_header_integer(empty_swagger_spec, param_spec):
     param_spec['in'] = 'header'
-    param_spec['type'] = 'integer'
+    param_spec['type_name'] = 'integer'
     del param_spec['format']
     param = Param(empty_swagger_spec, Mock(spec=Operation), param_spec)
     request = {
@@ -142,9 +142,9 @@ def test_header_integer(empty_swagger_spec, param_spec):
 def test_body(empty_swagger_spec, param_spec):
     param_spec['in'] = 'body'
     param_spec['schema'] = {
-        'type': 'integer'
+        'type_name': 'integer'
     }
-    del param_spec['type']
+    del param_spec['type_name']
     del param_spec['format']
     param = Param(empty_swagger_spec, Mock(spec=Operation), param_spec)
     request = {
@@ -169,7 +169,7 @@ def test_formData_integer(empty_swagger_spec, param_spec):
 
 def test_formData_file(empty_swagger_spec, param_spec, request_dict):
     param_spec['in'] = 'formData'
-    param_spec['type'] = 'file'
+    param_spec['type_name'] = 'file'
     param = Param(
         empty_swagger_spec,
         Mock(spec=Operation, consumes=['multipart/form-data']),

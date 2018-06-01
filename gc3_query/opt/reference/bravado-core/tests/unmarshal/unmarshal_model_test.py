@@ -130,7 +130,7 @@ def test_value_is_not_dict_like_raises_error(petstore_dict):
     with pytest.raises(SwaggerMappingError) as excinfo:
         unmarshal_model(petstore_spec, pet_spec, 'i am not a dict')
 
-    assert 'Expected type to be dict' in str(excinfo.value)
+    assert 'Expected type_name to be dict' in str(excinfo.value)
 
 
 def test_nullable_object_properties(petstore_dict, pet_dict):
@@ -200,12 +200,12 @@ def test_unmarshal_model_polymorphic_specs(polymorphic_spec):
         'list': [
             {
                 'name': 'a dog name',
-                'type': 'Dog',
+                'type_name': 'Dog',
                 'birth_date': '2017-03-09',
             },
             {
                 'name': 'a cat name',
-                'type': 'Cat',
+                'type_name': 'Cat',
                 'color': 'white',
             },
         ]
@@ -222,5 +222,5 @@ def test_unmarshal_model_polymorphic_specs(polymorphic_spec):
     assert len(pet_list.list) == len(list_of_pets_dict['list'])
 
     for list_item_model, list_item_dict in zip(pet_list.list, list_of_pets_dict['list']):
-        assert isinstance(list_item_model, polymorphic_spec.definitions[list_item_dict['type']])
+        assert isinstance(list_item_model, polymorphic_spec.definitions[list_item_dict['type_name']])
         assert list_item_model._marshal() == list_item_dict

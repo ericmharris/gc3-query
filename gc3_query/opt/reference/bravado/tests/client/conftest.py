@@ -33,7 +33,7 @@ def minimal_swagger_dict(getPetById_spec):
         },
         'securityDefinitions': {
             'api_key': {
-                'type': 'apiKey',
+                'type_name': 'apiKey',
                 'name': 'api_key',
                 'in': 'header',
             },

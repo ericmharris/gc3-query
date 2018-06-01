@@ -79,7 +79,7 @@ class Loader(object):
     """Abstraction for loading Swagger API's.
 
     :param http_client: HTTP client interface.
-    :type  http_client: http_client.HttpClient
+    :type_name  http_client: http_client.HttpClient
     :param request_headers: dict of request headers
     """
 
@@ -100,7 +100,7 @@ class Loader(object):
             self.request_headers,
         ).result()
 
-        content_type = response.headers.get('content-type', '').lower()
+        content_type = response.headers.get('content-type_name', '').lower()
         if is_yaml(spec_url, content_type):
             return self.load_yaml(response.text)
         else:
@@ -112,7 +112,7 @@ class Loader(object):
         compatibility with the existing YAML spec examples in
         https://github.com/OAI/OpenAPI-Specification/tree/master/examples/v2.0/yaml
         :param text: String from which to parse the YAML.
-        :type  text: basestring
+        :type_name  text: basestring
         :return: Python dictionary representing the spec.
         :raise: yaml.parser.ParserError: If the text is not valid YAML.
         """

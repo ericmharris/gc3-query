@@ -55,15 +55,15 @@ def test_defaultdicts_can_be_used_instead_of_models(petstore_dict):
 
 
 def test_unknown_type_raises_error(empty_swagger_spec):
-    invalid_spec = {'type': 'foo'}
+    invalid_spec = {'type_name': 'foo'}
     with pytest.raises(SwaggerMappingError) as excinfo:
         marshal_schema_object(empty_swagger_spec, invalid_spec, "don't matter")
-    assert 'Unknown type foo' in str(excinfo.value)
+    assert 'Unknown type_name foo' in str(excinfo.value)
 
 
 def test_ref(minimal_swagger_dict):
     ref_spec = {'$ref': '#/refs/Foo'}
-    foo_spec = {'type': 'string'}
+    foo_spec = {'type_name': 'string'}
     minimal_swagger_dict['refs'] = {'Foo': foo_spec}
     swagger_spec = Spec(minimal_swagger_dict)
     assert 'foo' == marshal_schema_object(swagger_spec, ref_spec, 'foo')
@@ -73,14 +73,14 @@ def test_marshal_raises_SwaggerMappingError_if_SwaggerFormat_fails_during_to_wir
     minimal_swagger_dict['definitions']['test'] = {
         'properties': {
             'date': {
-                'type': 'string',
+                'type_name': 'string',
                 'format': 'date',
             },
         },
         'required': [
             'date',
         ],
-        'type': 'object'
+        'type_name': 'object'
     }
     swagger_spec = Spec(minimal_swagger_dict)
     date_str = datetime.date.today().isoformat()
@@ -91,7 +91,7 @@ def test_marshal_raises_SwaggerMappingError_if_SwaggerFormat_fails_during_to_wir
             value={'date': date_str},
         )
     message, wrapped_exception = excinfo.value.args
-    assert message == 'Error while marshalling value={} to type=string/date.'.format(date_str)
+    assert message == 'Error while marshalling value={} to type_name=string/date.'.format(date_str)
     assert type(wrapped_exception) is AttributeError
     assert wrapped_exception.args == ('\'str\' object has no attribute \'isoformat\'', )
 

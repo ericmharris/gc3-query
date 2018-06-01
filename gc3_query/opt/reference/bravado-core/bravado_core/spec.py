@@ -61,7 +61,7 @@ CONFIG_DEFAULTS = {
     #       server side can use either models or dicts.
     'use_models': True,
 
-    # List of user-defined formats of type
+    # List of user-defined formats of type_name
     # :class:`bravado_core.formatter.SwaggerFormat`. These formats are in
     # addition to the formats already supported by the Swagger 2.0
     # Specification.
@@ -70,8 +70,8 @@ CONFIG_DEFAULTS = {
     # Fill with None all the missing properties during object unmarshal-ing
     'include_missing_properties': True,
 
-    # What to do when a type is missing
-    # If True, set the type to object and validate
+    # What to do when a type_name is missing
+    # If True, set the type_name to object and validate
     # If False, do no validation
     'default_type_to_object': False,
 
@@ -87,7 +87,7 @@ class Spec(object):
     :param spec_dict: Swagger API specification in json-like dict form
     :param origin_url: URL from which the spec was retrieved.
     :param http_client: Used to retrive the spec via http/https.
-    :type http_client: :class:`bravado.http_client.HTTPClient`
+    :type_name http_client: :class:`bravado.http_client.HTTPClient`
     :param config: Configuration dict. See CONFIG_DEFAULTS.
     """
 
@@ -99,8 +99,8 @@ class Spec(object):
         self.api_url = None
         self.config = dict(CONFIG_DEFAULTS, **(config or {}))
 
-        # (key, value) = (simple format def name, Model type)
-        # (key, value) = (#/ format def ref, Model type)
+        # (key, value) = (simple format def name, Model type_name)
+        # (key, value) = (#/ format def ref, Model type_name)
         self.definitions = {}
 
         # (key, value) = (simple resource name, Resource)
@@ -198,7 +198,7 @@ class Spec(object):
 
         :param spec_dict: swagger spec in json-like dict form.
         :param origin_url: the url used to retrieve the spec, if any
-        :type  origin_url: str
+        :type_name  origin_url: str
         :param: http_client: http client used to download remote $refs
         :param config: Configuration dict. See CONFIG_DEFAULTS.
         """
@@ -319,7 +319,7 @@ class Spec(object):
     def register_format(self, user_defined_format):
         """Registers a user-defined format to be used with this spec.
 
-        :type user_defined_format:
+        :type_name user_defined_format:
             :class:`bravado_core.formatter.SwaggerFormat`
         """
         name = user_defined_format.format
@@ -441,7 +441,7 @@ def build_http_handlers(http_client):
             'url': uri,
         }
         response = http_client.request(request_params).result()
-        content_type = response.headers.get('content-type', '').lower()
+        content_type = response.headers.get('content-type_name', '').lower()
         if is_yaml(uri, content_type):
             return yaml.safe_load(response.content)
         else:
@@ -527,7 +527,7 @@ def build_api_serving_url(spec_dict, origin_url=None, preferred_scheme=None):
 def post_process_spec(swagger_spec, on_container_callbacks):
     """Post-process the passed in swagger_spec.spec_dict.
 
-    For each container type (list or dict) that is traversed in spec_dict,
+    For each container type_name (list or dict) that is traversed in spec_dict,
     the list of passed in callbacks is called with arguments (container, key).
 
     When the container is a dict, key is obviously the key for the value being
@@ -542,9 +542,9 @@ def post_process_spec(swagger_spec, on_container_callbacks):
     assume a given scope before de-reffing $refs (otherwise, de-reffing won't
     work).
 
-    :type swagger_spec: :class:`bravado_core.spec.Spec`
+    :type_name swagger_spec: :class:`bravado_core.spec.Spec`
     :param on_container_callbacks: list of callbacks to be invoked on each
-        container type.
+        container type_name.
         NOTE: the individual callbacks should not mutate the current container
     """
     def fire_callbacks(container, key, path):

@@ -32,8 +32,8 @@ def test_bless_models_short_circuit_if_no_dict_like_container(mock_is_dict_like,
     'response_schema',
     (
         [1, 2, 3],  # is_dict_like(model_spec)
-        {'type': 'string'},  # is_object(model_spec)
-        {'in': 'body', 'name': 'body', 'type': 'string'},  # determine_object_type(model_spec)
+        {'type_name': 'string'},  # is_object(model_spec)
+        {'in': 'body', 'name': 'body', 'type_name': 'string'},  # determine_object_type(model_spec)
         {'x-model': 'string'},  # deref(model_spec.get('x-model'))
     )
 )
@@ -66,7 +66,7 @@ def test_bless_models_gets_out_if_initial_pre_conditions_are_not_met(
 
 def test_bless_model_adds_model_marker(minimal_swagger_dict):
     response_schema = {
-        'type': 'object',
+        'type_name': 'object',
         'title': 'valid_response',
     }
     minimal_swagger_dict['paths'] = {
@@ -94,7 +94,7 @@ def test_bless_model_adds_model_marker(minimal_swagger_dict):
 
 def test_bless_model_does_not_generate_model_tag_if_no_title_is_set(minimal_swagger_dict):
     response_schema = {
-        'type': 'object',
+        'type_name': 'object',
     }
     minimal_swagger_dict['paths'] = {
         '/endpoint': {

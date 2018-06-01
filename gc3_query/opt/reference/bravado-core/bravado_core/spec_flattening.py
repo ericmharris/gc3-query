@@ -41,12 +41,12 @@ def _marshal_uri(target_uri, origin_uri):
         {
             "definitions": {
                 "a/possible/def": {
-                    "type": "object"
+                    "type_name": "object"
                 },
                 "a": {
                     "possible": {
                         "def": {
-                            "type": "string"
+                            "type_name": "string"
                         }
                     }
                 },
@@ -57,7 +57,7 @@ def _marshal_uri(target_uri, origin_uri):
         }
 
     Assuming that the JSON parser is not raising exception the dereferenced value of
-    "#/definitions/def" could be {"type": "object"} or {"type": "string"} which is
+    "#/definitions/def" could be {"type_name": "object"} or {"type_name": "string"} which is
     an undetermined condition which can lead to weird errors.
     Let's assume instead that the JSON parser will raise an exception in this case
     the JSON object will not be usable.
@@ -65,9 +65,9 @@ def _marshal_uri(target_uri, origin_uri):
     To prevent this conditions we are removing possible '/' from the JSON keys.
 
     :param target_uri: URI to marshal
-    :type target_uri: ParseResult
+    :type_name target_uri: ParseResult
     :param origin_uri: URI of the root swagger spec file
-    :type origin_uri: ParseResult
+    :type_name origin_uri: ParseResult
 
     :return: a string representation of the URL which could be used into the JSON keys
     :rtype: str
@@ -148,19 +148,19 @@ def flattened_spec(
     most recent Swagger 2.0 specifications.
 
     :param spec_dict: Swagger Spec dictionary representation. Note: the method assumes that the specs are valid specs.
-    :type spec_dict: dict
+    :type_name spec_dict: dict
     :param spec_resolver: Swagger Spec resolver for fetching external references
-    :type spec_resolver: RefResolver
+    :type_name spec_resolver: RefResolver
     :param spec_url: Base url of your Swagger Specs. It is used to hide internal paths during uri marshaling.
-    :type spec_url: str
+    :type_name spec_url: str
     :param http_handlers: custom handlers for retrieving external specs.
         The expected format is {protocol: read_protocol}, with read_protocol similar to  read_protocol=lambda uri: ...
         An example could be provided by ``bravado_core.spec.build_http_handlers``
-    :type http_handlers: dict
+    :type_name http_handlers: dict
     :param marshal_uri_function: function used to marshal uris in string suitable to be keys in Swagger Specs.
-    :type marshal_uri_function: Callable with the same signature of ``_marshal_uri``
+    :type_name marshal_uri_function: Callable with the same signature of ``_marshal_uri``
     :param spec_definitions: known swagger definitions (hint: definitions attribute of bravado_core.spec.Spec instance)
-    :type dict: bravado_core.spec.Spec
+    :type_name dict: bravado_core.spec.Spec
 
     :return: Flattened representation of the Swagger Specs
     :rtype: dict
@@ -263,7 +263,7 @@ def flattened_spec(
         )
 
         flatten_models = {
-            # schema objects might not have a "type" set so they won't be tagged as models
+            # schema objects might not have a "type_name" set so they won't be tagged as models
             definition.get(MODEL_MARKER)
             for definition in itervalues(known_mappings['definitions'])
         }

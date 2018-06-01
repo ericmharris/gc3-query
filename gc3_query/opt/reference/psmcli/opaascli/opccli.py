@@ -72,7 +72,7 @@ class OPCCreateCLI(object):
                 original_service_file_name = service
                 if service.lower() in LocalizationConstants.ServiceMapping:
                     service = LocalizationConstants.ServiceMapping[service.lower()]
-                    # change the input service type to display service type from service mapping.
+                    # change the input service type_name to display service type_name from service mapping.
                     service_list_desc_for_help = OrderedDict([(service, v) if k == original_service_file_name else (k, v) for k, v in service_list_desc_for_help.items()])
                 service_list[service.lower()] = OPCServiceCmdExecutor(service, self.opcDir, value, original_service_file_name=original_service_file_name)
             # add descriptions for help

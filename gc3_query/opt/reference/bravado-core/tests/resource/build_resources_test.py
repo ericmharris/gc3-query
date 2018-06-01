@@ -76,7 +76,7 @@ def test_resource_with_shared_parameters(paths_spec):
         'in': 'query',
         'description': 'Filter the pets by attribute',
         'required': False,
-        'type': 'string',
+        'type_name': 'string',
     }
     paths_spec['/pet/findByStatus']['parameters'] = [shared_parameter]
     spec_dict = {'paths': paths_spec}

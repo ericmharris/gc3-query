@@ -26,13 +26,13 @@ def test_success_json_response(minimal_swagger_spec):
     response_spec = {
         'description': 'Address',
         'schema': {
-            'type': 'object',
+            'type_name': 'object',
             'properties': {
                 'first_name': {
-                    'type': 'string',
+                    'type_name': 'string',
                 },
                 'last_name': {
-                    'type': 'string',
+                    'type_name': 'string',
                 }
             }
         }
@@ -57,13 +57,13 @@ def test_success_msgpack_response(minimal_swagger_spec):
     response_spec = {
         'description': 'Address',
         'schema': {
-            'type': 'object',
+            'type_name': 'object',
             'properties': {
                 'first_name': {
-                    'type': 'string',
+                    'type_name': 'string',
                 },
                 'last_name': {
-                    'type': 'string',
+                    'type_name': 'string',
                 }
             }
         }
@@ -103,7 +103,7 @@ def test_failure_response_content_type_not_supported_by_operation(
     response_spec = {
         'description': 'I return an int',
         'schema': {
-            'type': 'integer',
+            'type_name': 'integer',
         }
     }
     op = Operation(minimal_swagger_spec, '/foo', 'get',
@@ -119,7 +119,7 @@ def test_failure_response_content_type_not_supported_by_bravado_core(
     response_spec = {
         'description': 'I return an int',
         'schema': {
-            'type': 'integer',
+            'type_name': 'integer',
         }
     }
     op = Operation(minimal_swagger_spec, '/foo', 'get',
@@ -127,7 +127,7 @@ def test_failure_response_content_type_not_supported_by_bravado_core(
     response = Mock(spec=OutgoingResponse, content_type='application/xml')
     with pytest.raises(SwaggerMappingError) as excinfo:
         validate_response_body(op, response_spec, response)
-    assert 'Unsupported content-type' in str(excinfo.value)
+    assert 'Unsupported content-type_name' in str(excinfo.value)
 
 
 def test_success_text_plain_response(minimal_swagger_spec):

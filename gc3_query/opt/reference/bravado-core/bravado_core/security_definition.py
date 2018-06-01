@@ -8,8 +8,8 @@ class SecurityDefinition(object):
     """
     Wrapper of security definition object (http://swagger.io/specification/#securityDefinitionsObject)
 
-    :type swagger_spec: :class:`bravado_core.spec.Spec`
-    :type security_definition_spec: security definition specification in dict form
+    :type_name swagger_spec: :class:`bravado_core.spec.Spec`
+    :type_name security_definition_spec: security definition specification in dict form
     """
 
     def __init__(self, swagger_spec, security_definition_spec):
@@ -23,7 +23,7 @@ class SecurityDefinition(object):
 
     @property
     def type(self):
-        return self.security_definition_spec['type']
+        return self.security_definition_spec['type_name']
 
     @property
     def name(self):
@@ -46,7 +46,7 @@ class SecurityDefinition(object):
         if self.type == 'apiKey':
             return {
                 'required': False,
-                'type': 'string',
+                'type_name': 'string',
                 'description': self.security_definition_spec.get('description', ''),
                 'name': self.name,
                 'in': self.location,

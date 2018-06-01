@@ -13,7 +13,7 @@ def test_single_file(empty_swagger_spec):
     file_contents = "I am the contents of a file"
     op = Mock(spec=Operation, consumes=['multipart/form-data'])
     param_spec = {
-        'type': 'file',
+        'type_name': 'file',
         'in': 'formData',
         'name': 'photo'
     }
@@ -31,12 +31,12 @@ def test_multiple_files(empty_swagger_spec):
     file2_contents = "I am the contents of a file2"
     op = Mock(spec=Operation, consumes=['multipart/form-data'])
     param1_spec = {
-        'type': 'file',
+        'type_name': 'file',
         'in': 'formData',
         'name': 'photo'
     }
     param2_spec = {
-        'type': 'file',
+        'type_name': 'file',
         'in': 'formData',
         'name': 'headshot'
     }
@@ -59,7 +59,7 @@ def test_mime_type_not_found_in_consumes(empty_swagger_spec):
     file_contents = "I am the contents of a file"
     op = Mock(spec=Operation, operation_id='upload_photos', consumes=[])
     param_spec = {
-        'type': 'file',
+        'type_name': 'file',
         'in': 'formData',
         'name': 'photo'
     }

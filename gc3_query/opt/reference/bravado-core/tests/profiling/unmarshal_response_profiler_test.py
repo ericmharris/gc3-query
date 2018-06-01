@@ -15,7 +15,7 @@ class FakeJsonResponse(IncomingResponse):
         self.text = text
         self.status_code = 200
         self.reason = 'OK'
-        self.headers = {'content-type': 'application/json'}
+        self.headers = {'content-type_name': 'application/json'}
         if headers:
             self.headers = headers
 

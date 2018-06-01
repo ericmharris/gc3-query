@@ -5,7 +5,7 @@ from bravado_core.spec import Spec
 
 def test_true(minimal_swagger_spec):
     prop_spec = {
-        'type': 'string',
+        'type_name': 'string',
         'x-nullable': True,
     }
     assert is_prop_nullable(minimal_swagger_spec, prop_spec)
@@ -13,14 +13,14 @@ def test_true(minimal_swagger_spec):
 
 def test_false(minimal_swagger_spec):
     prop_spec = {
-        'type': 'string',
+        'type_name': 'string',
     }
     assert not is_prop_nullable(minimal_swagger_spec, prop_spec)
 
 
 def test_false_explicit(minimal_swagger_spec):
     prop_spec = {
-        'type': 'string',
+        'type_name': 'string',
         'x-nullable': False,
     }
     assert not is_prop_nullable(minimal_swagger_spec, prop_spec)
@@ -29,7 +29,7 @@ def test_false_explicit(minimal_swagger_spec):
 def test_ref_true(minimal_swagger_dict):
     minimal_swagger_dict['definitions'] = {
         'Pet': {
-            'type': 'object',
+            'type_name': 'object',
             'x-nullable': True,
         }
     }
@@ -41,7 +41,7 @@ def test_ref_true(minimal_swagger_dict):
 def test_ref_false(minimal_swagger_dict):
     minimal_swagger_dict['definitions'] = {
         'Pet': {
-            'type': 'object',
+            'type_name': 'object',
         }
     }
     param_spec = {'$ref': '#/definitions/Pet'}

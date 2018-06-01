@@ -38,13 +38,13 @@ def scrub_sensitive_value(func):
 def validate_schema_object(swagger_spec, schema_object_spec, value):
     """
     :raises ValidationError: when jsonschema validation fails.
-    :raises SwaggerMappingError: on invalid Swagger `type`.
+    :raises SwaggerMappingError: on invalid Swagger `type_name`.
     :raises SwaggerValidationError: when user-defined format validation fails.
     """
     deref = swagger_spec.deref
     schema_object_spec = deref(schema_object_spec)
     default_type = 'object' if swagger_spec.config['default_type_to_object'] else None
-    obj_type = deref(schema_object_spec.get('type', default_type))
+    obj_type = deref(schema_object_spec.get('type_name', default_type))
 
     if not obj_type:
         return
@@ -62,16 +62,16 @@ def validate_schema_object(swagger_spec, schema_object_spec, value):
         pass
 
     else:
-        raise SwaggerMappingError('Unknown type {0} for value {1}'.format(
+        raise SwaggerMappingError('Unknown type_name {0} for value {1}'.format(
             obj_type, value))
 
 
 @scrub_sensitive_value
 def validate_primitive(swagger_spec, primitive_spec, value):
     """
-    :type swagger_spec: :class:`bravado_core.spec.Spec`
-    :param primitive_spec: spec for a swagger primitive type in dict form
-    :type value: int, string, float, long, etc
+    :type_name swagger_spec: :class:`bravado_core.spec.Spec`
+    :param primitive_spec: spec for a swagger primitive type_name in dict form
+    :type_name value: int, string, float, long, etc
     """
     get_validator_type(swagger_spec)(
         primitive_spec,
@@ -82,9 +82,9 @@ def validate_primitive(swagger_spec, primitive_spec, value):
 @scrub_sensitive_value
 def validate_array(swagger_spec, array_spec, value):
     """
-    :type swagger_spec: :class:`bravado_core.spec.Spec`
-    :param spec: spec for an 'array' type in dict form
-    :type value: list
+    :type_name swagger_spec: :class:`bravado_core.spec.Spec`
+    :param spec: spec for an 'array' type_name in dict form
+    :type_name value: list
     """
     get_validator_type(swagger_spec)(
         array_spec,
@@ -95,9 +95,9 @@ def validate_array(swagger_spec, array_spec, value):
 @scrub_sensitive_value
 def validate_object(swagger_spec, object_spec, value):
     """
-    :type swagger_spec: :class:`bravado_core.spec.Spec`
-    :param object_spec: spec for an 'object' type in dict form
-    :type value: dict
+    :type_name swagger_spec: :class:`bravado_core.spec.Spec`
+    :param object_spec: spec for an 'object' type_name in dict form
+    :type_name value: dict
     """
     get_validator_type(swagger_spec)(
         object_spec,
@@ -110,9 +110,9 @@ def validate_security_object(op, request_data):
     Checks that one security option is used at time.
 
     :param op: operation to be considered
-    :type op: :class:`bravado_core.operation.Operation`
+    :type_name op: :class:`bravado_core.operation.Operation`
     :param request_data:
-    :type request_data: dict
+    :type_name request_data: dict
     :raise: SwaggerSecurityValidationError
     """
 

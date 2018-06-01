@@ -149,7 +149,7 @@ print(f'\njson_data: {json_data}')
 #             "200": {
 #                 "headers": {
 #                     "set-cookie": {
-#                         "type": "string",
+#                         "type_name": "string",
 #                         "description": "The cookie value is returned if the session is extended"
 #                     }
 #                 },
@@ -164,7 +164,7 @@ print(f'\njson_data: {json_data}')
 #         "parameters": [{
 #             "name": "Cookie",
 #             "in": "header",
-#             "type": "string",
+#             "type_name": "string",
 #             "description": "The Cookie: header must be included with every request to the service. It must be set to the value of the set-cookie header in the response received to the POST /authenticate/ call."
 #         }]
 #     }
@@ -174,9 +174,9 @@ print(f'\njson_data: {json_data}')
 #     "properties": {
 #         "result": {
 #             "items": {
-#                 "type": "string"
+#                 "type_name": "string"
 #             },
-#             "type": "array"
+#             "type_name": "array"
 #         }
 #     }
 # },
@@ -290,7 +290,7 @@ print(f"Operation {operation_id} finished.\n")
 #             "200": {
 #                 "headers": {
 #                     "set-cookie": {
-#                         "type": "string",
+#                         "type_name": "string",
 #                         "description": "The cookie value is returned if the session is extended"
 #                     }
 #                 },
@@ -307,11 +307,11 @@ print(f"Operation {operation_id} finished.\n")
 #             "in": "path",
 #             "description": "Specify <code>/Compute-<i>identityDomain</i>/<i>user</i>/</code> to retrieve the names of objects that you can access. Specify <code>/Compute-<i>identityDomain</i>/</code> to retrieve the names of containers that contain objects that you can access.",
 #             "required": true,
-#             "type": "string"
+#             "type_name": "string"
 #         }, {
 #             "name": "Cookie",
 #             "in": "header",
-#             "type": "string",
+#             "type_name": "string",
 #             "description": "The Cookie: header must be included with every request to the service. It must be set to the value of the set-cookie header in the response received to the POST /authenticate/ call."
 #         }]
 #     }
@@ -386,7 +386,7 @@ print(f"Operation {operation_id} finished.\n")
 #             "200": {
 #                 "headers": {
 #                     "set-cookie": {
-#                         "type": "string",
+#                         "type_name": "string",
 #                         "description": "The cookie value is returned if the session is extended"
 #                     }
 #                 },
@@ -403,26 +403,26 @@ print(f"Operation {operation_id} finished.\n")
 #             "in": "path",
 #             "description": "<code>/Compute-<em>identity_domain</em>/<em>user</em></code> or <p><code>/Compute-<em>identity_domain</em></code>",
 #             "required": true,
-#             "type": "string"
+#             "type_name": "string"
 #         }, {
 #             "name": "availability_domain",
 #             "in": "query",
 #             "description": "The availability domain the instance is in",
 #             "required": false,
-#             "type": "string"
+#             "type_name": "string"
 #         }, {
 #             "name": "tags",
 #             "in": "query",
 #             "description": "Strings used to tag the instance. When you specify tags, only instances tagged with the specified value are displayed.",
 #             "required": false,
-#             "type": "array",
+#             "type_name": "array",
 #             "items": {
-#                 "type": "string"
+#                 "type_name": "string"
 #             }
 #         }, {
 #             "name": "Cookie",
 #             "in": "header",
-#             "type": "string",
+#             "type_name": "string",
 #             "description": "The Cookie: header must be included with every request to the service. It must be set to the value of the set-cookie header in the response received to the POST /authenticate/ call."
 #         }]
 #     }
@@ -434,7 +434,7 @@ print(f"Operation {operation_id} finished.\n")
 #             "items": {
 #                 "$ref": "#/definitions/Instance-response"
 #             },
-#             "type": "array"
+#             "type_name": "array"
 #         }
 #     }
 # },
@@ -442,172 +442,172 @@ print(f"Operation {operation_id} finished.\n")
 # "Instance-response": {
 #     "properties": {
 #         "account": {
-#             "type": "string",
+#             "type_name": "string",
 #             "description": "Shows the default account for your identity domain."
 #         },
 #         "attributes": {
 #             "additionalProperties": {
-#                 "type": "object"
+#                 "type_name": "object"
 #             },
-#             "type": "object",
+#             "type_name": "object",
 #             "description": "A dictionary of attributes to be made available to the instance. A value with the key \"userdata\" will be made available in an EC2-compatible manner."
 #         },
 #         "availability_domain": {
-#             "type": "string",
+#             "type_name": "string",
 #             "description": "The availability domain the instance is in"
 #         },
 #         "boot_order": {
 #             "items": {
-#                 "type": "integer"
+#                 "type_name": "integer"
 #             },
-#             "type": "array",
+#             "type_name": "array",
 #             "description": "Boot order list."
 #         },
 #         "desired_state": {
-#             "type": "string",
+#             "type_name": "string",
 #             "description": "Desired state for the instance. The value can be <code>shutdown</code> or <code>running</code> to shutdown an instance or to restart a previously shutdown instance respectively."
 #         },
 #         "disk_attach": {
-#             "type": "string",
+#             "type_name": "string",
 #             "description": "A label assigned by the user to identify disks."
 #         },
 #         "domain": {
-#             "type": "string",
+#             "type_name": "string",
 #             "description": "The default domain to use for the hostname and for DNS lookups."
 #         },
 #         "entry": {
-#             "type": "integer",
+#             "type_name": "integer",
 #             "description": "Optional imagelistentry number (default will be used if not specified)."
 #         },
 #         "error_reason": {
-#             "type": "string",
+#             "type_name": "string",
 #             "description": "The reason for the instance going to error state, if available."
 #         },
 #         "fingerprint": {
-#             "type": "string",
+#             "type_name": "string",
 #             "description": "SSH server fingerprint presented by the instance."
 #         },
 #         "hostname": {
-#             "type": "string",
+#             "type_name": "string",
 #             "description": "The hostname for this instance."
 #         },
 #         "hypervisor": {
 #             "additionalProperties": {
-#                 "type": "object"
+#                 "type_name": "object"
 #             },
-#             "type": "object",
+#             "type_name": "object",
 #             "description": "A dictionary of hypervisor-specific attributes."
 #         },
 #         "image_format": {
-#             "type": "string",
+#             "type_name": "string",
 #             "description": "The format of the image."
 #         },
 #         "imagelist": {
-#             "type": "string",
+#             "type_name": "string",
 #             "description": "Name of imagelist to be launched."
 #         },
 #         "ip": {
-#             "type": "string",
+#             "type_name": "string",
 #             "description": "IP address of the instance."
 #         },
 #         "label": {
-#             "type": "string",
+#             "type_name": "string",
 #             "description": "A label assigned by the user, specifically for defining inter-instance relationships."
 #         },
 #         "name": {
-#             "type": "string",
+#             "type_name": "string",
 #             "description": "Multipart name of the instance."
 #         },
 #         "networking": {
 #             "additionalProperties": {
-#                 "type": "object"
+#                 "type_name": "object"
 #             },
-#             "type": "object",
+#             "type_name": "object",
 #             "description": "Mapping of <device name> to network specifiers for virtual NICs to be attached to this instance."
 #         },
 #         "placement_requirements": {
 #             "items": {
-#                 "type": "string"
+#                 "type_name": "string"
 #             },
-#             "type": "array",
+#             "type_name": "array",
 #             "description": "A list of strings specifying arbitrary tags on nodes to be matched on placement."
 #         },
 #         "platform": {
-#             "type": "string",
+#             "type_name": "string",
 #             "description": "The OS platform for the instance."
 #         },
 #         "priority": {
-#             "type": "string",
+#             "type_name": "string",
 #             "description": "The priority at which this instance will be run."
 #         },
 #         "quota": {
-#             "type": "string",
+#             "type_name": "string",
 #             "description": "Not used"
 #         },
 #         "relationships": {
 #             "items": {
 #                 "additionalProperties": {
-#                     "type": "object"
+#                     "type_name": "object"
 #                 },
-#                 "type": "object"
+#                 "type_name": "object"
 #             },
-#             "type": "array",
+#             "type_name": "array",
 #             "description": "A list of relationship specifications to be satisfied on this instance's placement"
 #         },
 #         "resolvers": {
 #             "items": {
-#                 "type": "string"
+#                 "type_name": "string"
 #             },
-#             "type": "array",
+#             "type_name": "array",
 #             "description": "Resolvers to use instead of the default resolvers."
 #         },
 #         "reverse_dns": {
-#             "type": "boolean",
+#             "type_name": "boolean",
 #             "description": "Add PTR records for the hostname."
 #         },
 #         "shape": {
-#             "type": "string",
+#             "type_name": "string",
 #             "description": "A shape is a resource profile that specifies the number of CPU threads and the amount of memory (in MB) to be allocated to an instance."
 #         },
 #         "sshkeys": {
 #             "items": {
-#                 "type": "string"
+#                 "type_name": "string"
 #             },
-#             "type": "array",
+#             "type_name": "array",
 #             "description": "SSH keys that will be exposed to the instance."
 #         },
 #         "start_time": {
-#             "type": "string",
+#             "type_name": "string",
 #             "description": "Start time of the instance."
 #         },
 #         "state": {
-#             "type": "string",
+#             "type_name": "string",
 #             "description": "State of the instance."
 #         },
 #         "storage_attachments": {
 #             "items": {
-#                 "type": "string"
+#                 "type_name": "string"
 #             },
-#             "type": "array",
+#             "type_name": "array",
 #             "description": "List of dictionaries containing storage attachment Information."
 #         },
 #         "tags": {
 #             "items": {
-#                 "type": "string"
+#                 "type_name": "string"
 #             },
-#             "type": "array",
+#             "type_name": "array",
 #             "description": "Comma-separated list of strings used to tag the instance."
 #         },
 #         "uri": {
-#             "type": "string",
+#             "type_name": "string",
 #             "description": "Uniform Resource Identifier"
 #         },
 #         "vcable_id": {
-#             "type": "string",
+#             "type_name": "string",
 #             "description": "vCable for this instance."
 #         },
 #         "vnc": {
-#             "type": "string",
+#             "type_name": "string",
 #             "description": "IP address and port of the VNC console for the instance."
 #         }
 #     }
@@ -664,7 +664,7 @@ print(f"Operation {operation_id} finished.")
 #             "200": {
 #                 "headers": {
 #                     "set-cookie": {
-#                         "type": "string",
+#                         "type_name": "string",
 #                         "description": "The cookie value is returned if the session is extended"
 #                     }
 #                 },
@@ -681,11 +681,11 @@ print(f"Operation {operation_id} finished.")
 #             "in": "path",
 #             "description": "<p>Multipart name of the object.",
 #             "required": true,
-#             "type": "string"
+#             "type_name": "string"
 #         }, {
 #             "name": "Cookie",
 #             "in": "header",
-#             "type": "string",
+#             "type_name": "string",
 #             "description": "The Cookie: header must be included with every request to the service. It must be set to the value of the set-cookie header in the response received to the POST /authenticate/ call."
 #         }]
 #     }

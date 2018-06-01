@@ -9,16 +9,16 @@ from bravado_core.spec import Spec
 @pytest.fixture
 def address_spec():
     return {
-        'type': 'object',
+        'type_name': 'object',
         'properties': {
             'number': {
-                'type': 'number'
+                'type_name': 'number'
             },
             'street_name': {
-                'type': 'string'
+                'type_name': 'string'
             },
             'street_type': {
-                'type': 'string',
+                'type_name': 'string',
                 'enum': [
                     'Street',
                     'Avenue',
@@ -36,10 +36,10 @@ def business_address_spec():
                 '$ref': '#/definitions/Address'
             },
             {
-                'type': 'object',
+                'type_name': 'object',
                 'properties': {
                     'company': {
-                        'type': 'string'
+                        'type_name': 'string'
                     },
                 }
             }
@@ -75,7 +75,7 @@ def test_declared_property(minimal_swagger_spec, address_spec, address):
 
 def test_properties_and_additionalProperties_not_present(minimal_swagger_spec,
                                                          address):
-    object_spec = {'type': 'object'}
+    object_spec = {'type_name': 'object'}
     result = get_spec_for_prop(
         minimal_swagger_spec, object_spec, address, 'street_name')
     assert result is None
@@ -84,7 +84,7 @@ def test_properties_and_additionalProperties_not_present(minimal_swagger_spec,
 def test_properties_not_present_and_additionalProperties_True(
         minimal_swagger_spec, address):
     object_spec = {
-        'type': 'object',
+        'type_name': 'object',
         'additionalProperties': True
     }
     result = get_spec_for_prop(
@@ -95,7 +95,7 @@ def test_properties_not_present_and_additionalProperties_True(
 def test_properties_not_present_and_additionalProperties_False(
         minimal_swagger_spec, address):
     object_spec = {
-        'type': 'object',
+        'type_name': 'object',
         'additionalProperties': False
     }
     result = get_spec_for_prop(
@@ -105,8 +105,8 @@ def test_properties_not_present_and_additionalProperties_False(
 
 def test_additionalProperties_with_spec(minimal_swagger_spec, address_spec,
                                         address):
-    address_spec['additionalProperties'] = {'type': 'string'}
-    expected_spec = {'type': 'string'}
+    address_spec['additionalProperties'] = {'type_name': 'string'}
+    expected_spec = {'type_name': 'string'}
     # 'city' is not a declared property so it gets classified under
     # additionalProperties
     result = get_spec_for_prop(
@@ -150,12 +150,12 @@ def test_object_is_ref(minimal_swagger_dict, address_spec, address):
 
 def test_property_is_ref(minimal_swagger_dict, address):
     street_type_spec = {
-        'type': 'string',
+        'type_name': 'string',
         'enum': ['Street', 'Avenue', 'Boulevard']
     }
 
     address_spec = {
-        'type': 'object',
+        'type_name': 'object',
         'properties': {
             'street_type': {
                 '$ref': '#/definitions/StreetType'

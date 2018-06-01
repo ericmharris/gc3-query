@@ -120,10 +120,10 @@ def test_AliasKeyDict_del():
 @pytest.mark.parametrize(
     'object_dict, expected_object_type',
     (
-        [{'in': 'body', 'name': 'body', 'required': True, 'schema': {'type': 'object'}}, ObjectType.PARAMETER],
+        [{'in': 'body', 'name': 'body', 'required': True, 'schema': {'type_name': 'object'}}, ObjectType.PARAMETER],
         [{'get': {'responses': {'200': {'description': 'response description'}}}}, ObjectType.PATH_ITEM],
-        [{'description': 'response description', 'schema': {'type': 'object'}}, ObjectType.RESPONSE],
-        [{'description': 'response description', 'parameters': {'param': {'type': 'object'}}}, ObjectType.SCHEMA],
+        [{'description': 'response description', 'schema': {'type_name': 'object'}}, ObjectType.RESPONSE],
+        [{'description': 'response description', 'parameters': {'param': {'type_name': 'object'}}}, ObjectType.SCHEMA],
     )
 )
 def test_determine_object_type(object_dict, expected_object_type):

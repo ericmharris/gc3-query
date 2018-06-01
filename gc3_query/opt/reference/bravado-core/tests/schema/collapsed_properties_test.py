@@ -11,17 +11,17 @@ def users_spec():
         "User": {
             "properties": {
                 "id": {
-                    "type": "integer",
+                    "type_name": "integer",
                     "format": "int64"
                 },
                 "username": {
-                    "type": "string"
+                    "type_name": "string"
                 },
                 "email": {
-                    "type": "string"
+                    "type_name": "string"
                 },
                 "password": {
-                    "type": "string"
+                    "type_name": "string"
                 }
             }
         },
@@ -33,7 +33,7 @@ def users_spec():
                 {
                     "properties": {
                         "vip_pass_no": {
-                            "type": "string"
+                            "type_name": "string"
                         }
                     }
                 }
@@ -45,12 +45,12 @@ def users_spec():
                     "$ref": "#/definitions/User"
                 },
                 {
-                    "type": "object",
+                    "type_name": "object",
                     "properties": {
                         "permissions": {
-                            "type": "array",
+                            "type_name": "array",
                             "items": {
-                                "type": "string"
+                                "type_name": "string"
                             }
                         }
                     }
@@ -88,14 +88,14 @@ def test_allOf(users_spec, users_swagger_spec):
 
     expected_props = {
         # User properties
-        'id': {'type': 'integer', 'format': 'int64'},
-        'username': {'type': 'string'},
-        'email': {'type': 'string'},
-        'password': {'type': 'string'},
+        'id': {'type_name': 'integer', 'format': 'int64'},
+        'username': {'type_name': 'string'},
+        'email': {'type_name': 'string'},
+        'password': {'type_name': 'string'},
         # VIP additional properties
-        'vip_pass_no': {'type': 'string'},
+        'vip_pass_no': {'type_name': 'string'},
         # Admin additional properties
-        'permissions': {'items': {'type': 'string'}, 'type': 'array'}
+        'permissions': {'items': {'type_name': 'string'}, 'type_name': 'array'}
     }
     assert props == expected_props
 
@@ -104,7 +104,7 @@ def test_recursive_ref(node_spec, recursive_swagger_spec):
     props = collapsed_properties(node_spec, recursive_swagger_spec)
 
     expected_props = {
-        'name': {'type': 'string'},
+        'name': {'type_name': 'string'},
         'child': {'$ref': '#/definitions/Node'}
     }
     assert props == expected_props

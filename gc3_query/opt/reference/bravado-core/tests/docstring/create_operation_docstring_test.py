@@ -9,7 +9,7 @@ def test_simple(op_spec, empty_swagger_spec):
         "Multiple status values can be provided with comma " \
         "seperated strings\n\n" \
         ":param status: the status, yo! (Default: available) (optional)\n" \
-        ":type status: array\n" \
+        ":type_name status: array\n" \
         ":returns: 200: successful operation\n" \
         ":rtype: array:#/definitions/Pet\n" \
         ":returns: 400: Invalid status value\n"
@@ -39,7 +39,7 @@ def test_deprecated(op_spec, empty_swagger_spec):
         "Multiple status values can be provided with comma " \
         "seperated strings\n\n" \
         ":param status: the status, yo! (Default: available) (optional)\n" \
-        ":type status: array\n" \
+        ":type_name status: array\n" \
         ":returns: 200: successful operation\n" \
         ":rtype: array:#/definitions/Pet\n" \
         ":returns: 400: Invalid status value\n"
@@ -54,7 +54,7 @@ def test_no_summary(op_spec, empty_swagger_spec):
         "Multiple status values can be provided with comma " \
         "seperated strings\n\n" \
         ":param status: the status, yo! (Default: available) (optional)\n" \
-        ":type status: array\n" \
+        ":type_name status: array\n" \
         ":returns: 200: successful operation\n" \
         ":rtype: array:#/definitions/Pet\n" \
         ":returns: 400: Invalid status value\n"
@@ -68,7 +68,7 @@ def test_no_description(op_spec, empty_swagger_spec):
     expected = \
         "[GET] Finds Pets by status\n\n" \
         ":param status: the status, yo! (Default: available) (optional)\n" \
-        ":type status: array\n" \
+        ":type_name status: array\n" \
         ":returns: 200: successful operation\n" \
         ":rtype: array:#/definitions/Pet\n" \
         ":returns: 400: Invalid status value\n"
@@ -79,13 +79,13 @@ def test_no_description(op_spec, empty_swagger_spec):
 
 
 def test_notype(op_spec, empty_swagger_spec):
-    del op_spec['responses']['200']['schema']['type']
+    del op_spec['responses']['200']['schema']['type_name']
     expected = \
         "[GET] Finds Pets by status\n\n" \
         "Multiple status values can be provided with comma " \
         "seperated strings\n\n" \
         ":param status: the status, yo! (Default: available) (optional)\n" \
-        ":type status: array\n" \
+        ":type_name status: array\n" \
         ":returns: 200: successful operation\n" \
         ":rtype: notype\n" \
         ":returns: 400: Invalid status value\n"
@@ -108,7 +108,7 @@ def test_unicode(op_spec, empty_swagger_spec):
         u"[GET] Ümlaut1\n\n" \
         u"Ümlaut2\n\n" \
         u":param Ümlaut3: Ümlaut4 (Default: Ümlaut5) (optional)\n" \
-        u":type Ümlaut3: array\n" \
+        u":type_name Ümlaut3: array\n" \
         u":returns: 200: Ümlaut6\n" \
         u":rtype: array:#/definitions/Pet\n" \
         u":returns: 400: Ümlaut7\n"

@@ -128,11 +128,11 @@ class RequestsClient(HttpClient):
                 also_return_response=False):
         """
         :param request_params: complete request data.
-        :type request_params: dict
+        :type_name request_params: dict
         :param operation: operation that this http request is for. Defaults
             to None - in which case, we're obviously just retrieving a Swagger
             Spec.
-        :type operation: :class:`bravado_core.operation.Operation`
+        :type_name operation: :class:`bravado_core.operation.Operation`
         :param response_callbacks: List of callables to post-process the
             incoming response. Expects args incoming_response and operation.
         :param also_return_response: Consult the constructor documentation for
@@ -181,7 +181,7 @@ class RequestsResponseAdapter(IncomingResponse):
     """Wraps a requests.models.Response object to provide a uniform interface
     to the response innards.
 
-    :type requests_lib_response: :class:`requests.models.Response`
+    :type_name requests_lib_response: :class:`requests.models.Response`
     """
 
     def __init__(self, requests_lib_response):
@@ -225,7 +225,7 @@ class RequestsFutureAdapter(FutureAdapter):
         :param request: dict containing API request parameters
         :param misc_options: misc options to apply when sending a HTTP request.
             e.g. timeout, connect_timeout, etc
-        :type misc_options: dict
+        :type_name misc_options: dict
         """
         self.session = session
         self.request = request
@@ -281,7 +281,7 @@ class RequestsFutureAdapter(FutureAdapter):
 
         :param timeout: timeout in seconds to wait for response. Defaults to
             None to wait indefinitely.
-        :type timeout: float
+        :type_name timeout: float
         :return: raw response from the server
         :rtype: dict
         """

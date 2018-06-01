@@ -9,16 +9,16 @@ from bravado_core.spec import Spec
 @pytest.fixture
 def address_spec():
     return {
-        'type': 'object',
+        'type_name': 'object',
         'properties': {
             'number': {
-                'type': 'number'
+                'type_name': 'number'
             },
             'street_name': {
-                'type': 'string'
+                'type_name': 'string'
             },
             'street_type': {
-                'type': 'string',
+                'type_name': 'string',
                 'enum': [
                     'Street',
                     'Avenue',
@@ -44,9 +44,9 @@ def test_properties(empty_swagger_spec, address_spec, address):
 
 def test_array(empty_swagger_spec, address_spec):
     tags_spec = {
-        'type': 'array',
+        'type_name': 'array',
         'items': {
-            'type': 'string'
+            'type_name': 'string'
         }
     }
     address_spec['properties']['tags'] = tags_spec
@@ -66,13 +66,13 @@ def test_array(empty_swagger_spec, address_spec):
 
 def test_nested_object(empty_swagger_spec, address_spec):
     location_spec = {
-        'type': 'object',
+        'type_name': 'object',
         'properties': {
             'longitude': {
-                'type': 'number'
+                'type_name': 'number'
             },
             'latitude': {
-                'type': 'number'
+                'type_name': 'number'
             },
         }
     }
@@ -92,19 +92,19 @@ def test_nested_object(empty_swagger_spec, address_spec):
 
 def test_model(minimal_swagger_dict, address_spec):
     location_spec = {
-        'type': 'object',
+        'type_name': 'object',
         'properties': {
             'longitude': {
-                'type': 'number'
+                'type_name': 'number'
             },
             'latitude': {
-                'type': 'number'
+                'type_name': 'number'
             },
         }
     }
     minimal_swagger_dict['definitions']['Location'] = location_spec
 
-    # The Location model type won't be built on schema ingestion unless
+    # The Location model type_name won't be built on schema ingestion unless
     # something actually references it. Create a throwaway response for this
     # purpose.
     location_response = {
@@ -192,7 +192,7 @@ def test_pass_through_additionalProperties_with_no_spec(
 
 def test_pass_through_property_with_no_spec(
         empty_swagger_spec, address_spec, address):
-    del address_spec['properties']['street_name']['type']
+    del address_spec['properties']['street_name']['type_name']
     # add a field with a None value and no spec
     address['none_field'] = None
     result = marshal_object(empty_swagger_spec, address_spec, address)
@@ -245,11 +245,11 @@ def test_recursive_ref_with_depth_n(recursive_swagger_spec):
 
 def test_marshal_with_nullable_required_property(empty_swagger_spec):
     object_spec = {
-        'type': 'object',
+        'type_name': 'object',
         'required': ['x'],
         'properties': {
             'x': {
-                'type': 'string',
+                'type_name': 'string',
                 'x-nullable': True,
             }
         }
@@ -261,11 +261,11 @@ def test_marshal_with_nullable_required_property(empty_swagger_spec):
 
 def test_marshal_with_non_nullable_required_property(empty_swagger_spec):
     object_spec = {
-        'type': 'object',
+        'type_name': 'object',
         'required': ['x'],
         'properties': {
             'x': {
-                'type': 'string'
+                'type_name': 'string'
             }
         }
     }
@@ -277,10 +277,10 @@ def test_marshal_with_non_nullable_required_property(empty_swagger_spec):
 
 def test_marshal_with_nullable_non_required_property(empty_swagger_spec):
     object_spec = {
-        'type': 'object',
+        'type_name': 'object',
         'properties': {
             'x': {
-                'type': 'string',
+                'type_name': 'string',
                 'x-nullable': True,
             }
         }
@@ -292,10 +292,10 @@ def test_marshal_with_nullable_non_required_property(empty_swagger_spec):
 
 def test_marshal_with_non_nullable_non_required_property(empty_swagger_spec):
     object_spec = {
-        'type': 'object',
+        'type_name': 'object',
         'properties': {
             'x': {
-                'type': 'string'
+                'type_name': 'string'
             }
         }
     }

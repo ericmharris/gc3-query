@@ -11,9 +11,9 @@ from bravado_core.spec import Spec
 @pytest.fixture
 def int_array_spec():
     return {
-        'type': 'array',
+        'type_name': 'array',
         'items': {
-            'type': 'integer',
+            'type_name': 'integer',
         }
     }
 
@@ -35,11 +35,11 @@ def test_empty_array(empty_swagger_spec, int_array_spec):
 
 def test_array_of_array(empty_swagger_spec):
     array_of_array_spec = {
-        'type': 'array',
+        'type_name': 'array',
         'items': {
-            'type': 'array',
+            'type_name': 'array',
             'items': {
-                'type': 'string',
+                'type_name': 'string',
             }
         }
     }
@@ -55,18 +55,18 @@ def test_array_of_array(empty_swagger_spec):
 
 def test_array_of_objects(empty_swagger_spec):
     array_of_addresses_spec = {
-        'type': 'array',
+        'type_name': 'array',
         'items': {
-            'type': 'object',
+            'type_name': 'object',
             'properties': {
                 'number': {
-                    'type': 'number'
+                    'type_name': 'number'
                 },
                 'street_name': {
-                    'type': 'string'
+                    'type_name': 'string'
                 },
                 'street_type': {
-                    'type': 'string',
+                    'type_name': 'string',
                     'enum': [
                         'Street',
                         'Avenue',
@@ -104,7 +104,7 @@ def test_array_of_models(petstore_dict):
     Tag = petstore_spec.definitions['Tag']
 
     array_of_pets_spec = {
-        'type': 'array',
+        'type_name': 'array',
         'items': petstore_spec.spec_dict['definitions']['Pet']
     }
 
@@ -163,7 +163,7 @@ def test_non_list_like_type_throws_error(empty_swagger_spec):
     i_am_not_a_list = dict()
     with pytest.raises(SwaggerMappingError) as excinfo:
         marshal_array(empty_swagger_spec, i_am_not_a_list, i_am_not_a_list)
-    assert 'Expected list like type' in str(excinfo.value)
+    assert 'Expected list like type_name' in str(excinfo.value)
 
 
 def test_ref(minimal_swagger_dict, int_array_spec):

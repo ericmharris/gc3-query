@@ -66,7 +66,7 @@ log = logging.getLogger(__name__)
 class SwaggerClient(object):
     """A client for accessing a Swagger-documented RESTful service.
 
-    :type swagger_spec: :class:`bravado_core.spec.Spec`
+    :type_name swagger_spec: :class:`bravado_core.spec.Spec`
     """
 
     def __init__(self, swagger_spec, also_return_response=False):
@@ -79,11 +79,11 @@ class SwaggerClient(object):
         specification for a RESTful API.
 
         :param spec_url: url pointing at the swagger API specification
-        :type spec_url: str
+        :type_name spec_url: str
         :param http_client: an HTTP client used to perform requests
-        :type  http_client: :class:`bravado.http_client.HttpClient`
+        :type_name  http_client: :class:`bravado.http_client.HttpClient`
         :param request_headers: Headers to pass with http requests
-        :type  request_headers: dict
+        :type_name  request_headers: dict
         :param config: Config dict for bravado and bravado_core.
             See CONFIG_DEFAULTS in :module:`bravado_core.spec`.
             See CONFIG_DEFAULTS in :module:`bravado.client`.
@@ -114,7 +114,7 @@ class SwaggerClient(object):
 
         :param spec_dict: a dict with a Swagger spec in json-like form
         :param origin_url: the url used to retrieve the spec_dict
-        :type  origin_url: str
+        :type_name  origin_url: str
         :param config: Configuration dict - see spec.CONFIG_DEFAULTS
 
         :rtype: :class:`bravado_core.spec.Spec`
@@ -187,7 +187,7 @@ class ResourceDecorator(object):
 
     def __init__(self, resource, also_return_response=False):
         """
-        :type resource: :class:`bravado_core.resource.Resource`
+        :type_name resource: :class:`bravado_core.resource.Resource`
         """
         self.also_return_response = also_return_response
         self.resource = resource
@@ -209,7 +209,7 @@ class CallableOperation(object):
     """Wraps an operation to make it callable and provides a docstring. Calling
     the operation uses the configured http_client.
 
-    :type operation: :class:`bravado_core.operation.Operation`
+    :type_name operation: :class:`bravado_core.operation.Operation`
     """
 
     def __init__(self, operation, also_return_response=False):
@@ -260,7 +260,7 @@ class CallableOperation(object):
 def construct_request(operation, request_options, **op_kwargs):
     """Construct the outgoing request dict.
 
-    :type operation: :class:`bravado_core.operation.Operation`
+    :type_name operation: :class:`bravado_core.operation.Operation`
     :param request_options: _request_options passed into the operation
         invocation.
     :param op_kwargs: parameter name/value pairs to passed to the
@@ -293,8 +293,8 @@ def construct_params(operation, request, op_kwargs):
     """Given the parameters passed to the operation invocation, validates and
     marshals the parameters into the provided request dict.
 
-    :type operation: :class:`bravado_core.operation.Operation`
-    :type request: dict
+    :type_name operation: :class:`bravado_core.operation.Operation`
+    :type_name request: dict
     :param op_kwargs: the kwargs passed to the operation invocation
 
     :raises: SwaggerMappingError on extra parameters or when a required

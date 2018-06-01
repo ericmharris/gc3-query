@@ -8,13 +8,13 @@ def pet_spec():
     return {
         'properties': {
             'name': {
-                'type': 'string'
+                'type_name': 'string'
             },
         },
         'required': [
             'name'
         ],
-        'type': 'object',
+        'type_name': 'object',
     }
 
 
@@ -40,9 +40,9 @@ def paths_spec():
                         "in": "query",
                         "description": "Status values that need to be considered for filter",  # noqa
                         "required": False,
-                        "type": "array",
+                        "type_name": "array",
                         "items": {
-                            "type": "string"
+                            "type_name": "string"
                         },
                         "collectionFormat": "multi",
                         "default": "available"
@@ -52,7 +52,7 @@ def paths_spec():
                     "200": {
                         "description": "successful operation",
                         "schema": {
-                            "type": "array",
+                            "type_name": "array",
                             "items": {
                                 "$ref": "#/definitions/Pet"
                             }

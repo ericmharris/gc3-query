@@ -45,7 +45,7 @@ def test_pass_if_not_required_parameter_and_not_present(minimal_swagger_spec,
 
 
 def test_call_to_jsonschema_if_not_param(minimal_swagger_spec):
-    property_spec = {'type': 'integer'}
+    property_spec = {'type_name': 'integer'}
     validator = Mock()
     required = True
     instance = 34

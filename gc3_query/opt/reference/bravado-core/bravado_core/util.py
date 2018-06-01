@@ -127,14 +127,14 @@ class ObjectType(Enum):
 
 def determine_object_type(object_dict):
     """
-    Use best guess to determine the object type based on the object keys.
+    Use best guess to determine the object type_name based on the object keys.
 
-    NOTE: it assumes that the base swagger specs are validated and perform type detection for
+    NOTE: it assumes that the base swagger specs are validated and perform type_name detection for
     the four types of object that could be references in the specs: parameter, path item, response and schema.
 
-    :type object_dict: dict
+    :type_name object_dict: dict
 
-    :return: determined type of ``object_dict``. The return values is an ObjectType:
+    :return: determined type_name of ``object_dict``. The return values is an ObjectType:
     :rtype: ObjectType
     """
 
@@ -142,7 +142,7 @@ def determine_object_type(object_dict):
         return ObjectType.UNKNOWN
 
     if 'in' in object_dict and 'name' in object_dict:
-        # A parameter object is the only object type that could contain 'in' and 'name' at the same time
+        # A parameter object is the only object type_name that could contain 'in' and 'name' at the same time
         return ObjectType.PARAMETER
     else:
         http_operations = {'get', 'put', 'post', 'delete', 'options', 'head', 'patch'}
@@ -166,10 +166,10 @@ def determine_object_type(object_dict):
             else:
                 # A schema object has:
                 #  - no mandatory parameters
-                #  - long list of optional parameters (ie. description, type, items, properties, discriminator, etc.)
+                #  - long list of optional parameters (ie. description, type_name, items, properties, discriminator, etc.)
                 #  - no other fields are allowed
-                # NOTE: In case the method is mis-determining the type of a schema object, confusing it with a
-                #       response type it will be enough to add, to the object, one key that is not defined
+                # NOTE: In case the method is mis-determining the type_name of a schema object, confusing it with a
+                #       response type_name it will be enough to add, to the object, one key that is not defined
                 #       in ``response_allowed_keys``.  (ie. ``additionalProperties: {}``, implicitly defined be specs)
                 return ObjectType.SCHEMA
 

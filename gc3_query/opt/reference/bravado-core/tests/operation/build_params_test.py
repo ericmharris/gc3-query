@@ -32,7 +32,7 @@ def test_op_param_only(minimal_swagger_dict):
                 'name': 'pet_id',
                 'in': 'query',
                 'required': 'true',
-                'type': 'integer',
+                'type_name': 'integer',
             }
         ],
         'responses': {
@@ -68,7 +68,7 @@ def test_path_param_only(minimal_swagger_dict):
                 'name': 'pet_id',
                 'in': 'query',
                 'required': 'true',
-                'type': 'integer',
+                'type_name': 'integer',
             }
         ],
     }
@@ -88,7 +88,7 @@ def test_path_param_and_op_param(minimal_swagger_dict):
                 'name': 'pet_id',
                 'in': 'query',
                 'required': True,
-                'type': 'integer',
+                'type_name': 'integer',
             }
         ],
         'responses': {
@@ -103,7 +103,7 @@ def test_path_param_and_op_param(minimal_swagger_dict):
                 'name': 'sort_key',
                 'in': 'query',
                 'required': False,
-                'type': 'string',
+                'type_name': 'string',
             }
         ],
     }
@@ -125,7 +125,7 @@ def test_op_param_overrides_path_param(minimal_swagger_dict):
                 'name': 'sort_key',
                 'in': 'query',
                 'required': True,
-                'type': 'string',
+                'type_name': 'string',
             }
         ],
         'responses': {
@@ -140,7 +140,7 @@ def test_op_param_overrides_path_param(minimal_swagger_dict):
                 'name': 'sort_key',
                 'in': 'query',
                 'required': False,
-                'type': 'string',
+                'type_name': 'string',
             }
         ],
     }
@@ -161,13 +161,13 @@ def test_path_param_and_op_param_refs(minimal_swagger_dict):
             'name': 'pet_id',
             'in': 'query',
             'required': True,
-            'type': 'integer',
+            'type_name': 'integer',
         },
         'SortKey': {
             'name': 'sort_key',
             'in': 'query',
             'required': False,
-            'type': 'string',
+            'type_name': 'string',
         },
     }
     op_spec = {
@@ -212,7 +212,7 @@ def test_sanitized_param(minimal_swagger_dict):
                 'name': 'pet-id',
                 'in': 'headers',
                 'required': 'true',
-                'type': 'integer',
+                'type_name': 'integer',
             }
         ],
     }

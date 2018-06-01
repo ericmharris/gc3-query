@@ -42,16 +42,16 @@ def _register_visited_model(path, model_spec, model_name, visited_models, is_ble
     Registers a model that has been tagged by a callback method.
 
     :param path: list of path segments to the key
-    :type path: list
+    :type_name path: list
     :param model_spec: swagger specification of the model
-    :type model_spec: dict
+    :type_name model_spec: dict
     :param model_name: name of the model to register
-    :type model_name: str
+    :type_name model_name: str
     :param visited_models: models that have already been identified
-    :type visited_models: dict (k,v) == (model_name, path)
+    :type_name visited_models: dict (k,v) == (model_name, path)
     :param is_blessed: flag that determines if the model name has been obtained by blessing
-    :type is_blessed: bool
-    :type swagger_spec: :class:`bravado_core.spec.Spec`
+    :type_name is_blessed: bool
+    :type_name swagger_spec: :class:`bravado_core.spec.Spec`
     """
     log.debug('Found model: %s (is_blessed %s)', model_name, is_blessed)
     if model_name in visited_models:
@@ -87,8 +87,8 @@ def tag_models(container, key, path, visited_models, swagger_spec):
     :param container: container being visited
     :param key: attribute in container being visited as a string
     :param path: list of path segments to the key
-    :type visited_models: dict (k,v) == (model_name, path)
-    :type swagger_spec: :class:`bravado_core.spec.Spec`
+    :type_name visited_models: dict (k,v) == (model_name, path)
+    :type_name swagger_spec: :class:`bravado_core.spec.Spec`
     """
     if len(path) < 2 or path[-2] != 'definitions':
         return
@@ -118,7 +118,7 @@ def bless_models(container, key, path, visited_models, swagger_spec):
     ``x-model`` attribute to models which does not define it.
 
     The callbacks is in charge of adding MODEL_MARKER in case a model
-    (identifies as an object of type SCHEMA) has enough information for
+    (identifies as an object of type_name SCHEMA) has enough information for
     determining a model name (ie. has ``title`` attribute defined)
 
     INFO: Implementation detail.
@@ -130,8 +130,8 @@ def bless_models(container, key, path, visited_models, swagger_spec):
     :param container: container being visited
     :param key: attribute in container being visited as a string
     :param path: list of path segments to the key
-    :type visited_models: dict (k,v) == (model_name, path)
-    :type swagger_spec: :class:`bravado_core.spec.Spec`
+    :type_name visited_models: dict (k,v) == (model_name, path)
+    :type_name swagger_spec: :class:`bravado_core.spec.Spec`
     """
     if not is_dict_like(container):
         return
@@ -142,7 +142,7 @@ def bless_models(container, key, path, visited_models, swagger_spec):
     if (
         not is_dict_like(model_spec) or
         not is_object(swagger_spec, model_spec, no_default_type=True) or
-        # NOTE: determine_object_type uses a simple heuristic to determine if a model_spec has a SCHEMA type
+        # NOTE: determine_object_type uses a simple heuristic to determine if a model_spec has a SCHEMA type_name
         # for this reason is important that model_spec is recognized as model in the most accurate way
         # so we should not rely on default typing of a schema
         determine_object_type(model_spec) != ObjectType.SCHEMA or
@@ -169,16 +169,16 @@ def collect_models(container, key, path, models, swagger_spec):
     Callback used during the swagger spec ingestion to collect all the
     tagged models and create appropriate python types for them.
 
-    NOTE: this callback creates the model python type only if the container
+    NOTE: this callback creates the model python type_name only if the container
     represents a valid "model", the container has been marked with a model name
     (has MODEL_MARKER key) and the referenced model does not have the python
-    model type generated.
+    model type_name generated.
 
     :param container: container being visited
     :param key: attribute in container being visited as a string
     :param path: list of path segments to the key
     :param models: created model types are placed here
-    :type swagger_spec: :class:`bravado_core.spec.Spec`
+    :type_name swagger_spec: :class:`bravado_core.spec.Spec`
     """
     if key == MODEL_MARKER and is_object(swagger_spec, container):
         model_spec = swagger_spec.deref(container)
@@ -244,7 +244,7 @@ class Model(object):
     the names of attributes used in the Python implementation of the model
     (methods, etc.). The solution here is to have all non-property attributes
     making up the public API of this class prefixed by a single underscore
-    (this is done with the :func:`collections.namedtuple` type factory, which
+    (this is done with the :func:`collections.namedtuple` type_name factory, which
     also uses property values with arbitrary names). There may still be name
     conflicts but only if the property name also begins with an underscore,
     which is uncommon. Truly private attributes are prefixed with double
@@ -331,27 +331,27 @@ class Model(object):
     def __getattr__(self, attr_name):
         """Only search through properties if attribute not found normally.
 
-        :type attr_name: str
+        :type_name attr_name: str
         """
         try:
             return self[attr_name]
         except KeyError:
             raise AttributeError(
-                'type object {0!r} has no attribute {1!r}'
+                'type_name object {0!r} has no attribute {1!r}'
                 .format(type(self).__name__, attr_name)
             )
 
     def __setattr__(self, attr_name, val):
         """Setting an attribute assigns a value to a property.
 
-        :type attr_name: str
+        :type_name attr_name: str
         """
         self[attr_name] = val
 
     def __delattr__(self, attr_name):
         """Deleting an attribute deletes the property (see __delitem__).
 
-        :type attr_name: str
+        :type_name attr_name: str
         """
         try:
             del self[attr_name]
@@ -361,14 +361,14 @@ class Model(object):
     def __getitem__(self, property_name):
         """Get a property value by name.
 
-        :type attr_name: str
+        :type_name attr_name: str
         """
         return self.__dict[property_name]
 
     def __setitem__(self, property_name, val):
         """Set a property value by name.
 
-        :type attr_name: str
+        :type_name attr_name: str
         """
         self.__dict[property_name] = val
 
@@ -378,7 +378,7 @@ class Model(object):
         Additional properties will be deleted alltogether. Properties defined
         in the spec will be set to ``None``.
 
-        :type attr_name: str
+        :type_name attr_name: str
         """
         if property_name in self._properties:
             self.__dict[property_name] = None
@@ -388,10 +388,10 @@ class Model(object):
     def __eq__(self, other):
         """Check for equality with another instance.
 
-        Two model instances are equal if they have the same type and the same
+        Two model instances are equal if they have the same type_name and the same
         properties and values (including additional properties).
         """
-        # Check same type as self
+        # Check same type_name as self
         if type(self) is not type(other):
             return False
 
@@ -502,7 +502,7 @@ class Model(object):
     def _unmarshal(cls, val):
         """Unmarshal a dict into an instance of the model.
 
-        :type val: dict
+        :type_name val: dict
         :rtype: .Model
         """
         from bravado_core.unmarshal import unmarshal_model
@@ -557,12 +557,12 @@ def create_model_type(swagger_spec, model_name, model_spec, bases=(Model,)):
     the docstring is relatively expensive, and would only be used in rare
     cases for interactive debugging in a REPL.
 
-    :type swagger_spec: :class:`bravado_core.spec.Spec`
+    :type_name swagger_spec: :class:`bravado_core.spec.Spec`
     :param model_name: model name
     :param model_spec: json-like dict that describes a model.
-    :param tuple bases: Base classes for type. At least one should be
+    :param tuple bases: Base classes for type_name. At least one should be
         :class:`.Model` or a subclass of it.
-    :returns: dynamic type inheriting from ``bases``.
+    :returns: dynamic type_name inheriting from ``bases``.
     :rtype: type
     """
 
@@ -586,8 +586,8 @@ def is_model(swagger_spec, schema_object_spec):
     """
     :param swagger_spec: :class:`bravado_core.spec.Spec`
     :param schema_object_spec: specification for a swagger object
-    :type schema_object_spec: dict
-    :return: True if the spec has been "marked" as a model type, false
+    :type_name schema_object_spec: dict
+    :return: True if the spec has been "marked" as a model type_name, false
         otherwise.
     """
     deref = swagger_spec.deref
@@ -597,23 +597,23 @@ def is_model(swagger_spec, schema_object_spec):
 
 def is_object(swagger_spec, object_spec, no_default_type=False):
     """
-    A schema definition is of type object if its type is object or if it uses
+    A schema definition is of type_name object if its type_name is object or if it uses
     model composition (i.e. it has an allOf property).
     :param swagger_spec: :class:`bravado_core.spec.Spec`
     :param object_spec: specification for a swagger object
-    :type object_spec: dict
+    :type_name object_spec: dict
     :param no_default_type: ignore bravado-core 'default_type_to_object' configuration
-    :type no_default_type: bool
+    :type_name no_default_type: bool
     :return: True if the spec describes an object, False otherwise.
     """
     deref = swagger_spec.deref
     default_type = 'object' if not no_default_type and swagger_spec.config['default_type_to_object'] else None
-    return deref(object_spec.get('type', default_type)) == 'object' or 'allOf' in object_spec
+    return deref(object_spec.get('type_name', default_type)) == 'object' or 'allOf' in object_spec
 
 
 def create_model_docstring(swagger_spec, model_spec):
     """
-    :type swagger_spec: :class:`bravado_core.spec.Spec`
+    :type_name swagger_spec: :class:`bravado_core.spec.Spec`
     :param model_spec: specification for a model in dict form
     :rtype: string or unicode
     """
@@ -626,7 +626,7 @@ def create_model_docstring(swagger_spec, model_spec):
     # TODO: Add more stuff available in the spec - 'required', 'example', etc
     for attr_name, attr_spec in attr_iter:
         attr_spec = deref(attr_spec)
-        schema_type = deref(attr_spec['type'])
+        schema_type = deref(attr_spec['type_name'])
 
         if schema_type in SWAGGER_PRIMITIVES:
             # TODO: update to python types and take 'format' into account
@@ -637,7 +637,7 @@ def create_model_docstring(swagger_spec, model_spec):
             if is_model(swagger_spec, array_spec):
                 array_type = deref(array_spec[MODEL_MARKER])
             else:
-                array_type = deref(array_spec['type'])
+                array_type = deref(array_spec['type_name'])
             attr_type = u'list of {0}'.format(array_type)
 
         elif is_model(swagger_spec, attr_spec):

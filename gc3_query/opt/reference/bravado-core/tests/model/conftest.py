@@ -12,29 +12,29 @@ def definitions_spec():
         "User": {
             "properties": {
                 "id": {
-                    "type": "integer",
+                    "type_name": "integer",
                     "format": "int64"
                 },
                 "username": {
-                    "type": "string"
+                    "type_name": "string"
                 },
                 "firstName": {
-                    "type": "string"
+                    "type_name": "string"
                 },
                 "lastName": {
-                    "type": "string"
+                    "type_name": "string"
                 },
                 "email": {
-                    "type": "string"
+                    "type_name": "string"
                 },
                 "password": {
-                    "type": "string"
+                    "type_name": "string"
                 },
                 "phone": {
-                    "type": "string"
+                    "type_name": "string"
                 },
                 "userStatus": {
-                    "type": "integer",
+                    "type_name": "integer",
                     "format": "int32",
                     "description": "User Status"
                 }
@@ -46,11 +46,11 @@ def definitions_spec():
         "Category": {
             "properties": {
                 "id": {
-                    "type": "integer",
+                    "type_name": "integer",
                     "format": "int64"
                 },
                 "name": {
-                    "type": "string"
+                    "type_name": "string"
                 }
             },
         },
@@ -61,24 +61,24 @@ def definitions_spec():
             ],
             "properties": {
                 "id": {
-                    "type": "integer",
+                    "type_name": "integer",
                     "format": "int64"
                 },
                 "category": {
                     "$ref": "#/definitions/Category"
                 },
                 "name": {
-                    "type": "string",
+                    "type_name": "string",
                     "example": "doggie"
                 },
                 "photoUrls": {
-                    "type": "array",
+                    "type_name": "array",
                     "items": {
-                        "type": "string"
+                        "type_name": "string"
                     }
                 },
                 "tags": {
-                    "type": "array",
+                    "type_name": "array",
                     "items": {
                         "$ref": "#/definitions/Tag"
                     }
@@ -92,11 +92,11 @@ def definitions_spec():
                     "$ref": "#/definitions/Pet",
                 },
                 {
-                    "type": "object",
+                    "type_name": "object",
                     "required": ["neutered"],
                     "properties": {
                         "neutered": {
-                            "type": "boolean",
+                            "type_name": "boolean",
                         }
                     }
                 }
@@ -105,11 +105,11 @@ def definitions_spec():
         "Tag": {
             "properties": {
                 "id": {
-                    "type": "integer",
+                    "type_name": "integer",
                     "format": "int64"
                 },
                 "name": {
-                    "type": "string"
+                    "type_name": "string"
                 }
             },
             "xml": {

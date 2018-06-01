@@ -9,16 +9,16 @@ from tests.validate.conftest import email_address_format
 @pytest.fixture
 def address_spec():
     return {
-        'type': 'object',
+        'type_name': 'object',
         'properties': {
             'number': {
-                'type': 'number'
+                'type_name': 'number'
             },
             'street_name': {
-                'type': 'string'
+                'type_name': 'string'
             },
             'street_type': {
-                'type': 'string',
+                'type_name': 'string',
                 'enum': [
                     'Street',
                     'Avenue',
@@ -34,10 +34,10 @@ def allOf_spec(address_spec):
     return {
         'allOf': [
             {
-                'type': 'object',
+                'type_name': 'object',
                 'properties': {
                     'business': {
-                        'type': 'string'
+                        'type_name': 'string'
                     },
                 },
                 'required': ['business'],
@@ -91,18 +91,18 @@ def test_property_with_no_schema(minimal_swagger_spec, address_spec):
         'street_name': 'Main',
         'street_type': 'Street',
     }
-    del address_spec['properties']['street_name']['type']
+    del address_spec['properties']['street_name']['type_name']
     validate_object(minimal_swagger_spec, address_spec, address)
 
 
 @pytest.fixture
 def email_address_object_spec():
     return {
-        'type': 'object',
+        'type_name': 'object',
         'required': ['email_address'],
         'properties': {
             'email_address': {
-                'type': 'string',
+                'type_name': 'string',
                 'format': 'email_address',
             }
         }
@@ -145,11 +145,11 @@ def test_user_defined_format_sensitive_failure(
 def test_builtin_format_still_works_when_user_defined_format_used(
         minimal_swagger_spec):
     ipaddress_spec = {
-        'type': 'object',
+        'type_name': 'object',
         'required': ['ipaddress'],
         'properties': {
             'ipaddress': {
-                'type': 'string',
+                'type_name': 'string',
                 'format': 'ipv4',
             }
         }
@@ -223,11 +223,11 @@ def test_recursive_ref_depth_n_failure(recursive_swagger_spec):
 
 def content_spec_factory(required, nullable):
     return {
-        'type': 'object',
+        'type_name': 'object',
         'required': ['x'] if required else [],
         'properties': {
             'x': {
-                'type': 'string',
+                'type_name': 'string',
                 'x-nullable': nullable,
             }
         }
@@ -278,7 +278,7 @@ def test_nullable_false_value_none(empty_swagger_spec, required):
 
     with pytest.raises(ValidationError) as excinfo:
         validate_object(empty_swagger_spec, content_spec, value)
-    assert excinfo.value.message == "None is not of type 'string'"
+    assert excinfo.value.message == "None is not of type_name 'string'"
 
 
 @pytest.mark.parametrize('required', [True, False])
@@ -339,16 +339,16 @@ def test_validate_valid_polymorphic_object(polymorphic_spec):
         'list': [
             {
                 'name': 'a generic pet name',
-                'type': 'GenericPet',
+                'type_name': 'GenericPet',
             },
             {
                 'name': 'a dog name',
-                'type': 'Dog',
+                'type_name': 'Dog',
                 'birth_date': '2017-03-09',
             },
             {
                 'name': 'a cat name',
-                'type': 'Cat',
+                'type_name': 'Cat',
                 'color': 'white',
             },
         ]
@@ -369,7 +369,7 @@ def test_validate_valid_polymorphic_object(polymorphic_spec):
                 'list': [
                     {
                         'name': 'a cat name',
-                        'type': 'Dog',
+                        'type_name': 'Dog',
                         'color': 'white',
                     },
                 ]
@@ -382,11 +382,11 @@ def test_validate_valid_polymorphic_object(polymorphic_spec):
                 'list': [
                     {
                         'name': 'any string',
-                        'type': 'a not defined type',
+                        'type_name': 'a not defined type_name',
                     },
                 ]
             },
-            '\'a not defined type\' is not a recognized schema',
+            '\'a not defined type_name\' is not a recognized schema',
         ],
         [
             {
@@ -394,7 +394,7 @@ def test_validate_valid_polymorphic_object(polymorphic_spec):
                 'list': [
                     {
                         'name': 'a bird name',
-                        'type': 'Bird',
+                        'type_name': 'Bird',
                     },
                 ]
             },
@@ -406,7 +406,7 @@ def test_validate_valid_polymorphic_object(polymorphic_spec):
                 'list': [
                     {
                         'name': 'a whale name',
-                        'type': 'Whale',
+                        'type_name': 'Whale',
                         'weight': 1000,
                     },
                 ]

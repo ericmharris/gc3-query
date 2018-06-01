@@ -28,7 +28,7 @@ class IncomingResponse(object):
 
     def __getattr__(self, name):
         """When an attempt to access a required attribute that doesn't exist
-        is made, let the caller know that the type is non-compliant in its
+        is made, let the caller know that the type_name is non-compliant in its
         attempt to be `IncomingResponse`. This is in place of the usual throwing
         of an AttributeError.
 
@@ -40,7 +40,7 @@ class IncomingResponse(object):
         """
         if name in self.__required_attrs__:
             raise NotImplementedError(
-                'This IncomingResponse type {0} forgot to implement an attr '
+                'This IncomingResponse type_name {0} forgot to implement an attr '
                 'for `{1}`'.format(type(self), name))
         raise AttributeError(
             "'{0}' object has no attribute '{1}'".format(type(self), name))
@@ -74,7 +74,7 @@ class OutgoingResponse(object):
         """
         if name in self.__required_attrs__:
             raise NotImplementedError(
-                'This OutgoingResponse type {0} forgot to implement an attr'
+                'This OutgoingResponse type_name {0} forgot to implement an attr'
                 ' for `{1}`'.format(type(self), name))
         raise AttributeError(
             "'{0}' object has no attribute '{1}'".format(type(self), name))
@@ -91,9 +91,9 @@ def unmarshal_response(response, op):
     """Unmarshal incoming http response into a value based on the
     response specification.
 
-    :type response: :class:`bravado_core.response.IncomingResponse`
-    :type op: :class:`bravado_core.operation.Operation`
-    :returns: value where type(value) matches response_spec['schema']['type']
+    :type_name response: :class:`bravado_core.response.IncomingResponse`
+    :type_name op: :class:`bravado_core.operation.Operation`
+    :returns: value where type_name(value) matches response_spec['schema']['type_name']
         if it exists, None otherwise.
     """
     deref = op.swagger_spec.deref
@@ -105,7 +105,7 @@ def unmarshal_response(response, op):
     if not has_content(response_spec):
         return None
 
-    content_type = response.headers.get('content-type', '').lower()
+    content_type = response.headers.get('content-type_name', '').lower()
 
     if content_type.startswith(APP_JSON) or content_type.startswith(APP_MSGPACK):
         content_spec = deref(response_spec['schema'])
@@ -133,8 +133,8 @@ def get_response_spec(status_code, op):
                     {status_code}/
                         {response}
 
-    :type status_code: int
-    :type op: :class:`bravado_core.operation.Operation`
+    :type_name status_code: int
+    :type_name op: :class:`bravado_core.operation.Operation`
 
     :return: response specification
     :rtype: dict
@@ -161,9 +161,9 @@ def get_response_spec(status_code, op):
 def validate_response(response_spec, op, response):
     """Validate an outgoing response against its Swagger specification.
 
-    :type response_spec: dict
-    :type op: :class:`bravado_core.operation.Operation`
-    :type response: :class:`bravado_core.response.OutgoingResponse`
+    :type_name response_spec: dict
+    :type_name op: :class:`bravado_core.operation.Operation`
+    :type_name response: :class:`bravado_core.response.OutgoingResponse`
     """
     if not op.swagger_spec.config['validate_responses']:
         return
@@ -176,9 +176,9 @@ def validate_response_body(op, response_spec, response):
     """Validate an outgoing response's body against the response's Swagger
     specification.
 
-    :type op: :class:`bravado_core.operation.Operation`
-    :type response_spec: dict
-    :type response: :class:`bravado_core.response.OutgoingResponse`
+    :type_name op: :class:`bravado_core.operation.Operation`
+    :type_name response_spec: dict
+    :type_name response: :class:`bravado_core.response.OutgoingResponse`
 
     :raises: SwaggerMappingError
     """
@@ -194,7 +194,7 @@ def validate_response_body(op, response_spec, response):
 
     if response.content_type not in op.produces:
         raise SwaggerMappingError(
-            "Response content-type '{0}' is not supported by the Swagger "
+            "Response content-type_name '{0}' is not supported by the Swagger "
             "specification's content-types '{1}"
             .format(response.content_type, op.produces))
 
@@ -210,9 +210,9 @@ def validate_response_body(op, response_spec, response):
         # TODO: but in the meantime don't raise errors for them
         pass
     else:
-        # TODO: Expand content-type support for non-json types
+        # TODO: Expand content-type_name support for non-json types
         raise SwaggerMappingError(
-            "Unsupported content-type in response: {0}"
+            "Unsupported content-type_name in response: {0}"
             .format(response.content_type))
 
 
@@ -220,9 +220,9 @@ def validate_response_headers(op, response_spec, response):
     """Validate an outgoing response's headers against the response's Swagger
     specification.
 
-    :type op: :class:`bravado_core.operation.Operation`
-    :type response_spec: dict
-    :type response: :class:`bravado_core.response.OutgoingResponse`
+    :type_name op: :class:`bravado_core.operation.Operation`
+    :type_name response_spec: dict
+    :type_name response: :class:`bravado_core.response.OutgoingResponse`
     """
     deref = op.swagger_spec.deref
 

@@ -29,7 +29,7 @@ class SwaggerClientTest(unittest.TestCase):
     def test_bad_param(self):
         try:
             self.uut.pet.listPets(doesNotExist='asdf')
-            self.fail("Expected type error")
+            self.fail("Expected type_name error")
         except TypeError:
             pass
 
@@ -37,7 +37,7 @@ class SwaggerClientTest(unittest.TestCase):
     def test_missing_required(self):
         try:
             self.uut.pet.createPet()
-            self.fail("Expected type error")
+            self.fail("Expected type_name error")
         except TypeError:
             pass
 
@@ -157,27 +157,27 @@ class SwaggerClientTest(unittest.TestCase):
                                     {
                                         u"method": u"GET",
                                         u"nickname": u"listPets",
-                                        u"type": u"array",
+                                        u"type_name": u"array",
                                         u"items": {
-                                            u"type": u"string"
+                                            u"type_name": u"string"
                                         },
                                         u"parameters": []
                                     },
                                     {
                                         u"method": u"POST",
                                         u"nickname": u"createPet",
-                                        u"type": u"string",
+                                        u"type_name": u"string",
                                         u"parameters": [
                                             {
                                                 u"name": u"name",
                                                 u"paramType": u"query",
-                                                u"type": u"string",
+                                                u"type_name": u"string",
                                                 u"required": True
                                             },
                                             {
                                                 u"name": u"birthday",
                                                 u"paramType": u"query",
-                                                u"type": u"string",
+                                                u"type_name": u"string",
                                                 u"format": u"date",
                                                 u"required": False
                                             }
@@ -191,15 +191,15 @@ class SwaggerClientTest(unittest.TestCase):
                                     {
                                         u"method": u"GET",
                                         u"nickname": u"findPets",
-                                        u"type": u"array",
+                                        u"type_name": u"array",
                                         u"items": {
-                                            u"type": u"string"
+                                            u"type_name": u"string"
                                         },
                                         u"parameters": [
                                             {
                                                 u"name": u"species",
                                                 u"paramType": u"query",
-                                                u"type": u"string",
+                                                u"type_name": u"string",
                                                 u"allowMultiple": True
                                             }
                                         ]
@@ -212,11 +212,11 @@ class SwaggerClientTest(unittest.TestCase):
                                     {
                                         u"method": u"DELETE",
                                         u"nickname": u"deletePet",
-                                        u"type": u"void",
+                                        u"type_name": u"void",
                                         u"parameters": [
                                             {
                                                 u"name": u"petId",
-                                                u"type": u"integer",
+                                                u"type_name": u"integer",
                                                 u"paramType": u"path"
                                             }
                                         ]
@@ -229,16 +229,16 @@ class SwaggerClientTest(unittest.TestCase):
                                     {
                                         u"method": u"POST",
                                         u"nickname": u"postVaccine",
-                                        u"type": u"void",
+                                        u"type_name": u"void",
                                         u"parameters": [
                                             {
                                                 u"name": u"petId",
-                                                u"type": u"integer",
+                                                u"type_name": u"integer",
                                                 u"paramType": u"path"
                                             },
                                             {
                                                 u"name": u"vaccineFile",
-                                                u"type": u"File",
+                                                u"type_name": u"File",
                                                 u"paramType": u"form"
                                             }
                                         ]

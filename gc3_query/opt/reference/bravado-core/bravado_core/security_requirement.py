@@ -12,9 +12,9 @@ class SecurityRequirement(object):
     """
     Wrapper of security requirement object (http://swagger.io/specification/#securityRequirementObject)
 
-    :type swagger_spec: :class:`bravado_core.spec.Spec`
-    :type op: :class:`bravado_core.operation.Operation`
-    :type security_requirement_spec: security requirement specification in dict form
+    :type_name swagger_spec: :class:`bravado_core.spec.Spec`
+    :type_name op: :class:`bravado_core.operation.Operation`
+    :type_name security_requirement_spec: security requirement specification in dict form
     """
 
     def __init__(self, swagger_spec, security_requirement_spec):

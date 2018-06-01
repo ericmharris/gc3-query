@@ -15,7 +15,7 @@ def response_spec():
     return {
         'description': "Day of the week",
         'schema': {
-            'type': 'string',
+            'type_name': 'string',
         }
     }
 
@@ -37,7 +37,7 @@ def test_json_content(empty_swagger_spec, response_spec):
     response = Mock(
         spec=IncomingResponse,
         status_code=200,
-        headers={'content-type': APP_JSON},
+        headers={'content-type_name': APP_JSON},
         json=Mock(return_value='Monday'))
 
     with patch('bravado_core.response.get_response_spec') as m:
@@ -51,7 +51,7 @@ def test_msgpack_content(empty_swagger_spec, response_spec):
     response = Mock(
         spec=IncomingResponse,
         status_code=200,
-        headers={'content-type': APP_MSGPACK},
+        headers={'content-type_name': APP_MSGPACK},
         raw_bytes=msgpack.dumps(message, use_bin_type=True))
 
     with patch(
@@ -66,7 +66,7 @@ def test_text_content(empty_swagger_spec, response_spec):
     response = Mock(
         spec=IncomingResponse,
         status_code=200,
-        headers={'content-type': 'text/plain'},
+        headers={'content-type_name': 'text/plain'},
         text='Monday')
 
     with patch('bravado_core.response.get_response_spec') as m:
@@ -80,7 +80,7 @@ def test_skips_validation(empty_swagger_spec, response_spec):
     response = Mock(
         spec=IncomingResponse,
         status_code=200,
-        headers={'content-type': APP_JSON},
+        headers={'content-type_name': APP_JSON},
         json=Mock(return_value='Monday'))
 
     with patch('bravado_core.response.validate_schema_object') as val_schem:
@@ -96,7 +96,7 @@ def test_performs_validation(empty_swagger_spec, response_spec):
     response = Mock(
         spec=IncomingResponse,
         status_code=200,
-        headers={'content-type': APP_JSON},
+        headers={'content-type_name': APP_JSON},
         json=Mock(return_value='Monday'))
 
     with patch('bravado_core.response.validate_schema_object') as val_schem:

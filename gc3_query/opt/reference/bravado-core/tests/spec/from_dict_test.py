@@ -53,7 +53,7 @@ def test_complicated_refs():
 def test_ref_to_external_path_with_ref_to_local_model():
     # Test that an an external ref to a path (in swagger.json) which contains
     # a local ref to a model (in pet.json) works as expected:
-    # - model type for Pet is created
+    # - model type_name for Pet is created
     # - de-reffed spec_dict contains 'x-model' annotations
     #
     # This is really a test for `tag_models`. Migrate over there
@@ -111,10 +111,10 @@ def test_spec_with_dereffed_and_tagged_models_works(minimal_swagger_dict):
                     'description': 'Returns a Pet',
                     'schema': {
                         'x-model': 'Pet',
-                        'type': 'object',
+                        'type_name': 'object',
                         'properties': {
                             'name': {
-                                'type': 'string'
+                                'type_name': 'string'
                             }
                         }
                     }

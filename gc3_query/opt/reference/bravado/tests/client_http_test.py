@@ -24,7 +24,7 @@ class ClientTest(unittest.TestCase):
             body='[]', content_type='text/json')
         resp = self.client.simple1.createAsterikInfoHttp(body=body).result()
         self.assertEqual('application/json',
-                         httpretty.last_request().headers['content-type'])
+                         httpretty.last_request().headers['content-type_name'])
         self.assertEqual('{"id": "test_id"}',
                          httpretty.last_request().body)
         self.assertEqual([], resp)
@@ -41,7 +41,7 @@ class ClientTest(unittest.TestCase):
     def test_bad_param(self):
         try:
             self.client.simple.getAsteriskInfo(doesNotExist='asdf')
-            self.fail("Expected type error")
+            self.fail("Expected type_name error")
         except TypeError:
             pass
 
@@ -49,7 +49,7 @@ class ClientTest(unittest.TestCase):
     def test_missing_required(self):
         try:
             self.client.simple1.getAsteriskInfoHttp()
-            self.fail("Expected type error")
+            self.fail("Expected type_name error")
         except TypeError:
             pass
 
