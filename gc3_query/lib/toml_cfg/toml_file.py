@@ -9,6 +9,8 @@ LIB_NAME.FILE_NAME
 <DESCR>
 """
 from dataclasses import dataclass
+import inspect
+import types, typing
 
 from gc3_query.lib import *
 from pathlib import Path
@@ -57,7 +59,8 @@ class TOMLFile:
             _debug(f"key={key}, type_name={type_name}")
         else:
             key = s[0:first_eq_loc - 1].strip()
-            type_name = 'None'
+            # type_name = 'None'
+            type_name = None
             _debug(f"key={key}, type_name={type_name}")
 
         valid_toml = f"{key} = {value}"

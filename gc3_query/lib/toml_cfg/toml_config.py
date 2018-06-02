@@ -1,4 +1,5 @@
 from pathlib import Path
+from dataclasses import dataclass, make_dataclass
 import toml
 
 
