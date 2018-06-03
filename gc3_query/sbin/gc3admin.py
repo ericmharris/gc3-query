@@ -41,6 +41,26 @@ def cli(ctx, debug, help):
         ctx.gc3_config["logging_level"] = "WARNING"
 
 
+@cli.group(
+    invoke_without_command=False,
+    context_settings=CONTEXT_SETTINGS,
+    help="""
+Help message for gc3query setup_home_dir.
+""",
+)
+@click.version_option(__version__, "-v", "--version", message="%(version)s")
+@click.option("-d", "--debug", is_flag=True, help="Show additional debug information.")
+@click.option("-?", "-h", "--help", is_flag=True, help="Show this message and exit.")
+@click.pass_context
+def setup_home_dir(ctx, debug, help):
+    # named ctx.parent.gc3_config to other functions in setup_home_dir group.
+    ctx.gc3_config = {}
+    click.echo(f"Running setup_home_dir() with context: {ctx}")
+    if debug:
+        ctx.gc3_config["logging_level"] = "DEBUG"
+    else:
+        ctx.gc3_config["logging_level"] = "WARNING"
+
 # @cli.command(help="Help for util_hello", short_help="Short help for util_hello", epilog="Epilog for util_hello")
 # @click.option('--opt', '-o', help="Help for opt")
 # @click.pass_context
@@ -71,30 +91,24 @@ def setup_mongodb(
     sys.exit(0)
 
 
-@cli.command(help="Setup Kitty.", short_help="Setup Kitty.", epilog="Setup Mongo")
+@setup_home_dir.command(help="Setup Kitty.", short_help="Setup Kitty.", epilog="Setup Mongo")
 @click.option(
     "--kitty-bin-dir",
     "-b",
-    prompt="Please enter full path to Kitty bin directory",
-    help="Directory containing kitty executables, eg. kittyd.exe",
+    prompt="Please enter full path to kitty.exe",
+    help="Path to kitty.exe, eg. C:\ProgramData\chocolatey\lib\kitty\tools\kitty.exe",
 )
-@click.option("--listen-port", "-p", help="TCP port kittyd should listen on.", default=7117)
 @click.option("--force", "-f", help="Force, overwrite files if they exist.", default=False, is_flag=True)
 @click.pass_context
-def setup_kitty(
-    ctx: click.core.Context, kitty_bin_dir: str = None, listen_port: int = 7117, force: bool = False
-) -> None:
+def setup_kitty(ctx: click.core.Context, kitty_bin_dir: str = None, force: bool = False) -> None:
     click.echo(click.style(f"gc3admin.setup_kitty(): target_dir={kitty_bin_dir}", fg="green"))
     _warning(f"Test logging for gc3admin.")
     print(f"context: {ctx.parent.gc3_config}")
-    setup_kitty_db = SetupHomeKitty(ctx=ctx, kitty_bin_dir=kitty_bin_dir, listen_port=listen_port, force=force)
-
+    setup_kitty_db = SetupHomeKitty(ctx=ctx, kitty_bin_dir=kitty_bin_dir, force=force)
     sys.exit(0)
 
 
-
-
-@cli.command(help="Setup Cookiecutter.", short_help="Setup Cookiecutter.", epilog="Setup Mongo")
+@setup_home_dir.command(help="Setup Cookiecutter.", short_help="Setup Cookiecutter.", epilog="Setup Mongo")
 @click.option(
     "--cookiecutter-bin-dir",
     "-b",
@@ -110,6 +124,7 @@ def setup_cookiecutter(
     click.echo(click.style(f"gc3admin.setup_cookiecutter(): target_dir={cookiecutter_bin_dir}", fg="green"))
     _warning(f"Test logging for gc3admin.")
     print(f"context: {ctx.parent.gc3_config}")
-    setup_cookiecutter_db = SetupHomeCookiecutter(ctx=ctx, cookiecutter_bin_dir=cookiecutter_bin_dir, listen_port=listen_port, force=force)
+    setup_cookiecutter_db = SetupHomeCookiecutter(ctx=ctx, cookiecutter_bin_dir=cookiecutter_bin_dir,
+                                                  listen_port=listen_port, force=force)
 
     sys.exit(0)

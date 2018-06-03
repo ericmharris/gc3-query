@@ -65,19 +65,18 @@ class SetupHomeKitty:
 	kitty.ini
     [emharris@win10x64-emharris:master .kitty]# kitty.exe -convert-dir
     """
-    template_name: str = "basic_config"
-    template_path: str = str(BASE_DIR.joinpath(f"opt/templates/cookiecutter/kitty/{template_name}"))
+    template_family: str = "home_directory"
+    template_name: str = "kitty"
+    template_path: str = str(BASE_DIR.joinpath(f"opt/templates/cookiecutter/{template_family}/{template_name}"))
 
-    def __init__(
-        self, ctx: click.core.Context, kitty_bin_dir: str = None, listen_port: int = 7117, force: bool = False
-    ):
+    def __init__( self, ctx: click.core.Context,
+                  kitty_bin_dir: str = None, force: bool = False ):
         self.kitty_bin_dir = Path(kitty_bin_dir) if kitty_bin_dir else kitty_bin_dir
-        self.listen_port = listen_port
         self.force = force
-        self.user_inputs = self.gather_inputs(ctx=ctx, kitty_bin_dir=self.kitty_bin_dir, listen_port=listen_port)
+        self.user_inputs = self.gather_inputs(ctx=ctx, kitty_bin_dir=self.kitty_bin_dir)
         self.proj_dir = self.deploy(user_inputs=self.user_inputs, force=force)
 
-    def gather_inputs(self, ctx: click.core.Context, kitty_bin_dir: Path, listen_port: int):
+    def gather_inputs(self, ctx: click.core.Context, kitty_bin_dir: Path):
         user_inputs = {}
         cc_user_config = cookiecutter.config.get_user_config()
         cc_default_ctx = cc_user_config.get("default_context")
@@ -100,9 +99,9 @@ class SetupHomeKitty:
         if kitty_bin_dir is None:
             kitty_bin_dir_choco = Path(r"C:\ProgramData\chocolatey\lib\kitty\tools\kitty.exe")
             kitty_bin_dir_default = str(kitty_bin_dir_choco) if kitty_bin_dir_choco.exists() else r"C:\Program Files"
-            kitty_bin_dir = Path(
-                click.prompt("Please enter full path to Kitty bin directory", default=kitty_bin_dir_default, type=str)
-            )
+            kitty_bin_dir = Path( click.prompt("Please enter full path to Kitty bin directory",
+                                               default=kitty_bin_dir_default,
+                                               type=str))
         mongod_bin_name = "mongod.exe" if "win" in sys.platform else "mongod"
         mongod_bin = kitty_bin_dir.joinpath(mongod_bin_name)
         _debug(f"kitty_bin_dir={kitty_bin_dir}, mongod_bin={mongod_bin}")
