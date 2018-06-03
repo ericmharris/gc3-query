@@ -29,7 +29,7 @@ except:
 
 class ReadConfigFile(ConfigParser.RawConfigParser):
     """
-    based on ConfigParser from the standard library, modified to parse toml_cfg
+    based on ConfigParser from the standard library, modified to parse atoml_cfg
     files without sections.
     """
 
@@ -80,7 +80,7 @@ class ReadConfigFile(ConfigParser.RawConfigParser):
 
 
 class Utils(object):
-    # a general class to get toml_cfg values and general utility apis.
+    # a general class to get atoml_cfg values and general utility apis.
 
     DATA_TYPES = {
             str: 'string',
@@ -191,8 +191,8 @@ class Utils(object):
         self._teardown_params = ['-f', '--force']
         self._teardown_force_param_values = ['true', 'false']
 
-        # arguments for setup. toml_cfg payload
-        self._config_payload_params = ['-c', '--toml_cfg-payload']
+        # arguments for setup. atoml_cfg payload
+        self._config_payload_params = ['-c', '--atoml_cfg-payload']
         self._profile_based_region = 'region'
 
         # storage cloud endpoint
@@ -413,7 +413,7 @@ class Utils(object):
             return None
 
     def getValueFromConfigFile(self, value):
-        # reads the value from the toml_cfg value for specified key.
+        # reads the value from the atoml_cfg value for specified key.
         cp = self.readConfigFile()
         if cp and value.lower() in cp.getoptionslist() and cp.getoption(value.lower()) is not None and cp.getoption(value.lower()):
             return cp.getoption(value.lower())
@@ -422,7 +422,7 @@ class Utils(object):
             raise OpaasConfigError
 
     def getValueConfigFileOrReturnsNone(self, value):
-        # reads the value from the toml_cfg value for specified key.
+        # reads the value from the atoml_cfg value for specified key.
         cp = self.readConfigFile()
         if cp and value.lower() in cp.getoptionslist():
             return cp.getoption(value.lower())
@@ -430,7 +430,7 @@ class Utils(object):
             return None
 
     def writeValueToConfigFile(self, key, value):
-        # write the value to the toml_cfg file. either adds a value
+        # write the value to the atoml_cfg file. either adds a value
         # if not present or overrides the current value.
         cp = self.readConfigFile()
         cp.set(NOSECTION, key, value)
@@ -445,7 +445,7 @@ class Utils(object):
         user = self.getValueFromConfigFile(self.username)
         token = keyring.get_password(self.cli_keyring_name, user)
         if token is None:
-            # raise toml_cfg error when there is no token
+            # raise atoml_cfg error when there is no token
             raise OpaasConfigError
         return token
 
@@ -463,7 +463,7 @@ class Utils(object):
             os.remove(dir + "/" + f)
 
     def remove_config_dirs(self, dir_name):
-        # remove all the toml_cfg dirs while doing psm undo setup
+        # remove all the atoml_cfg dirs while doing psm undo setup
         try:
             for root, dirs, files in os.walk(dir_name, topdown=False):
                 for name in files:

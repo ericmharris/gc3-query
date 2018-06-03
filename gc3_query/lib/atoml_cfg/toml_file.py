@@ -1,13 +1,32 @@
 # -*- coding: utf-8 -*-
 
 """
-LIB_NAME.FILE_NAME
+gc3-query.toml_file    [6/1/2018 10:50 AM]
 ~~~~~~~~~~~~~~~~
 
-<DESCR SHORT>
+Single file containing TOML or ATOML
 
-<DESCR>
 """
+
+################################################################################
+## Standard Library Imports
+import sys, os
+
+################################################################################
+## Third-Party Imports
+from dataclasses import dataclass
+
+################################################################################
+## Project Imports
+from gc3_query.lib import *
+
+_debug, _info, _warning, _error, _critical = get_logging(name=__name__)
+
+
+
+
+
+
 from dataclasses import dataclass
 import inspect
 import types, typing
@@ -38,11 +57,11 @@ class AnnotatedTOML:
         return self.toml
 
 
-class TOMLFile:
+class ATomlFile:
 
     @classmethod
     def pre_process_line(cls, s: str) -> AnnotatedTOML:
-        """Returns TOML string with any type_name annotations in the LHS separated out.
+        """Returns valid TOML string with any type_name annotations in the LHS separated out.
 
         :param s:
         """
@@ -60,14 +79,14 @@ class TOMLFile:
         else:
             key = s[0:first_eq_loc - 1].strip()
             # type_name = 'None'
-            type_name = None
+            type_name = 'None'
             _debug(f"key={key}, type_name={type_name}")
 
         valid_toml = f"{key} = {value}"
         a_toml = AnnotatedTOML(input=s, key=key, type_name=type_name, value=value, toml=valid_toml)
         return a_toml
 
-    def __init__(self, path: Path):
+    def __init__(self, path: Path) -> None:
         """
 
         :type_name config_path: Path
@@ -91,3 +110,6 @@ class TOMLFile:
             _info(f"loaded {len(pp_lines)} lines from {self.path}")
 
         return pp_lines
+
+    def __str__(self):
+        return f"<{self._name}: path={self.path}>"

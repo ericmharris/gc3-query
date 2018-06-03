@@ -67,11 +67,11 @@ class SetupMongoDB:
         mongodb_setup_dir = gc3_var_dir.joinpath("mongodb")
         mongodb_data_dir = mongodb_setup_dir.joinpath("data")
         mongodb_logs_dir = mongodb_setup_dir.joinpath("logs")
-        mongodb_configs_dir = mongodb_setup_dir.joinpath("toml_cfg")
+        mongodb_configs_dir = mongodb_setup_dir.joinpath("atoml_cfg")
         mongodb_service_log_file = mongodb_logs_dir.joinpath("mongo-service.log")
         mongodb_cmd_log_file = mongodb_logs_dir.joinpath("mongo-cmd.log")
-        mongodb_service_config_file = mongodb_configs_dir.joinpath("mongo-service.toml_cfg")
-        mongodb_cmd_config_file = mongodb_configs_dir.joinpath("mongo-cmd.toml_cfg")
+        mongodb_service_config_file = mongodb_configs_dir.joinpath("mongo-service.atoml_cfg")
+        mongodb_cmd_config_file = mongodb_configs_dir.joinpath("mongo-cmd.atoml_cfg")
 
         _debug(f"gc3_var_dir={gc3_var_dir}, mongodb_setup_dir={mongodb_setup_dir}")
         user_inputs["gc3_var_dir"] = str(gc3_var_dir)
@@ -114,7 +114,7 @@ class SetupMongoDB:
                 if it exists
             :param output_dir: Where to output the generated project dir into.
             :param config_file: User configuration file path.
-            :param default_config: Use default values rather than a toml_cfg file.
+            :param default_config: Use default values rather than a atoml_cfg file.
             :param password: The password to use when extracting the repository.
     """
 

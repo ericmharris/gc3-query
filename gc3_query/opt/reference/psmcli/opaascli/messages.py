@@ -144,7 +144,7 @@ class ErrorMessages(object):
     OPAAS_CLI_UPGRADE_GENERIC_ERROR = "Response code: %s while trying to update the cli."
     OPAAS_CLI_UPGRADE_DOWNLOAD_KIT_LOCATION_ERROR = "The downloaded file location path is None."
     OPAAS_CLI_LOG_LEVEL_ERROR = "Please check the help by running 'psm log h'.\n"
-    OPAAS_CLI_CONFIG_FILE_READ_ERROR = "Error while reading value from toml_cfg file: %s"
+    OPAAS_CLI_CONFIG_FILE_READ_ERROR = "Error while reading value from atoml_cfg file: %s"
     OPAAS_CLI_TEAR_DOWN_CRED_ERROR = "Error while removing credentials: {0}"
     OPAAS_CLI_CONFIG_DOWNLOAD_CATALOG_ERROR = "Failed to execute psm setup while trying to download catalogs"
     OPASS_CLI_VERSION_NOT_FOUND_ERROR = "CLI header key missing in the response header"
@@ -182,7 +182,7 @@ class ErrorMessages(object):
     OPAAS_CLI_PROFILE_BASED_INVALID_ACCESS_TOKEN_ERR_DISPLAY = "Error: accessTokenServer cannot be empty. Please specify a value.\n"
     OPAAS_CLI_PROFILE_BASED_MISSING_VALUES_ERR_DISPLAY = "Error: missing one or more of the required values in the payload: %s, %s, %s\n"
     OPAAS_CLI_PROFILE_BASED_MISSING_VALUES_OAUTH_ERR_DISPLAY = "Error: missing one or more of the required values in the payload: %s, %s\n"
-    OPAAS_CLI_PROFILE_BASED_FILE_NOT_FOUND_ERR_DISPLAY = "usage: psm setup [parameters]\npsm: error: argument -c/--toml_cfg-payload: can't open '{msg}': [Errno 2] No such file or directory: '{msg}'\n"
+    OPAAS_CLI_PROFILE_BASED_FILE_NOT_FOUND_ERR_DISPLAY = "usage: psm setup [parameters]\npsm: error: argument -c/--atoml_cfg-payload: can't open '{msg}': [Errno 2] No such file or directory: '{msg}'\n"
 
 
     # Display error messages

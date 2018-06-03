@@ -4,7 +4,7 @@ import toml
 from pathlib import Path
 
 from gc3_query.lib import *
-from gc3_query.lib.toml_cfg.toml_file import TOMLFile
+from gc3_query.lib.atoml_cfg.toml_file import ATomlFile
 
 from gc3_query.lib.models.gc3_meta_data import GC3MetaData
 
@@ -45,15 +45,15 @@ def pre_process_line_setup() -> List[str]:
 def test_toml_file_with_valid(pre_process_line_setup):
     valid_toml, annotated_toml, one_off_cases_toml = pre_process_line_setup
     for s in valid_toml:
-        pre_proc_line = TOMLFile.pre_process_line(s)
-        assert pre_proc_line.type_name is None
+        pre_proc_line = ATomlFile.pre_process_line(s)
+        assert pre_proc_line.type_name=='None'
         assert pre_proc_line.input in valid_toml
 
 
 def test_with_annotations(pre_process_line_setup):
     valid_toml, annotated_toml, one_off_cases_toml = pre_process_line_setup
     for s, type in annotated_toml.items():
-        pre_proc_line = TOMLFile.pre_process_line(s)
+        pre_proc_line = ATomlFile.pre_process_line(s)
         assert pre_proc_line.type_name in s
         assert pre_proc_line.type_name == type
         assert pre_proc_line.type_name not in pre_proc_line.toml
@@ -62,7 +62,7 @@ def test_with_annotations(pre_process_line_setup):
 def test_one_off_cases_toml(pre_process_line_setup):
     valid_toml, annotated_toml, one_off_cases_toml = pre_process_line_setup
     for s, type in one_off_cases_toml.items():
-        pre_proc_line = TOMLFile.pre_process_line(s)
+        pre_proc_line = ATomlFile.pre_process_line(s)
         assert pre_proc_line.type_name == type
 
 
@@ -77,6 +77,6 @@ def test_file_load_01(test_load_file_setup):
     config_dir = test_load_file_setup
     test_toml_file: Path = config_dir.joinpath('user_info_basic.toml')
     assert test_toml_file.exists()
-    tf = TOMLFile(path=test_toml_file)
+    tf = ATomlFile(path=test_toml_file)
     assert True
     assert tf is not None

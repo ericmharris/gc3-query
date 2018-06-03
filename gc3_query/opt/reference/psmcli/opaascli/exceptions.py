@@ -27,7 +27,7 @@ class DataNotFoundError(OPCError):
     errMsg = "No data found."
 
 class OpaasConfigError(OPCError):
-    # if any data is missing in the toml_cfg file.
+    # if any data is missing in the atoml_cfg file.
     errMsg = "Please configure the psm client using the command 'psm setup'."
 
 class OpaasDownloadFileError(OPCError):
