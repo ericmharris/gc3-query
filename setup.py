@@ -51,6 +51,7 @@ requirements = [
     'jinja2-time',
     'Logbook',
     'msgpack',
+    'httpie',
     # 'ASDF',
     # 'ASDF',
     'sortedcontainers',
