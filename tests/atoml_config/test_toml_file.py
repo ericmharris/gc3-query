@@ -77,6 +77,6 @@ def test_file_load_01(test_load_file_setup):
     config_dir = test_load_file_setup
     test_toml_file: Path = config_dir.joinpath('user_info_basic.toml')
     assert test_toml_file.exists()
-    tf = ATomlFile(path=test_toml_file)
+    tf = ATomlFile(file_path=test_toml_file)
     assert True
     assert tf is not None

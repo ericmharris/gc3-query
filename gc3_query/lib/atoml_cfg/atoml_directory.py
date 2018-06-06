@@ -32,6 +32,7 @@ class ATomlDirectory:
         self.path = path.resolve()
         self.atoml_files = self._read_toml_files(self.path)
         self.atoml_directories: List[ATomlDirectory] = []
+        self.toml_directories = self._load_toml_directory(self.path)
 
 
     def _read_toml_files(self, path: Path) -> List[ATomlFile]:
@@ -45,3 +46,15 @@ class ATomlDirectory:
         return toml_files
 
 
+    def _load_toml_directory(self, path: Path) -> List["ATomlDirectory"]:
+        toml_directories = []
+        for p in path.iterdir():
+            if p.name.startswith('_') or p.name.startswith('.'):
+                _debug(f"Skipping directory {p}, starts with [._]")
+                continue
+            if not p.is_dir():
+                _debug(f"Skipping {p}, not a directory.")
+                continue
+            _debug(f"Loading TOMLDirectory: {p}")
+            toml_directories.append(ATomlDirectory(p))
+        return toml_directories

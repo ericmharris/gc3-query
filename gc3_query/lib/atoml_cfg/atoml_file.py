@@ -86,13 +86,13 @@ class ATomlFile:
         a_toml = AnnotatedTOML(input=s, key=key, type_name=type_name, value=value, toml=valid_toml)
         return a_toml
 
-    def __init__(self, path: Path) -> None:
+    def __init__(self, file_path: Path) -> None:
         """
 
         :type_name config_path: Path
         """
         self._name = self.__class__.__name__
-        self.path = path.resolve()
+        self.path = file_path.resolve()
         self._lines = self.load_file(self.path)
         self.toml_text_lines = [l.toml for l in self._lines]
         self.toml_text = '\n'.join(self.toml_text_lines)
