@@ -111,12 +111,12 @@ class RequestExecutor():
         if content_type is not None and content_type != 'multipart/form-data':
             headers['Content-Type'] = content_type
 
-        # path, query and body queryParams
+        # file_path, query and body queryParams
         for param, value in reqParamHandler.cmd_params_values.items():
             paramType = reqParamHandler.param_dict[param]['paramType']
             type = reqParamHandler.param_dict[param]['type_name']
-            if paramType == 'path':
-                # BUG FIX: 27474210. Added quote to encode the path params.
+            if paramType == 'file_path':
+                # BUG FIX: 27474210. Added quote to encode the file_path params.
                 uri = uri.replace('{' + param + '}', quote(value))
             elif paramType == 'query':
                 queryParams[param] = value

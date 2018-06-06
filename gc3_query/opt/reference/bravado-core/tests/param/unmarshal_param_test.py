@@ -70,7 +70,7 @@ def boolean_param_spec():
 
 
 def test_path_string(empty_swagger_spec, param_spec):
-    param_spec['in'] = 'path'
+    param_spec['in'] = 'file_path'
     param = Param(empty_swagger_spec, Mock(spec=Operation), param_spec)
     request = Mock(spec=IncomingRequest, path={'petId': '34'})
     assert 34 == unmarshal_param(param, request)

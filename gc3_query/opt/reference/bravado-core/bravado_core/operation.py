@@ -19,7 +19,7 @@ def _sanitize_operation_id(operation_id, http_method, path_name):
     # Handle crazy corner cases where someone explictily sets operation
     # id a value that gets sanitized down to an empty string
     if len(sanitized_operation_id) == 0:
-        # build based on the http method and request path
+        # build based on the http method and request file_path
         sanitized_operation_id = sanitize_name(http_method + '_' + path_name)
 
     # Handle super crazy corner case where even ``http_method + '_' + path_name``
@@ -46,7 +46,7 @@ class Operation(object):
         """Swagger operation defined by a unique (http_method, path_name) pair.
 
         :type_name swagger_spec: :class:`Spec`
-        :param path_name: path of the operation. e.g. /pet/{petId}
+        :param path_name: file_path of the operation. e.g. /pet/{petId}
         :param http_method: get/put/post/delete/etc
         :param op_spec: operation specification in dict form
         """
@@ -123,7 +123,7 @@ class Operation(object):
         Creates a :class:`Operation` and builds up its list of :class:`Param` s
 
         :param swagger_spec: :class:`Spec`
-        :param path_name: path of the operation. e.g. /pet/{petId}
+        :param path_name: file_path of the operation. e.g. /pet/{petId}
         :param http_method: get/put/post/delete/etc
         :param op_spec: operation specification in dict form
         :rtype: :class:`Operation`
@@ -152,7 +152,7 @@ class Operation(object):
 
 def build_params(op):
     """Builds up the list of this operation's parameters taking into account
-    parameters that may be available for this operation's path component.
+    parameters that may be available for this operation's file_path component.
 
     :type_name op: :class:`bravado_core.operation.Operation`
 
@@ -179,14 +179,14 @@ def build_params(op):
         params[sanitized_name] = param
         params.add_alias(param.name, sanitized_name)
 
-    # Security parameters cannot override and been overridden by operation or path objects
+    # Security parameters cannot override and been overridden by operation or file_path objects
     new_params = {}
     new_param_aliases = {}
     for parameter in op.security_parameters:
         param_name = sanitize_name(parameter.name)
         if param_name in params:
             raise SwaggerSchemaError(
-                "'{0}' security parameter is overriding a parameter defined in operation or path object".format(
+                "'{0}' security parameter is overriding a parameter defined in operation or file_path object".format(
                     parameter.name,
                 )
             )

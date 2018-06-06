@@ -14,7 +14,7 @@ log = logging.getLogger(__name__)
 
 def convert_path_to_resource(path_name):
     """
-    Given a path name (#/paths/{path_name}) try to convert it into a resource
+    Given a file_path name (#/paths/{path_name}) try to convert it into a resource
     name on a best effort basis when an operation has no tags.
 
     Examples:
@@ -24,11 +24,11 @@ def convert_path_to_resource(path_name):
       /pet/{petId}        ->  pet
 
     :param path_name: #/paths/{path_name} from a swagger spec
-    :return: name of the resource to which operations under the given path
+    :return: name of the resource to which operations under the given file_path
         should be associated with.
     """
     tokens = path_name.lstrip('/').split('/')
-    err_msg = "Could not extract resource name from path {0}"
+    err_msg = "Could not extract resource name from file_path {0}"
     resource_name = tokens[0]
     if not resource_name:
         raise SwaggerMappingError(err_msg.format(path_name))
@@ -46,7 +46,7 @@ def build_resources(swagger_spec):
     # - If an operation has multiple tags, it will be associated with multiple
     #   resources!
     # - If an operation has no tags, its resource name will be derived from its
-    #   path
+    #   file_path
     # key = tag_name   value = { operation_id : Operation }
     tag_to_ops = defaultdict(dict)
     deref = swagger_spec.deref
@@ -57,7 +57,7 @@ def build_resources(swagger_spec):
         for http_method, op_spec in iteritems(path_spec):
             op_spec = deref(op_spec)
             # vendor extensions and parameters that are shared across all
-            # operations for a given path are also defined at this level - we
+            # operations for a given file_path are also defined at this level - we
             # just need to skip over them.
             if http_method.startswith('x-') or http_method == 'parameters':
                 continue

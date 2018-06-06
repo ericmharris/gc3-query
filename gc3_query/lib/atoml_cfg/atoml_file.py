@@ -66,18 +66,22 @@ class ATomlFile:
         :param s:
         """
         first_eq_loc = s.find('=')
-        value = s[first_eq_loc + 1:]
-        _debug(f"s={s}, first_eq_loc={first_eq_loc}, value={value}")
         if first_eq_loc == -1:
             return AnnotatedTOML(input=s, key='None', type_name='None', value='None', toml=s)
 
-        if ':' in s[0:first_eq_loc]:
-            parts = [p.strip() for p in s[0:first_eq_loc].split(":")]
+        value = s[first_eq_loc + 1:]
+        key = s[0:first_eq_loc - 1].strip()
+        _debug(f"s={s}, first_eq_loc={first_eq_loc}, key={key}, value={value}")
+
+        if "'" in key:
+            key = key.replace("'", "")
+        if ':' in key:
+            parts = [p.strip() for p in key.split(":")]
             assert len(parts) == 2
             key, type_name = parts[0], parts[1]
             _debug(f"key={key}, type_name={type_name}")
         else:
-            key = s[0:first_eq_loc - 1].strip()
+            # key = s[0:first_eq_loc - 1].strip()
             # type_name = 'None'
             type_name = 'None'
             _debug(f"key={key}, type_name={type_name}")
@@ -92,24 +96,31 @@ class ATomlFile:
         :type_name config_path: Path
         """
         self._name = self.__class__.__name__
-        self.path = file_path.resolve()
-        self._lines = self.load_file(self.path)
+        self.file_path = file_path.resolve()
+        self.file_name = self.file_path.name
+        self._lines = self.load_file(self.file_path)
         self.toml_text_lines = [l.toml for l in self._lines]
         self.toml_text = '\n'.join(self.toml_text_lines)
         self.toml = toml.loads(self.toml_text)
 
+        _debug(f"{self._name} loaded with {len(self.toml_text_lines)} lines.")
+
     def load_file(self, path: Path) -> List[AnnotatedTOML]:
 
         if not path.exists():
-            raise RuntimeError(f"{self._name} created with file that does not exist: {self.path}")
+            raise RuntimeError(f"{self._name} created with file that does not exist: {self.file_path}")
         if not path.is_file():
-            raise RuntimeError(f"{self._name} created with something other than a file (eg. directory): {self.path}")
+            raise RuntimeError(f"{self._name} created with something other than a file (eg. directory): {self.file_path}")
         with path.open() as fd:
             _lines = fd.readlines()
             pp_lines = [self.pre_process_line(l) for l in _lines]
-            _info(f"loaded {len(pp_lines)} lines from {self.path}")
+            _info(f"loaded {len(pp_lines)} lines from {self.file_path}")
 
         return pp_lines
 
     def __str__(self):
-        return f"<{self._name}: path={self.path}>"
+        return f"<{self._name}: file_path={self.file_path}>"
+
+
+    def __eq__(self, other: 'ATomlFile') -> bool:
+        return self.file_path == other.file_path

@@ -100,7 +100,7 @@ print(f'\njson_data: {json_data}')
 # print(f'spec_file_path exists: {spec_file_path.exists()}, spec_file_path: {spec_file_path}')
 #
 # #### http://bravado.readthedocs.io/en/latest/advanced.html#loading-swagger-json-by-file-path
-# ## needed for: client = SwaggerClient.from_url('file:///some/path/swagger.json')
+# ## needed for: client = SwaggerClient.from_url('file:///some/file_path/swagger.json')
 # spec_file_uri = f"file:///{spec_file_path}"
 # print(f'spec_file_uri: {spec_file_path}')
 #
@@ -304,7 +304,7 @@ print(f"Operation {operation_id} finished.\n")
 #         "produces": ["application/oracle-compute-v3+directory+json"],
 #         "parameters": [{
 #             "name": "container",
-#             "in": "path",
+#             "in": "file_path",
 #             "description": "Specify <code>/Compute-<i>identityDomain</i>/<i>user</i>/</code> to retrieve the names of objects that you can access. Specify <code>/Compute-<i>identityDomain</i>/</code> to retrieve the names of containers that contain objects that you can access.",
 #             "required": true,
 #             "type_name": "string"
@@ -400,7 +400,7 @@ print(f"Operation {operation_id} finished.\n")
 #         "produces": ["application/oracle-compute-v3+json"],
 #         "parameters": [{
 #             "name": "container",
-#             "in": "path",
+#             "in": "file_path",
 #             "description": "<code>/Compute-<em>identity_domain</em>/<em>user</em></code> or <p><code>/Compute-<em>identity_domain</em></code>",
 #             "required": true,
 #             "type_name": "string"
@@ -678,7 +678,7 @@ print(f"Operation {operation_id} finished.")
 #         "produces": ["application/oracle-compute-v3+json"],
 #         "parameters": [{
 #             "name": "name",
-#             "in": "path",
+#             "in": "file_path",
 #             "description": "<p>Multipart name of the object.",
 #             "required": true,
 #             "type_name": "string"

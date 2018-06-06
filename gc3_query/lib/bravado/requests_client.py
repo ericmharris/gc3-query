@@ -64,17 +64,17 @@ class OCRequestsClient(RequestsClient):
         """
         _debug(f"input request_params={request_params}")
         url = request_params.get("url", None)
-        # ParseResult(scheme='https', netloc='compute.uscom-central-1.oraclecloud.com', path='/instance/Compute-587626604%2Feric.harris%40oracle.com%2F', params='', query='', fragment='')
+        # ParseResult(scheme='https', netloc='compute.uscom-central-1.oraclecloud.com', file_path='/instance/Compute-587626604%2Feric.harris%40oracle.com%2F', params='', query='', fragment='')
         parsed_url: ParseResult = urlparse3(url)
         unqoted_path = unquote_plus(parsed_url.path)
         requoted_path = quote(unqoted_path)
         parsed_url_d = parsed_url._asdict()
 
         ### https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604/eric.harris%40oracle.com/
-        # parsed_url_d['path'] = requoted_path
+        # parsed_url_d['file_path'] = requoted_path
         # new_url = urlunparse(parsed_url_d.values())
         ### https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604/eric.harris@oracle.com/
-        parsed_url_d["path"] = unqoted_path
+        parsed_url_d["file_path"] = unqoted_path
         new_url = urlunparse(parsed_url_d.values())
 
         request_params["url"] = new_url

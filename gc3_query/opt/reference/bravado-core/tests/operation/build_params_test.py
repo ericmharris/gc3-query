@@ -15,7 +15,7 @@ def test_no_params(minimal_swagger_dict):
     }
     path_spec = {
         'get': op_spec
-        # path params would go here
+        # file_path params would go here
     }
     minimal_swagger_dict['paths']['/pets'] = path_spec
     swagger_spec = Spec(minimal_swagger_dict)
@@ -42,7 +42,7 @@ def test_op_param_only(minimal_swagger_dict):
     }
     path_spec = {
         'get': op_spec,
-        # path params would go here
+        # file_path params would go here
     }
     minimal_swagger_dict['paths']['/pets'] = path_spec
     swagger_spec = Spec(minimal_swagger_dict)

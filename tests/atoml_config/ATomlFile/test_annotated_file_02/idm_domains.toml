@@ -1,0 +1,60 @@
+[idm_domains]
+first_name = 'Eric'
+last_name = 'Harris'
+email = 'eric.harris@oracle.com'
+cloud_username = 'eric.harris@oracle.com'
+os_username = 'eharris'
+home_directory = 'C:\Users\{{user.os_username}}'
+password_storage = 'keyring'
+default_idm_domain = 'gc3pilot'
+
+
+[idm_domains._meta]
+title = 'IDM Domains'
+file = 'idm_domains.toml'
+decription = 'Oracle Cloud IDM domains used with the GC3 project.'
+dependencies = ''
+default_type = 'str'
+
+
+[idm_domains.gc3pilot]
+name = 'gc3pilot'
+id = 'gc3pilot'
+service_instance_id = 575988287
+subscription_id = 1480019
+csi_number = 21204068
+region = 'us'
+data_center = 'usdc2'
+
+#### These two lines throw an exception from toml
+# 'rest_url:url' = 'https://compute.uscom-central-1.oraclecloud.com/'
+'rest_url:url' = 'https://compute.uscom-central-1.oraclecloud.com/'
+# 'sftp_url:url' = 'sftp://sftp.us2.cloud.oracle.com:22'
+'sftp_url:url' = 'sftp://sftp.us2.cloud.oracle.com:22'
+
+multiple_sites = true
+[idm_domains.gc3pilot.sites.uscom-central-1]
+name = 'uscom-central-1'
+data_center ='usdc2'
+rest_endpoint = 'https://compute.uscom-central-1.oraclecloud.com/'
+[idm_domains.gc3pilot.sites.us006_z70]
+name = 'us006_z70'
+data_center = 'usdc6'
+rest_endpoint = 'https://api-z70.compute.us6.oraclecloud.com/'
+
+
+[idm_domains.gc30003]
+name = 'gc30003'
+id = 'gc30003'
+service_instance_id = 587626604
+subscription_id = 1586698
+csi_number = 21361344
+region = 'us'
+data_center = 'usdc2'
+multiple_sites = false
+'rest_url:url' = 'https://compute.uscom-central-1.oraclecloud.com/'
+'sftp_url:url' = 'sftp://sftp.us2.cloud.oracle.com:22'
+[idm_domains.gc30003.sites.uscom-central-1]
+name = 'uscom-central-1'
+data_center ='usdc2'
+rest_endpoint = 'https://compute.uscom-central-1.oraclecloud.com/'

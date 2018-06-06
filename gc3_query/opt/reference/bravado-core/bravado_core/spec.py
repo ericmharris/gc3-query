@@ -294,11 +294,11 @@ class Spec(object):
 
     def get_op_for_request(self, http_method, path_pattern):
         """Return the Swagger operation for the passed in request http method
-        and path pattern. Makes it really easy for server-side implementations
+        and file_path pattern. Makes it really easy for server-side implementations
         to map incoming requests to the Swagger spec.
 
         :param http_method: http method of the request
-        :param path_pattern: request path pattern. e.g. /foo/{bar}/baz/{id}
+        :param path_pattern: request file_path pattern. e.g. /foo/{bar}/baz/{id}
 
         :returns: the matching operation or None if a match couldn't be found
         :rtype: :class:`bravado_core.operation.Operation`
@@ -475,13 +475,13 @@ def build_api_serving_url(spec_dict, origin_url=None, preferred_scheme=None):
         The host (name or ip) serving the API. This MUST be the host only and
         does not include the scheme nor sub-paths. It MAY include a port.
         If the host is not included, the host serving the documentation is to
-        be used (including the port). The host does not support path templating.
+        be used (including the port). The host does not support file_path templating.
 
     - basePath string
-        The base path on which the API is served, which is relative to the
+        The base file_path on which the API is served, which is relative to the
         host. If it is not included, the API is served directly under the host.
         The value MUST start with a leading slash (/). The basePath does not
-        support path templating.
+        support file_path templating.
 
     - schemes [string]
         The transfer protocol of the API. Values MUST be from the list:
@@ -585,7 +585,7 @@ def post_process_spec(swagger_spec, on_container_callbacks):
     def descend(fragment, path):
         """
         :param fragment: node in spec_dict
-        :param path: list of strings that form the current path to fragment
+        :param path: list of strings that form the current file_path to fragment
         """
         path = path or []
 

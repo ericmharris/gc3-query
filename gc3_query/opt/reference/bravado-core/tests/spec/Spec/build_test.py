@@ -157,8 +157,8 @@ def test_build_raises_in_case_of_duplicated_models_in_definitions(minimal_swagge
         Spec.from_dict(minimal_swagger_dict)
 
     expected_exception_string = (
-        'Duplicate "model" model found at path {new_path}. '
-        'Original "model" model at path {old_path}'.format(
+        'Duplicate "model" model found at file_path {new_path}. '
+        'Original "model" model at file_path {old_path}'.format(
             new_path=['definitions', 'model'],
             old_path=['definitions', 'duplicated_model'],
         )
@@ -200,7 +200,7 @@ def test_build_raises_in_case_of_duplicated_models_in_paths(minimal_swagger_dict
 
     # NOTE: the exception depends on the descending order
     expected_exception_string = (
-        'Identified duplicated model: model_name "{mod_name}", path: {path}.\n'
+        'Identified duplicated model: model_name "{mod_name}", file_path: {path}.\n'
         '    Known model spec: "{known_model}"\n'
         '    New model spec: "{new_model}"\n'
         'TIP: enforce different model naming by using {MODEL_MARKER}'.format(
@@ -247,7 +247,7 @@ def test_build_raises_in_case_of_duplicated_models_between_paths_and_definitions
 
     # NOTE: the exception depends on the descending order
     expected_exception_string = (
-        'Identified duplicated model: model_name "{mod_name}", path: {path}.\n'
+        'Identified duplicated model: model_name "{mod_name}", file_path: {path}.\n'
         '    Known model spec: "{known_model}"\n'
         '    New model spec: "{new_model}"\n'
         'TIP: enforce different model naming by using {MODEL_MARKER}'.format(

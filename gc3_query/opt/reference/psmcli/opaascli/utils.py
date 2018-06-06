@@ -271,17 +271,17 @@ class Utils(object):
 
     @property
     def conf_file_name(self):
-        # concatenate to give the full path as a string.
+        # concatenate to give the full file_path as a string.
         return self.opcDir + self._confFile
 
     @property
     def data_file_name(self):
-        # concatenate to give the full path as a string.
+        # concatenate to give the full file_path as a string.
         return self.opcDir + self._dataFile
 
     @property
     def log_file_name(self):
-        # concatenate to give the full path as a string.
+        # concatenate to give the full file_path as a string.
         return self.opc_log_dir + self._logFile
 
     @property

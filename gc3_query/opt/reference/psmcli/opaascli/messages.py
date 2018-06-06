@@ -142,7 +142,7 @@ class ErrorMessages(object):
     OPAAS_CLI_UPGRADE_PIP_ERROR = "Exception while updating using pip: %s"
     OPAAS_CLI_NO_VERSION_FOUND_ERROR ='No client and catalog version found in the response.'
     OPAAS_CLI_UPGRADE_GENERIC_ERROR = "Response code: %s while trying to update the cli."
-    OPAAS_CLI_UPGRADE_DOWNLOAD_KIT_LOCATION_ERROR = "The downloaded file location path is None."
+    OPAAS_CLI_UPGRADE_DOWNLOAD_KIT_LOCATION_ERROR = "The downloaded file location file_path is None."
     OPAAS_CLI_LOG_LEVEL_ERROR = "Please check the help by running 'psm log h'.\n"
     OPAAS_CLI_CONFIG_FILE_READ_ERROR = "Error while reading value from atoml_cfg file: %s"
     OPAAS_CLI_TEAR_DOWN_CRED_ERROR = "Error while removing credentials: {0}"

@@ -89,7 +89,7 @@ def test_required_query_array_with_no_value(empty_swagger_spec,
 
 
 def test_path_integer(empty_swagger_spec, param_spec):
-    param_spec['in'] = 'path'
+    param_spec['in'] = 'file_path'
     param = Param(empty_swagger_spec, Mock(spec=Operation), param_spec)
     request = {'url': '/pet/{petId}'}
     marshal_param(param, 34, request)
@@ -106,7 +106,7 @@ def test_path_integer(empty_swagger_spec, param_spec):
     ]
 )
 def test_path_string(empty_swagger_spec, param_spec, string_param, expected_path):
-    param_spec['in'] = 'path'
+    param_spec['in'] = 'file_path'
     param_spec['type_name'] = 'string'
     del param_spec['format']
     param = Param(empty_swagger_spec, Mock(spec=Operation), param_spec)

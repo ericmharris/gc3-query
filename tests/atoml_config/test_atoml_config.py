@@ -15,7 +15,7 @@ TEST_BASE_DIR: Path = Path(__file__).parent.joinpath("ATomlConfig")
 
 def test_no_input_throws_error():
     with pytest.raises(ATomlConfigError) as e:
-        atc = ATomlConfig(atoml_files=None, atoml_dir=None)
+        atc = ATomlConfig(atoml_file_paths=None, atoml_dir_path=None)
 
 
 
@@ -23,15 +23,15 @@ def test_no_input_throws_error():
 def test_load_atoml_settings_file_present():
     config_dir = TEST_BASE_DIR.joinpath("load_atoml_settings_file/present")
     atoml_settings_file = config_dir.joinpath('__init__.toml')
-    atc = ATomlConfig(atoml_dir=config_dir)
+    atc = ATomlConfig(atoml_dir_path=config_dir)
     assert config_dir.exists()
     assert atoml_settings_file.exists()
-    assert atc._atoml_settings_file.path==atoml_settings_file
+    assert atc._atoml_settings_file.file_path == atoml_settings_file
 
 def test_load_atoml_settings_file_absent():
     config_dir = TEST_BASE_DIR.joinpath("load_atoml_settings_file/absent")
     atoml_settings_file = config_dir.joinpath('__init__.toml')
-    atc = ATomlConfig(atoml_dir=config_dir)
+    atc = ATomlConfig(atoml_dir_path=config_dir)
     assert config_dir.exists()
     assert not atoml_settings_file.exists()
     assert atc._atoml_settings_file==None
@@ -41,11 +41,28 @@ def test_load_atoml_settings_file_absent():
 def load_atoml_files_individually_setup() -> List[str]:
     config_dir = TEST_BASE_DIR.joinpath("load_atoml_files/test_load_atoml_files_individually")
     assert config_dir.exists()
-
     yield (config_dir)
 
 def test_load_atoml_files_individually(load_atoml_files_individually_setup):
     config_dir = load_atoml_files_individually_setup
+    at_files = config_dir.glob('*.toml')
+    atc = ATomlConfig(atoml_file_paths=at_files)
+    assert len(atc.atoml_files) > 1
+    assert 'title' in atc.toml
+    assert 'rest_url' in atc.toml['idm_domains']['gc3pilot']
+
+
+def test_file_names(load_atoml_files_individually_setup):
+    config_dir = load_atoml_files_individually_setup
+    at_files = config_dir.glob('*.toml')
+    atc = ATomlConfig(atoml_file_paths=at_files)
+    assert '__init__.toml' in atc.file_names
+    assert 'user_info.toml' in atc.file_names
+
+
+def test_load_atoml_files_from_dir():
+    assert False
+
 
 
 # def test_load_atoml_files_from_directory():

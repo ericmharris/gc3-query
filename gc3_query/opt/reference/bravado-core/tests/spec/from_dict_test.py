@@ -51,7 +51,7 @@ def test_complicated_refs():
 
 
 def test_ref_to_external_path_with_ref_to_local_model():
-    # Test that an an external ref to a path (in swagger.json) which contains
+    # Test that an an external ref to a file_path (in swagger.json) which contains
     # a local ref to a model (in pet.json) works as expected:
     # - model type_name for Pet is created
     # - de-reffed spec_dict contains 'x-model' annotations

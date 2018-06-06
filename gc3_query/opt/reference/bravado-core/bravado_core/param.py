@@ -83,7 +83,7 @@ def get_param_type_spec(param):
     :raises: SwaggerMappingError when param location is not valid
     """
     location = param.location
-    if location in ('path', 'query', 'header', 'formData'):
+    if location in ('file_path', 'query', 'header', 'formData'):
         return param.param_spec
     if location == 'body':
         return param.swagger_spec.deref(param.param_spec).get('schema')
@@ -97,7 +97,7 @@ def marshal_param(param, value, request):
     place it in the proper request destination.
 
     Destination is one of:
-        - path - can accept primitive and array of primitive types
+        - file_path - can accept primitive and array of primitive types
         - query - can accept primitive and array of primitive types
         - header - can accept primitive and array of primitive types
         - body - can accept any type_name
@@ -127,7 +127,7 @@ def marshal_param(param, value, request):
     if param_type == 'array' and location != 'body':
         value = marshal_collection_format(swagger_spec, param_spec, value)
 
-    if location == 'path':
+    if location == 'file_path':
         token = u'{%s}' % param.name
         quoted_value = quote_plus(six.text_type(value).encode('utf8'), safe=',')
         request['url'] = request['url'].replace(token, quoted_value)
@@ -165,7 +165,7 @@ def unmarshal_param(param, request):
 
     default_value = schema.get_default(swagger_spec, param_spec)
 
-    if location == 'path':
+    if location == 'file_path':
         raw_value = cast_param(request.path.get(param.name, None))
     elif location == 'query':
         raw_value = cast_param(request.query.get(param.name, default_value))

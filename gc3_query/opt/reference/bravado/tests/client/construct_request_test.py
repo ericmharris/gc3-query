@@ -73,7 +73,7 @@ def test_with_not_string_headers(
     # To unmarshall a request bravado-core needs the request to be wrapped
     # by an object with a specific list of attributes
     request_object = type('IncomingRequest', (IncomingRequest,), {
-        'path': {'petId': petId},
+        'file_path': {'petId': petId},
         'query': {},
         'form': {},
         'headers': request['headers'],

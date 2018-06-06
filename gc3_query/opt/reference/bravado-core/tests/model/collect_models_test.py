@@ -85,7 +85,7 @@ def test_raise_error_if_duplicate_models_are_identified(minimal_swagger_dict, pe
         )
 
     expected_lines = [
-        'Identified duplicated model: model_name "{mod_name}", path: {path}.'.format(mod_name=model_name, path=path),
+        'Identified duplicated model: model_name "{mod_name}", file_path: {path}.'.format(mod_name=model_name, path=path),
         'Known model spec: "{}"',
         'New model spec: "{pet_model_spec}"'.format(pet_model_spec=pet_model_spec),
         'TIP: enforce different model naming by using {MODEL_MARKER}'.format(MODEL_MARKER='x-model'),

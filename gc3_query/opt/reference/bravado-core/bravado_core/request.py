@@ -13,7 +13,7 @@ class IncomingRequest(object):
     Subclasses are responsible for providing attrs for __required_attrs__.
     """
     __required_attrs__ = [
-        'path',     # dict of URL path parameters
+        'file_path',     # dict of URL file_path parameters
         'query',    # dict of parameters from the query string
         'form',     # dict of form parameters from a POST
         'headers',  # dict of request headers

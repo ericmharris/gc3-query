@@ -41,14 +41,14 @@ def _register_visited_model(path, model_spec, model_name, visited_models, is_ble
     """
     Registers a model that has been tagged by a callback method.
 
-    :param path: list of path segments to the key
-    :type_name path: list
+    :param path: list of file_path segments to the key
+    :type_name file_path: list
     :param model_spec: swagger specification of the model
     :type_name model_spec: dict
     :param model_name: name of the model to register
     :type_name model_name: str
     :param visited_models: models that have already been identified
-    :type_name visited_models: dict (k,v) == (model_name, path)
+    :type_name visited_models: dict (k,v) == (model_name, file_path)
     :param is_blessed: flag that determines if the model name has been obtained by blessing
     :type_name is_blessed: bool
     :type_name swagger_spec: :class:`bravado_core.spec.Spec`
@@ -57,7 +57,7 @@ def _register_visited_model(path, model_spec, model_name, visited_models, is_ble
     if model_name in visited_models:
         return _raise_or_warn_duplicated_model(
             swagger_spec=swagger_spec,
-            message='Duplicate "{0}" model found at path {1}. Original "{0}" model at path {2}'.format(
+            message='Duplicate "{0}" model found at file_path {1}. Original "{0}" model at file_path {2}'.format(
                 model_name, path, visited_models[model_name],
             ),
         )
@@ -86,8 +86,8 @@ def tag_models(container, key, path, visited_models, swagger_spec):
 
     :param container: container being visited
     :param key: attribute in container being visited as a string
-    :param path: list of path segments to the key
-    :type_name visited_models: dict (k,v) == (model_name, path)
+    :param path: list of file_path segments to the key
+    :type_name visited_models: dict (k,v) == (model_name, file_path)
     :type_name swagger_spec: :class:`bravado_core.spec.Spec`
     """
     if len(path) < 2 or path[-2] != 'definitions':
@@ -129,8 +129,8 @@ def bless_models(container, key, path, visited_models, swagger_spec):
 
     :param container: container being visited
     :param key: attribute in container being visited as a string
-    :param path: list of path segments to the key
-    :type_name visited_models: dict (k,v) == (model_name, path)
+    :param path: list of file_path segments to the key
+    :type_name visited_models: dict (k,v) == (model_name, file_path)
     :type_name swagger_spec: :class:`bravado_core.spec.Spec`
     """
     if not is_dict_like(container):
@@ -176,7 +176,7 @@ def collect_models(container, key, path, models, swagger_spec):
 
     :param container: container being visited
     :param key: attribute in container being visited as a string
-    :param path: list of path segments to the key
+    :param path: list of file_path segments to the key
     :param models: created model types are placed here
     :type_name swagger_spec: :class:`bravado_core.spec.Spec`
     """
@@ -196,7 +196,7 @@ def collect_models(container, key, path, models, swagger_spec):
         ):
             return _raise_or_warn_duplicated_model(
                 swagger_spec=swagger_spec,
-                message='Identified duplicated model: model_name "{model_name}", path: {path}.\n'
+                message='Identified duplicated model: model_name "{model_name}", file_path: {path}.\n'
                 '    Known model spec: "{model_type._model_spec}"\n'
                 '    New model spec: "{model_spec}"\n'
                 'TIP: enforce different model naming by using {MODEL_MARKER}'.format(

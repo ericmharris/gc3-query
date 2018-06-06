@@ -80,3 +80,26 @@ def test_file_load_01(test_load_file_setup):
     tf = ATomlFile(file_path=test_toml_file)
     assert True
     assert tf is not None
+
+
+
+#### These two lines throw an exception from toml
+# 'rest_url:url' = 'https://compute.uscom-central-1.oraclecloud.com/'
+# 'sftp_url:url' = 'sftp://sftp.us2.cloud.oracle.com:22'
+def test_annotated_file_01():
+    config_dir = Path(__file__).parent.joinpath("ATomlFile/test_annotated_file_01")
+    at_file = config_dir.joinpath("idm_domains.toml")
+    assert at_file.exists()
+    atf = ATomlFile(file_path=at_file)
+    assert atf.toml is not None
+    assert 'rest_url' in atf.toml['idm_domains']['gc3pilot']
+
+# Test the rest of that file
+def test_annotated_file_02():
+    config_dir = Path(__file__).parent.joinpath("ATomlFile/test_annotated_file_02")
+    at_file = config_dir.joinpath("idm_domains.toml")
+    assert at_file.exists()
+    atf = ATomlFile(file_path=at_file)
+    assert atf.toml is not None
+    assert 'rest_url' in atf.toml['idm_domains']['gc3pilot']
+

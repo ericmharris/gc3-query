@@ -9,10 +9,10 @@ import sys
 def main():
     #import opaascli.opccli
     try:
-        from opaascli import opccli        
+        from opaascli import opccli
         return opccli.main()
     except ImportError as e:
-        print("'psm' command not found. Please check and update PATH environment variable with the correct Python installation path.")
+        print("'psm' command not found. Please check and update PATH environment variable with the correct Python installation file_path.")
 
 if __name__ == '__main__':
 
@@ -25,6 +25,6 @@ if __name__ == '__main__':
         print("")
         print("")
         print("Please upgrade Python to version 3.3+. If already on 3.3+ version,")
-        print("please update the PATH environment variable with the correct Python installation path.")
+        print("please update the PATH environment variable with the correct Python installation file_path.")
         print("")
 

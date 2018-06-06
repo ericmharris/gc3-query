@@ -51,10 +51,10 @@ class SetupHomeCCutter:
         # game_type = None
         # while game_type not in ['hilo', 'pacman', 'pong']:
         #     game_type = input('Game type_name? [hilo, pacman, pong]? ')
-        # working_dir = input('Full path where to create the project [must exist]? ')
-        # while not os.path.exists(working_dir):
+        # working_dir = input('Full file_path where to create the project [must exist]? ')
+        # while not os.file_path.exists(working_dir):
         #     print("Oh, that doesn't exist, try again...")
-        #     working_dir = input('Full path where to create the project [must exist]? ')
+        #     working_dir = input('Full file_path where to create the project [must exist]? ')
         # return GameCreateInfo(package_name, full_name, game_type, working_dir)
 
         if CCutter_bin_dir is None:
@@ -64,7 +64,7 @@ class SetupHomeCCutter:
             )
             CCutter_bin_dir = Path(
                 click.prompt(
-                    "Please enter full path to CCutter bin directory", default=CCutter_bin_dir_default, type=str
+                    "Please enter full file_path to CCutter bin directory", default=CCutter_bin_dir_default, type=str
                 )
             )
         mongod_bin_name = "mongod.exe" if "win" in sys.platform else "mongod"
@@ -122,7 +122,7 @@ class SetupHomeCCutter:
             :param: overwrite_if_exists: Overwrite the contents of output directory
                 if it exists
             :param output_dir: Where to output the generated project dir into.
-            :param config_file: User configuration file path.
+            :param config_file: User configuration file file_path.
             :param default_config: Use default values rather than a atoml_cfg file.
             :param password: The password to use when extracting the repository.
     """

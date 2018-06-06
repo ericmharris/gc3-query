@@ -79,8 +79,8 @@ def test_duplicate_model(mock_log, minimal_swagger_dict, pet_model_spec, use_mod
     minimal_swagger_dict['definitions']['Pet'] = pet_model_spec
     swagger_spec = Spec(minimal_swagger_dict, config={'use_models': use_models})
 
-    duplicate_message = 'Duplicate "Pet" model found at path [\'definitions\', \'Pet\']. ' \
-                        'Original "Pet" model at path [\'definitions\', \'Pet\']'
+    duplicate_message = 'Duplicate "Pet" model found at file_path [\'definitions\', \'Pet\']. ' \
+                        'Original "Pet" model at file_path [\'definitions\', \'Pet\']'
 
     raised_exception = None
     try:

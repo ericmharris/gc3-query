@@ -75,7 +75,7 @@ def setup_home_dir(ctx, debug, help):
 @click.option(
     "--mongodb-bin-dir",
     "-b",
-    # prompt="Please enter full path to MongoDB bin directory",
+    # prompt="Please enter full file_path to MongoDB bin directory",
     help="Directory containing mongodb executables, eg. mongod.exe",
 )
 @click.option("--listen-port", "-p", help="TCP port mongod should listen on.", default=7117)
@@ -95,7 +95,7 @@ def setup_mongodb(
 @click.option(
     "--kitty-bin-dir",
     "-b",
-    prompt="Please enter full path to kitty.exe",
+    prompt="Please enter full file_path to kitty.exe",
     help="Path to kitty.exe, eg. C:\ProgramData\chocolatey\lib\kitty\tools\kitty.exe",
 )
 @click.option("--force", "-f", help="Force, overwrite files if they exist.", default=False, is_flag=True)
@@ -112,7 +112,7 @@ def setup_kitty(ctx: click.core.Context, kitty_bin_dir: str = None, force: bool 
 @click.option(
     "--cookiecutter-bin-dir",
     "-b",
-    prompt="Please enter full path to Cookiecutter bin directory",
+    prompt="Please enter full file_path to Cookiecutter bin directory",
     help="Directory containing cookiecutter executables, eg. cookiecutterd.exe",
 )
 @click.option("--listen-port", "-p", help="TCP port cookiecutterd should listen on.", default=7117)

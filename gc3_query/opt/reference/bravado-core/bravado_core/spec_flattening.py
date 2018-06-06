@@ -87,7 +87,7 @@ def _marshal_uri(target_uri, origin_uri):
     if origin_uri and target_uri.scheme == 'file':
         scheme, netloc, path, params, query, fragment = target_uri
 
-        # Masquerade the absolute file path on the "local" server using
+        # Masquerade the absolute file file_path on the "local" server using
         # relative paths from the root swagger spec file
         spec_dir = os.path.dirname(origin_uri.path)
         scheme = 'lfile'
@@ -132,7 +132,7 @@ def flattened_spec(
 ):
     """
     Flatten Swagger Specs description into an unique and JSON serializable document.
-    The flattening injects in place the referenced [path item objects](https://swagger.io/specification/#pathItemObject)
+    The flattening injects in place the referenced [file_path item objects](https://swagger.io/specification/#pathItemObject)
     while it injects in '#/parameters' the [parameter objects](https://swagger.io/specification/#parameterObject),
     in '#/definitions' the [schema objects](https://swagger.io/specification/#schemaObject) and in
     '#/responses' the [response objects](https://swagger.io/specification/#responseObject).

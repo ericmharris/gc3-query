@@ -18,10 +18,10 @@ def test_success():
 def test_fails_on_empty_string():
     with pytest.raises(SwaggerMappingError) as excinfo:
         convert_path_to_resource('')
-    assert 'name from path' in str(excinfo.value)
+    assert 'name from file_path' in str(excinfo.value)
 
 
 def test_fails_on_slash():
     with pytest.raises(SwaggerMappingError) as excinfo:
         convert_path_to_resource('/')
-    assert 'name from path' in str(excinfo.value)
+    assert 'name from file_path' in str(excinfo.value)

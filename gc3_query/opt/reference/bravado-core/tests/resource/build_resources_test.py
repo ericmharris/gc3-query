@@ -30,11 +30,11 @@ def test_resource_with_sanitized_tag(paths_spec):
 
 
 def test_resource_with_a_single_operation_associated_by_path_name(paths_spec):
-    # rename path so we know resource name will not be 'pet'
+    # rename file_path so we know resource name will not be 'pet'
     paths_spec['/foo/findByStatus'] = paths_spec['/pet/findByStatus']
     del paths_spec['/pet/findByStatus']
 
-    # remove tags on operation so path name is used to assoc with a resource
+    # remove tags on operation so file_path name is used to assoc with a resource
     del paths_spec['/foo/findByStatus']['get']['tags']
 
     spec_dict = {'paths': paths_spec}
@@ -44,11 +44,11 @@ def test_resource_with_a_single_operation_associated_by_path_name(paths_spec):
 
 
 def test_resource__associated_by_sanitized_path_name(paths_spec):
-    # rename path so we know resource name will not be 'pet'
+    # rename file_path so we know resource name will not be 'pet'
     paths_spec['/foo-bar/findByStatus'] = paths_spec['/pet/findByStatus']
     del paths_spec['/pet/findByStatus']
 
-    # remove tags on operation so path name is used to assoc with a resource
+    # remove tags on operation so file_path name is used to assoc with a resource
     del paths_spec['/foo-bar/findByStatus']['get']['tags']
 
     spec_dict = {'paths': paths_spec}

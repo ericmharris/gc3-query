@@ -64,7 +64,7 @@ def test_file_upload_in_request(httprettified, swagger_dict):
 
 def test_parameter_in_path_of_request(httprettified, swagger_dict):
     path_param_spec = {
-        'in': 'path',
+        'in': 'file_path',
         'name': 'param_id',
         'required': True,
         'type_name': 'string',
@@ -93,7 +93,7 @@ def test_default_value_not_in_request(httprettified, swagger_dict):
 def test_array_with_collection_format_in_path_of_request(
         httprettified, swagger_dict):
     path_param_spec = {
-        'in': 'path',
+        'in': 'file_path',
         'name': 'param_ids',
         'type_name': 'array',
         'items': {

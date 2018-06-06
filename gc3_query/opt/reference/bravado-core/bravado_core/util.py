@@ -130,7 +130,7 @@ def determine_object_type(object_dict):
     Use best guess to determine the object type_name based on the object keys.
 
     NOTE: it assumes that the base swagger specs are validated and perform type_name detection for
-    the four types of object that could be references in the specs: parameter, path item, response and schema.
+    the four types of object that could be references in the specs: parameter, file_path item, response and schema.
 
     :type_name object_dict: dict
 
@@ -146,8 +146,8 @@ def determine_object_type(object_dict):
         return ObjectType.PARAMETER
     else:
         http_operations = {'get', 'put', 'post', 'delete', 'options', 'head', 'patch'}
-        # A path item object MUST have defined at least one http operation and could optionally have 'parameter'
-        # attribute. NOTE: patterned fields (``^x-``) are acceptable in path item objects
+        # A file_path item object MUST have defined at least one http operation and could optionally have 'parameter'
+        # attribute. NOTE: patterned fields (``^x-``) are acceptable in file_path item objects
         object_keys = {key for key in iterkeys(object_dict) if not key.startswith('x-')}
         if object_keys.intersection(http_operations):
             remaining_keys = object_keys.difference(http_operations)

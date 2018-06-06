@@ -90,7 +90,7 @@ SWAGGER_SPEC_DICT = {
                 'produces': ['application/json'],
                 'parameters': [
                     {
-                        'in': 'path',
+                        'in': 'file_path',
                         'name': 'special',
                         'type_name': 'string',
                         'required': True,

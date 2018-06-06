@@ -5,7 +5,7 @@ from bravado_core.spec import Spec
 
 def test_true(minimal_swagger_spec):
     param_spec = {
-        'in': 'path',
+        'in': 'file_path',
         'name': 'petId',
         'type_name': 'integer',
     }
@@ -20,7 +20,7 @@ def test_false(minimal_swagger_spec):
 def test_ref_true(minimal_swagger_dict):
     minimal_swagger_dict['parameters'] = {
         'PetId': {
-            'in': 'path',
+            'in': 'file_path',
             'name': 'petId',
             'type_name': 'integer',
             'required': True,

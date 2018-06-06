@@ -144,7 +144,7 @@ class SwaggerClientTest(unittest.TestCase):
             u"basePath": u"http://swagger.py/swagger-test",
             u"apis": [
                 {
-                    u"path": u"/api-docs/pet.json",
+                    u"file_path": u"/api-docs/pet.json",
                     u"description": u"Test loader when missing a file",
                     u"api_declaration": {
                         u"swaggerVersion": u"1.2",
@@ -152,7 +152,7 @@ class SwaggerClientTest(unittest.TestCase):
                         u"resourcePath": u"/pet.json",
                         u"apis": [
                             {
-                                u"path": u"/pet",
+                                u"file_path": u"/pet",
                                 u"operations": [
                                     {
                                         u"method": u"GET",
@@ -186,7 +186,7 @@ class SwaggerClientTest(unittest.TestCase):
                                 ]
                             },
                             {
-                                u"path": u"/pet/find",
+                                u"file_path": u"/pet/find",
                                 u"operations": [
                                     {
                                         u"method": u"GET",
@@ -207,7 +207,7 @@ class SwaggerClientTest(unittest.TestCase):
                                 ]
                             },
                             {
-                                u"path": u"/pet/{petId}",
+                                u"file_path": u"/pet/{petId}",
                                 u"operations": [
                                     {
                                         u"method": u"DELETE",
@@ -217,14 +217,14 @@ class SwaggerClientTest(unittest.TestCase):
                                             {
                                                 u"name": u"petId",
                                                 u"type_name": u"integer",
-                                                u"paramType": u"path"
+                                                u"paramType": u"file_path"
                                             }
                                         ]
                                     }
                                 ]
                             },
                             {
-                                u"path": u"/pet/{petId}/vaccine",
+                                u"file_path": u"/pet/{petId}/vaccine",
                                 u"operations": [
                                     {
                                         u"method": u"POST",
@@ -234,7 +234,7 @@ class SwaggerClientTest(unittest.TestCase):
                                             {
                                                 u"name": u"petId",
                                                 u"type_name": u"integer",
-                                                u"paramType": u"path"
+                                                u"paramType": u"file_path"
                                             },
                                             {
                                                 u"name": u"vaccineFile",

@@ -28,7 +28,7 @@ def test_location_is_body(empty_swagger_spec, body_param_spec):
 
 
 def test_location_is_not_body(empty_swagger_spec):
-    for location in ('path', 'query', 'header', 'formData',):
+    for location in ('file_path', 'query', 'header', 'formData',):
         param_spec = {
             'name': 'petId',
             'in': location,

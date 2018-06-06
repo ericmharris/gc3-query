@@ -81,12 +81,12 @@ class CustomAccsPushExecutor(RequestExecutor):
 
         if self._archive_path in self.reqParamHandler.cmd_params_values:
             isArchivePathDir = False
-            # 1) Check if archive path is a directory to be zipped
+            # 1) Check if archive file_path is a directory to be zipped
             # or it is a zip file.
             archive_path = self.reqParamHandler.cmd_params_values[self._archive_path]
             archive_path_arg = "-{0}/{1}".format(self.reqParamHandler.arg_parameter_list[self._archive_path].alias_name, \
                                                 self.reqParamHandler.arg_parameter_list[self._archive_path].argument_option_name)
-            # raise an exception if the path doesnt exist.
+            # raise an exception if the file_path doesnt exist.
             if not os.path.exists(archive_path):
                 err_msg = ErrorMessages.OPAAS_CLI_NO_SUCH_FILE_EXISTS_ERROR.format(archive_path_arg, archive_path)
                 raise PSMUsageError(usage = "usage: %s" % self.usage, prog = self.prog, err_msg = err_msg)
@@ -105,7 +105,7 @@ class CustomAccsPushExecutor(RequestExecutor):
             if max_upload_size is not None:
                 self.max_limit_accs = self._utils.convert_size_to_bytes(int(max_upload_size))
 
-            # Check if the given path is a dir.
+            # Check if the given file_path is a dir.
             if os.path.isdir(archive_path):
                 # create a zip in the temp dir: TODO
                 isArchivePathDir = True
@@ -314,7 +314,7 @@ class CustomAccsStreamLogExecutor(RequestExecutor):
         for param, value in self.reqParamHandler.cmd_params_values.items():
             paramType = self.reqParamHandler.param_dict[param]['paramType']
             type = self.reqParamHandler.param_dict[param]['type_name']
-            if paramType == 'path':
+            if paramType == 'file_path':
                 uri = uri.replace('{' + param + '}', value)
 
         request_url = defaultUri + uri
