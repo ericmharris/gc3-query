@@ -41,7 +41,7 @@ class ATomlConfig:
                                                                                     atoml_file_paths=self.atoml_file_paths)
 
         self.atoml_files = self._load_atoml_files(atoml_file_paths=self.atoml_file_paths) if self.atoml_file_paths else None
-        self._atoml_dir_files = self._load_atoml_files_from_dir(atoml_dir=self.atoml_dir_path, atoml_files=self.atoml_files) if self.atoml_dir_path else None
+        self.atoml_files = self._load_atoml_files_from_dir(atoml_dir=self.atoml_dir_path, atoml_files=self.atoml_files) if self.atoml_dir_path else self.atoml_files
 
         self.toml = self._merge_toml(atoml_settings_file=self._atoml_settings_file, atoml_files=self.atoml_files)
 

@@ -119,7 +119,10 @@ class ATomlFile:
         return pp_lines
 
     def __str__(self):
-        return f"<{self._name}: file_path={self.file_path}>"
+        return f"<{self._name}: file_path={self.file_name}>"
+
+    def __repr__(self):
+        return self.__str__()
 
 
     def __eq__(self, other: 'ATomlFile') -> bool:
