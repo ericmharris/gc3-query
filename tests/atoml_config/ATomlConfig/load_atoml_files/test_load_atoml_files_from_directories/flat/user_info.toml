@@ -1,0 +1,20 @@
+[user]
+first_name = 'Eric'
+last_name = 'Harris'
+email = 'eric.harris@oracle.com'
+cloud_username = 'eric.harris@oracle.com'
+os_username = 'eharris'
+home_directory = 'C:\Users\eharris'
+password_storage = 'keyring'
+default_idm_domain = 'gc3pilot'
+
+
+[user._meta]
+title = 'User Information'
+file = 'user_info.toml'
+decription = 'Basic user information'
+dependencies = ''
+default_type = 'str'
+
+
+

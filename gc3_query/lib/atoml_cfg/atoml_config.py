@@ -28,13 +28,14 @@ from gc3_query.lib.atoml_cfg.atoml_directory import ATomlDirectory
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
-class ATomlConfig:
-    def __init__(self, atoml_file_paths: Iterable[Path] = None, atoml_dir_path: Path = None) -> None:
-        self._name = self.__class__.__name__
-        if not atoml_file_paths and not atoml_dir_path:
+class ATomlConfig(ATomlDirectory):
+    def __init__(self, file_paths: Iterable[Path] = None, directory_path: Path = None) -> None:
+        super().__init__(directory_path=directory_path)
+        # self._name = self.__class__.__name__
+        if not file_paths and not directory_path:
             raise ATomlConfigError(f"Empty {self._name} created.  Specify at least one atoml file or directory.")
-        self.atoml_file_paths = [Path(p).resolve() for p in atoml_file_paths] if atoml_file_paths else None
-        self.atoml_dir_path = Path(atoml_dir_path).resolve() if atoml_dir_path else None
+        self.atoml_file_paths = [Path(p).resolve() for p in file_paths] if file_paths else None
+        self.atoml_dir_path = Path(directory_path).resolve() if directory_path else None
 
         ## __init__.toml is automatically loaded if it's found in the directory
         self._atoml_settings_file: Union[ATomlFile, None] = self._load_atoml_settings_file(atoml_dir_path=self.atoml_dir_path,
@@ -93,6 +94,11 @@ class ATomlConfig:
         return toml_files
 
     def _load_atoml_directories(self, atoml_dir: Path) -> List[ATomlDirectory]:
+        """
+
+        :param atoml_dir:
+        :return:
+        """
         toml_directories = []
         for p in atoml_dir.iterdir():
             if p.name.startswith('_') or p.name.startswith('.'):
