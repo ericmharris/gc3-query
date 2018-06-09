@@ -41,6 +41,9 @@ class ATomlDirectory:
             self.atoml_files = self._load_atoml_files(directory_path=self.directory_path)
             self.atoml_directories: List[ATomlDirectory] = self._load_toml_directories(self.directory_path)
 
+        self._toml = self._merge_toml(atoml_files=self.atoml_files)
+        _debug(f"{self._name} created: {self}")
+
 
     def _read_toml_files(self, path: Path) -> List[ATomlFile]:
         toml_files = []
@@ -63,7 +66,6 @@ class ATomlDirectory:
 
 
     def _load_atoml_files(self, directory_path: Path) -> List[ATomlFile]:
-
         if not directory_path.exists() and self.directory_path.is_dir():
             raise ATomlConfigError(f"Empty {self._name} created.  Specify at least one atoml file or directory.")
 
@@ -79,5 +81,14 @@ class ATomlDirectory:
 
 
     def _load_atoml_dir(self, atoml_dir: Path) -> List[ATomlFile]:
-        toml_files = self._load_atoml_files(toml_file_paths)
+        toml_files = self._load_atoml_files(atoml_dir)
         return toml_files
+
+
+    def _merge_toml(self, atoml_files: Union[List[ATomlFile], None]) -> Union[Dict, None]:
+        if atoml_files:
+            mt = {}
+            for atf in atoml_files:
+                mt.update(atf.toml)
+            return mt
+        return

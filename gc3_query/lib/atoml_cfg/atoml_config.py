@@ -121,7 +121,7 @@ class ATomlConfig(ATomlDirectory):
             return copy.deepcopy(atoml_settings_file.toml)
         if atoml_files:
             mt = copy.deepcopy(atoml_settings_file.toml) if atoml_settings_file else dict()
-            for atf in self.atoml_files:
+            for atf in atoml_files:
                 mt.update(atf.toml)
             return mt
         raise RuntimeError("should never get here...")
