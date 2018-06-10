@@ -27,13 +27,11 @@ from gc3_query.lib.atoml_cfg.atoml_directory import ATomlDirectory
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
-
 class ATomlConfig(ATomlDirectory):
     def __init__(self, file_paths: Iterable[Path] = None, directory_path: Path = None) -> None:
-        super().__init__(directory_path=directory_path)
-        # self._name = self.__class__.__name__
         if not file_paths and not directory_path:
             raise ATomlConfigError(f"Empty {self._name} created.  Specify at least one atoml file or directory.")
+        super().__init__(directory_path)
         self.atoml_file_paths = [Path(p).resolve() for p in file_paths] if file_paths else None
         self.atoml_dir_path = Path(directory_path).resolve() if directory_path else None
 

@@ -31,26 +31,26 @@ def load_atoml_files_from_directory_setup() -> List[str]:
     config_dir: Path = TEST_BASE_DIR.joinpath("load_atoml_files_from_directories")
     assert config_dir.exists()
 
-    def run_data_tests(atd):
-        assert len(atd.atoml_files) > 1
-        # assert 'ASDF' in atd._toml
-        # assert 'title' in atd._toml
-        # assert '__init__' in atd._toml
-
-        assert 'user' in atd._toml
-        assert '_meta' in atd._toml['user']
-
-        assert 'mongodb' in atd._toml
-        assert 'storage' in atd._toml['mongodb']
-        assert 'db_path' in atd._toml['mongodb']['storage']
-
-        assert 'idm_domains' in atd._toml
-        assert 'gc3pilot' in atd._toml['idm_domains']
-        assert 'rest_url' in atd._toml['idm_domains']['gc3pilot']
-
-        assert 'valid_toml' in atd._toml
-        assert 'valid_toml_quoted' in atd._toml
-        return True
+    # def run_data_tests(atd):
+    #     assert len(atd.atoml_files) > 1
+    #     # assert 'ASDF' in atd._toml
+    #     # assert 'title' in atd._toml
+    #     # assert '__init__' in atd._toml
+    #
+    #     assert 'user' in atd._toml
+    #     assert '_meta' in atd._toml['user']
+    #
+    #     assert 'mongodb' in atd._toml
+    #     assert 'storage' in atd._toml['mongodb']
+    #     assert 'db_path' in atd._toml['mongodb']['storage']
+    #
+    #     assert 'idm_domains' in atd._toml
+    #     assert 'gc3pilot' in atd._toml['idm_domains']
+    #     assert 'rest_url' in atd._toml['idm_domains']['gc3pilot']
+    #
+    #     assert 'valid_toml' in atd._toml
+    #     assert 'valid_toml_quoted' in atd._toml
+    #     return True
 
     yield config_dir
 
