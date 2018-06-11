@@ -1,4 +1,3 @@
-
 import pytest
 import toml
 from pathlib import Path
@@ -18,8 +17,6 @@ def test_no_input_throws_error():
         atc = ATomlConfig(file_paths=None, directory_path=None)
 
 
-
-
 def test_load_atoml_settings_file_present():
     config_dir = TEST_BASE_DIR.joinpath("load_atoml_settings_file/present")
     atoml_settings_file = config_dir.joinpath('__init__.toml')
@@ -28,13 +25,14 @@ def test_load_atoml_settings_file_present():
     assert atoml_settings_file.exists()
     assert atc._atoml_settings_file.file_path == atoml_settings_file
 
+
 def test_load_atoml_settings_file_absent():
     config_dir = TEST_BASE_DIR.joinpath("load_atoml_settings_file/absent")
     atoml_settings_file = config_dir.joinpath('__init__.toml')
     atc = ATomlConfig(directory_path=config_dir)
     assert config_dir.exists()
     assert not atoml_settings_file.exists()
-    assert atc._atoml_settings_file==None
+    assert atc._atoml_settings_file == None
 
 
 @pytest.fixture()
@@ -42,6 +40,7 @@ def load_atoml_files_individually_setup() -> List[str]:
     config_dir = TEST_BASE_DIR.joinpath("load_atoml_files/test_load_atoml_files_individually")
     assert config_dir.exists()
     yield (config_dir)
+
 
 def test_load_atoml_files_individually(load_atoml_files_individually_setup):
     config_dir = load_atoml_files_individually_setup
@@ -58,8 +57,6 @@ def test_file_names(load_atoml_files_individually_setup):
     atc = ATomlConfig(file_paths=at_files)
     assert '__init__.toml' in atc.file_names
     assert 'user_info.toml' in atc.file_names
-
-
 
 
 @pytest.fixture()
@@ -90,7 +87,6 @@ def load_atoml_files_from_directory_setup() -> List[str]:
     yield config_dir, test_data
 
 
-
 def test_load_atoml_files_from_flat_dir(load_atoml_files_from_directory_setup):
     config_dir, test_data = load_atoml_files_from_directory_setup
     test_dir = config_dir.joinpath('flat')
@@ -98,8 +94,6 @@ def test_load_atoml_files_from_flat_dir(load_atoml_files_from_directory_setup):
     atc = ATomlConfig(directory_path=test_dir)
     test_result = test_data(atc)
     assert test_result
-
-
 
 
 def test_load_atoml_files_from_one_deep_dir(load_atoml_files_from_directory_setup):
@@ -118,5 +112,3 @@ def test_load_atoml_files_from_nest_dir(load_atoml_files_from_directory_setup):
     atc = ATomlConfig(directory_path=test_dir)
     test_result = test_data(atc)
     assert test_result
-
-

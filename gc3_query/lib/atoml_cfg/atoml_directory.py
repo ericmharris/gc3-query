@@ -39,7 +39,7 @@ class ATomlDirectory:
             self.directory_path = directory_path.resolve()
             self.directory_name = self.directory_path.name
             self.atoml_files = self._load_atoml_files(directory_path=self.directory_path)
-            self.atoml_directories: List[ATomlDirectory] = self._load_toml_directories(self.directory_path)
+            self.atoml_directories: List[ATomlDirectory] = self._load_atoml_directories(self.directory_path)
 
         self._toml = self._merge_toml(atoml_files=self.atoml_files)
         _debug(f"{self._name} created: {self}")
@@ -56,7 +56,7 @@ class ATomlDirectory:
         return toml_files
 
 
-    def _load_toml_directories(self, directory_path: Path) -> List["ATomlDirectory"]:
+    def _load_atoml_directories(self, directory_path: Path) -> List["ATomlDirectory"]:
         toml_directories = []
         for p in directory_path.iterdir():
             if p.is_dir():
