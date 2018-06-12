@@ -41,10 +41,10 @@ class ATomlConfig(ATomlDirectory):
         self._atoml_settings_file: Union[ATomlFile, None] = self._load_atoml_settings_file(
             atoml_dir_path=self.atoml_dir_path,
             atoml_file_paths=self.atoml_file_paths)
-
-        # self.atoml_files = self._load_atoml_files(atoml_file_paths=self.atoml_file_paths) if self.atoml_file_paths else None
+        if self.atoml_file_paths:
+            self.atoml_files.extend(self.load_atoml_files(atoml_file_paths=self.atoml_file_paths))
         # self.atoml_files = self._load_atoml_files_from_dir(atoml_dir=self.atoml_dir_path, atoml_files=self.atoml_files) if self.atoml_dir_path else self.atoml_files
-        # self.toml = self._merge_toml(atoml_settings_file=self._atoml_settings_file, atoml_files=self.atoml_files)
+        self.toml = self.merged_toml(atoml_settings_file=self._atoml_settings_file, atoml_files=self.atoml_files)
 
         _debug(f"{self._name} created: {self}")
 
@@ -73,15 +73,15 @@ class ATomlConfig(ATomlDirectory):
             return fn
         return [self._atoml_settings_file.file_name]
 
-    # def _load_atoml_files(self, atoml_file_paths: List[Path]) -> List[ATomlFile]:
-    #     toml_files = []
-    #     for p in atoml_file_paths:
-    #         if p.name.startswith('_') and p.name is not '__init__.toml':
-    #             continue
-    #         if p.name.startswith('_'):
-    #             continue
-    #         toml_files.append(ATomlFile(file_path=p))
-    #     return toml_files
+    def load_atoml_files(self, atoml_file_paths: List[Path]) -> List[ATomlFile]:
+        toml_files = []
+        for p in atoml_file_paths:
+            if p.name.startswith('_') and p.name is not '__init__.toml':
+                continue
+            if p.name.startswith('_'):
+                continue
+            toml_files.append(ATomlFile(file_path=p))
+        return toml_files
 
     # def _load_atoml_files_from_dir(self, atoml_dir: Path, atoml_files: Union[List[ATomlFile], None]) -> List[ATomlFile]:
     #     toml_file_paths = [] if atoml_files is None else copy.deepcopy(atoml_files)
@@ -111,13 +111,13 @@ class ATomlConfig(ATomlDirectory):
     def load_file(self, path: Path) -> List[Any]:
         pass
 
-    # def _merge_toml(self, atoml_settings_file: ATomlFile, atoml_files: List[ATomlFile]) -> Dict:
-    #     if not atoml_files and atoml_settings_file:
-    #         _warning(f"{self._name} created with only an __init__.toml file.")
-    #         return copy.deepcopy(atoml_settings_file.toml)
-    #     if atoml_files:
-    #         mt = copy.deepcopy(atoml_settings_file.toml) if atoml_settings_file else dict()
-    #         for atf in atoml_files:
-    #             mt.update(atf.toml)
-    #         return mt
-    #     raise RuntimeError("should never get here...")
+    def merged_toml(self, atoml_settings_file: ATomlFile, atoml_files: List[ATomlFile]) -> Dict:
+        if not atoml_files and atoml_settings_file:
+            _warning(f"{self._name} created with only an __init__.toml file.")
+            return copy.deepcopy(atoml_settings_file.toml)
+        if atoml_files:
+            mt = copy.deepcopy(atoml_settings_file.toml) if atoml_settings_file else dict()
+            for atf in atoml_files:
+                mt.update(atf.toml)
+            return mt
+        raise RuntimeError("should never get here...")
