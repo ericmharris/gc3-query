@@ -65,7 +65,7 @@ def load_atoml_files_from_directory_setup() -> List[str]:
     assert config_dir.exists()
 
     def test_data(atc):
-        assert len(atc.atoml_files) > 1
+        assert len(atc.atoml_files) == 1
         assert 'title' in atc.toml
         assert '__init__' in atc.toml
 

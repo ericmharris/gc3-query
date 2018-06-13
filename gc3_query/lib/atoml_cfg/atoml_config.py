@@ -44,9 +44,17 @@ class ATomlConfig(ATomlDirectory):
         if self.atoml_file_paths:
             self.atoml_files.extend(self.load_atoml_files(atoml_file_paths=self.atoml_file_paths))
         # self.atoml_files = self._load_atoml_files_from_dir(atoml_dir=self.atoml_dir_path, atoml_files=self.atoml_files) if self.atoml_dir_path else self.atoml_files
-        self.toml = self.merged_toml(atoml_settings_file=self._atoml_settings_file, atoml_files=self.atoml_files)
+        self.toml = self.merged_toml(atoml_settings_file=self._atoml_settings_file,
+                                     atoml_files=self.atoml_files,
+                                     atoml_directories=self.atoml_directories)
 
         _debug(f"{self._name} created: {self}")
+
+    # def __str__(self):
+    #     return f"<{self._name}>"
+    #
+    # def __repr__(self):
+    #     return self.__str__()
 
     def _load_atoml_settings_file(self, atoml_dir_path: Path, atoml_file_paths: List[Path]) -> ATomlFile:
         """Loads global settings from __init__.toml file, if present
@@ -111,13 +119,17 @@ class ATomlConfig(ATomlDirectory):
     def load_file(self, path: Path) -> List[Any]:
         pass
 
-    def merged_toml(self, atoml_settings_file: ATomlFile, atoml_files: List[ATomlFile]) -> Dict:
-        if not atoml_files and atoml_settings_file:
+    def merged_toml(self, atoml_settings_file: ATomlFile, atoml_files: List[ATomlFile], atoml_directories: List[ATomlDirectory]) -> Dict:
+        if not any([atoml_files,  atoml_directories]) and atoml_settings_file:
             _warning(f"{self._name} created with only an __init__.toml file.")
             return copy.deepcopy(atoml_settings_file.toml)
+        mt = copy.deepcopy(atoml_settings_file.toml) if atoml_settings_file else dict()
         if atoml_files:
-            mt = copy.deepcopy(atoml_settings_file.toml) if atoml_settings_file else dict()
             for atf in atoml_files:
                 mt.update(atf.toml)
-            return mt
-        raise RuntimeError("should never get here...")
+        if atoml_directories:
+            for atd in atoml_directories:
+                mt.update(atd._toml)
+        return mt
+
+        # raise RuntimeError("should never get here...")

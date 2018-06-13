@@ -41,9 +41,14 @@ class ATomlDirectory:
             self.atoml_files = self._load_atoml_files(directory_path=self.directory_path)
             self.atoml_directories: List[ATomlDirectory] = self._load_atoml_directories(self.directory_path)
 
-        self._toml = self._merge_toml(atoml_files=self.atoml_files)
+        self._toml = self._merge_toml(atoml_files=self.atoml_files, atoml_directories=self.atoml_directories)
         _debug(f"{self._name} created: {self}")
 
+    def __str__(self):
+        return f"<{self._name}: directory_name={self.directory_name}>"
+
+    def __repr__(self):
+        return self.__str__()
 
     def _read_toml_files(self, path: Path) -> List[ATomlFile]:
         toml_files = []
@@ -84,11 +89,15 @@ class ATomlDirectory:
         toml_files = self._load_atoml_files(atoml_dir)
         return toml_files
 
-
-    def _merge_toml(self, atoml_files: Union[List[ATomlFile], None]) -> Union[Dict, None]:
+    def _merge_toml(self, atoml_files: Union[List[ATomlFile], None], atoml_directories: Union[List["ATomlDirectory"], None]) -> Union[Dict, None]:
+        mt = {}
+        if not any([atoml_files,  atoml_directories]):
+            _warning(f"Empty toml merge on {self._name}.")
+            return
         if atoml_files:
-            mt = {}
             for atf in atoml_files:
                 mt.update(atf.toml)
-            return mt
-        return
+        if atoml_directories:
+            for atd in atoml_directories:
+                mt.update(atd._toml)
+        return mt
