@@ -13,6 +13,7 @@ gc3-query.atoml_config    [6/3/2018 8:42 AM]
 ## Standard Library Imports
 import sys, os
 import copy
+from collections.abc import Mapping
 
 ################################################################################
 ## Third-Party Imports
@@ -28,6 +29,7 @@ from gc3_query.lib.atoml_cfg.atoml_directory import ATomlDirectory
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
+# class ATomlConfig(ATomlDirectory, metaclass=Mapping):
 class ATomlConfig(ATomlDirectory):
     def __init__(self, file_paths: Iterable[Path] = None, directory_path: Path = None) -> None:
         self._name = self.__class__.__name__
@@ -55,6 +57,36 @@ class ATomlConfig(ATomlDirectory):
     #
     # def __repr__(self):
     #     return self.__str__()
+
+    def __getitem__(self, item):
+        return self.toml.__getitem__(item)
+
+    def __iter__(self):
+        return self.toml.__iter__()
+
+    def __len__(self):
+        return self.toml.__len__()
+
+    def __contains__(self, item):
+        return self.toml.__contains__(item)
+
+    def __eq__(self, other):
+        return self.toml.__eq__(other)
+
+    def __ne__(self, other):
+        return self.toml.__ne__(other)
+
+    def keys(self):
+        return self.toml.keys()
+
+    def items(self):
+        return self.toml.items()
+
+    def values(self):
+        return self.toml.values()
+
+    def get(self, k):
+        return self.toml.get(k)
 
     def _load_atoml_settings_file(self, atoml_dir_path: Path, atoml_file_paths: List[Path]) -> ATomlFile:
         """Loads global settings from __init__.toml file, if present
