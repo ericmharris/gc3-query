@@ -52,6 +52,8 @@ requirements = [
     'Logbook',
     'msgpack',
     'httpie',
+    'cryptography',
+    # 'ASDF',
     # 'ASDF',
     # 'ASDF',
     'sortedcontainers',
@@ -88,6 +90,7 @@ setup(
         'console_scripts': [
             'gc3load=gc3_query.bin.gc3load:cli',
             'gc3scan=gc3_query.bin.gc3scan:cli',
+            'gc3keygen=gc3_query.bin.gc3keygen:cli',
             'gc3admin=gc3_query.sbin.gc3admin:cli'
         ]
     },

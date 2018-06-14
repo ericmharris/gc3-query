@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
 
 """
-${PROJECT_NAME}.${NAME}    [${DATE} ${TIME}]
+#@Filename : ${NAME}
+#@Date : [${DATE} ${TIME}]
+#@Poject: ${PROJECT_NAME}
+#@AUTHOR : ${USER}
+
 ~~~~~~~~~~~~~~~~
+
 
 <DESCR SHORT>
 

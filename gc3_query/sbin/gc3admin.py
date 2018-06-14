@@ -61,6 +61,7 @@ def setup_home_dir(ctx, debug, help):
     else:
         ctx.gc3_config["logging_level"] = "WARNING"
 
+
 # @cli.command(help="Help for util_hello", short_help="Short help for util_hello", epilog="Epilog for util_hello")
 # @click.option('--opt', '-o', help="Help for opt")
 # @click.pass_context
