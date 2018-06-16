@@ -3,7 +3,7 @@ import mongoengine
 
 from gc3_query.lib import *
 from gc3_query.lib.atoml_cfg import cfg
-from gc3_query.lib.logging import get_logging
+from gc3_query.lib.gc3logging import get_logging
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 

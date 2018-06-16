@@ -10,7 +10,7 @@ import click
 
 from gc3_query import __version__
 from gc3_query.lib import *
-from gc3_query.lib.logging import get_logging
+from gc3_query.lib.gc3logging import get_logging
 from gc3_query.lib.gc3load import *
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
@@ -39,9 +39,9 @@ Help message for gc3_query cli.
 def cli(ctx, debug, help):
     click.echo(f"Running cli() with context: {ctx}")
     if debug:
-        logging.basicConfig(level=logging.DEBUG)
+        gc3logging.basicConfig(level=gc3logging.DEBUG)
     else:
-        logging.basicConfig(level=logging.WARN)
+        gc3logging.basicConfig(level=gc3logging.WARN)
 
 
 @cli.command(help="Help for util_hello", short_help="Short help for util_hello", epilog="Epilog for util_hello")

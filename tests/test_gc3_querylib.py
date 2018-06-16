@@ -3,7 +3,7 @@ import pytest
 
 from collections import namedtuple
 
-from gc3_query.lib.logging import get_logging
+from gc3_query.lib.gc3logging import get_logging
 from gc3_query.lib.gc3load import TestCase
 
 
