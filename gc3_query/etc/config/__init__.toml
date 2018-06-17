@@ -1,5 +1,5 @@
-[annotations]
-Path = pathlib.Path
-URL =  str
+title = '__init__'
+decription = 'GC3 Configuration Data'
 
-
+[__init__]
+project_name = 'gc3_query'

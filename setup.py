@@ -79,7 +79,7 @@ test_requirements = [
 
 setup(
     name='gc3_query',
-    version='0.1.0',
+    version='0.1.1',
     description="Oracle Cloud utility for fetching, storing, and reporting on IaaS and PaaS data.",
     long_description=readme + '\n\n' + history,
     author="Eric Harris",
@@ -91,6 +91,7 @@ setup(
             'gc3load=gc3_query.bin.gc3load:cli',
             'gc3scan=gc3_query.bin.gc3scan:cli',
             'gc3keygen=gc3_query.bin.gc3keygen:cli',
+            'atoml=gc3_query.bin.atoml:cli',
             'gc3admin=gc3_query.sbin.gc3admin:cli'
         ]
     },

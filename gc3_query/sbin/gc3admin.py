@@ -32,7 +32,7 @@ Help message for gc3query cli.
 @click.option("-?", "-h", "--help", is_flag=True, help="Show this message and exit.")
 @click.pass_context
 def cli(ctx, debug, help):
-    # named ctx.parent.gc3_config to other functions in cli group.
+    # named ctx.parent.gc3cfg to other functions in cli group.
     ctx.gc3_config = {}
     click.echo(f"Running cli() with context: {ctx}")
     if debug:
@@ -53,7 +53,7 @@ Help message for gc3query setup_home_dir.
 @click.option("-?", "-h", "--help", is_flag=True, help="Show this message and exit.")
 @click.pass_context
 def setup_home_dir(ctx, debug, help):
-    # named ctx.parent.gc3_config to other functions in setup_home_dir group.
+    # named ctx.parent.gc3cfg to other functions in setup_home_dir group.
     ctx.gc3_config = {}
     click.echo(f"Running setup_home_dir() with context: {ctx}")
     if debug:
@@ -87,7 +87,7 @@ def setup_mongodb(
 ) -> None:
     click.echo(click.style(f"gc3admin.setup_mongodb(): target_dir={mongodb_bin_dir}", fg="green"))
     _warning(f"Test logging for gc3admin.")
-    print(f"context: {ctx.parent.gc3_config}")
+    print(f"context: {ctx.parent.gc3cfg}")
     setup_mongo_db = SetupMongoDB(ctx=ctx, mongodb_bin_dir=mongodb_bin_dir, listen_port=listen_port, force=force)
     sys.exit(0)
 
@@ -104,7 +104,7 @@ def setup_mongodb(
 def setup_kitty(ctx: click.core.Context, kitty_bin_dir: str = None, force: bool = False) -> None:
     click.echo(click.style(f"gc3admin.setup_kitty(): target_dir={kitty_bin_dir}", fg="green"))
     _warning(f"Test logging for gc3admin.")
-    print(f"context: {ctx.parent.gc3_config}")
+    print(f"context: {ctx.parent.gc3cfg}")
     setup_kitty_db = SetupHomeKitty(ctx=ctx, kitty_bin_dir=kitty_bin_dir, force=force)
     sys.exit(0)
 
@@ -124,7 +124,7 @@ def setup_cookiecutter(
 ) -> None:
     click.echo(click.style(f"gc3admin.setup_cookiecutter(): target_dir={cookiecutter_bin_dir}", fg="green"))
     _warning(f"Test logging for gc3admin.")
-    print(f"context: {ctx.parent.gc3_config}")
+    print(f"context: {ctx.parent.gc3cfg}")
     setup_cookiecutter_db = SetupHomeCookiecutter(ctx=ctx, cookiecutter_bin_dir=cookiecutter_bin_dir,
                                                   listen_port=listen_port, force=force)
 

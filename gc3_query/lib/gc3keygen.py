@@ -56,7 +56,7 @@ Help message for gc3keygen cli.
 @click.option("-?", "-h", "--help", is_flag=True, help="Show this message and exit.")
 @click.pass_context
 def cli(ctx, debug, help):
-    # named ctx.parent.gc3_config to other functions in cli group.
+    # named ctx.parent.gc3cfg to other functions in cli group.
     ctx.gc3_config = {}
     click.echo(f"Running cli() with context: {ctx}")
     if debug:
@@ -75,7 +75,7 @@ def cli(ctx, debug, help):
 @click.pass_context
 def create_project_ssh_keys(ctx: click.core.Context, region: str, project_code: str, password: str, key_size: int = 2048) -> None:
     click.echo(click.style(f"gc3keygen.create_project_ssh_keys(): region={region}, project_id={project_code}, password={password}", fg="green"))
-    print(f"context: {ctx.parent.gc3_config}")
+    print(f"context: {ctx.parent.gc3cfg}")
 
     private_key = rsa.generate_private_key(public_exponent=65537, key_size=key_size, backend=default_backend())
     public_key = private_key.public_key()
