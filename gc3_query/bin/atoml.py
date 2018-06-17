@@ -16,11 +16,13 @@
 ################################################################################
 ## Standard Library Imports
 import sys, os
+# from pprint import pprint
 
 ################################################################################
 ## Third-Party Imports
 from dataclasses import dataclass
 import click
+from prettyprinter import prettyprinter, pprint
 
 ################################################################################
 ## Project Imports
@@ -57,12 +59,13 @@ def cli(ctx, debug, help):
     # named ctx.parent.gc3cfg to other functions in cli group.
     atoml_config_dir = GC3_QUERY_HOME.joinpath('etc/config')
     _debug(f"atoml_config_dir={atoml_config_dir}")
+    ctx.gc3_config = {}
     ctx.gc3cfg = ATomlConfig(directory_path=atoml_config_dir)
     click.echo(f"Running atoml.cli() with context: {ctx}, ctx.gc3cfg={ctx.gc3cfg}")
     if debug:
-        ctx.gc3cfg["logging_level"] = "DEBUG"
+        ctx.gc3_config["logging_level"] = "DEBUG"
     else:
-        ctx.gc3cfg["logging_level"] = "WARNING"
+        ctx.gc3_config["logging_level"] = "WARNING"
 
 
 @cli.command(help="Annotated TOML CLI", short_help="ATOML CLI", epilog="ATOML CLI")
@@ -70,4 +73,12 @@ def cli(ctx, debug, help):
 @click.pass_context
 def print(ctx: click.core.Context, verbose: bool = False) -> None:
     click.echo(click.style(f"atoml.print(): verbose={verbose}", fg="green"))
+    gc3cfg = ctx.parent.gc3cfg
+    pprint(gc3cfg.toml)
     sys.exit(0)
+
+
+
+
+if __name__=='__main__':
+    cli()

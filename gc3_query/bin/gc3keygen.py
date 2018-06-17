@@ -109,9 +109,5 @@ def create_project_ssh_keys(ctx: click.core.Context, region: str, project_code: 
     sys.exit(0)
 
 
-
-
-
-
 if __name__=='__main__':
     cli()
