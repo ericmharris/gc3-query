@@ -18,6 +18,7 @@ from collections.abc import Mapping
 ################################################################################
 ## Third-Party Imports
 from dataclasses import dataclass
+from melddict import MeldDict
 
 ################################################################################
 ## Project Imports
@@ -155,13 +156,16 @@ class ATomlConfig(ATomlDirectory):
         if not any([atoml_files,  atoml_directories]) and atoml_settings_file:
             _warning(f"{self._name} created with only an __init__.toml file.")
             return copy.deepcopy(atoml_settings_file.toml)
-        mt = copy.deepcopy(atoml_settings_file.toml) if atoml_settings_file else dict()
+        # mt = copy.deepcopy(atoml_settings_file.toml) if atoml_settings_file else dict()
+        mt = MeldDict(atoml_settings_file.toml) if atoml_settings_file else MeldDict({})
         if atoml_files:
             for atf in atoml_files:
-                mt.update(atf.toml)
+                # mt.update(atf.toml)
+                mt.add(atf.toml)
         if atoml_directories:
             for atd in atoml_directories:
-                mt.update(atd._toml)
+                # mt.update(atd._toml)
+                mt.add(atd._toml)
         return mt
 
         # raise RuntimeError("should never get here...")

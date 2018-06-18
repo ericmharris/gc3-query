@@ -18,6 +18,7 @@ from collections import ChainMap
 ################################################################################
 ## Third-Party Imports
 from dataclasses import dataclass
+from melddict import MeldDict
 
 ################################################################################
 ## Project Imports
@@ -94,17 +95,15 @@ class ATomlDirectory:
         if not any([atoml_files,  atoml_directories]):
             _warning(f"Empty toml merge on {self._name}.")
             return
+        mt = MeldDict({})
         if atoml_files:
-            toml_dicts = [atf.toml for atf in atoml_files]
-            mt = ChainMap(*toml_dicts)
-            # for atf in atoml_files:
-            #     mt.update(atf.toml)
-        else:
-            mt = {}
-
+            # toml_dicts = [atf.toml for atf in atoml_files]
+            # mt =  dict(*toml_dicts)
+            for atf in atoml_files:
+                mt.add(atf.toml)
         if atoml_directories:
-            dir_toml_dicts = [atd._toml for atd in atoml_directories]
-            mt = ChainMap(mt, *dir_toml_dicts)
-            # for atd in atoml_directories:
-            #     mt.update(atd._toml)
+            # dir_toml_dicts = [atd._toml for atd in atoml_directories]
+            # mt = ChainMap(mt, *dir_toml_dicts)
+            for atd in atoml_directories:
+                mt.add(atd._toml)
         return mt

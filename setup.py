@@ -53,7 +53,7 @@ requirements = [
     'msgpack',
     'httpie',
     'cryptography',
-    # 'ASDF',
+    'melddict',
     # 'ASDF',
     # 'ASDF',
     'sortedcontainers',
