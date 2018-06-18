@@ -1,0 +1,22 @@
+
+
+[idm_domains.gc3pilot]
+name = 'gc3pilot'
+id = 'gc3pilot'
+service_instance_id = 575988287
+subscription_id = 1480019
+csi_number = 21204068
+region = 'us'
+data_center = 'usdc2'
+'rest_url:url' = 'https://compute.uscom-central-1.oraclecloud.com/'
+'sftp_url:url' = 'sftp://sftp.us2.cloud.oracle.com:22'
+multiple_sites = true
+[idm_domains.gc3pilot.sites.uscom-central-1]
+name = 'uscom-central-1'
+data_center ='usdc2'
+rest_endpoint = 'https://compute.uscom-central-1.oraclecloud.com/'
+[idm_domains.gc3pilot.sites.us006_z70]
+name = 'us006_z70'
+data_center = 'usdc6'
+rest_endpoint = 'https://api-z70.compute.us6.oraclecloud.com/'
+

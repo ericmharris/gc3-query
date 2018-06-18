@@ -95,9 +95,9 @@ def test_load_atoml_files_from_one_deep_dir(load_atoml_files_from_directory_setu
 
 
 
-def test_load_atoml_files_from_nested_dir(load_atoml_files_from_directory_setup):
+def test_load_atoml_files_from_nested_dir_01(load_atoml_files_from_directory_setup):
     config_dir = load_atoml_files_from_directory_setup
-    test_dir = config_dir.joinpath('nested')
+    test_dir = config_dir.joinpath('nested_01')
     assert test_dir.exists()
     atd = ATomlDirectory(directory_path=test_dir)
 
@@ -110,6 +110,17 @@ def test_load_atoml_files_from_nested_dir(load_atoml_files_from_directory_setup)
     assert 'mongodb' in catd._toml
     assert 'storage' in catd._toml['mongodb']
     assert 'db_path' in catd._toml['mongodb']['storage']
+
+
+
+def test_load_atoml_files_from_nested_dir_02(load_atoml_files_from_directory_setup):
+    config_dir = load_atoml_files_from_directory_setup
+    test_dir = config_dir.joinpath('nested_02')
+    assert test_dir.exists()
+    atd = ATomlDirectory(directory_path=test_dir)
+
+    assert 'user' in atd._toml
+    assert 'idm_domains' in atd._toml
 
 
 

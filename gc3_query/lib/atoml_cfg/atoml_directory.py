@@ -13,6 +13,7 @@ gc3-query.toml_directory    [6/1/2018 10:50 AM]
 ## Standard Library Imports
 import sys, os
 import copy
+from collections import ChainMap
 
 ################################################################################
 ## Third-Party Imports
@@ -90,14 +91,20 @@ class ATomlDirectory:
         return toml_files
 
     def _merge_toml(self, atoml_files: Union[List[ATomlFile], None], atoml_directories: Union[List["ATomlDirectory"], None]) -> Union[Dict, None]:
-        mt = {}
         if not any([atoml_files,  atoml_directories]):
             _warning(f"Empty toml merge on {self._name}.")
             return
         if atoml_files:
-            for atf in atoml_files:
-                mt.update(atf.toml)
+            toml_dicts = [atf.toml for atf in atoml_files]
+            mt = ChainMap(*toml_dicts)
+            # for atf in atoml_files:
+            #     mt.update(atf.toml)
+        else:
+            mt = {}
+
         if atoml_directories:
-            for atd in atoml_directories:
-                mt.update(atd._toml)
+            dir_toml_dicts = [atd._toml for atd in atoml_directories]
+            mt = ChainMap(mt, *dir_toml_dicts)
+            # for atd in atoml_directories:
+            #     mt.update(atd._toml)
         return mt
