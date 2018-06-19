@@ -1,0 +1,278 @@
+---
+  template:
+    templateName: GC3-Oracle-IOTEnterpriseApps-Template 
+    templateVersion: 17.45.11
+    templateDescription: "Provisions IOT Stack composed of JCS and DBCS instances using Oracle Storage Cloud Service. **WARNING** You will be billed for the Cloud resources created if you create a Cloud Stack from this template."
+    parameters:
+      # Common to all services
+      publicKeyText:
+        label: SSH Public Key
+        description: Click Edit to generate a new key pair, enter an existing public keys value or upload a new public key.
+        type: ssh
+        mandatory: true
+        sensitive: true
+      commonAdminUsername:
+        label: Username for Cloud Services
+        description: "Username must be between 8 and 128 ASCII characters and cannot contain a tab, brackets, parentheses or the characters , < > & # | ?"
+        type: String
+        minLength: 8
+        maxLength: 128
+        default: IoTAdmin
+        allowedPattern: "[\\p{Print}&&[^',<>#&|\\?\\(\\)\\{\\}\t ]]++"
+      commonAdminPwd:
+        label: Password (to access all services in Stack)
+        description: "Password to access all services in Stack. Password must be between 8 and 30 characters with at least one lower case letter, one upper case letter, one number and one special character (_,#). For example, Ach1z0#d"
+        type: Password
+        minLength: 8
+        maxLength: 30
+        allowedPattern: "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*[0-9])[a-zA-Z]([a-zA-Z0-9_#])+$"
+        mandatory: true
+        sensitive: true
+      installType:
+        label: Installation Type
+        description: "Select either 'development' or 'production'. A development installation is a bare minimal install of IoT with no redundancy or high availability."
+        type: String
+        default: "Development"
+        allowedValues: [ Development,Production ]
+        mandatory: true
+      numOfNamedUser:
+        label: Number of Named Users
+        description: "Enter the number of licensed named users."
+        type: Number
+        default: 30
+        minValue: 1
+        maxValue: 1000
+        condition: {"Fn::Equals":[{"Fn::GetParam":"installType"},"Production"]}
+      # Storage Cloud Service definition
+      backupStorageContainer:
+        label: Cloud Storage Container
+        description: "Name of the Exiting or new Oracle Storage Cloud Service container to be created for JCS and DBCS backup, recovery. The name has to be in the form https|http://<storagedomain>/{version}/<schema name>/<container name> or <storage service name>-<identity domain name>/<container name>. e.g:storagesvc999-usoracleaccoutrial00999/backupContainer. If given container does not exist a new container will be created."
+        type: String
+        mandatory: true
+      cloudStorageUser:
+        label: Cloud Storage Username
+        description: Enter cloud storage container user name.
+        type: String
+        mandatory: true
+      cloudStoragePassword:
+        label: Cloud Storage Password
+        description: Enter password for cloud storage container user.
+        type: String
+        mandatory: true
+        sensitive: true
+      # Content Storage Cloud Service definition
+      customCloudStorageContainer:
+        label: Content Storage Container
+        description: "Oracle Storage Cloud Service container to be created for content storage. We strongly recommend not to use backup container as content container. The name has to be in the form https|http://<storagedomain>/{version}/<schema name>/<container name> or <storage service name>-<identity domain name>/<container name>. e.g:storagesvc999-usoracleaccoutrial00999/backupContainer. If given container does not exist a new container will be created."
+        type: String
+        mandatory: true
+      contentStoreCreds:
+        label: Use same credentials as Cloud Storage Container
+        description: "Select false if you need to enter different credentials for the cloud storage service."
+        type: String
+        default: true
+        mandatory: true
+        allowedValues: [ true, false ]
+      customCloudStorageUser:
+        label: Content Storage Username
+        description: Enter cloud storage container user name.
+        type: String
+        mandatory: false
+        condition: {"Fn::Equals":[{"Fn::GetParam":"contentStoreCreds"}, false ] }
+      customCloudStoragePassword:
+        label: Content Storage Password
+        description: Enter password for cloud storage container user.
+        type: String
+        mandatory: false
+        sensitive: true
+        condition: {"Fn::Equals":[{"Fn::GetParam":"contentStoreCreds"}, false ] }
+      usrPrivateKey:
+        label: Import private key
+        description: "Import private key (without passphrase) corresponding to the SSH Public Key used for this stack creation. We recommend to use Create a New Key option available in SSH Public Key field to generate key pair." 
+        type: File
+        mandatory: true
+      spareJCS:
+        label: Create spare JCS instance
+        description: "Creates spare weblogic server instance "
+        type: Boolean
+        default: false
+        mandatory: false
+      enableSimulator:
+        label: "Enable IoT Device Simulator"
+        description: "Check this option if you want to enable Enable IoT Device Simulator "
+        type: Boolean
+        default: true
+        mandatory: true
+    conditions:
+      minimalInstall: {"Fn::Equals":[{ "Fn::GetParam":"installType"}, "Development"] }
+      customStorageCreds: {"Fn::Equals":[{ "Fn::GetParam":"contentStoreCreds"}, "true"] }
+      containerMatch: {"Fn::Not":[{"Fn::Equals":[{ "Fn::GetParam":"customCloudStorageContainer"}, { "Fn::GetParam":"backupStorageContainer"}]}]}
+      isSpareJCS: {"Fn::Equals":[{ "Fn::GetParam":"spareJCS"}, "true"] }
+    parameterGroups:
+      - label: Service Details
+        parameters: [ installType, numOfNamedUser, commonAdminUsername, commonAdminPwd, publicKeyText ]
+      - label: Backup and Recovery Configuration
+        parameters: [ backupStorageContainer, cloudStorageUser, cloudStoragePassword ]
+      - label: Content Storage Container
+        parameters: [ customCloudStorageContainer, contentStoreCreds, customCloudStorageUser, customCloudStoragePassword ]
+      - label: Oracle Internet of Things - Enterprise
+        parameters: [ usrPrivateKey, spareJCS, enableSimulator ]
+    resources:
+      # Storage Cloud Service
+      backupContainer:
+        type: OSS.Container
+        parameters:
+          cloudStorageContainer: { "Fn::GetParam": backupStorageContainer }
+          cloudStorageUser: { "Fn::GetParam": cloudStorageUser }
+          cloudStoragePassword: { "Fn::GetParam": cloudStoragePassword }
+      contentContainer:
+        type: OSS.Container
+        parameters:
+          cloudStorageContainer: { "Fn::GetParam": customCloudStorageContainer }
+          cloudStorageUser: { "Fn::If":[ "customStorageCreds", { "Fn::GetParam": cloudStorageUser }, { "Fn::GetParam": customCloudStorageUser }]}
+          cloudStoragePassword: { "Fn::If":[ "customStorageCreds", { "Fn::GetParam": cloudStoragePassword }, { "Fn::GetParam": customCloudStoragePassword }]}
+        condition: containerMatch
+     # Database Cloud Service
+      dbcs:
+        type: dbaas
+        parameters:
+          serviceName: { "Fn::Join": ["", ["Fn::GetParam": serviceName, DBAAS]] }
+          version: 12.2.0.1
+          level: PAAS
+          edition: EE
+          subscriptionType: HOURLY
+          shape: oc3
+          vmPublicKeyText: { "Fn::GetParam": publicKeyText }
+          parameters:
+            -
+              type: db
+              adminPassword: { "Fn::GetParam": commonAdminPwd }
+              noRollback: { "Fn::If":[ "minimalInstall", "true", "false" ] }
+              sid: ORCL
+              failoverDatabase: no
+              backupDestination: BOTH
+              timezone: UTC
+              charset: AL32UTF8
+              ncharset: AL16UTF16
+              cloudStorageContainer: { "Fn::GetParam": backupStorageContainer }
+              cloudStorageUser: { "Fn::GetParam": cloudStorageUser }
+              cloudStoragePwd: { "Fn::GetParam": cloudStoragePassword }
+              usableStorage: { "Fn::If":[ "minimalInstall", "15", "100" ] }
+        depends_on:
+          - backupContainer
+      # Java Cloud Service
+      jcs:
+        type: jaas
+        parameters:
+          serviceName: { "Fn::Join": ["", ["Fn::GetParam": serviceName, JAAS]] }
+          level: PAAS
+          subscriptionType: HOURLY
+          enableAdminConsole: true
+          cloudStorageContainer: { "Fn::GetParam": backupStorageContainer }
+          cloudStorageUser: { "Fn::GetParam": cloudStorageUser }
+          cloudStoragePassword: {"Fn::GetParam": cloudStoragePassword }
+          provisionOTD: true
+          noRollback: { "Fn::If":[ "minimalInstall", "true", "false" ] }
+          edition: SUITE
+          serviceVersion: 12cRelease212
+          vmPublicKeyText: { "Fn::GetParam": publicKeyText }
+          components:
+            WLS:
+              adminUserName: { "Fn::Join": ["_", [ "Fn::GetParam": commonAdminUsername , jcs ]] }
+              adminPassword: { "Fn::GetParam": commonAdminPwd }
+              dbServiceName: { "Fn::GetAtt": [dbcs, serviceName] }
+              dbaName: sys
+              dbaPassword: { "Fn::GetParam": commonAdminPwd }
+              shape: oc3
+              managedServerCount: { "Fn::If":[ "minimalInstall", "1", "2" ] }
+              clusters:
+                -
+                  clusterName: { "Fn::Join": ["", ["Fn::GetParam": serviceName, _DGCLUSTER]] }
+                  shape: oc3
+                  type: CACHING_CLUSTER
+                  serversPerNode: 1
+                  serverCount: { "Fn::If":[ "minimalInstall", "1", "3" ] }
+            OTD:
+              shape: oc3
+              loadBalancingPolicy: LEAST_CONNECTION_COUNT
+        depends_on:
+          - backupContainer
+          - dbcs
+      #  Spare JCS instance
+      sparejcs:
+        type: jaas
+        parameters:
+          serviceName: { "Fn::Join": ["", ["Fn::GetParam": serviceName, SPAREJCS ]] }
+          level: PAAS
+          subscriptionType: HOURLY
+          enableAdminConsole: true
+          cloudStorageContainer: { "Fn::GetParam": backupStorageContainer }
+          cloudStorageUser: { "Fn::GetParam": cloudStorageUser }
+          cloudStoragePassword: {"Fn::GetParam": cloudStoragePassword }
+          provisionOTD: false
+          noRollback: { "Fn::If":[ "minimalInstall", "true", "false" ] }
+          edition: SUITE
+          serviceVersion: 12cRelease212
+          vmPublicKeyText: { "Fn::GetParam": publicKeyText }
+          components:
+            WLS:
+              adminUserName: { "Fn::Join": ["_", [ "Fn::GetParam": commonAdminUsername , jcs ]] }
+              adminPassword: { "Fn::GetParam": commonAdminPwd }
+              dbServiceName: { "Fn::GetAtt": [dbcs, serviceName] }
+              dbaName: sys
+              dbaPassword: { "Fn::GetParam": commonAdminPwd }
+              shape: oc3
+              managedServerCount: 1
+        condition: isSpareJCS
+        depends_on:
+          - backupContainer
+          - dbcs
+      # IOT Enterprise Applications Cloud Service
+      iot:
+        type: IOTEnterpriseApps 
+        parameters:
+          meteringFrequencies: HOURLY
+          serviceLevels: PAAS
+          serviceParameters:
+            serviceName: { "Fn::Join": ["", ["Fn::GetParam": serviceName, IOT ]] }
+            cloudStorageContainer: { "Fn::GetParam": backupStorageContainer }
+            cloudStorageUser: { "Fn::GetParam": cloudStorageUser }
+            cloudStoragePassword: {"Fn::GetParam": cloudStoragePassword }
+            customcloudStorageContainer:  {"Fn::GetParam": customCloudStorageContainer }
+            customcloudStorageContainerAutoGenerate: true
+            sameCredStorageContainerAutoGenerate: { "Fn::If":[ "customStorageCreds", "true", "false" ] }
+            EnablecontentstoreCreds: { "Fn::If":[ "customStorageCreds", "false", "true" ] }
+            customcloudStorageUser: { "Fn::If":[ "customStorageCreds", { "Fn::GetParam": cloudStorageUser }, { "Fn::GetParam": customCloudStorageUser } ] }
+            customcloudStoragePassword: { "Fn::If":[ "customStorageCreds", { "Fn::GetParam": cloudStorageUser }, { "Fn::GetParam": customCloudStoragePassword } ] }
+            noRollback: { "Fn::If":[ "minimalInstall", "true", "false" ] }
+            edition: STANDARD
+            vmUser: opc
+            vmPublicKeyText: { "Fn::GetParam": publicKeyText }
+            usrPrivateKeyFile: { "Fn::GetParam": usrPrivateKey }
+          componentParameters:
+            OEP:
+              shape: oc1m
+              iotAdminUserName: { "Fn::GetParam": commonAdminUsername }
+              iotAdminPassword: { "Fn::GetParam": commonAdminPwd }
+              jcsServiceName:  { "Fn::GetAtt": [jcs, serviceName] }
+              jcsUsername: { "Fn::Join": ["_", [ "Fn::GetParam": commonAdminUsername , jcs ]] } 
+              jcsPassword: { "Fn::GetParam": commonAdminPwd }
+              dbcsName: { "Fn::GetAtt": [dbcs, serviceName] }
+              dbcsUserName: sys
+              dbcsPassword: { "Fn::GetParam": commonAdminPwd }
+              deviceSimulatorEnable: { "Fn::GetParam": enableSimulator }
+              dataVolumeSizeInt: { "Fn::If":[ "minimalInstall", "10", "35" ] }
+            Nosql:
+              shape: { "Fn::If":[ "minimalInstall", "oc1m", "oc1m" ] }
+              nosqlServerCount: 1
+              dataVolumeSizeInt: { "Fn::If":[ "minimalInstall", "10", "100" ] }
+            ES:
+              shape: oc1m
+        depends_on:
+          - backupContainer
+          - dbcs
+          - jcs
+    attributes:
+        OraConnectString:
+            value: { "Fn::GetAtt": [dbcs, components.DB_1.attributes.CONNECT_DESCRIPTOR] }
+            description: DBCS connect descriptor

@@ -1,0 +1,282 @@
+---
+  template: 
+    templateName: Oracle-SOACS-DBCS-Template
+    templateVersion: 18.2.5-1805310600
+    templateDescription: "Provisions a Stack composed of SOA Cloud Service and Database Cloud Service instances using Oracle Storage Cloud Service. **WARNING** You will be billed for the Cloud resources created if you create a Cloud Stack from this template"
+    
+    parameters: 
+      wlVersion: 
+        label: SOA Version
+        description: "Select a SOA Version"
+        type: String
+        default: 12cRelease212
+        allowedValues: {"12cRelease212": "Oracle WebLogic Server 12c, 12.2.1.2"}
+      wlComputeShape: 
+        label: Compute Shape
+        description: Select a Compute Shape for this service.
+        type: ComputeShape
+        mandatory: true
+        default: {"Fn::FindInMap": [RegionTypes, {"Fn::GetParam": stackRegion.regionType}, defaultShape]}
+        allowedValues: {"Fn::FindInMap": [RegionTypes, {"Fn::GetParam": stackRegion.regionType}, allowedShapes]}
+        customize:
+          regionType: {"Fn::If": [emptyRegion, OCICLASSIC, {"Fn::GetParam": stackRegion.regionType}]}
+      wlByol:
+        label: Bring Your Own License
+        description: "Check this field if you wish to use your own license. If you choose this please make sure that you have proper entitlements to use for new service instances you are creating."
+        type: Boolean
+        default: false
+        condition: jcsBYOL
+      wlEntitlement:
+        label: SOA Entitlement
+        description: "This is the entitlement id used to identify the service in the tenant account."
+        type: String
+        mandatory: true
+        condition: jcsMultEntitl
+        allowedValues: {"Fn::GetParam": _account.soa.entitlementids}
+      publicKeyText: 
+        label: SSH Public Key
+        description: Click Edit to generate a new key pair, enter an existing public keys value or upload a new public key.
+        type: ssh
+        mandatory: true
+        sensitive: true
+      wlAdminUser: 
+        label: Administrator Username
+        description: "Your choice of name for the SOA administration user. Must be between 8 and 128 ASCII characters and cannot contain a tab, brackets, parentheses or the characters , < > & # | ?"
+        type: String
+        minLength: 8
+        maxLength: 128
+        default: weblogic
+        allowedPattern: "[\\p{Print}&&[^',<>#&|\\?\\(\\)\\{\\}\t ]]++"
+        constraintDescription: "SOA administration username must be between 8 and 128 ASCII characters and cannot contain a tab, brackets, parentheses or the characters , < > & # | ?"
+      dbSid: 
+        label: DB Name (SID)
+        description: "Database name of your choice, up to 8 characters; must begin with a letter and can contain only letters and numbers."
+        type: String
+        minLength: 1
+        maxLength: 8
+        default: ORCL
+        allowedPattern: "^[a-zA-Z][a-zA-Z0-9]*$"
+        constraintDescription: "Database name can contain up to 8 characters; must begin with a letter and can contain only letters and numbers. "
+      dbVersion: 
+        label: DBCS Version
+        description: "Select a DBCS Version"
+        type: String
+        default: 12.1.0.2
+        allowedValues: {"11.2.0.4": "Oracle Database 11g Release 2", "12.1.0.2": "Oracle Database 12c Release 1", "12.2.0.1": "Oracle Database 12c Release 2" }
+      dbByol:
+        label: Bring Your Own License
+        description: "Check this field if you wish to use your own license. If you choose this please make sure that you have proper entitlements to use for new service instances you are creating."
+        type: Boolean
+        default: false
+        condition: dbcsBYOL
+      dbEntitlement:
+        label: DB Entitlement
+        description: "This is the entitlement id used to identify the service in the tenant account."
+        type: String
+        condition: dbcsMultEntitl
+        mandatory: true
+        allowedValues: {"Fn::GetParam": _account.dbaas.entitlementids}
+      dbSoftwareEdition:
+        label: Software Edition
+        description: "Select the database edition for this Oracle Database Cloud Service instance."
+        type: String
+        allowedValues: {"SE": "Standard Edition", "EE": "Enterprise Edition", "EE_HP": "Enterprise Edition - High Performance", "EE_EP": "Enterprise Edition - Extreme Performance" }
+        default: SE
+      commonPwd:
+        label: Password (to access SOA and DBCS)
+        description: "Password to access JCS and DBCS. Password must be between 8 and 30 characters with at least one lower case letter, one upper case letter, one number and one special character (_,#). For example, Ach1z0#d"
+        type: Password
+        minLength: 8
+        maxLength: 30
+        allowedPattern: "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*[0-9])[a-zA-Z]([a-zA-Z0-9_#])+$"
+        mandatory: true
+        sensitive: true
+        constraintDescription: "Password must be between 8 and 30 characters with at least one lower case letter, one upper case letter, one number and one special character (_,#). For example, Ach1z0#d"
+      backupDestination:
+        label: Backup Destination
+        description: Backup Destination can be None, or Both Remote and Disk Storage
+        type: String
+        default: BOTH
+        mandatory: true
+        allowedValues: {"BOTH": "Both Remote and Disk Storage" }
+      dbBackupStorageContainer:
+        label: Database Backup Container
+        description: {"Fn::If": [isOCI,"URL of the Object Storage container for your service instance backups. Example: https://swiftobjectstorage.<region>.oraclecloud.com/v1/<namespace>/<container>. To identify the URL of your storage account, see here for <a href = \"http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=oci_general_paasprereqs\"> details.</a>","URL of the Oracle Storage Cloud Service container for your service instance backups. Example: https://foo.storage.oraclecloud.com/MyService-bar/MyContainer. To identify the URL of your storage account, see the <a href = \"http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=CSSTO-GUID-221133EF-F408-4DCF-9BF7-7A1F12C3E8A6\"> documentation.</a> If this container doesn't exist, use the provided checkbox to create it."]}
+        type: String
+        condition: backupRequired
+        default:
+          "Fn::If":
+            - isOCI
+            - ""
+            - "Fn::If":
+              - dbcsMultEntitl
+              - {"Fn::Join": ["", [{ "Fn::GetParam": {"Fn::Join": ["", [_account.dbaas.,{"Fn::GetParam": wlEntitlement},.cloudstorageuri]]}}, "DBaaS"]]}
+              - {"Fn::Join": ["", [{"Fn::GetParam": _account.dbaas.cloudstorageuri}, "DBaaS"]]}
+      backupStorageUser:
+        label: Username
+        description: Name of an Oracle Storage Cloud Service user that has write access to the specific container. If the container does not exist, then this user must have the Service Administrator role.
+        type: String
+        condition: backupRequired
+      backupStoragePassword:
+        label: Password
+        description: Password for the Oracle Storage Cloud Service user.
+        type: String
+        sensitive: true
+        condition: backupRequired
+      createBackupContainer:
+        label: Create Cloud Storage Container
+        description: "Check this option if you want to create a new container with the information specified above."
+        type: Boolean
+        default: false
+        condition: backupRequired
+      dbComputeShape:
+        label: Compute Shape
+        description: Select a Compute Shape for this service.
+        type: ComputeShape
+        mandatory: true
+        default: {"Fn::FindInMap": [RegionTypes, {"Fn::GetParam": stackRegion.regionType}, defaultShape]}
+        allowedValues: {"Fn::FindInMap": [RegionTypes, {"Fn::GetParam": stackRegion.regionType}, allowedShapes]}
+        customize:
+          regionType: {"Fn::If": [emptyRegion, OCICLASSIC, {"Fn::GetParam": stackRegion.regionType}]}
+      dbStorage: 
+        label: Usable Database Storage (GB)
+        description: "Enter the value for usable Database Storage in GB. The number must be between 15 and 1200."
+        type: Number
+        default: 50
+      stackRegion:
+        label: Region
+        type: RegionConfig
+        customize:
+          serviceType: SOA
+      provisionOTD: 
+        label: Provision OTD
+        description: Would you like to Provision OTD?
+        type: boolean
+        mandatory: false  
+        default: true
+    parameterGroups:
+      - label: Database Cloud
+        parameters: [ dbByol, dbEntitlement, dbSid, dbVersion, dbComputeShape, dbStorage, dbSoftwareEdition ]
+      - label: Access
+        parameters: [ commonPwd, publicKeyText, stackRegion ]
+      - label: Storage Cloud (for Backup)
+        parameters: [ backupDestination, dbBackupStorageContainer, backupStorageUser, backupStoragePassword, createBackupContainer ]
+      - label: SOA Cloud
+        parameters: [ wlByol, wlEntitlement, wlVersion, wlComputeShape, wlAdminUser ]
+    conditions:
+       jcsMultEntitl: {"Fn::GreaterThan": [{"Fn::Size" : {"Fn::GetParam" : _account.soa.entitlementids}}, 1]}
+       dbcsMultEntitl: {"Fn::GreaterThan": [{"Fn::Size" : {"Fn::GetParam" : _account.dbaas.entitlementids}}, 1]}
+       jcsBYOL: {"Fn::Equals": [true, "Fn::GetParam": _account.soa.BYOL]}
+       dbcsBYOL: {"Fn::Equals": [true, "Fn::GetParam": _account.DBaaS.BYOL]}
+       backupRequired: {"Fn::Equals": ["BOTH", "Fn::GetParam": backupDestination]}
+       createContainer: {"Fn::If": [backupRequired, {"Fn::Equals": ["true", "Fn::GetParam": createBackupContainer]}, "false"]}
+       emptyRegion: {"Fn::Empty": {"Fn::GetParam": stackRegion.region}}
+       emptyAd: {"Fn::Empty": {"Fn::GetParam": stackRegion.availabilityDomain}}
+       emptySubnet: {"Fn::Empty": {"Fn::GetParam": stackRegion.subnet}}
+       emptyIpNetwork: {"Fn::Empty": {"Fn::GetParam": stackRegion.ipNetwork}}
+       isOCI: {"Fn::Equals": [OCI, "Fn::GetParam": stackRegion.regionType]}
+       isUCM: {"Fn::Equals": [true, "Fn::GetParam": _account.soa.commitmodelaccount]}
+       notCreateContainer: {"Fn::And": [{"Fn::If": [createContainer, "false", "true"]}, {"Fn::If": [backupRequired, "true", "false"]}]}
+       backupContainerCreationRequired: {"Fn::And": [{"Fn::If": [backupRequired, "true", "false"]}, {"Fn::If": [isOCI, "false", "true"]}]}
+    
+    mappings:
+        WlsToAllowedDbVersions:
+           wlVersions:
+             12cRelease212:
+                "12.1.0.2": "Oracle Database 12c Release 1"
+                "12.2.0.1": "Oracle Database 12c Release 2"
+        RegionTypes:
+           OCI:
+              "defaultShape": VM.Standard1.1
+              "allowedShapes": [VM.Standard1.1, VM.Standard1.2, VM.Standard1.4,VM.Standard1.8,VM.Standard1.16,VM.Standard2.1,VM.Standard2.2,VM.Standard2.4,VM.Standard2.8,VM.Standard2.16,VM.Standard2.24,BM.Standard1.36,BM.Standard2.52]
+           OCICLASSIC:
+              "defaultShape": oc1m
+              "allowedShapes": [ oc1m, oc2m, oc3m, oc4m ]     
+    validations:
+        dbBackupStorage:
+            condition: notCreateContainer
+            validationType: STORAGE_CONNECT
+            parameters:
+                cloudStorageContainer: { "Fn::GetParam": dbBackupStorageContainer }
+                cloudStorageUser: { "Fn::GetParam": backupStorageUser }
+                cloudStoragePassword: { "Fn::GetParam": backupStoragePassword }
+    
+    resources:
+      backupContainer: 
+        type: OSS.Container
+        condition: createContainer
+        parameters: 
+          cloudStorageContainer: { "Fn::GetParam": dbBackupStorageContainer }
+          cloudStorageUser: { "Fn::GetParam": backupStorageUser }
+          cloudStoragePassword: { "Fn::GetParam": backupStoragePassword }
+          refServiceType: SOA
+      dbcs:
+        type: dbaas
+        parameters: 
+          serviceName: { "Fn::Join": ["", ["Fn::GetParam": serviceName, DBCS]] }
+          version: { "Fn::GetParam": dbVersion }
+          level: PAAS
+          edition: { "Fn::GetParam": dbSoftwareEdition }
+          shape: { "Fn::GetParam": dbComputeShape }
+          vmPublicKeyText: { "Fn::GetParam": publicKeyText }
+          isBYOL: { "Fn::If": [dbcsBYOL, {"Fn::GetParam": dbByol}, "OPC::NoValue" ]}
+          serviceEntitlementId: { "Fn::If": [dbcsMultEntitl, {"Fn::GetParam": dbEntitlement}, "OPC::NoValue" ]}
+          subnet: { "Fn::If": [emptySubnet, "OPC::NoValue", { "Fn::GetParam": stackRegion.subnet } ]}
+          ipNetwork: { "Fn::If": [emptyIpNetwork, "OPC::NoValue", { "Fn::GetParam": stackRegion.ipNetwork } ]}
+          availabilityDomain: { "Fn::If": [emptyAd, "OPC::NoValue", { "Fn::GetParam": stackRegion.availabilityDomain } ]}
+          region: { "Fn::If": [emptyRegion, "OPC::NoValue", { "Fn::GetParam": stackRegion.region } ]}
+          parameters: 
+            - 
+              type: db
+              adminPassword: { "Fn::GetParam": commonPwd }
+              sid: { "Fn::GetParam": dbSid }
+              failoverDatabase: no
+              backupDestination: { "Fn::GetParam": backupDestination }
+              timezone: UTC
+              charset: AL32UTF8
+              ncharset: AL16UTF16
+              cloudStorageContainer: { "Fn::GetParam": dbBackupStorageContainer }
+              cloudStorageUser: { "Fn::GetParam": backupStorageUser }
+              cloudStoragePwd: { "Fn::GetParam": backupStoragePassword }
+              usableStorage: { "Fn::GetParam": dbStorage }
+        depends_on: [ { "Fn::If": [createContainer, backupContainer, "OPC::NoValue" ]} ]
+      soacs: 
+        type: SOA
+        parameters: 
+          purchasePack: soaosbb2b
+          edition: SUITE
+          serviceLevel: PAAS
+          enableAdminConsole: true
+          vmPublicKeyText: { "Fn::GetParam": publicKeyText }
+          serviceName: { "Fn::Join": ["", ["Fn::GetParam": serviceName, SOACS]] }
+          serviceVersion: { "Fn::GetParam": wlVersion }
+          cloudStorageContainer: { "Fn::GetParam": dbBackupStorageContainer }
+          cloudStorageUser: { "Fn::GetParam": backupStorageUser }
+          cloudStoragePassword:  { "Fn::GetParam": backupStoragePassword }
+          provisionOTD: {"Fn::GetParam": provisionOTD}
+          meteringFrequency: { "Fn::If": [isUCM,"HOURLY","MONTHLY"]}
+          subnet: { "Fn::If": [emptySubnet, "OPC::NoValue", { "Fn::GetParam": stackRegion.subnet } ]}
+          ipNetwork: { "Fn::If": [emptyIpNetwork, "OPC::NoValue", { "Fn::GetParam": stackRegion.ipNetwork } ]}
+          availabilityDomain: { "Fn::If": [emptyAd, "OPC::NoValue", { "Fn::GetParam": stackRegion.availabilityDomain } ]}
+          region: { "Fn::If": [emptyRegion, "OPC::NoValue", { "Fn::GetParam": stackRegion.region } ]}
+          isBYOL: { "Fn::If": [jcsBYOL, {"Fn::GetParam": wlByol}, "OPC::NoValue" ]}
+          components:  
+             WLS:
+                adminUserName: { "Fn::GetParam": wlAdminUser }
+                adminPassword: { "Fn::GetParam": commonPwd }
+                dbServiceName: { "Fn::GetAtt": [dbcs, serviceName] }
+                dbaName: sys
+                dbaPassword: { "Fn::GetParam": commonPwd }
+                managedServerCount: 1
+                shape: { "Fn::GetParam": wlComputeShape }
+             OTD:  
+                listenerPortsEnabled: true
+                loadBalancingPolicy: LEAST_CONNECTION_COUNT
+                haEnabled: false    
+                shape: oc3
+        depends_on: 
+          - dbcs   
+    attributes: 
+        OraConnectString: 
+            value: { "Fn::GetAtt": [dbcs, components.DB_1.attributes.CONNECT_DESCRIPTOR] }
+            description: DBCS connect descriptor
