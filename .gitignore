@@ -19,6 +19,7 @@ lib/
 lib64/
 var/
 gc3_query/var/*.zip
+gc3_query/opt/scripts/key_store
 
 # Package subdirs
 !gc3_query/lib/
