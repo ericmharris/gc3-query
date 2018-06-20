@@ -4,16 +4,18 @@ echo "Enter region (eg. naac, apac, emea): "
 read -e REGION
 echo "Enter 4 digit project code (eg. cdmt, soar): "
 read -e PROJECT_CODE
+echo "Enter tag for the key (eg. 'admin' for opc/team access, 'cust' for keys given to projects for shell access to oracle, etc.): "
+read -e SSH_KEY_TAG
 echo "Enter SSH keystore password: "
 read -e PASSWORD
 
 export DATE=`date '+%Y%m%d'`
-export KEY_FILE_BASE="${REGION}_${PROJECT_CODE}"
+export KEY_FILE_BASE="${REGION}_${PROJECT_CODE}_${SSH_KEY_TAG}"
 export PRIVATE_KEY_FILE="${KEY_FILE_BASE}.rsa"
 export PUBLIC_KEY_FILE="${KEY_FILE_BASE}.rsa.pub"
 export RENAMED_PUBLIC_KEY_FILE="${KEY_FILE_BASE}.pub"
 export KEY_COMMENT="rsa-key_${REGION}-${PROJECT_CODE}_${DATE}"
-export KEY_DIRECTORY="$PWD/$REGION/$PROJECT_CODE"
+export KEY_DIRECTORY="$PWD/key_store/$REGION/$PROJECT_CODE"
 export PRIVATE_KEY_OUTPUT="${KEY_DIRECTORY}/${PRIVATE_KEY_FILE}"
 export PUBLIC_KEY_OUTPUT="${KEY_DIRECTORY}/${PUBLIC_KEY_FILE}"
 export RENAMED_PUBLIC_KEY_OUTPUT="${KEY_DIRECTORY}/${RENAMED_PUBLIC_KEY_FILE}"
