@@ -26,6 +26,7 @@ alias gpull='git pull origin master'
 alias gpush='git push origin master'
 alias gpush='git push origin master'
 
+
 timestamp ()
 {
 # 04_25_2018.15_55_28
@@ -45,3 +46,12 @@ datestamp ()
 
 alias ts='timestamp'
 alias ds='datestamp'
+
+
+py36 ()
+{
+alias python='python3.6'
+alias python3='python3.6'
+alias pip='pip3.6'
+alias pip3='pip3.6'
+}

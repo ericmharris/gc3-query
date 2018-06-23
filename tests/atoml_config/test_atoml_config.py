@@ -152,3 +152,14 @@ def test_data_access(abc_mapping_setup):
 
 
 
+def test_load_atoml_multiple_paths():
+    config_dir_01 = TEST_BASE_DIR.joinpath("load_atoml_settings_file/present")
+    config_dir_02 = TEST_BASE_DIR.joinpath("load_atoml_settings_file/absent")
+    atoml_settings_file = config_dir_01.joinpath('__init__.toml')
+    atc = ATomlConfig(directory_path=[config_dir_01, config_dir_02])
+    assert config_dir_01.exists()
+    assert config_dir_02.exists()
+    assert atoml_settings_file.exists()
+    assert atc._atoml_settings_file.file_path == atoml_settings_file
+
+

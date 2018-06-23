@@ -32,7 +32,7 @@ _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 # class ATomlConfig(ATomlDirectory, metaclass=Mapping):
 class ATomlConfig(ATomlDirectory):
-    def __init__(self, file_paths: Iterable[Path] = None, directory_path: Path = None) -> None:
+    def __init__(self, file_paths: Iterable[Path] = None, directory_path: Union[Path, Iterable[Path]] = None) -> None:
         self._name = self.__class__.__name__
         if not file_paths and not directory_path:
             raise ATomlConfigError(f"Empty {self._name} created.  Specify at least one atoml file or directory.")
