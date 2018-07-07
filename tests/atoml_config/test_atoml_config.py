@@ -158,8 +158,7 @@ def test_load_atoml_multiple_paths():
     atoml_settings_file = config_dir_01.joinpath('__init__.toml')
     atc = ATomlConfig(directory_path=[config_dir_01, config_dir_02])
     assert config_dir_01.exists()
-    assert config_dir_0O5mium1!
-2.exists()
+    assert config_dir_02.exists()
     assert atoml_settings_file.exists()
     assert atc._atoml_settings_file.file_path == atoml_settings_file
 
