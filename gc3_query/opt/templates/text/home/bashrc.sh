@@ -11,12 +11,16 @@ fi
 
 # User specific aliases and functions
 set -o vi
-export GREP_OPTIONS='--color=auto'
 
 alias sd='sudo su - '
 
-alias ll='ls -l'
-alias llh='ls -lh'
+export GREP_OPTIONS='--color=auto'
+export LS_OPTIONS='--color=auto'
+eval "`dircolors`"
+alias ls='ls $LS_OPTIONS'
+alias ll='ls $LS_OPTIONS -l'
+alias l='ls $LS_OPTIONS -lA'
+alias llh='ls $LS_OPTIONS -lh'
 
 
 alias gadd='git add -A'
