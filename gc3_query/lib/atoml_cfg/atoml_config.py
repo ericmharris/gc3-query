@@ -13,7 +13,7 @@ gc3-query.atoml_config    [6/3/2018 8:42 AM]
 ## Standard Library Imports
 import sys, os
 import copy
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 
 ################################################################################
 ## Third-Party Imports
@@ -32,13 +32,26 @@ _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 # class ATomlConfig(ATomlDirectory, metaclass=Mapping):
 class ATomlConfig(ATomlDirectory):
-    def __init__(self, file_paths: Iterable[Path] = None, directory_path: Union[Path, Iterable[Path]] = None) -> None:
+    def __init__(self, file_paths: Iterable[Path] = None, directory_paths: Union[Path, Iterable[Path]] = None) -> None:
         self._name = self.__class__.__name__
-        if not file_paths and not directory_path:
+        if not file_paths and not directory_paths:
             raise ATomlConfigError(f"Empty {self._name} created.  Specify at least one atoml file or directory.")
-        super().__init__(directory_path)
+
+        if isinstance(directory_paths, Path):
+            super().__init__(directory_path=directory_paths)
+            self.atoml_dir_path = Path(directory_paths).resolve() if directory_paths else None
+        elif isinstance(directory_paths, Sequence):
+            directory_path = directory_paths.pop(0)
+            self.atoml_dir_path = Path(directory_path).resolve()
+            super().__init__(directory_path=self.atoml_dir_path)
+            if directory_paths:
+                self.atoml_directory_paths = [Path(p).resolve() for p in directory_paths]
+                self.atoml_directories.extend([ATomlDirectory(directory_path=p) for p in self.atoml_directory_paths])
+        else:
+            self.atoml_dir_path = None
+            super().__init__(directory_path=self.atoml_dir_path)
+
         self.atoml_file_paths = [Path(p).resolve() for p in file_paths] if file_paths else None
-        self.atoml_dir_path = Path(directory_path).resolve() if directory_path else None
 
         ## __init__.toml is automatically loaded if it's found in the directory
         self._atoml_settings_file: Union[ATomlFile, None] = self._load_atoml_settings_file(
@@ -152,7 +165,7 @@ class ATomlConfig(ATomlDirectory):
     def load_file(self, path: Path) -> List[Any]:
         pass
 
-    def merged_toml(self, atoml_settings_file: ATomlFile, atoml_files: List[ATomlFile], atoml_directories: List[ATomlDirectory]) -> Dict:
+    def merged_toml(self, atoml_settings_file: ATomlFile, atoml_files: List[ATomlFile], atoml_directories: Union[List[ATomlDirectory], None]) -> Dict:
         if not any([atoml_files,  atoml_directories]) and atoml_settings_file:
             _warning(f"{self._name} created with only an __init__.toml file.")
             return copy.deepcopy(atoml_settings_file.toml)

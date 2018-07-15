@@ -60,7 +60,7 @@ def cli(ctx, debug, help):
     atoml_config_dir = GC3_QUERY_HOME.joinpath('etc/config')
     _debug(f"atoml_config_dir={atoml_config_dir}")
     ctx.gc3_config = {}
-    ctx.gc3cfg = ATomlConfig(directory_path=atoml_config_dir)
+    ctx.gc3cfg = ATomlConfig(directory_paths=atoml_config_dir)
     click.echo(f"Running atoml.cli() with context: {ctx}, ctx.gc3cfg={ctx.gc3cfg}")
     if debug:
         ctx.gc3_config["logging_level"] = "DEBUG"

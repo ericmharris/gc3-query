@@ -14,13 +14,13 @@ TEST_BASE_DIR: Path = Path(__file__).parent.joinpath("ATomlConfig")
 
 def test_no_input_throws_error():
     with pytest.raises(ATomlConfigError) as e:
-        atc = ATomlConfig(file_paths=None, directory_path=None)
+        atc = ATomlConfig(file_paths=None, directory_paths=None)
 
 
 def test_load_atoml_settings_file_present():
     config_dir = TEST_BASE_DIR.joinpath("load_atoml_settings_file/present")
     atoml_settings_file = config_dir.joinpath('__init__.toml')
-    atc = ATomlConfig(directory_path=config_dir)
+    atc = ATomlConfig(directory_paths=config_dir)
     assert config_dir.exists()
     assert atoml_settings_file.exists()
     assert atc._atoml_settings_file.file_path == atoml_settings_file
@@ -29,7 +29,7 @@ def test_load_atoml_settings_file_present():
 def test_load_atoml_settings_file_absent():
     config_dir = TEST_BASE_DIR.joinpath("load_atoml_settings_file/absent")
     atoml_settings_file = config_dir.joinpath('__init__.toml')
-    atc = ATomlConfig(directory_path=config_dir)
+    atc = ATomlConfig(directory_paths=config_dir)
     assert config_dir.exists()
     assert not atoml_settings_file.exists()
     assert atc._atoml_settings_file == None
@@ -90,7 +90,7 @@ def test_load_atoml_files_from_flat_dir(load_atoml_files_from_directory_setup):
     config_dir, test_data = load_atoml_files_from_directory_setup
     test_dir = config_dir.joinpath('flat')
     assert test_dir.exists()
-    atc = ATomlConfig(directory_path=test_dir)
+    atc = ATomlConfig(directory_paths=test_dir)
     test_result = test_data(atc)
     assert len(atc.atoml_files) == 4
     assert test_result
@@ -100,7 +100,7 @@ def test_load_atoml_files_from_one_deep_dir(load_atoml_files_from_directory_setu
     config_dir, test_data = load_atoml_files_from_directory_setup
     test_dir = config_dir.joinpath('one_deep')
     assert test_dir.exists()
-    atc = ATomlConfig(directory_path=test_dir)
+    atc = ATomlConfig(directory_paths=test_dir)
     test_result = test_data(atc)
     assert len(atc.atoml_files) == 2
     assert test_result
@@ -110,7 +110,7 @@ def test_load_atoml_files_from_nest_dir(load_atoml_files_from_directory_setup):
     config_dir, test_data = load_atoml_files_from_directory_setup
     test_dir = config_dir.joinpath('nested')
     assert test_dir.exists()
-    atc = ATomlConfig(directory_path=test_dir)
+    atc = ATomlConfig(directory_paths=test_dir)
     test_result = test_data(atc)
 
     assert len(atc.atoml_files) == 1
@@ -130,7 +130,7 @@ def test_data_access(abc_mapping_setup):
     config_dir = abc_mapping_setup
     test_dir = config_dir.joinpath('data_access')
     assert test_dir.exists()
-    atc = ATomlConfig(directory_path=test_dir)
+    atc = ATomlConfig(directory_paths=test_dir)
     assert len(atc.atoml_files) == 4
 
     assert "user" in atc
@@ -150,16 +150,27 @@ def test_data_access(abc_mapping_setup):
     assert 'first_name' in atc.get("user")
 
 
-
-
 def test_load_atoml_multiple_paths():
     config_dir_01 = TEST_BASE_DIR.joinpath("load_atoml_settings_file/present")
     config_dir_02 = TEST_BASE_DIR.joinpath("load_atoml_settings_file/absent")
     atoml_settings_file = config_dir_01.joinpath('__init__.toml')
-    atc = ATomlConfig(directory_path=[config_dir_01, config_dir_02])
+    atc = ATomlConfig(directory_paths=[config_dir_01, config_dir_02])
     assert config_dir_01.exists()
     assert config_dir_02.exists()
     assert atoml_settings_file.exists()
     assert atc._atoml_settings_file.file_path == atoml_settings_file
+
+    assert 'title' in atc.toml
+    assert '__init__' in atc.toml
+
+
+    assert 'mongodb' in atc.toml
+    assert 'storage' in atc.toml['mongodb']
+    assert 'db_path' in atc.toml['mongodb']['storage']
+
+    assert 'idm_domains' in atc.toml
+    assert 'gc3pilot' in atc.toml['idm_domains']
+    assert 'rest_url' in atc.toml['idm_domains']['gc3pilot']
+
 
 
