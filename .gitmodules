@@ -1,3 +1,12 @@
 [submodule "gc3_query/opt/reference/toml"]
 	path = gc3_query/opt/reference/toml
 	url = https://github.com/uiri/toml.git
+[submodule "gc3_query/opt/reference/oci-python-sdk"]
+	path = gc3_query/opt/reference/oci-python-sdk
+	url = https://github.com/oracle/oci-python-sdk.git
+[submodule "gc3_query/opt/reference/oci-cli"]
+	path = gc3_query/opt/reference/oci-cli
+	url = https://github.com/oracle/oci-cli.git
+[submodule "gc3_query/opt/reference/oci-ansible-modules"]
+	path = gc3_query/opt/reference/oci-ansible-modules
+	url = https://github.com/oracle/oci-ansible-modules.git
