@@ -1,0 +1,7 @@
+requestium
+aiobravado
+melddict
+bravado
+prettyprinter
+msgpack
+logbook

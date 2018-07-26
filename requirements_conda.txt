@@ -1,0 +1,30 @@
+# [eharris@win10aulaptop:master gc3-query]$ conda install -y --dry-run --file requirements.txt
+# Solving environment: failed
+# 
+# PackagesNotFoundError: The following packages are not available from current channels:
+# 
+#   - requestium
+#   - aiobravado
+#   - melddict
+#   - bravado
+#   - prettyprinter
+#   - msgpack
+#   - logbook
+
+Click>=6.0
+colorama
+pendulum
+voluptuous
+dataclasses
+requests>=2.18.0
+selenium
+cookiecutter
+beautifulsoup4
+pymongo
+mongoengine
+jinja2-time
+httpie
+cryptography
+sortedcontainers
+keyring
+
