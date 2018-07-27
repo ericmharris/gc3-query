@@ -25,16 +25,13 @@ class SetupMongoDB:
     template_name: str = "basic_config"
     template_path: str = str(BASE_DIR.joinpath(f"opt/templates/cookiecutter/mongodb/{template_name}"))
 
-    def __init__(
-        self, ctx: click.core.Context, mongodb_bin_dir: str = None, listen_port: int = 7117, force: bool = False
-    ):
-        self.mongodb_bin_dir = (
-            Path(mongodb_bin_dir) if mongodb_bin_dir else Path(r"C:\Program Files\MongoDB\Server\3.6\bin")
-        )
+    def __init__( self, ctx: click.core.Context, mongodb_bin_dir: str = None, listen_port: int = 7117, force: bool = False ):
+        self.mongodb_bin_dir = ( Path(mongodb_bin_dir) if mongodb_bin_dir else Path(r"C:\Program Files\MongoDB\Server\3.6\bin"))
         self.listen_port = listen_port
         self.force = force
         self.user_inputs = self.gather_inputs(ctx=ctx, mongodb_bin_dir=self.mongodb_bin_dir, listen_port=listen_port)
-        self.proj_dir = self.deploy(user_inputs=self.user_inputs, force=force)
+        # self.proj_dir = self.deploy(user_inputs=self.user_inputs, force=force)
+        self.proj_dir = None
 
     def gather_inputs(self, ctx: click.core.Context, mongodb_bin_dir: Path, listen_port: int):
         user_inputs = {}
@@ -90,10 +87,9 @@ class SetupMongoDB:
 
         return user_inputs
 
-    def deploy(self, user_inputs: Dict[str, Any], force: bool):
+    def deploy(self) -> bool:
         """
 
-        :param user_inputs:
         :return:
 
 
@@ -121,17 +117,18 @@ class SetupMongoDB:
         working_dir = os.path.abspath(os.path.dirname(__file__))
         template = os.path.join(working_dir, "templates", "cookiecutter-use-api")
         _debug(
-            f"user_inputs={user_inputs}, template={SetupMongoDB.template_path}, output_dir={user_inputs['mongodb_setup_dir']}"
+            f"user_inputs={self.user_inputs}, template={SetupMongoDB.template_path}, output_dir={self.user_inputs['mongodb_setup_dir']}"
         )
-        _debug(f"extra_context={user_inputs}")
-        _debug(f"force={force}")
+        _debug(f"extra_context={self.user_inputs}")
+        _debug(f"force={self.force}")
 
         proj_dir = cookiecutter.main.cookiecutter(
             template=SetupMongoDB.template_path,
             no_input=True,
-            overwrite_if_exists=force,
-            output_dir=user_inputs["gc3_var_dir"],
-            extra_context=user_inputs,
+            overwrite_if_exists=self.force,
+            output_dir=self.user_inputs["gc3_var_dir"],
+            extra_context=self.user_inputs,
         )
 
-        return proj_dir
+        self.proj_dir = proj_dir
+        return True
