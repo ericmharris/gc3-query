@@ -1,39 +1,53 @@
-import os
-import sys
-from pathlib import Path
-from typing import Dict, Any
+# -*- coding: utf-8 -*-
 
+"""
+#@Filename : cookie_cutter_base
+#@Date : [7/27/2018 1:09 PM]
+#@Poject: gc3-query
+#@AUTHOR : emharris
+
+~~~~~~~~~~~~~~~~
+
+<DESCR SHORT>
+
+<DESCR>
+"""
+
+################################################################################
+## Standard Library Imports
+import sys, os
+import abc
+
+################################################################################
+## Third-Party Imports
+from dataclasses import dataclass
 import click
 import cookiecutter
-import cookiecutter.main
-import cookiecutter.config
 
-from gc3_query.lib import BASE_DIR
-from gc3_query.lib.gc3admin.gc3admin import _debug
+################################################################################
+## Project Imports
+from gc3_query.lib import *
 
-CONTEXT_SETTINGS = dict(
-    help_option_names=[
-        "-h",
-        "--help",
-        "-?",
-    ],  # help_option_names sets tokens that come after a command that'll trigger help.
-    ignore_unknown_options=True,
-)
+_debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
-class SetupMongoDB:
-    template_name: str = "basic_config"
-    template_path: str = str(BASE_DIR.joinpath(f"opt/templates/cookiecutter/mongodb/{template_name}"))
+class CookieCutterBase:
 
-    def __init__( self, ctx: click.core.Context, mongodb_bin_dir: str = None, listen_port: int = 7117, force: bool = False ):
-        self.mongodb_bin_dir = ( Path(mongodb_bin_dir) if mongodb_bin_dir else Path(r"C:\Program Files\MongoDB\Server\3.6\bin"))
-        self.listen_port = listen_port
-        self.force = force
+    def __init__(self, ctx: click.core.Context, template_name: str, template_path: Path, command_line_options: Dict[str, Any] = None):
+        self.ctx = ctx
+        self.template_name = template_name
+        self.template_path = template_path
+        self.command_line_options = command_line_options
         self.user_inputs = self.gather_inputs(ctx=ctx, mongodb_bin_dir=self.mongodb_bin_dir, listen_port=listen_port)
-        # self.proj_dir = self.deploy(user_inputs=self.user_inputs, force=force)
-        self.proj_dir = None
 
-    def gather_inputs(self, ctx: click.core.Context, mongodb_bin_dir: Path, listen_port: int):
+    @abc.abstractmethod
+    def gather_inputs(self, ctx: click.core.Context, command_line_options: Dict[str, Any] = None) -> Dict[str,Any]:
+        """
+
+        :param ctx:
+        :param command_line_options:
+        :return:
+        """
         user_inputs = {}
         cc_user_config = cookiecutter.config.get_user_config()
         cc_default_ctx = cc_user_config.get("default_context")
@@ -52,39 +66,6 @@ class SetupMongoDB:
         #     print("Oh, that doesn't exist, try again...")
         #     working_dir = input('Full file_path where to create the project [must exist]? ')
         # return GameCreateInfo(package_name, full_name, game_type, working_dir)
-
-        if not mongodb_bin_dir.exists():
-            mongodb_bin_dir = Path(click.prompt("Please enter full file_path to MongoDB bin directory", type=str))
-        mongod_bin_name = "mongod.exe" if "win" in sys.platform else "mongod"
-        mongod_bin = mongodb_bin_dir.joinpath(mongod_bin_name)
-        _debug(f"mongodb_bin_dir={mongodb_bin_dir}, mongod_bin={mongod_bin}")
-        user_inputs["mongod_bin"] = str(mongod_bin)
-
-        gc3_var_dir = BASE_DIR.joinpath("var")
-        mongodb_setup_dir = gc3_var_dir.joinpath("mongodb")
-        mongodb_data_dir = mongodb_setup_dir.joinpath("data")
-        mongodb_logs_dir = mongodb_setup_dir.joinpath("logs")
-        mongodb_configs_dir = mongodb_setup_dir.joinpath("atoml_cfg")
-        mongodb_service_log_file = mongodb_logs_dir.joinpath("mongo-service.log")
-        mongodb_cmd_log_file = mongodb_logs_dir.joinpath("mongo-cmd.log")
-        mongodb_service_config_file = mongodb_configs_dir.joinpath("mongo-service.atoml_cfg")
-        mongodb_cmd_config_file = mongodb_configs_dir.joinpath("mongo-cmd.atoml_cfg")
-
-        _debug(f"gc3_var_dir={gc3_var_dir}, mongodb_setup_dir={mongodb_setup_dir}")
-        user_inputs["gc3_var_dir"] = str(gc3_var_dir)
-        user_inputs["mongodb_setup_dir"] = str(mongodb_setup_dir)
-        user_inputs["mongodb_data_dir"] = str(mongodb_data_dir)
-        user_inputs["mongodb_logs_dir"] = str(mongodb_logs_dir)
-        user_inputs["mongodb_service_log_file"] = str(mongodb_service_log_file)
-        user_inputs["mongodb_cmd_log_file"] = str(mongodb_cmd_log_file)
-        user_inputs["mongodb_service_config_file"] = str(mongodb_service_config_file)
-        user_inputs["mongodb_cmd_config_file"] = str(mongodb_cmd_config_file)
-        # user_inputs['ASDF'] = str(ASDF)
-
-        user_inputs["mongodb_dir_name"] = "mongodb"
-        user_inputs["mongodb_bin_dir"] = str(mongod_bin)
-        user_inputs["listen_port"] = listen_port
-
         return user_inputs
 
     def deploy(self) -> bool:
