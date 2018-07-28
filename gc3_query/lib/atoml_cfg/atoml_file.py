@@ -15,6 +15,8 @@ import sys, os
 ################################################################################
 ## Third-Party Imports
 from dataclasses import dataclass
+import toml
+from toml.decoder import TomlDecodeError
 
 ################################################################################
 ## Project Imports
@@ -101,7 +103,14 @@ class ATomlFile:
         self._lines = self.load_file(self.file_path)
         self.toml_text_lines = [l.toml for l in self._lines]
         self.toml_text = '\n'.join(self.toml_text_lines)
-        self.toml = toml.loads(self.toml_text)
+        try:
+            self.toml = toml.loads(self.toml_text)
+        except TomlDecodeError as e:
+            _error(f"TomlDecodeError Exception caught")
+            _error(f"class={self._name}")
+            _error(f"file_path={self.file_path}")
+            _error(e)
+            raise
 
         _debug(f"{self._name} loaded with {len(self.toml_text_lines)} lines.")
 

@@ -103,3 +103,11 @@ def test_annotated_file_02():
     assert atf.toml is not None
     assert 'rest_url' in atf.toml['idm_domains']['gc3pilot']
 
+# Make sure the in-memory representation of the file has the same number of lines as the actual file (ie. no extra \n's)
+def test_file_length():
+    config_dir = Path(__file__).parent.joinpath("ATomlFile/test_file_length")
+    tfile_orig = config_dir.joinpath("gc30003.toml")
+    tfile_in_memory = config_dir.joinpath("gc30003_in_memory.toml")
+    assert tfile_orig.exists()
+    assert tfile_in_memory.exists()
+    assert False
