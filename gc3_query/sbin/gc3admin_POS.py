@@ -5,8 +5,8 @@ import click
 
 from gc3_query import __version__
 from gc3_query.lib.gc3admin.gc3admin import *
-from gc3_query.lib.gc3admin.setup_mongodb import SetupMongoDB
-from gc3_query.lib.gc3admin.setup_home_kitty import SetupHomeKitty
+from gc3_query.lib.cookie_cutter.setup_mongodb import SetupMongoDB
+from gc3_query.lib.cookie_cutter.setup_home_kitty import SetupHomeKitty
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
