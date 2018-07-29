@@ -86,30 +86,15 @@ def setup_mongodb( ctx: click.core.Context, mongodb_bin_dir: str = None, listen_
 
 
 
-@cli.command(help="Manage credentials in OS keystore", short_help="Keystore.", epilog="Manage keystore")
-@click.option( "--password",
-               "-p",
-               prompt="Please enter full file_path to MongoDB bin directory",
-               help="Directory containing mongodb executables, eg. mongod.exe", )
-@click.option("--listen-port", "-p", help="TCP port mongod should listen on.", default=7117)
-@click.option("--force", "-f", help="Force, overwrite files if they exist.", default=False, is_flag=True)
+@cli.command(help="Manage password for IDM domain", short_help="Keystore.", epilog="Manage keystore")
+@click.option("--domain-name", "-d", help="IDM Domain name")
+@click.option( "--password", "-p", prompt="Password for IDM Domain: ", help="Password for IDM Domain" )
+@click.option("--update", "-u", help="Update password if credenatial already exists.", default=False, is_flag=True)
 @click.pass_context
-def set_domain_passwords( ctx: click.core.Context, mongodb_bin_dir: str = None, listen_port: int = 7117, force: bool = False ) -> None:
+def set_domain_passwords( ctx: click.core.Context, domain_name: str, password: str, update: bool = False ) -> None:
     click.echo(click.style(f"gc3admin.setup_mongodb(): target_dir={mongodb_bin_dir}", fg="green"))
     _warning(f"Test logging for gc3admin.")
     print(f"context: {ctx.parent.gc3_config}")
-    setup_mongo_db = SetupMongoDB(ctx=ctx, mongodb_bin_dir=mongodb_bin_dir, listen_port=listen_port, force=force)
-    ret_code = setup_mongo_db.deploy()
-    if ret_code:
-        click.echo(click.style(f"""MongoDB configuration succeeded 
-        config_dir={setup_mongo_db.user_inputs['mongodb_setup_dir']} 
-        using MongoDB={setup_mongo_db.user_inputs['mongod_bin']}""", fg="green"))
-        sys.exit(0)
-    else:
-        click.echo(click.style(f"""MongoDB configuration FAILED!
-        config_dir={setup_mongo_db.user_inputs['mongodb_setup_dir']} 
-        using MongoDB={setup_mongo_db.user_inputs['mongod_bin']}""", fg="red"))
-        sys.exit(1)
 
 
 

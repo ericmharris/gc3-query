@@ -30,6 +30,7 @@ from gc3_query import GC3_QUERY_HOME
 from gc3_query.lib import *
 from gc3_query.lib.gc3logging import get_logging
 from gc3_query.lib.atoml.atoml_config import ATomlConfig
+from gc3_query.lib.gc3_config import gc3_cfg
 
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
@@ -56,16 +57,14 @@ Help message for atoml cli.
 @click.option("-?", "-h", "--help", is_flag=True, help="Show this message and exit.")
 @click.pass_context
 def cli(ctx, debug, help):
-    # named ctx.parent.gc3cfg to other functions in cli group.
-    atoml_config_dir = GC3_QUERY_HOME.joinpath('etc/config')
-    _debug(f"atoml_config_dir={atoml_config_dir}")
-    ctx.gc3_config = {}
-    ctx.gc3cfg = ATomlConfig(directory_paths=atoml_config_dir)
-    click.echo(f"Running atoml.cli() with context: {ctx}, ctx.gc3cfg={ctx.gc3cfg}")
+    # named ctx.parent.gc3_cfg to other functions in cli group.
+    # ctx.gc3_config = {}
+    ctx.gc3_cfg = gc3_cfg
+    click.echo(f"Running atoml.cli() with context: {ctx}, ctx.gc3_cfg={gc3_cfg}")
     if debug:
-        ctx.gc3_config["logging_level"] = "DEBUG"
+        ctx.gc3_cfg["logging"]["logging_level"] = "debug"
     else:
-        ctx.gc3_config["logging_level"] = "WARNING"
+        ctx.gc3_cfg["logging"]["logging_level"] = "warning"
 
 
 @cli.command(help="Annotated TOML CLI", short_help="ATOML CLI", epilog="ATOML CLI")
@@ -73,8 +72,8 @@ def cli(ctx, debug, help):
 @click.pass_context
 def print(ctx: click.core.Context, verbose: bool = False) -> None:
     click.echo(click.style(f"atoml.print(): verbose={verbose}", fg="green"))
-    gc3cfg = ctx.parent.gc3cfg
-    pprint(gc3cfg.toml)
+    gc3_cfg = ctx.parent.gc3_cfg
+    pprint(gc3_cfg)
     sys.exit(0)
 
 

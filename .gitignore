@@ -90,3 +90,7 @@ target/
 /gc3_query/var/scratchpad/instances_db.json
 /gc3_query/var/mongodb/data
 /gc3_query/var/mongodb/logs
+
+/gc3_query/opt/reference/oci-cli
+/gc3_query/opt/reference/oci-python-sdk
+
