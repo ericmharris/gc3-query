@@ -1,13 +1,36 @@
-import keyword
-import socket
-import re
-import datetime
+# -*- coding: utf-8 -*-
+
+"""
+#@Filename : base_collections
+#@Date : [7/29/2018 12:49 PM]
+#@Poject: gc3-query
+#@AUTHOR : emharris
+
+~~~~~~~~~~~~~~~~
+
+<DESCR SHORT>
+
+<DESCR>
+"""
+
+################################################################################
+## Standard Library Imports
+import sys, os
 from collections import OrderedDict
 from collections.abc import MutableMapping, MutableSequence
 from collections.abc import KeysView, MappingView, Set, ItemsView, ValuesView
-from pathlib import Path
-
 import yaml
+
+################################################################################
+## Third-Party Imports
+from dataclasses import dataclass
+
+################################################################################
+## Project Imports
+from gc3_query.lib import *
+
+_debug, _info, _warning, _error, _critical = get_logging(name=__name__)
+
 
 class ListBase(MutableSequence):
     """A container for manipulating lists of hosts"""
@@ -250,7 +273,7 @@ class OrderedDictBase(MutableMapping):
         """D.keys() -> a set-like object providing a view on D's keys
 
         :param filters:  List of callables excluding the key if any of them returns False
-        :return: 
+        :return:
         """
         return KeysViewBase(self, filters=filters)
 
@@ -309,13 +332,5 @@ class CachedOrderedDictBase(OrderedDictBase):
 
     def _update_cache(self):
         with self._path.open('w') as fd:
-            debug(f'{self.__class__.__name__} caching value to file: {self._path}')
+            _debug(f'{self.__class__.__name__} caching value to file: {self._path}')
             yaml.dump(self._d, fd)
-
-
-
-
-IniParserDumper.add_multi_representer(ListBase, yaml.representer.SafeRepresenter.represent_list)
-IniParserDumper.add_multi_representer(DictBase, yaml.representer.SafeRepresenter.represent_dict)
-IniParserDumper.add_multi_representer(OrderedDictBase, yaml.representer.SafeRepresenter.represent_dict)
-IniParserDumper.add_multi_representer(OrderedDictAttrBase, yaml.representer.SafeRepresenter.represent_dict)
