@@ -14,4 +14,4 @@ multiple_sites = false
 name = 'uscom-central-1'
 data_center ='usdc2'
 rest_endpoint = 'https://compute.uscom-central-1.oraclecloud.com/'
-is_ucm = False
+is_ucm = false

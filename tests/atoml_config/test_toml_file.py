@@ -107,7 +107,8 @@ def test_annotated_file_02():
 def test_file_length():
     config_dir = Path(__file__).parent.joinpath("ATomlFile/test_file_length")
     tfile_orig = config_dir.joinpath("gc30003.toml")
-    tfile_in_memory = config_dir.joinpath("gc30003_in_memory.toml")
+    # tfile_in_memory = config_dir.joinpath("gc30003_in_memory.toml")
+    atf_orig = ATomlFile(file_path=tfile_orig)
     assert tfile_orig.exists()
-    assert tfile_in_memory.exists()
-    assert False
+    # assert tfile_in_memory.exists()
+    assert len(atf_orig._lines) == len(atf_orig.toml_text.splitlines())

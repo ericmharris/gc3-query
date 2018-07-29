@@ -102,7 +102,7 @@ class ATomlFile:
         self.file_name = self.file_path.name
         self._lines = self.load_file(self.file_path)
         self.toml_text_lines = [l.toml for l in self._lines]
-        self.toml_text = '\n'.join(self.toml_text_lines)
+        self.toml_text = ''.join(self.toml_text_lines)
         try:
             self.toml = toml.loads(self.toml_text)
         except TomlDecodeError as e:
