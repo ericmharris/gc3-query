@@ -76,11 +76,11 @@ class SetupHomeCCutter:
         CCutter_setup_dir = gc3_var_dir.joinpath("CCutter")
         CCutter_data_dir = CCutter_setup_dir.joinpath("data")
         CCutter_logs_dir = CCutter_setup_dir.joinpath("logs")
-        CCutter_configs_dir = CCutter_setup_dir.joinpath("atoml_cfg")
+        CCutter_configs_dir = CCutter_setup_dir.joinpath("atoml")
         CCutter_service_log_file = CCutter_logs_dir.joinpath("mongo-service.log")
         CCutter_cmd_log_file = CCutter_logs_dir.joinpath("mongo-cmd.log")
-        CCutter_service_config_file = CCutter_configs_dir.joinpath("mongo-service.atoml_cfg")
-        CCutter_cmd_config_file = CCutter_configs_dir.joinpath("mongo-cmd.atoml_cfg")
+        CCutter_service_config_file = CCutter_configs_dir.joinpath("mongo-service.atoml")
+        CCutter_cmd_config_file = CCutter_configs_dir.joinpath("mongo-cmd.atoml")
 
         _debug(f"gc3_var_dir={gc3_var_dir}, CCutter_setup_dir={CCutter_setup_dir}")
         user_inputs["gc3_var_dir"] = str(gc3_var_dir)
@@ -123,7 +123,7 @@ class SetupHomeCCutter:
                 if it exists
             :param output_dir: Where to output the generated project dir into.
             :param config_file: User configuration file file_path.
-            :param default_config: Use default values rather than a atoml_cfg file.
+            :param default_config: Use default values rather than a atoml file.
             :param password: The password to use when extracting the repository.
     """
 

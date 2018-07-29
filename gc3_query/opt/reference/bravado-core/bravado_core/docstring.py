@@ -174,5 +174,5 @@ def formatted_type(spec):
     elif obj_type:
         return obj_type
     else:  # not obj_type
-        # if 'default_type_to_object' atoml_cfg is True, then this is defaulted to object type_name
+        # if 'default_type_to_object' atoml is True, then this is defaulted to object type_name
         return 'notype'

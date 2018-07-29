@@ -5,7 +5,7 @@ import cookiecutter
 import cookiecutter.main
 import cookiecutter.config
 # from cookiecutter.main import cookiecutter
-# from cookiecutter import main, atoml_cfg
+# from cookiecutter import main, atoml
 from prettyprinter import pprint, pformat
 import pdb
 
