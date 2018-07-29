@@ -19,6 +19,8 @@ from collections.abc import MutableMapping, MutableSequence
 
 ################################################################################
 ## Third-Party Imports
+from dataclasses import dataclass
+import keyring
 
 ################################################################################
 ## Project Imports
@@ -35,6 +37,18 @@ _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 # _debug(f"atoml_config_dir={atoml_config_dir}")
 # at_config = ATomlConfig(directory_paths=atoml_config_dir)
 # gc3_cfg = at_config.toml
+
+
+
+
+@dataclass
+class IDMCredential:
+
+    idm_domain_name: str
+    username: str
+    password: str
+    is_ucm: bool
+    is_classic: bool
 
 
 
@@ -77,5 +91,32 @@ class GC3Config(ConfigOrderedDictAttrBase):
 
 
 
+    def get_credential(self, idm_domain_name: str):
+        pass
+
+
+
+    def set_credential(self, idm_domain_name: str, password: str):
+        """Stores password for idm_domain_name in system/OS keystore
+
+
+        eharris_vpn = os.environ.get('EHARRIS_VPN', False)
+        eharris_keystore = os.environ.get('EHARRIS_KEYSTORE', False)
+        print(f"eharris_vpn={eharris_vpn}, eharris_keystore={eharris_keystore}")
+
+        ## This creates a Generic Windows Cred called 'vpn@eharris'
+        eharris_vpn_store = keyring.set_password("eharris", "vpn", eharris_vpn)
+        eharris_keystore_store = keyring.set_password("eharris", "keystore", eharris_keystore)
+
+
+
+
+
+
+
+        :param idm_domain_name:
+        :return:
+        """
+        idm_keystore_store = keyring.set_password("eharris", "keystore", eharris_keystore)
 
 
