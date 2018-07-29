@@ -40,7 +40,6 @@ _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
 
-
 @dataclass
 class IDMCredential:
 
@@ -82,8 +81,9 @@ class ConfigOrderedDictAttrBase(OrderedDictAttrBase):
 
 class GC3Config(ConfigOrderedDictAttrBase):
 
-    def __init__(self):
-        atoml_config_dir = GC3_QUERY_HOME.joinpath('etc/config')
+    def __init__(self, atoml_config_dir: Path = None):
+        if not atoml_config_dir:
+            atoml_config_dir = GC3_QUERY_HOME.joinpath('etc/config')
         _debug(f"atoml_config_dir={atoml_config_dir}")
         at_config = ATomlConfig(directory_paths=atoml_config_dir)
         gc3_cfg = at_config.toml
@@ -96,7 +96,7 @@ class GC3Config(ConfigOrderedDictAttrBase):
 
 
 
-    def set_credential(self, idm_domain_name: str, password: str):
+    def set_credential(self, idm_domain_name: str, password: str) -> bool:
         """Stores password for idm_domain_name in system/OS keystore
 
 
@@ -117,6 +117,22 @@ class GC3Config(ConfigOrderedDictAttrBase):
         :param idm_domain_name:
         :return:
         """
-        idm_keystore_store = keyring.set_password("eharris", "keystore", eharris_keystore)
+        if idm_domain_name not in self['idm_domains']:
+            raise RuntimeError(f"IDM Domain name provided, {idm_domain_name}, is not found in {self}")
+        service_name = f"gc3@{idm_domain_name}"
+        username = self['user']['cloud_username']
+        _info(f"service_name={service_name}, username={service_name}")
+        _debug(f"password={password}")
+        keystore_store = keyring.set_password(service_name=service_name,
+                                                      username=username,
+                                                      password=password)
+
+
+        keystore_check = keyring.get_password(service_name=service_name, username=username)
+        if keystore_check==password:
+            return  True
+        else:
+            raise RuntimeError(f"Failed to set password for service_name={service_name}, username={service_name}")
+
 
 

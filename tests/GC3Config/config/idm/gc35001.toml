@@ -1,0 +1,17 @@
+[idm_domains.gc35001]
+name = 'gc35001'
+id = 'gc35001'
+service_instance_id = 587626604
+subscription_id = 1586698
+csi_number = 21361344
+region = 'us'
+data_center = 'usdc2'
+multiple_sites = false
+'login_url:url' = 'https://myservices-gc35001.console.oraclecloud.com/mycloud/cloudportal/dashboard'
+'rest_url:url' = 'https://compute.uscom-central-1.oraclecloud.com/'
+'sftp_url:url' = 'sftp://sftp.us2.cloud.oracle.com:22'
+[idm_domains.gc35001.sites.uscom-central-1]
+name = 'uscom-central-1'
+data_center ='usdc2'
+rest_endpoint = 'https://compute.uscom-central-1.oraclecloud.com/'
+is_ucm = true
