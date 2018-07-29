@@ -122,7 +122,7 @@ class Configure(object):
                 # for refreshing OAuth token after expiring.
                 if self.isOauth:
                     keyring.set_password(self.utils.cli_keyring_name, self.utils._cli_user_passwd, passwd)
-                # add the user to the atoml_cfg file: open with append mode or write new mode.
+                # add the user to the atoml file: open with append mode or write new mode.
                 mode = 'w' if os.path.exists(self.confFileName) else 'a'
                 with open(self.confFileName, mode) as f:
                     f.write("%s=%s\n" % (self.utils.username, user))
@@ -355,7 +355,7 @@ class Configure(object):
             except Exception as e:
                 logger.error(ErrorMessages.OPAAS_CLI_TEAR_DOWN_CRED_ERROR.format(e))
 
-            # remove the atoml_cfg directories:
+            # remove the atoml directories:
             for dirname in self.subOpcDir:
                 if dirname != self.utils.opc_log_dir_name:
                     self.utils.remove_config_dirs(self.opcDir + os.sep + dirname)

@@ -78,7 +78,7 @@ def test_missing_object_spec(petstore_dict):
 
 
 def test_missing_object_spec_defaulting_on(petstore_dict):
-    """When default_type_to_object atoml_cfg option is set to True,
+    """When default_type_to_object atoml option is set to True,
     then missing types default to object
     """
     petstore_spec = Spec.from_dict(petstore_dict, config={'use_models': False, 'default_type_to_object': True})

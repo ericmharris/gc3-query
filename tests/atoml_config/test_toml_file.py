@@ -4,7 +4,7 @@ import toml
 from pathlib import Path
 
 from gc3_query.lib import *
-from gc3_query.lib.atoml_cfg.atoml_file import ATomlFile
+from gc3_query.lib.atoml.atoml_file import ATomlFile
 
 from gc3_query.lib.models.gc3_meta_data import GC3MetaData
 

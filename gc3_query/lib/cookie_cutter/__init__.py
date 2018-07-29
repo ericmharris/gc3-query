@@ -100,7 +100,7 @@ class CookieCutterBase:
             :param: overwrite_if_exists: Overwrite the contents of output directory
                 if it exists
             :param config_file: User configuration file file_path.
-            :param default_config: Use default values rather than a atoml_cfg file.
+            :param default_config: Use default values rather than a atoml file.
             :param password: The password to use when extracting the repository.
     """
 
