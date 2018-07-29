@@ -91,34 +91,41 @@ class GC3Config(ConfigOrderedDictAttrBase):
 
 
 
-    def get_credential(self, idm_domain_name: str):
-        pass
+    def get_credential(self, idm_domain_name: str) -> IDMCredential:
+        if idm_domain_name not in self['idm_domains']:
+            raise RuntimeError(f"IDM Domain name provided, {idm_domain_name}, is not found in {self}")
+        idm_domain_cfg = self['idm_domains'][idm_domain_name]
+        service_name = f"gc3@{idm_domain_name}"
+        username = self['user']['cloud_username']
+        _info(f"service_name={service_name}, username={service_name}")
+        _debug(f"password={password}")
+        keystore_store = keyring.set_password(service_name=service_name,
+                                              username=username,
+                                              password=password)
 
 
+        keystore_check = keyring.get_password(service_name=service_name, username=username)
+        if keystore_check==password:
+            return  IDMCredential(idm_domain_name=idm_domain_name,
+                                  username=username,
+                                  password=password,
+                                  is_ucm=idm_domain_cfg['is_ucm'],
+                                  is_classic=idm_domain_cfg['is_classic']
+                                  )
+        else:
+            raise RuntimeError(f"Failed to set password for service_name={service_name}, username={service_name}")
 
-    def set_credential(self, idm_domain_name: str, password: str) -> bool:
+
+    def set_credential(self, idm_domain_name: str, password: str) -> IDMCredential:
         """Stores password for idm_domain_name in system/OS keystore
 
-
-        eharris_vpn = os.environ.get('EHARRIS_VPN', False)
-        eharris_keystore = os.environ.get('EHARRIS_KEYSTORE', False)
-        print(f"eharris_vpn={eharris_vpn}, eharris_keystore={eharris_keystore}")
-
-        ## This creates a Generic Windows Cred called 'vpn@eharris'
-        eharris_vpn_store = keyring.set_password("eharris", "vpn", eharris_vpn)
-        eharris_keystore_store = keyring.set_password("eharris", "keystore", eharris_keystore)
-
-
-
-
-
-
-
         :param idm_domain_name:
+        :param password:
         :return:
         """
         if idm_domain_name not in self['idm_domains']:
             raise RuntimeError(f"IDM Domain name provided, {idm_domain_name}, is not found in {self}")
+        idm_domain_cfg = self['idm_domains'][idm_domain_name]
         service_name = f"gc3@{idm_domain_name}"
         username = self['user']['cloud_username']
         _info(f"service_name={service_name}, username={service_name}")
@@ -130,7 +137,12 @@ class GC3Config(ConfigOrderedDictAttrBase):
 
         keystore_check = keyring.get_password(service_name=service_name, username=username)
         if keystore_check==password:
-            return  True
+            return  IDMCredential(idm_domain_name=idm_domain_name,
+                                  username=username,
+                                  password=password,
+                                  is_ucm=idm_domain_cfg['is_ucm'],
+                                  is_classic=idm_domain_cfg['is_classic']
+                    )
         else:
             raise RuntimeError(f"Failed to set password for service_name={service_name}, username={service_name}")
 

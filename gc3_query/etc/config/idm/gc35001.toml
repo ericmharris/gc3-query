@@ -10,8 +10,9 @@ multiple_sites = false
 'login_url:url' = 'https://myservices-gc35001.console.oraclecloud.com/mycloud/cloudportal/dashboard'
 'rest_url:url' = 'https://compute.uscom-central-1.oraclecloud.com/'
 'sftp_url:url' = 'sftp://sftp.us2.cloud.oracle.com:22'
+is_ucm = true
+is_classic = false
 [idm_domains.gc35001.sites.uscom-central-1]
 name = 'uscom-central-1'
 data_center ='usdc2'
 rest_endpoint = 'https://compute.uscom-central-1.oraclecloud.com/'
-is_ucm = true
