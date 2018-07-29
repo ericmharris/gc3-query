@@ -27,4 +27,5 @@ httpie
 cryptography
 sortedcontainers
 keyring
+toml
 

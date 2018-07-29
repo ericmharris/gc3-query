@@ -61,6 +61,7 @@ requirements = [
     # 'psutil',
     # 'pycrypto',
     'prettyprinter',
+    'toml',
     # 'deepdiff',
     # 'pywin32',
     'keyring',
@@ -91,7 +92,7 @@ setup(
             'gc3load=gc3_query.bin.gc3load:cli',
             'gc3scan=gc3_query.bin.gc3scan:cli',
             'gc3keygen=gc3_query.bin.gc3keygen:cli',
-            'atoml=gc3_query.bin.atoml:cli',
+            'gc3atoml=gc3_query.bin.gc3atoml:cli',
             'gc3admin=gc3_query.sbin.gc3admin:cli'
         ]
     },

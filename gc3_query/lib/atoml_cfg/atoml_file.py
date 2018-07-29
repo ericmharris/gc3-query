@@ -15,8 +15,7 @@ import sys, os
 ################################################################################
 ## Third-Party Imports
 from dataclasses import dataclass
-import toml
-from toml.decoder import TomlDecodeError
+from toml import TomlDecodeError
 
 ################################################################################
 ## Project Imports
