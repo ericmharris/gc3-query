@@ -15,13 +15,10 @@
 
 ################################################################################
 ## Standard Library Imports
-import sys, os
-from collections.abc import Iterable, MutableMapping, MutableSequence
+from collections.abc import MutableMapping, MutableSequence
 
 ################################################################################
 ## Third-Party Imports
-from dataclasses import dataclass
-from melddict import MeldDict
 
 ################################################################################
 ## Project Imports
@@ -30,6 +27,7 @@ from gc3_query.lib import *
 from gc3_query import GC3_QUERY_HOME
 from gc3_query.lib.atoml.atoml_config import ATomlConfig
 from gc3_query.lib.base_collections import OrderedDictAttrBase, ListBase
+from gc3_query.lib.gc3logging import get_logging
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
@@ -76,9 +74,6 @@ class GC3Config(ConfigOrderedDictAttrBase):
         at_config = ATomlConfig(directory_paths=atoml_config_dir)
         gc3_cfg = at_config.toml
         super().__init__(mapping=gc3_cfg)
-
-
-gc3_cfg = GC3Config()
 
 
 

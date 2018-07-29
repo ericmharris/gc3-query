@@ -30,8 +30,7 @@ from gc3_query import GC3_QUERY_HOME
 from gc3_query.lib import *
 from gc3_query.lib.gc3logging import get_logging
 from gc3_query.lib.atoml.atoml_config import ATomlConfig
-from gc3_query.lib.gc3_config import gc3_cfg
-
+from gc3_query.lib import gc3_cfg
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
