@@ -18,4 +18,4 @@ rest_endpoint = 'https://compute.uscom-central-1.oraclecloud.com/'
 name = 'us006_z70'
 data_center = 'usdc6'
 rest_endpoint = 'https://api-z70.compute.us6.oraclecloud.com/'
-is_ucm = False
+is_ucm = false

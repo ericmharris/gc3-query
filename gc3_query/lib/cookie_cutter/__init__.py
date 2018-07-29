@@ -31,6 +31,13 @@ from gc3_query.lib import *
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
+
+@dataclass
+class CookieCutterData:
+    def __post_init__(self):
+        pass
+
+
 class CookieCutterBase:
 
     def __init__(self, ctx: click.core.Context, template_name: str, template_path: Path, command_line_options: Dict[str, Any] = None):
@@ -38,10 +45,11 @@ class CookieCutterBase:
         self.template_name = template_name
         self.template_path = template_path
         self.command_line_options = command_line_options
-        self.user_inputs = self.gather_inputs(ctx=ctx, mongodb_bin_dir=self.mongodb_bin_dir, listen_port=listen_port)
+        self.user_inputs = self.gather_inputs(ctx=ctx, command_line_options=self.command_line_options)
+        succeeded = self.deploy()
 
     @abc.abstractmethod
-    def gather_inputs(self, ctx: click.core.Context, command_line_options: Dict[str, Any] = None) -> Dict[str,Any]:
+    def gather_inputs(self, ctx: click.core.Context, command_line_options: Dict[str, Any] = None) -> Dict[str, Any]:
         """
 
         :param ctx:
@@ -68,11 +76,13 @@ class CookieCutterBase:
         # return GameCreateInfo(package_name, full_name, game_type, working_dir)
         return user_inputs
 
-    def deploy(self) -> bool:
-        """
+    def deploy(self, template_path: Path, template_data: Dict[str, Any], force: bool) -> bool:
+        """Write cc template to template_path using template_data
 
+        :param template_path:
+        :param template_data:
+        :param force:
         :return:
-
 
         def cookiecutter(
             template, checkout=None, no_input=False, extra_context=None,
@@ -89,7 +99,6 @@ class CookieCutterBase:
                 and user configuration.
             :param: overwrite_if_exists: Overwrite the contents of output directory
                 if it exists
-            :param output_dir: Where to output the generated project dir into.
             :param config_file: User configuration file file_path.
             :param default_config: Use default values rather than a atoml_cfg file.
             :param password: The password to use when extracting the repository.
@@ -97,14 +106,11 @@ class CookieCutterBase:
 
         working_dir = os.path.abspath(os.path.dirname(__file__))
         template = os.path.join(working_dir, "templates", "cookiecutter-use-api")
-        _debug(
-            f"user_inputs={self.user_inputs}, template={SetupMongoDB.template_path}, output_dir={self.user_inputs['mongodb_setup_dir']}"
-        )
+        _debug(f"template={template_path}, force={self.force}")
         _debug(f"extra_context={self.user_inputs}")
-        _debug(f"force={self.force}")
 
         proj_dir = cookiecutter.main.cookiecutter(
-            template=SetupMongoDB.template_path,
+            template=self.template_path,
             no_input=True,
             overwrite_if_exists=self.force,
             output_dir=self.user_inputs["gc3_var_dir"],
