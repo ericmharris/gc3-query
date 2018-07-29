@@ -23,8 +23,10 @@ CONTEXT_SETTINGS = dict(
 
 class SetupMongoDB(CookieCutterBase):
 
-    def __init__(self, ctx: click.core.Context, template_name: str, template_path: Path):
+    def __init__(self, ctx: click.core.Context, command_line_options: Dict[str, Any] = None):
         super().__init__(ctx, template_name, template_path)
+        self.user_inputs = self.gather_inputs(ctx=ctx, command_line_options=self.command_line_options)
+
 
 #
 # class SetupMongoDB(CookieCutterBase):

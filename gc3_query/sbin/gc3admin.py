@@ -75,7 +75,10 @@ def setup_mongodb( ctx: click.core.Context, mongodb_bin_dir: str = None, listen_
     click.echo(click.style(f"gc3admin.setup_mongodb(): target_dir={mongodb_bin_dir}", fg="green"))
     _warning(f"Test logging for gc3admin.")
     print(f"context: {ctx.parent.gc3_config}")
-    setup_mongo_db = SetupMongoDB(ctx=ctx, mongodb_bin_dir=mongodb_bin_dir, listen_port=listen_port, force=force)
+    command_line_options = dict(mongodb_bin_dir=mongodb_bin_dir,
+                                listen_port=listen_port,
+                                force=force )
+    setup_mongo_db = SetupMongoDB(ctx=ctx, command_line_options=command_line_options)
     ret_code = setup_mongo_db.deploy()
     if ret_code:
         click.echo(click.style(f"""MongoDB configuration succeeded 
