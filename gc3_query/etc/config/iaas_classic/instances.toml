@@ -1,4 +1,0 @@
-[iaas_classic.instances]
-service_name = 'Instances'
-spec_file = 'instances{{iaas_classic.api_catalog.api_version}}.json'
-spec_url = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/{{iaas_classic.api_catalog.api_version}}/apis/Instances/canonical'

@@ -26,12 +26,16 @@ from bravado.client import SwaggerClient
 ################################################################################
 ## Project Imports
 from gc3_query.lib import *
-from . import IaaSBase
+from . import IaaSServiceBase
 
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
-class Instances(IaaSBase):
+class Instances(IaaSServiceBase):
 
-    def __init__(self, atoml_cfg: dict, http_client: RequestsClient):
-        super().__init__(atoml_cfg, http_client)
+    service_name = 'Instances'
+
+    def __init__(self, service_cfg: Dict[str, Any], idm_cfg: Dict[str, Any]):
+        super().__init__(service_cfg, idm_cfg)
+
+
