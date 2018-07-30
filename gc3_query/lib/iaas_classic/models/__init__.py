@@ -2,7 +2,7 @@
 
 """
 #@Filename : __init__.py
-#@Date : [7/29/2018 11:25 AM]
+#@Date : [7/30/2018 10:50 AM]
 #@Poject: gc3-query
 #@AUTHOR : emharris
 
@@ -26,6 +26,3 @@ from dataclasses import dataclass
 from gc3_query.lib import *
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
-
-
-
