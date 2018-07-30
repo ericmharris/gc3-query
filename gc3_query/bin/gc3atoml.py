@@ -16,7 +16,9 @@
 ################################################################################
 ## Standard Library Imports
 import sys, os
+import json
 # from pprint import pprint
+
 
 ################################################################################
 ## Third-Party Imports
@@ -72,7 +74,7 @@ def cli(ctx, debug, help):
 def print(ctx: click.core.Context, verbose: bool = False) -> None:
     click.echo(click.style(f"atoml.print(): verbose={verbose}", fg="green"))
     gc3_cfg = ctx.parent.gc3_cfg
-    pprint(gc3_cfg)
+    pprint(gc3_cfg._serializable)
     sys.exit(0)
 
 
