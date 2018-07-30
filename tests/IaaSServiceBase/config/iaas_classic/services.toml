@@ -3,14 +3,14 @@ spec_url = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apic
 spec_file = '{{service_name | lower}}{{iaas_classic.api_catalog.api_version}}.json'
 
 
-[iaas_classic.services.Instances]
+[iaas_classic.services.instances]
 service_name = 'Instances'
 name = 'Instances'
 spec_url = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/18.1.2/apis/Instances/canonical'
 spec_file = 'Instances.json'
 
 
-[iaas_classic.services.SecurityRules]
+[iaas_classic.services.security_rules]
 service_name = 'SecurityRules'
 name = 'SecurityRules'
 spec_url = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/18.1.2/apis/SecurityRules/canonical'

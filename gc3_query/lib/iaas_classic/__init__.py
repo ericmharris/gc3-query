@@ -27,6 +27,7 @@ from bravado.client import SwaggerClient
 ## Project Imports
 from gc3_query.lib import *
 from gc3_query.lib import gc3_cfg
+from gc3_query.lib.iaas_classic.requests_client import IaaSRequestsClient
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
@@ -34,10 +35,12 @@ _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 class IaaSServiceBase:
 
-    def __init__(self, service_cfg: Dict[str,Any], idm_cfg: Dict[str,Any]):
+    def __init__(self, service_cfg: Dict[str,Any], idm_cfg: Dict[str,Any], **kwargs: Dict[str,Any]):
         self.service_cfg = service_cfg
         self.idm_cfg = idm_cfg
+        self.kwargs = kwargs
         self._service_name = service_cfg['service_name']
+        self.http_client = IaaSRequestsClient(idm_cfg=self.idm_cfg, skip_authentication=self.kwargs.get('skip_authentication', False))
 
 
     @property
