@@ -23,9 +23,10 @@ from melddict import MeldDict
 ################################################################################
 ## Project Imports
 from gc3_query.lib import *
-from gc3_query.lib.atoml_cfg.exceptions import *
-from gc3_query.lib.atoml_cfg.atoml_file import ATomlFile
-from gc3_query.lib.atoml_cfg.atoml_directory import ATomlDirectory
+from gc3_query.lib.atoml.exceptions import *
+from gc3_query.lib.atoml.atoml_file import ATomlFile
+from gc3_query.lib.atoml.atoml_directory import ATomlDirectory
+from gc3_query.lib.gc3logging import get_logging
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 

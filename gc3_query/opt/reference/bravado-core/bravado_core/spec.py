@@ -129,7 +129,7 @@ class Spec(object):
     def _validate_config(self):
         """
         Validates the correctness of the configurations injected and makes sure that:
-        - no extra atoml_cfg keys are available on the atoml_cfg dictionary
+        - no extra atoml keys are available on the atoml dictionary
         - dependent configs are checked
 
         :return: True if the initial configs are valid, False otherwise
@@ -142,7 +142,7 @@ class Spec(object):
             are_config_changed = True
             for key in extraneous_keys:
                 warnings.warn(
-                    message='atoml_cfg {} is not a recognized atoml_cfg key'.format(key),
+                    message='atoml {} is not a recognized atoml key'.format(key),
                     category=Warning,
                 )
 
@@ -150,7 +150,7 @@ class Spec(object):
             are_config_changed = True
             self.config['internally_dereference_refs'] = False
             warnings.warn(
-                message='internally_dereference_refs atoml_cfg disabled because validate_swagger_spec has to be enabled',
+                message='internally_dereference_refs atoml disabled because validate_swagger_spec has to be enabled',
                 category=Warning,
             )
 

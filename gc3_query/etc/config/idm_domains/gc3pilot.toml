@@ -10,6 +10,8 @@ data_center = 'usdc2'
 'rest_url:url' = 'https://compute.uscom-central-1.oraclecloud.com/'
 'sftp_url:url' = 'sftp://sftp.us2.cloud.oracle.com:22'
 multiple_sites = true
+is_ucm = false
+is_classic = true
 [idm_domains.gc3pilot.sites.uscom-central-1]
 name = 'uscom-central-1'
 data_center ='usdc2'
@@ -18,4 +20,3 @@ rest_endpoint = 'https://compute.uscom-central-1.oraclecloud.com/'
 name = 'us006_z70'
 data_center = 'usdc6'
 rest_endpoint = 'https://api-z70.compute.us6.oraclecloud.com/'
-is_ucm = false

@@ -3,8 +3,8 @@ import toml
 from pathlib import Path
 
 from gc3_query.lib import *
-from gc3_query.lib.atoml_cfg import cfg
-from gc3_query.lib.atoml_cfg.util import quote_key
+from gc3_query.lib.atoml import cfg
+from gc3_query.lib.atoml.util import quote_key
 
 from gc3_query.lib.models.gc3_meta_data import GC3MetaData
 

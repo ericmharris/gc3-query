@@ -1,6 +1,6 @@
 ###
 # Provides default values in any template using these variable names listed in default_context.
-# $ cookiecutter --atoml_cfg-file ~/.cookiecutters/defaults-eharris.yaml cookiecutter-pyproject
+# $ cookiecutter --atoml-file ~/.cookiecutters/defaults-eharris.yaml cookiecutter-pyproject
 # or set COOKIECUTTER_CONFIG environment var
 #
 default_context:

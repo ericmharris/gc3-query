@@ -1,0 +1,18 @@
+[idm_domains.gc30003]
+name = 'gc30003'
+id = 'gc30003'
+service_instance_id = 587626604
+subscription_id = 1586698
+csi_number = 21361344
+region = 'us'
+data_center = 'usdc2'
+multiple_sites = false
+'login_url:url' = 'https://myservices.us.oraclecloud.com/mycloud/gc30003/faces/dashboard.jspx'
+'rest_url:url' = 'https://compute.uscom-central-1.oraclecloud.com/'
+'sftp_url:url' = 'sftp://sftp.us2.cloud.oracle.com:22'
+is_ucm = false
+is_classic = true
+[idm_domains.gc30003.sites.uscom-central-1]
+name = 'uscom-central-1'
+data_center ='usdc2'
+rest_endpoint = 'https://compute.uscom-central-1.oraclecloud.com/'

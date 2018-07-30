@@ -1,7 +1,7 @@
 import pytest
 
-from gc3_query.lib.atoml_cfg import cfg
-from gc3_query.lib.atoml_cfg.toml_config import ATOMLConfig
+from gc3_query.lib.atoml import cfg
+from gc3_query.lib.atoml.toml_config import ATOMLConfig
 
 from gc3_query.lib.models.gc3_meta_data import GC3MetaData
 

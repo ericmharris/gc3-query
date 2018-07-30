@@ -137,7 +137,7 @@
   'asm': 'false',
   'dg_uniq_names': '',
   'ords_config': 'yes',
-  'tde_action': 'atoml_cfg',
+  'tde_action': 'atoml',
   'bkup_cfg_files': 'yes',
   'oidm_nbr_of_hash_prtn_agrmnt': '4',
   'redo_mnt': '/u04',

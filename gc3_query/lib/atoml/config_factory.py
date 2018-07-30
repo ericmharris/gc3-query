@@ -5,9 +5,15 @@ from dataclasses import dataclass
 
 from gc3_query.lib import *
 
+from gc3_query import GC3_QUERY_HOME
+from .atoml_config import ATomlConfig
+
 from gc3_query.lib.gc3logging import get_logging
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
+
+
+
 
 
 @dataclass
