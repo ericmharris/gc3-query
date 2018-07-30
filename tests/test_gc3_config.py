@@ -7,17 +7,19 @@ from gc3_query.lib import *
 from gc3_query.lib.gc3_config import GC3Config, IDMCredential
 
 TEST_BASE_DIR: Path = Path(__file__).parent.joinpath("GC3Config")
+config_dir = TEST_BASE_DIR.joinpath("config")
 
+def test_setup():
+    assert TEST_BASE_DIR.exists()
+    assert config_dir.exists()
 
 def test_init():
-    config_dir = TEST_BASE_DIR.joinpath("config")
     gc3_config = GC3Config(atoml_config_dir=config_dir)
     assert 'gc30003' in gc3_config['idm']
     assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
 
 
 def test_set_credential():
-    config_dir = TEST_BASE_DIR.joinpath("config")
     gc3_config = GC3Config(atoml_config_dir=config_dir)
     assert 'gc3test' in gc3_config['idm']
     assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
@@ -31,7 +33,6 @@ def test_set_credential():
 
 @pytest.fixture()
 def get_credential_setup() -> IDMCredential:
-    config_dir = TEST_BASE_DIR.joinpath("config")
     gc3_config = GC3Config(atoml_config_dir=config_dir)
     assert 'gc3test' in gc3_config['idm']
     assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
@@ -41,7 +42,6 @@ def get_credential_setup() -> IDMCredential:
 
 def test_load_atoml_files_individually(get_credential_setup):
     credential = get_credential_setup
-    config_dir = TEST_BASE_DIR.joinpath("config")
     gc3_config = GC3Config(atoml_config_dir=config_dir)
     assert 'gc3test' in gc3_config['idm']
     assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
