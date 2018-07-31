@@ -98,30 +98,31 @@ class IaaSRequestsClient(RequestsClient):
 
 
 
-    def request(self, request_params, operation=None, response_callbacks=None, also_return_response=False):
-        """
-        :param request_params: complete request data.
-        :type_name request_params: dict
-        :param operation: operation that this http request is for. Defaults
-            to None - in which case, we're obviously just retrieving a Swagger
-            Spec.
-        :type_name operation: :class:`bravado_core.operation.Operation`
-        :param response_callbacks: List of callables to post-process the
-            incoming response. Expects args incoming_response and operation.
-        :param also_return_response: Consult the constructor documentation for
-            :class:`bravado.http_future.HttpFuture`.
-
-        :returns: HTTP Future object
-        :rtype: :class: `bravado_core.http_future.HttpFuture`
-        """
-        sanitized_params, misc_options = self.separate_params(request_params)
-        sanitized_params = self.resanitize_params(sanitized_params)
-
-        requests_future = RequestsFutureAdapter(
-            self.session, self.authenticated_request(sanitized_params), misc_options
-        )
-
-        return HttpFuture(requests_future, RequestsResponseAdapter, operation, response_callbacks, also_return_response)
+    # def request(self, request_params, operation=None, request_config=None, response_callbacks=None, also_return_response=False):
+    #     """
+    #     :param request_config:
+    #     :param request_params: complete request data.
+    #     :type_name request_params: dict
+    #     :param operation: operation that this http request is for. Defaults
+    #         to None - in which case, we're obviously just retrieving a Swagger
+    #         Spec.
+    #     :type_name operation: :class:`bravado_core.operation.Operation`
+    #     :param response_callbacks: List of callables to post-process the
+    #         incoming response. Expects args incoming_response and operation.
+    #     :param also_return_response: Consult the constructor documentation for
+    #         :class:`bravado.http_future.HttpFuture`.
+    #
+    #     :returns: HTTP Future object
+    #     :rtype: :class: `bravado_core.http_future.HttpFuture`
+    #     """
+    #     sanitized_params, misc_options = self.separate_params(request_params)
+    #     sanitized_params = self.resanitize_params(sanitized_params)
+    #
+    #     requests_future = RequestsFutureAdapter(
+    #         self.session, self.authenticated_request(sanitized_params), misc_options
+    #     )
+    #
+    #     return HttpFuture(requests_future, RequestsResponseAdapter, operation, response_callbacks, also_return_response)
 
     def resanitize_params(self, request_params: Dict[str, Any]) -> Dict[str, Any]:
         """Updates request_params so they work better with OPC

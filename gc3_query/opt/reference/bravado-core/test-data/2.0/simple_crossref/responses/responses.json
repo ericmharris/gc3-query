@@ -1,8 +1,0 @@
-{
-    "pong": {
-        "description": "pong",
-        "schema": {
-          "$ref": "../definitions/definitions.json#/pong"
-        }
-    }
-}

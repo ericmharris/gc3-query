@@ -61,7 +61,7 @@ def cli(ctx, debug, help):
     # named ctx.parent.gc3_cfg to other functions in cli group.
     # ctx.gc3_config = {}
     ctx.gc3_cfg = gc3_cfg
-    click.echo(f"Running atoml.cli() with context: {ctx}, ctx.gc3_cfg={gc3_cfg}")
+    click.echo(f"Running atoml.cli() with context: {ctx}")
     if debug:
         ctx.gc3_cfg["logging"]["logging_level"] = "debug"
     else:

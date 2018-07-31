@@ -18,7 +18,7 @@ default_type_to_object = false
 # NOTE: this depends on validate_swagger_spec
 internally_dereference_refs = false
 # Also return the HTTP responses: http://bravado.readthedocs.io/en/stable/advanced.html#getting-access-to-the-http-response
-also_return_response = true
+# also_return_response = true
 # List of user-defined formats of type
 # :class:`bravado_core.formatter.SwaggerFormat`. These formats are in
 # addition to the formats already supported by the Swagger 2.0

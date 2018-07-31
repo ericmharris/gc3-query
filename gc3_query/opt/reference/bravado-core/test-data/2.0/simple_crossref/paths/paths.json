@@ -1,7 +1,0 @@
-{
-  "ping": {
-    "get": {
-      "$ref": "../operations/operations.json#/ping/get"
-    }
-  }
-}

@@ -70,13 +70,15 @@ class IaaSServiceBase:
         self.swagger_client_config = dict(gc3_cfg.iaas_classic.iaas_service_client_config)
         self.swagger_client = SwaggerClient.from_spec(spec_dict=self.api_spec,
                                                  origin_url=self.idm_cfg.rest_endpoint,
-                                                 http_client=requests_client,
+                                                 http_client=self.http_client,
                                                  config=self.swagger_client_config)
 
         # setattr(self, 'service_operations', getattr(self.swagger_client, service_cfg['service_name']))
+        setattr(self, 'service_resources', getattr(self.swagger_client, service_cfg['service_name']))
         self.service_operations = self.populate_service_operations(service_operations=getattr(self.swagger_client, service_cfg['service_name']))
-
-        _debug(f"swagger_client={swagger_client}")
+        _debug(f"swagger_client={self.swagger_client}")
+        # r = self.swagger_client.Instances.discoverRootInstance()
+        # _debug(f"swagger_client result ={r}")
 
     @property
     def api_spec(self) -> str:
