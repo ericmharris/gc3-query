@@ -17,7 +17,7 @@
 ## Standard Library Imports
 import sys, os
 import json
-from pprint import pprint
+from pprint import pprint, pformat
 
 
 ################################################################################
@@ -84,6 +84,16 @@ def print(ctx: click.core.Context) -> None:
     pprint(gc3_cfg._serializable)
     sys.exit(0)
 
+
+@cli.command(help="Export TOML to var/config_data.py", short_help="ATOML export ", epilog="export ATOML ")
+@click.pass_context
+def export(ctx: click.core.Context) -> None:
+    gc3_cfg = ctx.obj.gc3_cfg
+    output_file = BASE_DIR.joinpath('var/config/config_data.py')
+    with output_file.open('w') as fd:
+        fd.write(pformat(gc3_cfg._serializable))
+    click.echo(click.style(f"Config data written to {output_file}", fg="green"))
+    sys.exit(0)
 
 
 

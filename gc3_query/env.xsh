@@ -45,8 +45,10 @@ aliases['Ghvml'] = r'cd $DEVEL_DIR/gc3-query/gc3_query/var/mongodb/logs'
 aliases['Ghvms'] = r'cd $DEVEL_DIR/gc3-query/gc3_query/var/mongodb/scripts'
 aliases['Ghvs'] = r'cd $DEVEL_DIR/gc3-query/gc3_query/var/scratchpad'
 
-
+#### gc3atoml aliases
+aliases['GA'] = r'gc3atoml'
 aliases['GAp'] = r'gc3atoml print'
+aliases['GAe'] = r'gc3atoml export'
 
 
 
