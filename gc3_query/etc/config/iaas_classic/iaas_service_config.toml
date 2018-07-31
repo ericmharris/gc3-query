@@ -1,0 +1,27 @@
+[iaas_classic.iaas_service_client_config]
+# On the client side, validate incoming responses
+validate_responses = true
+# On the client side, validate outgoing requests
+validate_requests = true
+# Use swagger_spec_validator to validate the swagger spec
+validate_swagger_spec = true
+# Use Python classes (models) instead of dicts for #/definitions/{models}
+# On the client side, this applies to incoming responses.
+use_models = true
+# Fill with None all the missing properties during object unmarshalling
+include_missing_properties = true
+# What to do when a type is missing
+# If True, set the type to object and validate
+# If False, do no validation
+default_type_to_object = false
+# Completely dereference $refs to maximize marshaling and unmarshalling performances.
+# NOTE: this depends on validate_swagger_spec
+internally_dereference_refs = false
+# Also return the HTTP responses: http://bravado.readthedocs.io/en/stable/advanced.html#getting-access-to-the-http-response
+also_return_response = true
+# List of user-defined formats of type
+# :class:`bravado_core.formatter.SwaggerFormat`. These formats are in
+# addition to the formats already supported by the Swagger 2.0
+# Specification.
+## formats = []
+

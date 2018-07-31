@@ -65,7 +65,7 @@ class IaaSRequestsClient(RequestsClient):
         _debug(f"headers={self.headers}")
 
         if self.skip_authentication:
-            _warning(f"authenticate={self.skip_authentication}, authentication disabled.")
+            _warning(f"skip_authentication={self.skip_authentication}, authentication disabled.")
             self.auth_cookie_header = None
         else:
             self.auth_cookie_header = self.authenticate()
