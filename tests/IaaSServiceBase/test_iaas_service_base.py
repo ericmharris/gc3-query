@@ -48,3 +48,20 @@ def test_authentication(setup_gc30003):
     assert iaas_service_base.http_client.idm_domain_name==idm_cfg.name
     assert iaas_service_base.http_client.auth_cookie_header is not None
     assert 'nimbula' in iaas_service_base.http_client.auth_cookie_header['Cookie']
+
+
+def test_service_call(setup_gc30003):
+    service_cfg, idm_cfg = setup_gc30003
+    iaas_service_base = IaaSServiceBase(service_cfg=service_cfg, idm_cfg=idm_cfg)
+    assert 'nimbula' in iaas_service_base.http_client.auth_cookie_header['Cookie']
+    http_future = iaas_service_base.service_operations.discover_root_instance()
+    service_response = http_future.response()
+    assert service_response.metadata.status_code==200
+    assert "/Compute-" in service_response.result
+
+
+
+
+
+
+

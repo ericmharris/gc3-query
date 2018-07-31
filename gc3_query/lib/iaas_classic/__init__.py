@@ -73,12 +73,13 @@ class IaaSServiceBase:
                                                  http_client=self.http_client,
                                                  config=self.swagger_client_config)
 
-        # setattr(self, 'service_operations', getattr(self.swagger_client, service_cfg['service_name']))
+        # This is the container from Bravado.client that holds CallableOperation created using the spec
         setattr(self, 'service_resources', getattr(self.swagger_client, service_cfg['service_name']))
+
+        # This is populated with the CallableOperations from service_resources but the names are converted
+        # to python/snake-case (eg. discover_root_instance vs. discoverRootInstance)
+        #
         self.service_operations = self.populate_service_operations(service_operations=getattr(self.swagger_client, service_cfg['service_name']))
-        _debug(f"swagger_client={self.swagger_client}")
-        # r = self.swagger_client.Instances.discoverRootInstance()
-        # _debug(f"swagger_client result ={r}")
 
     @property
     def api_spec(self) -> str:
@@ -90,6 +91,11 @@ class IaaSServiceBase:
 
 
     def populate_service_operations(self, service_operations: ResourceDecorator) -> OrderedDictAttrBase:
+        """Return container of callable operations with names converted from camel to python/snake-case
+
+        :param service_operations:
+        :return:
+        """
         so = OrderedDictAttrBase()
         for service_operation_name in dir(service_operations):
             so_camel_name = camelcase_to_snake(service_operation_name)

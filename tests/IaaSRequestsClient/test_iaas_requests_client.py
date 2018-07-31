@@ -40,3 +40,6 @@ def test_authentication(setup_gc30003):
     assert iaas_client.idm_domain_name==idm_cfg.name
     assert iaas_client.auth_cookie_header is not None
     assert 'nimbula' in iaas_client.auth_cookie_header['Cookie']
+
+
+
