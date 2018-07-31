@@ -35,7 +35,7 @@ class Instances(IaaSServiceBase):
 
     service_name = 'Instances'
 
-    def __init__(self, service_cfg: Dict[str, Any], idm_cfg: Dict[str, Any]):
-        super().__init__(service_cfg, idm_cfg)
+    def __init__(self, service_cfg: Dict[str, Any], idm_cfg: Dict[str, Any], **kwargs: Dict[str, Any]):
+        super().__init__(service_cfg, idm_cfg, **kwargs)
 
 

@@ -74,7 +74,8 @@ class IaaSServiceBase:
                                                  config=self.swagger_client_config)
 
         # This is the container from Bravado.client that holds CallableOperation created using the spec
-        setattr(self, 'service_resources', getattr(self.swagger_client, service_cfg['service_name']))
+        # setattr(self, 'service_resources', getattr(self.swagger_client, service_cfg['service_name']))
+        self.bravado_service_operations = getattr(self.swagger_client, service_cfg['service_name'])
 
         # This is populated with the CallableOperations from service_resources but the names are converted
         # to python/snake-case (eg. discover_root_instance vs. discoverRootInstance)
