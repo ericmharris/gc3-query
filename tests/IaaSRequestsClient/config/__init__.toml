@@ -1,0 +1,5 @@
+title = 'GC3 Configuration Data'
+decription = 'GC3 Configuration Data'
+
+[__init__]
+project_name = 'gc3_query'

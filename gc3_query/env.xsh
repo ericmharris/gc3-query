@@ -46,6 +46,9 @@ aliases['Ghvms'] = r'cd $DEVEL_DIR/gc3-query/gc3_query/var/mongodb/scripts'
 aliases['Ghvs'] = r'cd $DEVEL_DIR/gc3-query/gc3_query/var/scratchpad'
 
 
+aliases['GAp'] = r'gc3atoml print'
+
+
 
 if 'win' in sys.platform:
 

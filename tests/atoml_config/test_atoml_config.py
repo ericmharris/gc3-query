@@ -48,7 +48,7 @@ def test_load_atoml_files_individually(load_atoml_files_individually_setup):
     atc = ATomlConfig(file_paths=at_files)
     assert len(atc.atoml_files) > 1
     assert 'title' in atc.toml
-    assert 'rest_url' in atc.toml['idm_domains']['gc3pilot']
+    assert 'rest_url' in atc.toml['idm']['gc3pilot']
 
 
 def test_file_names(load_atoml_files_individually_setup):
@@ -75,9 +75,9 @@ def load_atoml_files_from_directory_setup() -> List[str]:
         assert 'storage' in atc.toml['mongodb']
         assert 'db_path' in atc.toml['mongodb']['storage']
 
-        assert 'idm_domains' in atc.toml
-        assert 'gc3pilot' in atc.toml['idm_domains']
-        assert 'rest_url' in atc.toml['idm_domains']['gc3pilot']
+        assert 'idm' in atc.toml
+        assert 'gc3pilot' in atc.toml['idm']
+        assert 'rest_url' in atc.toml['idm']['gc3pilot']
 
         assert 'valid_toml' in atc.toml
         assert 'valid_toml_quoted' in atc.toml
@@ -168,9 +168,9 @@ def test_load_atoml_multiple_paths():
     assert 'storage' in atc.toml['mongodb']
     assert 'db_path' in atc.toml['mongodb']['storage']
 
-    assert 'idm_domains' in atc.toml
-    assert 'gc3pilot' in atc.toml['idm_domains']
-    assert 'rest_url' in atc.toml['idm_domains']['gc3pilot']
+    assert 'idm' in atc.toml
+    assert 'gc3pilot' in atc.toml['idm']
+    assert 'rest_url' in atc.toml['idm']['gc3pilot']
 
 
 

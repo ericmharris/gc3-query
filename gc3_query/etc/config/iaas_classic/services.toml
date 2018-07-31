@@ -1,0 +1,27 @@
+[iaas_classic.services]
+spec_url = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/{{iaas_classic.api_catalog.api_version}}/apis/{{service_name}}/canonical'
+spec_file = '{{service_name | lower}}{{iaas_classic.api_catalog.api_version}}.json'
+
+
+[iaas_classic.services.Instances]
+service_name = 'Instances'
+api_version = '18.1.2'
+name = 'Instances'
+spec_url = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/18.1.2/apis/Instances/canonical'
+spec_furl: fstr = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/{api_version}/apis/Instances/canonical'
+spec_file = 'Instances.json'
+
+
+[iaas_classic.services.SecurityRules]
+service_name = 'SecurityRules'
+name = 'SecurityRules'
+api_version = '18.1.2'
+spec_url = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/18.1.2/apis/SecurityRules/canonical'
+spec_furl: fstr = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/{api_version}/apis/SecurityRules/canonical'
+spec_file = 'SecurityRules.json'
+
+
+
+
+
+

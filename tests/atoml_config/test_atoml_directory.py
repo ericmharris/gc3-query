@@ -42,9 +42,9 @@ def load_atoml_files_from_directory_setup() -> List[str]:
     #     assert 'storage' in atd._toml['mongodb']
     #     assert 'db_path' in atd._toml['mongodb']['storage']
     #
-    #     assert 'idm_domains' in atd._toml
-    #     assert 'gc3pilot' in atd._toml['idm_domains']
-    #     assert 'rest_url' in atd._toml['idm_domains']['gc3pilot']
+    #     assert 'idm' in atd._toml
+    #     assert 'gc3pilot' in atd._toml['idm']
+    #     assert 'rest_url' in atd._toml['idm']['gc3pilot']
     #
     #     assert 'valid_toml' in atd._toml
     #     assert 'valid_toml_quoted' in atd._toml
@@ -65,9 +65,9 @@ def test_load_atoml_files_from_flat_dir(load_atoml_files_from_directory_setup):
     assert 'storage' in atd._toml['mongodb']
     assert 'db_path' in atd._toml['mongodb']['storage']
 
-    assert 'idm_domains' in atd._toml
-    assert 'gc3pilot' in atd._toml['idm_domains']
-    assert 'rest_url' in atd._toml['idm_domains']['gc3pilot']
+    assert 'idm' in atd._toml
+    assert 'gc3pilot' in atd._toml['idm']
+    assert 'rest_url' in atd._toml['idm']['gc3pilot']
 
     assert 'valid_toml' in atd._toml
     assert 'valid_toml_quoted' in atd._toml
@@ -114,11 +114,11 @@ def test_load_atoml_files_from_nested_dir_02(load_atoml_files_from_directory_set
     atd = ATomlDirectory(directory_path=test_dir)
 
     assert 'user' in atd._toml
-    assert 'idm_domains' in atd._toml
-    assert 'gc30003' in atd._toml["idm_domains"]
-    assert 'gc3pilot' in atd._toml["idm_domains"]
-    assert 'sites' in atd._toml["idm_domains"]['gc3pilot']
-    assert 'us006_z70' in atd._toml["idm_domains"]['gc3pilot']['sites']
+    assert 'idm' in atd._toml
+    assert 'gc30003' in atd._toml["idm"]
+    assert 'gc3pilot' in atd._toml["idm"]
+    assert 'sites' in atd._toml["idm"]['gc3pilot']
+    assert 'us006_z70' in atd._toml["idm"]['gc3pilot']['sites']
 
     assert 'mongodb' in atd._toml
     assert 'net' in atd._toml['mongodb']
@@ -133,11 +133,11 @@ def test_load_atoml_files_from_nested_dir_03(load_atoml_files_from_directory_set
     atd = ATomlDirectory(directory_path=test_dir)
 
     assert 'user' in atd._toml
-    assert 'idm_domains' in atd._toml
-    assert 'gc30003' in atd._toml["idm_domains"]
-    assert 'gc3pilot' in atd._toml["idm_domains"]
-    assert 'sites' in atd._toml["idm_domains"]['gc3pilot']
-    assert 'us006_z70' in atd._toml["idm_domains"]['gc3pilot']['sites']
+    assert 'idm' in atd._toml
+    assert 'gc30003' in atd._toml["idm"]
+    assert 'gc3pilot' in atd._toml["idm"]
+    assert 'sites' in atd._toml["idm"]['gc3pilot']
+    assert 'us006_z70' in atd._toml["idm"]['gc3pilot']['sites']
 
     assert 'mongodb' in atd._toml
     assert 'net' in atd._toml['mongodb']

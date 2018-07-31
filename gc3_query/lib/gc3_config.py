@@ -87,8 +87,7 @@ class ConfigOrderedDictAttrBase(OrderedDictAttrBase):
         return str(self._serializable)
 
     def __repr__(self):
-        return self.__str__()
-
+        return f"<{self.__class__.__name__}: len(self) items>"
 
 class GC3Config(ConfigOrderedDictAttrBase):
 
@@ -106,10 +105,10 @@ class GC3Config(ConfigOrderedDictAttrBase):
 
 
     def get_credential(self, idm_domain_name: str) -> IDMCredential:
-        if idm_domain_name not in self['idm_domains']:
+        if idm_domain_name not in self['idm']['domains']:
             raise RuntimeError(f"IDM Domain name provided, {idm_domain_name}, is not found in {self}")
 
-        idm_domain_cfg = self['idm_domains'][idm_domain_name]
+        idm_domain_cfg = self['idm']['domains'][idm_domain_name]
         service_name = f"gc3@{idm_domain_name}"
         username = self['user']['cloud_username']
         _info(f"service_name={service_name}, username={service_name}")
@@ -132,9 +131,9 @@ class GC3Config(ConfigOrderedDictAttrBase):
         :param password:
         :return:
         """
-        if idm_domain_name not in self['idm_domains']:
+        if idm_domain_name not in self['idm']['domains']:
             raise RuntimeError(f"IDM Domain name provided, {idm_domain_name}, is not found in {self}")
-        idm_domain_cfg = self['idm_domains'][idm_domain_name]
+        idm_domain_cfg = self['idm']['domains'][idm_domain_name]
         service_name = f"gc3@{idm_domain_name}"
         username = self['user']['cloud_username']
         _info(f"service_name={service_name}, username={service_name}")

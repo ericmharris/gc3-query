@@ -88,20 +88,20 @@ def test_file_load_01(test_load_file_setup):
 # 'sftp_url:url' = 'sftp://sftp.us2.cloud.oracle.com:22'
 def test_annotated_file_01():
     config_dir = Path(__file__).parent.joinpath("ATomlFile/test_annotated_file_01")
-    at_file = config_dir.joinpath("idm_domains.toml")
+    at_file = config_dir.joinpath("idm.toml")
     assert at_file.exists()
     atf = ATomlFile(file_path=at_file)
     assert atf.toml is not None
-    assert 'rest_url' in atf.toml['idm_domains']['gc3pilot']
+    assert 'rest_url' in atf.toml['idm']['gc3pilot']
 
 # Test the rest of that file
 def test_annotated_file_02():
     config_dir = Path(__file__).parent.joinpath("ATomlFile/test_annotated_file_02")
-    at_file = config_dir.joinpath("idm_domains.toml")
+    at_file = config_dir.joinpath("idm.toml")
     assert at_file.exists()
     atf = ATomlFile(file_path=at_file)
     assert atf.toml is not None
-    assert 'rest_url' in atf.toml['idm_domains']['gc3pilot']
+    assert 'rest_url' in atf.toml['idm']['gc3pilot']
 
 # Make sure the in-memory representation of the file has the same number of lines as the actual file (ie. no extra \n's)
 def test_file_length():

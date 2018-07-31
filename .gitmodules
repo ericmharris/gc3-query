@@ -10,3 +10,6 @@
 [submodule "gc3_query/opt/reference/oci-ansible-modules"]
 	path = gc3_query/opt/reference/oci-ansible-modules
 	url = https://github.com/oracle/oci-ansible-modules.git
+[submodule "gc3_query/opt/reference/bravado"]
+	path = gc3_query/opt/reference/bravado
+	url = https://github.com/Yelp/bravado.git

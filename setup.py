@@ -39,7 +39,7 @@ requirements = [
     'dataclasses',
     'requests>=2.18.0',
     'requestium',
-    'aiobravado[aiohttp_extras]',
+    # 'aiobravado[aiohttp_extras]',
     'bravado',
     'selenium',
     'cookiecutter',
