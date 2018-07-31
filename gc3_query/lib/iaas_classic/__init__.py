@@ -27,6 +27,8 @@ from bravado.client import SwaggerClient
 ## Project Imports
 from gc3_query.lib import *
 from gc3_query.lib import gc3_cfg
+## TODO: either change or add a snake_case function for camelCase
+from gc3_query.lib.util import camelcase_to_snake
 from gc3_query.lib.iaas_classic.requests_client import IaaSRequestsClient
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
