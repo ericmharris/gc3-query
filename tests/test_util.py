@@ -1,6 +1,6 @@
 import pytest
 
-from gc3_query.lib.util import camelcase_to_snake
+from gc3_query.lib.utils import camelcase_to_snake
 
 
 def test_camelcase_to_snake():

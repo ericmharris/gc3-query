@@ -244,12 +244,14 @@ class OrderedDictBase(MutableMapping):
     # The next five methods are requirements of the ABC.
     def __setitem__(self, key, value):
         self._d[key] = value
+        self.__dict__[key] = value
 
     def __getitem__(self, key):
         return self._d[key]
 
     def __delitem__(self, key):
         del self._d[key]
+        _ = self.__dict__.pop(key)
 
     def __iter__(self):
         return iter(self._d)

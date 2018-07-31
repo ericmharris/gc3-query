@@ -25,7 +25,9 @@ import click
 ## Project Imports
 from gc3_query import __version__
 from gc3_query.lib import *
+from gc3_query.lib import gc3_cfg
 from gc3_query.lib.cookie_cutter.setup_mongodb import SetupMongoDB
+
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
@@ -92,7 +94,8 @@ def setup_mongodb( ctx: click.core.Context, mongodb_bin_dir: str = None, listen_
 @click.option("--update", "-u", help="Update password if credenatial already exists.", default=False, is_flag=True)
 @click.pass_context
 def set_domain_passwords( ctx: click.core.Context, domain_name: str, password: str, update: bool = False ) -> None:
-    click.echo(click.style(f"gc3admin.setup_mongodb(): target_dir={mongodb_bin_dir}", fg="green"))
+
+    click.echo(click.style(f"Setting IDM password, domain_name={domain_name}, update={update}", fg="green"))
     _warning(f"Test logging for gc3admin.")
     print(f"context: {ctx.parent.gc3_config}")
 

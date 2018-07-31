@@ -37,9 +37,9 @@ from bravado.http_future import HttpFuture
 from gc3_query.lib import *
 from gc3_query.lib import gc3_cfg
 ## TODO: either change or add a snake_case function for camelCase
-from gc3_query.lib.util import camelcase_to_snake
+from gc3_query.lib.utils import camelcase_to_snake
 from gc3_query.lib.iaas_classic.requests_client import IaaSRequestsClient
-from gc3_query.lib.util import camelcase_to_snake
+from gc3_query.lib.utils import camelcase_to_snake
 from gc3_query.lib.base_collections import OrderedDictAttrBase
 
 
