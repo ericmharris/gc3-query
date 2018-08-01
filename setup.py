@@ -54,6 +54,8 @@ requirements = [
     'httpie',
     'cryptography',
     'melddict',
+    'cachetools',
+    # 'ASDF',
     # 'ASDF',
     # 'ASDF',
     'sortedcontainers',

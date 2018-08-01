@@ -38,7 +38,7 @@ from gc3_query.lib import *
 from gc3_query.lib import gc3_cfg
 ## TODO: either change or add a snake_case function for camelCase
 from gc3_query.lib.utils import camelcase_to_snake
-from gc3_query.lib.iaas_classic.requests_client import IaaSRequestsClient
+from gc3_query.lib.iaas_classic.requests_client import IaaSRequestsHTTPClient
 from gc3_query.lib.utils import camelcase_to_snake
 from gc3_query.lib.base_collections import OrderedDictAttrBase
 
@@ -50,7 +50,7 @@ API_SPEC_DIR = BASE_DIR.joinpath('lib/iaas_classic/api_specs')
 
 class IaaSServiceBase:
 
-    def __init__(self, service_cfg: Dict[str,Any], idm_cfg: Dict[str,Any], **kwargs: Dict[str,Any]):
+    def __init__(self, service_cfg: Dict[str,Any], idm_cfg: Dict[str,Any], http_client: IaaSRequestsHTTPClient=None, **kwargs: Dict[str, Any]):
         """
 
 
@@ -62,7 +62,9 @@ class IaaSServiceBase:
         self.idm_cfg = idm_cfg
         self.kwargs = kwargs
         self._service_name = service_cfg['service_name']
-        self.http_client = IaaSRequestsClient(idm_cfg=self.idm_cfg, skip_authentication=self.kwargs.get('skip_authentication', False))
+        self.http_client = http_client if http_client else IaaSRequestsHTTPClient(idm_cfg=self.idm_cfg,
+                                                                                  skip_authentication=self.kwargs.get(
+            'skip_authentication', False))
 
         # swagger_client = SwaggerClient.from_url(spec_url=spec_file_uri, http_client=requests_client, config={'also_return_response': True})
 
@@ -102,4 +104,38 @@ class IaaSServiceBase:
             so[so_camel_name] =  getattr(service_operations, service_operation_name)
             so.__dict__[so_camel_name] = so[so_camel_name]
         return so
+
+
+    def get_idm_container_name(self, cloud_username:str = None) -> str:
+        """ Return /Compute-identityDomain/ or /Compute-identityDomain/{cloud_username}/  eg. '/Compute-587626604/eric.harris@oracle.com' for gc30003
+
+        Specify /Compute-identityDomain/user/ to retrieve the names of objects that you can access. Specify /Compute-identityDomain/ to retrieve the names of containers that contain objects that you can access.
+
+        :return:
+        """
+        if cloud_username:
+            return  f"/Compute-{self.idm_cfg.service_instance_id}/{cloud_username}/"
+        else:
+            return  f"/Compute-{self.idm_cfg.service_instance_id}/"
+
+    @property
+    def idm_container_name(self) -> str:
+        """Return /Compute-identityDomain/, eg. '/Compute-587626604/' for gc30003
+
+        Specify /Compute-identityDomain/user/ to retrieve the names of objects that you can access. Specify /Compute-identityDomain/ to retrieve the names of containers that contain objects that you can access.
+
+        :return:
+        """
+        return self.get_idm_container_name()
+
+
+    @property
+    def idm_user_container_name(self) -> str:
+        """Return /Compute-identityDomain/user/, eg. '/Compute-587626604/eric.harris@oracle.com' for gc30003
+
+        Specify /Compute-identityDomain/user/ to retrieve the names of objects that you can access. Specify /Compute-identityDomain/ to retrieve the names of containers that contain objects that you can access.
+
+        :return:
+        """
+        return self.get_idm_container_name(cloud_username=gc3_cfg.user.cloud_username)
 

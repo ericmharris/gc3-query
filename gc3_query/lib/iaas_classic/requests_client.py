@@ -36,7 +36,7 @@ from gc3_query.lib import gc3_cfg
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
-class IaaSRequestsClient(RequestsClient):
+class IaaSRequestsHTTPClient(RequestsClient):
     """Synchronous HTTP client implementation with tweaks for Oracle Cloud.
     """
 

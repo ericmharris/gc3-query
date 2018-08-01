@@ -11,6 +11,8 @@ spec_url = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apic
 spec_furl: fstr = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/{api_version}/apis/Instances/canonical'
 spec_file = 'Instances.json'
 api_doc_url = 'https://docs.oracle.com/en/cloud/iaas/compute-iaas-cloud/stcsa/api-instances.html'
+swagger_ui_url = 'https://apicatalog.oraclecloud.com/ui/views/swaggerui3/oracle-public/compute/18.1.2?urls.primaryName=Instances'
+swagger_ui_furl: fstr = 'https://apicatalog.oraclecloud.com/ui/views/swaggerui3/oracle-public/compute/{api_version}?urls.primaryName=Instances'
 
 
 [iaas_classic.services.SecurityRules]
@@ -21,6 +23,8 @@ spec_url = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apic
 spec_furl: fstr = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/{api_version}/apis/SecurityRules/canonical'
 spec_file = 'SecurityRules.json'
 api_doc_url = 'https://docs.oracle.com/en/cloud/iaas/compute-iaas-cloud/stcsa/api-sshkeys.html'
+swagger_ui_url = 'https://apicatalog.oraclecloud.com/ui/views/swaggerui3/oracle-public/compute/18.1.2?urls.primaryName=SSHKeys'
+swagger_ui_furl: fstr = 'https://apicatalog.oraclecloud.com/ui/views/swaggerui3/oracle-public/compute/{api_version}?urls.primaryName=SSHKeys'
 
 
 
