@@ -107,20 +107,20 @@ class IaaSServiceBase:
 
 
     def get_idm_container_name(self, cloud_username:str = None) -> str:
-        """ Return /Compute-identityDomain/ or /Compute-identityDomain/{cloud_username}/  eg. '/Compute-587626604/eric.harris@oracle.com' for gc30003
+        """ Return Compute-identityDomain/ or Compute-identityDomain/{cloud_username}/  eg. 'Compute-587626604/eric.harris@oracle.com' for gc30003
 
         Specify /Compute-identityDomain/user/ to retrieve the names of objects that you can access. Specify /Compute-identityDomain/ to retrieve the names of containers that contain objects that you can access.
 
         :return:
         """
         if cloud_username:
-            return  f"/Compute-{self.idm_cfg.service_instance_id}/{cloud_username}/"
+            return  f"Compute-{self.idm_cfg.service_instance_id}/{cloud_username}/"
         else:
-            return  f"/Compute-{self.idm_cfg.service_instance_id}/"
+            return  f"Compute-{self.idm_cfg.service_instance_id}/"
 
     @property
     def idm_container_name(self) -> str:
-        """Return /Compute-identityDomain/, eg. '/Compute-587626604/' for gc30003
+        """Return Compute-identityDomain/, eg. 'Compute-587626604/' for gc30003
 
         Specify /Compute-identityDomain/user/ to retrieve the names of objects that you can access. Specify /Compute-identityDomain/ to retrieve the names of containers that contain objects that you can access.
 
@@ -131,7 +131,7 @@ class IaaSServiceBase:
 
     @property
     def idm_user_container_name(self) -> str:
-        """Return /Compute-identityDomain/user/, eg. '/Compute-587626604/eric.harris@oracle.com' for gc30003
+        """Return Compute-identityDomain/user/, eg. 'Compute-587626604/eric.harris@oracle.com' for gc30003
 
         Specify /Compute-identityDomain/user/ to retrieve the names of objects that you can access. Specify /Compute-identityDomain/ to retrieve the names of containers that contain objects that you can access.
 

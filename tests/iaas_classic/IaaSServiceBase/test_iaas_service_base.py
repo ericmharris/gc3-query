@@ -101,7 +101,7 @@ def test_get_idm_container_names(setup_preauthed_gc30003):
     http_future = iaas_service_base.service_operations.discover_root_instance()
     service_response = http_future.response()
     # '/Compute-587626604/'
-    idm_container_name = service_response.incoming_response.json()['result'][0]
+    idm_container_name = service_response.incoming_response.json()['result'][0].lstrip('/')
     # '/Compute-587626604/eric.harris@oracle.com/'
     idm_user_container_name = f"{idm_container_name}{gc3_cfg.user.cloud_username}/"
     assert iaas_service_base.idm_container_name==idm_container_name
