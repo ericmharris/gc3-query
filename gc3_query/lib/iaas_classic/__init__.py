@@ -86,7 +86,7 @@ class IaaSServiceBase:
         """Returns Open API spec"""
         spec_file_path = API_SPEC_DIR.joinpath(self.service_cfg.spec_file)
         spec_dict = load_file(spec_file_path)
-        spec_dict['schemes'] = ['https']
+        spec_dict['schemes'].append('https')
         return spec_dict
 
 
