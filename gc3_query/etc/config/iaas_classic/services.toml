@@ -10,6 +10,7 @@ name = 'Instances'
 spec_url = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/18.1.2/apis/Instances/canonical'
 spec_furl: fstr = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/{api_version}/apis/Instances/canonical'
 spec_file = 'Instances.json'
+api_doc_url = 'https://docs.oracle.com/en/cloud/iaas/compute-iaas-cloud/stcsa/api-instances.html'
 
 
 [iaas_classic.services.SecurityRules]
@@ -19,6 +20,7 @@ api_version = '18.1.2'
 spec_url = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/18.1.2/apis/SecurityRules/canonical'
 spec_furl: fstr = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/{api_version}/apis/SecurityRules/canonical'
 spec_file = 'SecurityRules.json'
+api_doc_url = 'https://docs.oracle.com/en/cloud/iaas/compute-iaas-cloud/stcsa/api-sshkeys.html'
 
 
 
