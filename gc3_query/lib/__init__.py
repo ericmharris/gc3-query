@@ -11,6 +11,7 @@ from gc3_query.lib.gc3_config import GC3Config
 from gc3_query.lib.gc3logging import get_logging
 
 
+gc3_cfg = GC3Config()
 
 BASE_DIR: Path = Path(__file__).parent.parent
-gc3_cfg = GC3Config()
+CONFIG_DIR: Path = BASE_DIR.joinpath('etc/config')

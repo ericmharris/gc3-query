@@ -63,10 +63,48 @@ def test_discover_root_instance(setup_gc30003):
 def test_discover_instance(setup_gc30003):
     service_cfg, idm_cfg, http_client = setup_gc30003
     instances = Instances(service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client)
-    http_future = instances.bravado_service_operations.discoverInstance(container=instances.idm_container_name)
+    container=instances.idm_container_name
+    http_future = instances.bravado_service_operations.discoverInstance(container=container)
     request_url = http_future.future.request.url
     service_response = http_future.response()
     result = service_response.result
+    http_response = service_response.incoming_response
+    http_response_json = http_response.json()
+    assert service_response.metadata.status_code==200
+
+
+def test_list_instance(setup_gc30003):
+    service_cfg, idm_cfg, http_client = setup_gc30003
+    instances = Instances(service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client)
+    container=instances.idm_container_name.replace('/', '')
+    container=instances.idm_user_container_name[0:-1]
+    http_future = instances.bravado_service_operations.listInstance(container=container)
+    request_url = http_future.future.request.url
+    service_response = http_future.response()
+    result = service_response.result
+    http_response = service_response.incoming_response
+    http_response_json = http_response.json()
+    assert service_response.metadata.status_code==200
+
+def test_get_instance(setup_gc30003):
+    service_cfg, idm_cfg, http_client = setup_gc30003
+    instances = Instances(service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client)
+    container=instances.idm_container_name.replace('/', '')
+    container=instances.idm_user_container_name[0:-1]
+    name = '/Compute-587626604/eric.harris@oracle.com/gc3_naac_soar_ebs1226_demo_01'
+    name = '/Compute-587626604/eric.harris@oracle.com/gc3_naac_soar_ebs1226_demo_01/'
+    # this nanme returned the next value
+    name = 'Compute-587626604/eric.harris@oracle.com/gc3_naac_soar_ebs1226_demo_01'
+    name = '/Compute-587626604/eric.harris@oracle.com/gc3_naac_soar_ebs1226_demo_01/8706cea9-6f49-428f-b354-a3748478d1c2'
+    # returned an empty list
+    name = 'Compute-587626604/eric.harris@oracle.com/gc3_naac_soar_ebs1226_demo_01/8706cea9-6f49-428f-b354-a3748478d1c2'
+    name = 'Compute-587626604/eric.harris@oracle.com/gc3_naac_soar_ebs1226_demo_01/8706cea9-6f49-428f-b354-a3748478d1c2/'
+    http_future = instances.bravado_service_operations.getInstance(name=name)
+    request_url = http_future.future.request.url
+    service_response = http_future.response()
+    result = service_response.result
+    http_response = service_response.incoming_response
+    http_response_json = http_response.json()
     assert service_response.metadata.status_code==200
 
 

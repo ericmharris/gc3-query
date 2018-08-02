@@ -100,12 +100,20 @@ class GC3Config(ConfigOrderedDictAttrBase):
         if not atoml_config_dir:
             atoml_config_dir = GC3_QUERY_HOME.joinpath('etc/config')
         _debug(f"atoml_config_dir={atoml_config_dir}")
-        at_config = ATomlConfig(directory_paths=atoml_config_dir)
-        gc3_cfg = at_config.toml
+        self._at_config = ATomlConfig(directory_paths=atoml_config_dir)
+        gc3_cfg = self._at_config.toml
         super().__init__(mapping=gc3_cfg)
         _debug(f"{self._name} created: {self}")
 
 
+    # def __getattr__(self, key):
+    #     value = self._d[key]
+    #     return value
+    #
+    #
+    # def __getitem__(self, key):
+    #     value = self._d[key]
+    #     return value
 
 
     def get_credential(self, idm_domain_name: str) -> IDMCredential:

@@ -59,7 +59,7 @@ class IaaSServiceBase:
                  service_cfg: Dict[str,Any],
                  idm_cfg: Dict[str,Any],
                  http_client: IaaSRequestsHTTPClient=None,
-                 from_url: bool = True,
+                 from_url: bool = False,
                  **kwargs: Dict[str, Any]):
         """
 
@@ -82,7 +82,7 @@ class IaaSServiceBase:
         # .../site-packages/bravado_core/spec.py:40
         self.swagger_client_config = dict(gc3_cfg.iaas_classic.iaas_service_client_config)
         if from_url:
-            self._spec_url = f"{service_cfg.spec_furl}".format_map(service_cfg)
+            self._spec_url = f"{service_cfg.spec_furl}".format_map(locals())
             _debug(f"self._spec_url={self._spec_url}")
             self.swagger_client = SwaggerClient.from_url(spec_url=self._spec_url,
                                                          http_client=self.http_client,
@@ -134,8 +134,10 @@ class IaaSServiceBase:
         """
         if cloud_username:
             return  f"Compute-{self.idm_cfg.service_instance_id}/{cloud_username}/"
+            # return  f"/Compute-{self.idm_cfg.service_instance_id}/{cloud_username}/"
         else:
             return  f"Compute-{self.idm_cfg.service_instance_id}/"
+            # return  f"/Compute-{self.idm_cfg.service_instance_id}/"
 
     @property
     def idm_container_name(self) -> str:
