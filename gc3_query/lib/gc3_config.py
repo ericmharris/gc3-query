@@ -86,8 +86,12 @@ class ConfigOrderedDictAttrBase(OrderedDictAttrBase):
     def __str__(self) -> str:
         return str(self._serializable)
 
+    # def __repr__(self):
+    #     return f"<{self.__class__.__name__}: len(self) items>"
+
     def __repr__(self):
-        return f"<{self.__class__.__name__}: len(self) items>"
+        return "{0}()".format(type(self))
+
 
 class GC3Config(ConfigOrderedDictAttrBase):
 
