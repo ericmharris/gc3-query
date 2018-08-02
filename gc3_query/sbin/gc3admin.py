@@ -27,6 +27,7 @@ from gc3_query import __version__
 from gc3_query.lib import *
 from gc3_query.lib import gc3_cfg
 from gc3_query.lib.cookie_cutter.setup_mongodb import SetupMongoDB
+from gc3_query.lib.base_collections import OrderedDictAttrBase
 
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
@@ -42,19 +43,48 @@ CONTEXT_SETTINGS = dict(
 )
 
 
-@click.group( invoke_without_command=False, context_settings=CONTEXT_SETTINGS, help=""" Help message for gc3keygen cli. """, )
-@click.version_option(__version__, "-v", "--version", message="%(version)s")
+# @click.group( invoke_without_command=False, context_settings=CONTEXT_SETTINGS, help=""" Help message for gc3keygen cli. """, )
+# @click.version_option(__version__, "-v", "--version", message="%(version)s")
+# @click.option("-d", "--debug", is_flag=True, help="Show additional debug information.")
+# @click.option("-?", "-h", "--help", is_flag=True, help="Show this message and exit.")
+# @click.pass_context
+# def cli(ctx, debug, help):
+#     # named ctx.parent.gc3cfg to other functions in cli group.
+#     ctx.gc3_config = {}
+#     click.echo(f"Running cli() with context: {ctx}")
+#     if debug:
+#         ctx.gc3_config["logging_level"] = "DEBUG"
+#     else:
+#         ctx.gc3_config["logging_level"] = "WARNING"
+
+
+
+@click.group(
+    invoke_without_command=False,
+    context_settings=CONTEXT_SETTINGS,
+    help="""Help message for atoml cli.""", )
+@click.version_option('0.1.0', "--version", message="%(version)s")
 @click.option("-d", "--debug", is_flag=True, help="Show additional debug information.")
-@click.option("-?", "-h", "--help", is_flag=True, help="Show this message and exit.")
+@click.option("--quiet", "-q", help="Print only serialized data", default=False, is_flag=True)
+@click.option("--verbose", "-v", help="Be chatty", default=False, is_flag=True)
+# @click.option("-?", "-h", "--help", is_flag=True, help="Show this message and exit.")
 @click.pass_context
-def cli(ctx, debug, help):
-    # named ctx.parent.gc3cfg to other functions in cli group.
-    ctx.gc3_config = {}
-    click.echo(f"Running cli() with context: {ctx}")
+def cli(ctx, debug:bool = False, quiet:bool = False, verbose: bool = False):
+    # named ctx.parent.gc3_cfg to other functions in cli group.
+    # ctx.gc3_config = {}
+    ctx.obj = OrderedDictAttrBase()
+    ctx.obj['debug'] = debug
+    ctx.obj['verbose'] = verbose
+    ctx.obj['quiet'] = quiet
+    ctx.obj['gc3_cfg'] = gc3_cfg
+    if not quiet:
+        click.echo(f"Running atoml.cli() with context: {ctx}")
     if debug:
-        ctx.gc3_config["logging_level"] = "DEBUG"
+        ctx.obj['logging_level'] = "debug"
+        ctx.obj["gc3_cfg"]["logging"]["logging_level"] = "debug"
     else:
-        ctx.gc3_config["logging_level"] = "WARNING"
+        ctx.obj['logging_level'] = "warning"
+        ctx.obj["gc3_cfg"]["logging"]["logging_level"] = "warning"
 
 
 @cli.command(help="Setup MongoDB.", short_help="Setup MongoDB.", epilog="Setup Mongo")
@@ -91,13 +121,14 @@ def setup_mongodb( ctx: click.core.Context, mongodb_bin_dir: str = None, listen_
 @cli.command(help="Manage password for IDM domain", short_help="Keystore.", epilog="Manage keystore")
 @click.option("--domain-name", "-d", help="IDM Domain name")
 @click.option( "--password", "-p", prompt="Password for IDM Domain: ", help="Password for IDM Domain" )
-@click.option("--update", "-u", help="Update password if credenatial already exists.", default=False, is_flag=True)
 @click.pass_context
-def set_domain_passwords( ctx: click.core.Context, domain_name: str, password: str, update: bool = False ) -> None:
-
-    click.echo(click.style(f"Setting IDM password, domain_name={domain_name}, update={update}", fg="green"))
-    _warning(f"Test logging for gc3admin.")
-    print(f"context: {ctx.parent.gc3_config}")
+def set_domain_passwords( ctx: click.core.Context, domain_name: str, password: str) -> None:
+    # click.echo(click.style(f"atoml.print(): verbose={ctx.obj.verbose}, quiet={ctx.obj.quiet}", fg="green"))
+    password = password.strip()
+    click.echo(click.style(f"Setting IDM password, domain_name={domain_name}", fg="blue"))
+    idm_credential = gc3_cfg.set_credential(idm_domain_name=domain_name, password=password)
+    click.echo(click.style(f"IDM password for domain_name={idm_credential.idm_domain_name} set to: '{idm_credential.password}'", fg="green"))
+    sys.exit(0)
 
 
 
