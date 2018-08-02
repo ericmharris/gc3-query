@@ -19,13 +19,14 @@ import sys, os
 
 ################################################################################
 ## Third-Party Imports
+from typing import Dict, Any
+
 from dataclasses import dataclass
 import bravado
 from bravado.requests_client import RequestsClient
 from bravado.client import SwaggerClient
 from bravado.client import SwaggerClient, ResourceDecorator
 from bravado.client import SwaggerClient, CallableOperation
-from gc3_query.lib.bravado.requests_client import OCRequestsClient
 from bravado.requests_client import RequestsResponseAdapter
 from bravado.swagger_model import load_file
 from bravado_core.exception import MatchingResponseNotFound
@@ -38,7 +39,7 @@ from gc3_query.lib import *
 from gc3_query.lib import gc3_cfg
 ## TODO: either change or add a snake_case function for camelCase
 from gc3_query.lib.utils import camelcase_to_snake
-from gc3_query.lib.iaas_classic.requests_client import IaaSRequestsHTTPClient
+from gc3_query.lib.iaas_classic.iaas_requests_http_client import IaaSRequestsHTTPClient
 from gc3_query.lib.utils import camelcase_to_snake
 from gc3_query.lib.base_collections import OrderedDictAttrBase
 
@@ -50,27 +51,45 @@ API_SPEC_DIR = BASE_DIR.joinpath('lib/iaas_classic/api_specs')
 
 class IaaSServiceBase:
 
-    def __init__(self, service_cfg: Dict[str,Any], idm_cfg: Dict[str,Any], http_client: IaaSRequestsHTTPClient=None, **kwargs: Dict[str, Any]):
-        """
+    idm_cfg: Dict[str, Any]
+    service_cfg: Dict[str, Any]
+    from_url: bool
 
+    def __init__(self,
+                 service_cfg: Dict[str,Any],
+                 idm_cfg: Dict[str,Any],
+                 http_client: IaaSRequestsHTTPClient=None,
+                 from_url: bool = True,
+                 **kwargs: Dict[str, Any]):
+        """
 
         :param service_cfg:
         :param idm_cfg:
+        :param http_client:
+        :param from_url:
         :param kwargs:
         """
+        self.from_url = from_url
         self.service_cfg = service_cfg
         self.idm_cfg = idm_cfg
         self.kwargs = kwargs
         self._service_name = service_cfg['service_name']
-        self.http_client = http_client if http_client else IaaSRequestsHTTPClient(idm_cfg=self.idm_cfg,
-                                                                                  skip_authentication=self.kwargs.get(
-            'skip_authentication', False))
+        self.http_client = http_client if http_client else \
+            IaaSRequestsHTTPClient(idm_cfg=self.idm_cfg, skip_authentication=self.kwargs.get('skip_authentication', False))
 
         # swagger_client = SwaggerClient.from_url(spec_url=spec_file_uri, http_client=requests_client, config={'also_return_response': True})
 
         # .../site-packages/bravado_core/spec.py:40
         self.swagger_client_config = dict(gc3_cfg.iaas_classic.iaas_service_client_config)
-        self.swagger_client = SwaggerClient.from_spec(spec_dict=self.api_spec,
+        if from_url:
+            self._spec_url = f"{service_cfg.spec_furl}".format_map(service_cfg)
+            _debug(f"self._spec_url={self._spec_url}")
+            self.swagger_client = SwaggerClient.from_url(spec_url=self._spec_url,
+                                                         http_client=self.http_client,
+                                                         request_headers=self.http_client.headers,
+                                                         config=self.swagger_client_config)
+        else:
+            self.swagger_client = SwaggerClient.from_spec(spec_dict=self.api_spec,
                                                  origin_url=self.idm_cfg.rest_endpoint,
                                                  http_client=self.http_client,
                                                  config=self.swagger_client_config)

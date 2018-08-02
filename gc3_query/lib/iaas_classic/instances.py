@@ -29,7 +29,7 @@ from bravado.client import SwaggerClient
 from gc3_query.lib import *
 from gc3_query.lib import gc3_cfg
 from . import IaaSServiceBase
-from .requests_client import IaaSRequestsHTTPClient
+from .iaas_requests_http_client import IaaSRequestsHTTPClient
 
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)

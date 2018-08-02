@@ -94,3 +94,5 @@ target/
 /gc3_query/opt/reference/oci-cli
 /gc3_query/opt/reference/oci-python-sdk
 
+/gc3_query/opt/reference/bravado_10.1.0
+/gc3_query/opt/reference/bravado_core_5.0.4

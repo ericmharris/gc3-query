@@ -5,6 +5,7 @@
 # __all__ = ['Path', 'List', 'Optional', 'Any', 'Callable', 'Dict', 'Tuple', 'Union', 'Set', 'Generator']
 from pathlib import Path
 from typing import List, Optional, Any, Callable, Dict, Tuple, Union, Set, Generator, Iterable
+DictStrAny = Dict[str, Any]
 
 from gc3_query.lib.gc3_config import GC3Config
 from gc3_query.lib.gc3logging import get_logging

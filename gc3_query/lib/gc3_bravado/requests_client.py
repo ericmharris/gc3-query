@@ -24,9 +24,12 @@ from gc3_query.lib import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
+_critical(f"This implimentation no longer works using the latest version of gc3_bravado.  request() signature has changed.")
+
 class OCRequestsClient(RequestsClient):
     """Synchronous HTTP client implementation with tweaks for Oracle Cloud.
     """
+    _critical(f"This implimentation no longer works using the latest version of gc3_bravado.  request() signature has changed.")
 
     def request(self, request_params, operation=None, response_callbacks=None, also_return_response=False):
         """
@@ -39,7 +42,7 @@ class OCRequestsClient(RequestsClient):
         :param response_callbacks: List of callables to post-process the
             incoming response. Expects args incoming_response and operation.
         :param also_return_response: Consult the constructor documentation for
-            :class:`bravado.http_future.HttpFuture`.
+            :class:`gc3_bravado.http_future.HttpFuture`.
 
         :returns: HTTP Future object
         :rtype: :class: `bravado_core.http_future.HttpFuture`
@@ -56,7 +59,7 @@ class OCRequestsClient(RequestsClient):
     def resanitize_params(self, request_params: Dict[str, Any]) -> Dict[str, Any]:
         """Updates request_params so they work better with OPC
 
-        The bravado RequestsClient sanitizes  URL's using quote_plus() which converts/escapes '/' to '%2F'.
+        The gc3_bravado RequestsClient sanitizes  URL's using quote_plus() which converts/escapes '/' to '%2F'.
 
         url = 'https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604%2Feric.harris%40oracle.com%2F'
         url_wanted = 'https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604/eric.harris@oracle.com/'

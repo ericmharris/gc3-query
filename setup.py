@@ -40,7 +40,7 @@ requirements = [
     'requests>=2.18.0',
     'requestium',
     # 'aiobravado[aiohttp_extras]',
-    'bravado',
+    'gc3_bravado',
     'selenium',
     'cookiecutter',
     'beautifulsoup4',

@@ -8,8 +8,8 @@ import keyring
 
 import bravado
 from bravado.client import SwaggerClient
-# from bravado.requests_client import RequestsClient
-from gc3_query.lib.bravado.requests_client import OCRequestsClient
+# from gc3_bravado.requests_client import RequestsClient
+from gc3_query.lib.gc3_bravado.requests_client import OCRequestsClient
 from bravado.swagger_model import load_file
 from bravado_core.exception import MatchingResponseNotFound
 from bravado.exception import HTTPBadRequest
@@ -21,7 +21,7 @@ from tinydb import TinyDB
 from prettyprinter import pprint, pformat
 
 ## https://medium.com/@betz.mark/validate-json-models-with-swagger-and-bravado-5fad6b21a825
-# Validate json models with swagger and bravado
+# Validate json models with swagger and gc3_bravado
 from bravado_core.spec import Spec
 
 opc_username = "eric.harris@oracle.com"
@@ -783,7 +783,7 @@ except bravado.exception.HTTPBadRequest:
     print("Request failed for {operation_id}! ")
     print(f"URL: {operation_future.future.request.url}")
     raise
-# except bravado.exception.HTTPNotFound:
+# except gc3_bravado.exception.HTTPNotFound:
 #     print("Request failed for {operation_id}! ")
 #     print(f"URL: {operation_future.future.request.url}")
 #     raise
