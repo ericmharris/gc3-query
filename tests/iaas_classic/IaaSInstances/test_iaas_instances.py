@@ -64,6 +64,7 @@ def test_discover_instance(setup_gc30003):
     service_cfg, idm_cfg, http_client = setup_gc30003
     instances = Instances(service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client)
     http_future = instances.bravado_service_operations.discoverInstance(container=instances.idm_container_name)
+    request_url = http_future.future.request.url
     service_response = http_future.response()
     result = service_response.result
     assert service_response.metadata.status_code==200
