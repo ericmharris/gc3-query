@@ -55,7 +55,8 @@ def test_authentication(setup_gc30003):
 def test_discover_root_instance(setup_gc30003):
     service_cfg, idm_cfg, http_client = setup_gc30003
     instances = Instances(service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client)
-    http_future = instances.service_operations.discover_root_instance()
+    # http_future = instances.service_operations.discover_root_instance()
+    http_future = instances.bravado_service_operations.discoverRootInstance()
     service_response = http_future.response()
     assert service_response.metadata.status_code==200
     assert f"/Compute-{instances.idm_cfg.service_instance_id}" in service_response.result
