@@ -43,22 +43,20 @@ from gc3_query.lib.iaas_classic.iaas_requests_http_client import IaaSRequestsHTT
 from gc3_query.lib.utils import camelcase_to_snake
 from gc3_query.lib.base_collections import OrderedDictAttrBase
 
-
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 API_SPEC_DIR = BASE_DIR.joinpath('lib/iaas_classic/api_specs')
 
 
 class IaaSServiceBase:
-
     idm_cfg: Dict[str, Any]
     service_cfg: Dict[str, Any]
     from_url: bool
 
     def __init__(self,
-                 service_cfg: Dict[str,Any],
-                 idm_cfg: Dict[str,Any],
-                 http_client: IaaSRequestsHTTPClient=None,
+                 service_cfg: Dict[str, Any],
+                 idm_cfg: Dict[str, Any],
+                 http_client: IaaSRequestsHTTPClient = None,
                  from_url: bool = False,
                  **kwargs: Dict[str, Any]):
         """
@@ -78,8 +76,16 @@ class IaaSServiceBase:
             IaaSRequestsHTTPClient(idm_cfg=self.idm_cfg, skip_authentication=self.kwargs.get('skip_authentication', False))
 
         # swagger_client = SwaggerClient.from_url(spec_url=spec_file_uri, http_client=requests_client, config={'also_return_response': True})
-
         # .../site-packages/bravado_core/spec.py:40
+
+        # swagger_client_config = {'validate_responses': True,
+        #           'validate_requests': True,
+        #           'validate_swagger_spec': True,
+        #           'use_models': True,
+        #           'include_missing_properties': True,
+        #           'default_type_to_object': False,
+        #           'internally_dereference_refs': False,
+        #           'also_return_response': True}
         self.swagger_client_config = dict(gc3_cfg.iaas_classic.iaas_service_client_config)
         if from_url:
             self._spec_url = f"{service_cfg.spec_furl}".format_map(locals())
@@ -90,9 +96,9 @@ class IaaSServiceBase:
                                                          config=self.swagger_client_config)
         else:
             self.swagger_client = SwaggerClient.from_spec(spec_dict=self.api_spec,
-                                                 origin_url=self.idm_cfg.rest_endpoint,
-                                                 http_client=self.http_client,
-                                                 config=self.swagger_client_config)
+                                                          origin_url=self.idm_cfg.rest_endpoint,
+                                                          http_client=self.http_client,
+                                                          config=self.swagger_client_config)
 
         # This is the container from Bravado.client (SwaggerClient module) that holds CallableOperation created using the spec
         self.bravado_service_operations = getattr(self.swagger_client, service_cfg['service_name'])
@@ -100,7 +106,8 @@ class IaaSServiceBase:
         # This is populated with the CallableOperations from service_resources but the names are converted
         # from camelCase to python/snake-case (eg. discover_root_instance vs. discoverRootInstance)
         #
-        self.service_operations = self.populate_service_operations(service_operations=getattr(self.swagger_client, service_cfg['service_name']))
+        self.service_operations = self.populate_service_operations(
+            service_operations=getattr(self.swagger_client, service_cfg['service_name']))
 
     @property
     def api_spec(self) -> str:
@@ -109,7 +116,6 @@ class IaaSServiceBase:
         spec_dict = load_file(spec_file_path)
         spec_dict['schemes'].append('https')
         return spec_dict
-
 
     def populate_service_operations(self, service_operations: ResourceDecorator) -> OrderedDictAttrBase:
         """Return container of callable operations with names converted from camel to python/snake-case
@@ -120,12 +126,11 @@ class IaaSServiceBase:
         so = OrderedDictAttrBase()
         for service_operation_name in dir(service_operations):
             so_camel_name = camelcase_to_snake(service_operation_name)
-            so[so_camel_name] =  getattr(service_operations, service_operation_name)
+            so[so_camel_name] = getattr(service_operations, service_operation_name)
             so.__dict__[so_camel_name] = so[so_camel_name]
         return so
 
-
-    def get_idm_container_name(self, cloud_username:str = None) -> str:
+    def get_idm_container_name(self, cloud_username: str = None) -> str:
         """ Return Compute-identityDomain/ or Compute-identityDomain/{cloud_username}/  eg. 'Compute-587626604/eric.harris@oracle.com' for gc30003
 
         Specify /Compute-identityDomain/user/ to retrieve the names of objects that you can access. Specify /Compute-identityDomain/ to retrieve the names of containers that contain objects that you can access.
@@ -133,10 +138,10 @@ class IaaSServiceBase:
         :return:
         """
         if cloud_username:
-            return  f"Compute-{self.idm_cfg.service_instance_id}/{cloud_username}/"
+            return f"Compute-{self.idm_cfg.service_instance_id}/{cloud_username}/"
             # return  f"/Compute-{self.idm_cfg.service_instance_id}/{cloud_username}/"
         else:
-            return  f"Compute-{self.idm_cfg.service_instance_id}/"
+            return f"Compute-{self.idm_cfg.service_instance_id}/"
             # return  f"/Compute-{self.idm_cfg.service_instance_id}/"
 
     @property
@@ -149,7 +154,6 @@ class IaaSServiceBase:
         """
         return self.get_idm_container_name()
 
-
     @property
     def idm_user_container_name(self) -> str:
         """Return Compute-identityDomain/user/, eg. 'Compute-587626604/eric.harris@oracle.com' for gc30003
@@ -159,4 +163,3 @@ class IaaSServiceBase:
         :return:
         """
         return self.get_idm_container_name(cloud_username=gc3_cfg.user.cloud_username)
-

@@ -45,7 +45,25 @@ class Instances(IaaSServiceBase):
 
 
 
-    def instance_names(self):
+    def get_instance_name(self, name: str, swagger_client_config: DictStrAny = None) -> DictStrAny:
+        pass
+
+
+
+    # TODO:  need to be able to override call configuration
+    # swagger_client_config = {'validate_responses': True,
+    #           'validate_requests': True,
+    #           'validate_swagger_spec': True,
+    #           'use_models': True,
+    #           'include_missing_properties': True,
+    #           'default_type_to_object': False,
+    #           'internally_dereference_refs': False,
+    #           'also_return_response': True}
+    def get_instance_details(self, name: str, swagger_client_config: DictStrAny = None) -> DictStrAny:
+        """
+
+        :return:
+        """
         pass
 
 
