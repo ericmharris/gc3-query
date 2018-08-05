@@ -36,14 +36,14 @@ def setup_gc30003():
     yield service_cfg, idm_cfg, http_client
 
 
-def test_init_no_auth(setup_gc30003):
-    service_cfg, idm_cfg, http_client = setup_gc30003
-    instances = Instances(service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client,  skip_authentication=True)
-    assert instances.http_client.skip_authentication==True
-    assert instances.http_client.idm_domain_name==idm_cfg.name
+# def test_init_no_auth(setup_gc30003):
+#     service_cfg, idm_cfg, http_client = setup_gc30003
+#     instances = Instances(service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client,  skip_authentication=True)
+#     assert instances.http_client.skip_authentication==True
+#     assert instances.http_client.idm_domain_name==idm_cfg.name
 
 
-def test_authentication(setup_gc30003):
+def test_init(setup_gc30003):
     service_cfg, idm_cfg, http_client = setup_gc30003
     instances = Instances(service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client)
     assert instances.http_client.skip_authentication==False
@@ -109,26 +109,43 @@ def test_get_instance(setup_gc30003):
     assert service_response.metadata.status_code==200
 
 
-@pytest.fixture()
-def setup_gc30003_from_url():
+# @pytest.fixture()
+# def setup_gc30003_from_url():
+#     service = 'Instances'
+#     idm_domain = 'gc30003'
+#     gc3_config = GC3Config(atoml_config_dir=config_dir)
+#     service_cfg = gc3_config.iaas_classic.services[service]
+#     idm_cfg = gc3_config.idm.domains[idm_domain]
+#     http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
+#     assert service==service_cfg.name
+#     assert idm_domain==idm_cfg.name
+#     assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
+#     yield service_cfg, idm_cfg, http_client
+#
+# def test_discover_instance_from_url(setup_gc30003_from_url):
+#     service_cfg, idm_cfg, http_client = setup_gc30003_from_url
+#     instances = Instances(service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client, from_url=True)
+#     http_future = instances.bravado_service_operations.discoverInstance(container=instances.idm_container_name)
+#     request_url = http_future.future.request.url
+#     service_response = http_future.response()
+#     result = service_response.result
+#     assert service_response.metadata.status_code==200
+
+
+def test_discover_instance_from_url_01():
     service = 'Instances'
     idm_domain = 'gc30003'
     gc3_config = GC3Config(atoml_config_dir=config_dir)
     service_cfg = gc3_config.iaas_classic.services[service]
     idm_cfg = gc3_config.idm.domains[idm_domain]
-    http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
+    # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     assert service==service_cfg.name
     assert idm_domain==idm_cfg.name
     assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
-    yield service_cfg, idm_cfg, http_client
-
-def test_discover_instance_from_url(setup_gc30003_from_url):
-    service_cfg, idm_cfg, http_client = setup_gc30003_from_url
-    instances = Instances(service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client, from_url=True)
+    instances = Instances(service_cfg=service_cfg, idm_cfg=idm_cfg, from_url=True)
     http_future = instances.bravado_service_operations.discoverInstance(container=instances.idm_container_name)
+    # http_future = instances.service_operations.discover_root_instance()
     request_url = http_future.future.request.url
     service_response = http_future.response()
     result = service_response.result
     assert service_response.metadata.status_code==200
-
-
