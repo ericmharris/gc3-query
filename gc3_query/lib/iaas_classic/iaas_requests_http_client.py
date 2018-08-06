@@ -47,7 +47,7 @@ class IaaSRequestsHTTPClient(RequestsClient):
         self.idm_domain_name = self.idm_cfg.name
         self.rest_endpoint: str = self.idm_cfg.rest_endpoint
         self.headers = {'Content-Type': 'application/oracle-compute-v3+json',
-                        'Accept': 'application/oracle-compute-v3+directory+json',
+                        'Accept': 'application/oracle-compute-v3+json, json, text/html',
                         }
         self.session.headers.update(self.headers)
         if gc3_cfg.user.use_proxy:

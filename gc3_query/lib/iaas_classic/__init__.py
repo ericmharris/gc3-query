@@ -20,6 +20,9 @@ import sys, os
 ################################################################################
 ## Third-Party Imports
 from typing import Dict, Any
+import toml
+import yaml
+import json
 
 from dataclasses import dataclass
 import bravado
@@ -43,10 +46,12 @@ from gc3_query.lib.iaas_classic.iaas_requests_http_client import IaaSRequestsHTT
 from gc3_query.lib.iaas_classic.iaas_swagger_client import IaaSSwaggerClient
 from gc3_query.lib.utils import camelcase_to_snake
 from gc3_query.lib.base_collections import OrderedDictAttrBase
+from gc3_query.lib.gc3_config import ConfigOrderedDictAttrBase
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
-API_SPEC_DIR = BASE_DIR.joinpath('lib/iaas_classic/api_specs')
+API_SPECS_DIR = BASE_DIR.joinpath('lib/iaas_classic/api_specs')
+MONGODB_MODELS_DIR = BASE_DIR.joinpath('lib/iaas_classic/models')
 
 
 class IaaSServiceBase:
@@ -93,10 +98,12 @@ class IaaSServiceBase:
             _debug(f"self._spec_url={self._spec_url}")
             # self.swagger_client_config['origin_url'] = self.idm_cfg.rest_endpoint
             # self.swagger_client_config['api_url'] = self.idm_cfg.rest_endpoint
+            self.http_client = http_client if http_client else \
+                IaaSRequestsHTTPClient(idm_cfg=self.idm_cfg, skip_authentication=self.kwargs.get('skip_authentication', False))
             self.swagger_client = IaaSSwaggerClient.from_api_catalog_url(spec_url=self._spec_url,
                                                                          rest_endpoint=self.idm_cfg.rest_endpoint,
-                                                         # http_client=self.http_client,
-                                                         # request_headers=self.http_client.headers,
+                                                         http_client=self.http_client,
+                                                         request_headers=self.http_client.headers,
                                                          config=self.swagger_client_config
                                                          )
             _debug(f"from_api_catalog_url: swagger_client={self.swagger_client}")
@@ -124,7 +131,7 @@ class IaaSServiceBase:
     @property
     def api_spec(self) -> str:
         """Returns Open API spec"""
-        spec_file_path = API_SPEC_DIR.joinpath(self.service_cfg.spec_file)
+        spec_file_path = API_SPECS_DIR.joinpath(self.service_cfg.spec_file)
         spec_dict = load_file(spec_file_path)
         spec_dict['schemes'].append('https')
         return spec_dict
@@ -175,3 +182,33 @@ class IaaSServiceBase:
         :return:
         """
         return self.get_idm_container_name(cloud_username=gc3_cfg.user.cloud_username)
+
+
+
+
+class IaaSServiceResult(ConfigOrderedDictAttrBase):
+
+    def __init__(self, http_response: RequestsResponseAdapter):
+        instance_results = http_response.json()['result']
+        assert len(instance_results)==1
+        instance_result = instance_results.pop()
+        super().__init__(mapping=instance_result)
+
+    def export(self, file_path: Path, format: str = 'toml', overwrite: bool = False)->Path:
+        assert file_path.parent.exists()
+        if file_path.exists() and not overwrite:
+            raise RuntimeError(f"File already exists! file_path={file_path}, overwrite={overwrite}")
+        fd = file_path.open('w')
+        if format is 'toml':
+            toml.dump(self._serializable, fd)
+        if format is 'yaml':
+            yaml.dump(self._serializable, fd)
+        if format is 'json':
+            json.dump(self._serializable, fd, indent=4)
+        fd.close()
+        return file_path
+
+
+
+
+

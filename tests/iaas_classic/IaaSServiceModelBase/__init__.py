@@ -2,7 +2,7 @@
 
 """
 #@Filename : __init__.py
-#@Date : [7/30/2018 10:50 AM]
+#@Date : [8/5/2018 3:48 PM]
 #@Poject: gc3-query
 #@AUTHOR : emharris
 
@@ -21,18 +21,8 @@ import sys, os
 ## Third-Party Imports
 from dataclasses import dataclass
 
-from mongoengine import DynamicDocument, EmbeddedDocument
-
 ################################################################################
 ## Project Imports
 from gc3_query.lib import *
-from gc3_query.lib.storage_adapters.mongodb import storage_adapter_init
 
-
-class IaaSServiceModelDynamicDocument(DynamicDocument):
-    connection_registered = storage_adapter_init()
-
-
-class IaaSServiceModelEmbeddedDocument(EmbeddedDocument):
-    pass
-
+_debug, _info, _warning, _error, _critical = get_logging(name=__name__)

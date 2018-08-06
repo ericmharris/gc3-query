@@ -8,7 +8,7 @@ from gc3_query.lib import BASE_DIR
 
 from gc3_query.lib.gc3_config import GC3Config, IDMCredential
 from gc3_query.lib.iaas_classic.iaas_requests_http_client import IaaSRequestsHTTPClient
-from gc3_query.lib.iaas_classic import IaaSServiceBase, API_SPEC_DIR
+from gc3_query.lib.iaas_classic import IaaSServiceBase, API_SPECS_DIR
 
 TEST_BASE_DIR: Path = Path(__file__).parent
 # config_dir = TEST_BASE_DIR.joinpath("config")
@@ -18,7 +18,7 @@ config_dir = BASE_DIR.joinpath("etc/config")
 def test_setup():
     assert TEST_BASE_DIR.exists()
     assert config_dir.exists()
-    assert API_SPEC_DIR.exists()
+    assert API_SPECS_DIR.exists()
 
 
 

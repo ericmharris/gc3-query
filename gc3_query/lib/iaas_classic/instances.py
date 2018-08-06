@@ -28,9 +28,9 @@ from bravado.client import SwaggerClient
 ## Project Imports
 from gc3_query.lib import *
 from gc3_query.lib import gc3_cfg
-from . import IaaSServiceBase
+from . import IaaSServiceBase, IaaSServiceResult
 from .iaas_requests_http_client import IaaSRequestsHTTPClient
-
+from gc3_query.lib.gc3_config import ConfigOrderedDictAttrBase
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
@@ -67,11 +67,17 @@ class Instances(IaaSServiceBase):
     #           'default_type_to_object': False,
     #           'internally_dereference_refs': False,
     #           'also_return_response': True}
-    def get_instance_details(self, name: str, swagger_client_config: DictStrAny = None) -> DictStrAny:
+    def get_instance_details(self, name: str, swagger_client_config: DictStrAny = None) -> ConfigOrderedDictAttrBase:
         """
 
         :return:
         """
-        pass
+        http_future = self.bravado_service_operations.getInstance(name=name)
+        request_url = http_future.future.request.url
+        service_response = http_future.response()
+        result = service_response.result
+        http_response = service_response.incoming_response
+        instance_details = IaaSServiceResult(http_response=http_response)
+        return instance_details
 
 
