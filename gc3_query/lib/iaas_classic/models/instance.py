@@ -25,7 +25,7 @@ import mongoengine
 ################################################################################
 ## Project Imports
 from gc3_query.lib import *
-from gc3_query.lib.iaas_classic import IaaSServiceResult
+from gc3_query.lib.iaas_classic import IaaSServiceResponse
 from gc3_query.lib.models.gc3_meta_data import GC3MetaData
 from gc3_query.lib.gc3logging import get_logging
 
@@ -104,6 +104,6 @@ class Instance(IaaSServiceModelDynamicDocument):
     #     ]
     # }
 
-    def __init__(self, instance_details: IaaSServiceResult,  *args, **values):
+    def __init__(self, instance_details: IaaSServiceResponse, *args, **values):
         super().__init__(*args, **values)
         _debug(f"{self.__class__.__name__}.__init__(args={args}, values={values}):")

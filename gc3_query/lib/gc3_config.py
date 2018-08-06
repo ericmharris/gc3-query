@@ -15,8 +15,6 @@
 
 ################################################################################
 ## Standard Library Imports
-from collections.abc import MutableMapping, MutableSequence
-import json
 
 ################################################################################
 ## Third-Party Imports
@@ -29,7 +27,7 @@ import keyring
 from gc3_query.lib import *
 from gc3_query import GC3_QUERY_HOME
 from gc3_query.lib.atoml.atoml_config import ATomlConfig
-from gc3_query.lib.base_collections import OrderedDictAttrBase, ListBase
+from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
 from gc3_query.lib.gc3logging import get_logging
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
@@ -50,50 +48,7 @@ class IDMCredential:
     is_classic: bool
 
 
-class ConfigListBase(ListBase):
-
-    def __init__(self, data=None):
-        super().__init__()
-        if isinstance(data, MutableSequence):
-            for v in data:
-                if isinstance(v, MutableSequence):
-                    self.append(ConfigListBase(v))
-                if isinstance(v, MutableMapping):
-                    self.append(ConfigOrderedDictAttrBase(v))
-                else:
-                    self.append(v)
-
-
-class ConfigOrderedDictAttrBase(OrderedDictAttrBase):
-
-    def __init__(self, mapping):
-        super().__init__()
-        self._serializable = dict()
-
-
-        for k, v in mapping.items():
-            if isinstance(v, MutableSequence):
-                self[k] = ConfigListBase(v)
-                self._serializable[k] = list(v)
-            if isinstance(v, MutableMapping):
-                self[k] = ConfigOrderedDictAttrBase(v)
-                self._serializable[k] = dict(v)
-            else:
-                self[k] = v
-                self._serializable[k] = v
-
-
-    def __str__(self) -> str:
-        return str(self._serializable)
-
-    # def __repr__(self):
-    #     return f"<{self.__class__.__name__}: len(self) items>"
-
-    def __repr__(self):
-        return "{0}()".format(type(self))
-
-
-class GC3Config(ConfigOrderedDictAttrBase):
+class GC3Config(NestedOrderedDictAttrListBase):
 
     def __init__(self, atoml_config_dir: Path = None):
         self._name = self.__class__.__name__

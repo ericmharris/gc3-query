@@ -28,6 +28,7 @@ from dataclasses import dataclass
 import bravado
 from bravado.requests_client import RequestsClient
 from bravado.client import SwaggerClient
+from bravado.response import BravadoResponse, BravadoResponseMetadata
 from bravado.client import SwaggerClient, ResourceDecorator
 from bravado.client import SwaggerClient, CallableOperation
 from bravado.requests_client import RequestsResponseAdapter
@@ -45,8 +46,7 @@ from gc3_query.lib.utils import camelcase_to_snake
 from gc3_query.lib.iaas_classic.iaas_requests_http_client import IaaSRequestsHTTPClient
 from gc3_query.lib.iaas_classic.iaas_swagger_client import IaaSSwaggerClient
 from gc3_query.lib.utils import camelcase_to_snake
-from gc3_query.lib.base_collections import OrderedDictAttrBase
-from gc3_query.lib.gc3_config import ConfigOrderedDictAttrBase
+from gc3_query.lib.base_collections import OrderedDictAttrBase, NestedOrderedDictAttrListBase
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
@@ -186,13 +186,22 @@ class IaaSServiceBase:
 
 
 
-class IaaSServiceResult(ConfigOrderedDictAttrBase):
+class IaaSResponseMetadata(NestedOrderedDictAttrListBase):
 
-    def __init__(self, http_response: RequestsResponseAdapter):
-        instance_results = http_response.json()['result']
-        assert len(instance_results)==1
-        instance_result = instance_results.pop()
-        super().__init__(mapping=instance_result)
+    def __init__(self, response_metadata: BravadoResponse):
+        result = 0
+        super().__init__(mapping=result)
+
+
+
+
+class IaaSServiceResponse(NestedOrderedDictAttrListBase):
+
+    def __init__(self, service_response: BravadoResponseMetadata):
+        results: list = service_response.incoming_response.json()['result']
+        assert len(results)==1
+        result: dict = results.pop()
+        super().__init__(mapping=result)
 
     def export(self, file_path: Path, format: str = 'toml', overwrite: bool = False)->Path:
         assert file_path.parent.exists()

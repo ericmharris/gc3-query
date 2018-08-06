@@ -71,8 +71,7 @@ def storage_adapter_init(user: str = gc3_cfg.mongodb.security.username,
         db_config = dict(host=server, port=port, alias=gc3_cfg.mongodb.db_alias, name=gc3_cfg.mongodb.db_name)
 
     mongoengine.register_connection(**db_config)
-    _info(f"mongodb.storage_adapter_init, connection registered: alias={gc3_cfg.mongodb.db_alias}, name={gc3_cfg.mongodb.db_name}, "
-       f"db_config={db_config})")
+    _info(f"connection registered: alias={gc3_cfg.mongodb.db_alias}, name={gc3_cfg.mongodb.db_name}, db_config={db_config})")
     return db_config
 
 

@@ -20,7 +20,7 @@ from collections import OrderedDict
 from collections.__init__ import OrderedDict
 from collections.abc import MutableMapping, MutableSequence
 from collections.abc import KeysView, MappingView, Set, ItemsView, ValuesView
-from typing import Any
+from typing import Any, MutableSequence, MutableMapping
 
 import yaml
 
@@ -340,3 +340,46 @@ class CachedOrderedDictBase(OrderedDictBase):
         with self._path.open('w') as fd:
             _debug(f'{self.__class__.__name__} caching value to file: {self._path}')
             yaml.dump(self._d, fd)
+
+
+class NestedConfigListBase(ListBase):
+
+    def __init__(self, data=None):
+        super().__init__()
+        if isinstance(data, MutableSequence):
+            for v in data:
+                if isinstance(v, MutableSequence):
+                    self.append(NestedConfigListBase(v))
+                if isinstance(v, MutableMapping):
+                    self.append(NestedOrderedDictAttrListBase(v))
+                else:
+                    self.append(v)
+
+
+class NestedOrderedDictAttrListBase(OrderedDictAttrBase):
+
+    def __init__(self, mapping):
+        super().__init__()
+        self._serializable = dict()
+
+
+        for k, v in mapping.items():
+            if isinstance(v, MutableSequence):
+                self[k] = NestedConfigListBase(v)
+                self._serializable[k] = list(v)
+            if isinstance(v, MutableMapping):
+                self[k] = NestedOrderedDictAttrListBase(v)
+                self._serializable[k] = dict(v)
+            else:
+                self[k] = v
+                self._serializable[k] = v
+
+
+    def __str__(self) -> str:
+        return str(self._serializable)
+
+    # def __repr__(self):
+    #     return f"<{self.__class__.__name__}: len(self) items>"
+
+    def __repr__(self):
+        return "{0}()".format(type(self))
