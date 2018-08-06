@@ -103,12 +103,12 @@
         1
     ],
     "metadata": {
-        "elapsed_time": 1.3439999999991414,
+        "elapsed_time": 1.1719999999986612,
         "is_fallback_result": false,
-        "processing_end_time": 11023.078,
-        "request_elapsed_time": 1.3439999999991414,
-        "request_end_time": 11023.078,
-        "start_time": 11021.734,
+        "processing_end_time": 12418.328,
+        "request_elapsed_time": 1.1719999999986612,
+        "request_end_time": 12418.328,
+        "start_time": 12417.156,
         "status_code": 200,
         "username": "eric.harris@oracle.com"
     }

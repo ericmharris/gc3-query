@@ -1,5 +1,6 @@
 import ssl
 import mongoengine
+from mongoengine import DynamicDocument, Document, DynamicEmbeddedDocument, EmbeddedDocument
 
 from gc3_query.lib.gc3logging import get_logging
 
