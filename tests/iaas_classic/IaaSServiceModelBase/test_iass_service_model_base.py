@@ -25,7 +25,8 @@ def test_setup():
 
 def test_init():
     model_base = IaaSServiceModelDynamicDocument()
-    assert model_base.connection_registered
+    assert model_base.connection_config
+    assert 'port' in model_base.connection_config
 
 
 

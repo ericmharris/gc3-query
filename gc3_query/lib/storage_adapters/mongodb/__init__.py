@@ -47,12 +47,13 @@ _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 #     use_auth=MONGODB_USE_AUTH,
 # ):
 
+
 def storage_adapter_init(user: str = gc3_cfg.mongodb.security.username,
                          password: str = gc3_cfg.mongodb.security.password,
                          port: int = gc3_cfg.mongodb.net.listen_port,
                          server: str = gc3_cfg.mongodb.net.listen_address,
                          use_ssl: bool = gc3_cfg.mongodb.net.use_ssl,
-                         use_auth: bool = gc3_cfg.mongodb.net.use_auth) -> bool:
+                         use_auth: bool = gc3_cfg.mongodb.net.use_auth) -> DictStrAny:
     if use_auth:
         db_config = dict(
             username=user,
@@ -63,11 +64,15 @@ def storage_adapter_init(user: str = gc3_cfg.mongodb.security.username,
             authentication_mechanism="SCRAM-SHA-1",
             ssl=use_ssl,
             ssl_cert_reqs=ssl.CERT_NONE,
+            alias=gc3_cfg.mongodb.db_alias,
+            name=gc3_cfg.mongodb.db_name
         )
     else:
-        db_config = dict(host=server, port=port)
+        db_config = dict(host=server, port=port, alias=gc3_cfg.mongodb.db_alias, name=gc3_cfg.mongodb.db_name)
 
-    mongoengine.register_connection(alias=gc3_cfg.mongodb.db_alias, name=gc3_cfg.mongodb.db_name, **db_config)
+    mongoengine.register_connection(**db_config)
     _info(f"mongodb.storage_adapter_init, connection registered: alias={gc3_cfg.mongodb.db_alias}, name={gc3_cfg.mongodb.db_name}, "
        f"db_config={db_config})")
-    return True
+    return db_config
+
+

@@ -27,4 +27,5 @@ def test_setup():
 def test_global_init():
     connection_registered = storage_adapter_init()
     assert connection_registered
+    assert 'port' in connection_registered
 

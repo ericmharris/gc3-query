@@ -30,7 +30,7 @@ from gc3_query.lib.storage_adapters.mongodb import storage_adapter_init
 
 
 class IaaSServiceModelDynamicDocument(DynamicDocument):
-    connection_registered = storage_adapter_init()
+    connection_config = storage_adapter_init()
 
 
 class IaaSServiceModelEmbeddedDocument(EmbeddedDocument):
