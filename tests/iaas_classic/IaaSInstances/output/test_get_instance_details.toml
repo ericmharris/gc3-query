@@ -39,6 +39,16 @@ mode = "hvm"
 sshkeys = [ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDkl16+TS1DB5jFwxr8tRMfztjLCHK2+wpfqy2eKeUzDJx8oGlasmBTAdwPX9cH3bfPRLJzru6SG2fJWsow4sU0d2clcwLRtqVdFMAdA3MSpIqayQMQJJ7NE5omkucF0pf0RG2p5cT3mBZDw/9IrSKnIAzaescUi72QOtcVSVgOiBcvJeQVn75GFQ0+JVKnVooh4pL2xDwTUj4EeSn5aLSA4ycqpBqvFFzrGsfDjDn55HiL0Dwwo9uM6VasAPHatqVIRA4EXGMu+QU6iw0m75e5n5CzEoL5ut4D2Og6MqrAVHTmtwf3WhPlDIzLu5OZbILydPq3/u58g6IVUHeB/wBd", "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDMvQhtNg2BmrGoKZVtChz6TFyy53KuB09L5SsmnbQxzM6C0PNfH1TwsG7p/emWOhc6jB2KFxdkuM/Q4BD9PreuFPN37FU5D1cIWKB8yPub3kTVJf1g5PkF1HsoG5vjf3tbUdB6I+pclMiV8tXPXBWA64wtfXc9g6dZSNvg4JDYh8J5eOul5Jct4QK9juA9pZNI7fOeYcT2z4PdmwYDkj517Ei47wX2xSM6++wM2+AkOPP2f6EZYaOQdex68in3R1g5T0rBfqPF1+7KRdPaP5c+s/ASqeFmitf7+/BQZa+9Em/F6EOoDwWbhAAFzJBidjzwWv+E+fsEbUjrWrBFB5Bkd3j2s3ojfTxDoLo+GzGrZtxuL4CcwWVTe98gRvRj7vRwTX8JIJfvKiJCkDPUZlW0Kxwysn6wZVXWLHnjf7c4NcMXJc5mdihtGTxGyZDyR4NLyoLGatN5ZAdYpiztkYxqxyWRrLT8DANZeWi0w+EdE0JAuvVyyBajV+FczHkViGY0xVm4SjcfFDz8KrByaEn/3ioZd6tK6ahFy/aT+N+cqu0xeFjPDOyxfQ7qtufbq/yJ0XktISBumVvBMOv7MbDXiUmqHlqP2pbw6V1XXqSIw6/Jsi4/9NeRPSjLbNvem3RFzAbxXIOiNlQKl+e03jCkDZ3pNFQ81RQhgegmhOtQqw==",]
 nimbula_orchestration = "/Compute-587626604/eric.harris@oracle.com/gc3_naac_soar_ebs1226_demo_01"
 
+[metadata]
+elapsed_time = 1.032000000000153
+is_fallback_result = false
+processing_end_time = 6340.328
+request_elapsed_time = 1.032000000000153
+request_end_time = 6340.328
+start_time = 6339.296
+status_code = 200
+username = "eric.harris@oracle.com"
+
 [networking.eth0]
 model = ""
 seclists = [ "/Compute-587626604/eric.harris@oracle.com/gc3_naac_soar_seclist_01",]

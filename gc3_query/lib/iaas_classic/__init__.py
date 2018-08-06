@@ -15,38 +15,23 @@
 
 ################################################################################
 ## Standard Library Imports
-import sys, os
 
 ################################################################################
 ## Third-Party Imports
-from typing import Dict, Any
-import toml
-import yaml
-import json
 
-from dataclasses import dataclass
-import bravado
-from bravado.requests_client import RequestsClient
+from bravado.client import ResourceDecorator
 from bravado.client import SwaggerClient
-from bravado.response import BravadoResponse, BravadoResponseMetadata
-from bravado.client import SwaggerClient, ResourceDecorator
-from bravado.client import SwaggerClient, CallableOperation
-from bravado.requests_client import RequestsResponseAdapter
 from bravado.swagger_model import load_file
-from bravado_core.exception import MatchingResponseNotFound
-from bravado.exception import HTTPBadRequest
-from bravado.http_future import HttpFuture
 
 ################################################################################
 ## Project Imports
 from gc3_query.lib import *
 from gc3_query.lib import gc3_cfg
 ## TODO: either change or add a snake_case function for camelCase
-from gc3_query.lib.utils import camelcase_to_snake
 from gc3_query.lib.iaas_classic.iaas_requests_http_client import IaaSRequestsHTTPClient
 from gc3_query.lib.iaas_classic.iaas_swagger_client import IaaSSwaggerClient
 from gc3_query.lib.utils import camelcase_to_snake
-from gc3_query.lib.base_collections import OrderedDictAttrBase, NestedOrderedDictAttrListBase
+from gc3_query.lib.base_collections import OrderedDictAttrBase
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
@@ -182,40 +167,6 @@ class IaaSServiceBase:
         :return:
         """
         return self.get_idm_container_name(cloud_username=gc3_cfg.user.cloud_username)
-
-
-
-
-class IaaSResponseMetadata(NestedOrderedDictAttrListBase):
-
-    def __init__(self, response_metadata: BravadoResponse):
-        result = 0
-        super().__init__(mapping=result)
-
-
-
-
-class IaaSServiceResponse(NestedOrderedDictAttrListBase):
-
-    def __init__(self, service_response: BravadoResponseMetadata):
-        results: list = service_response.incoming_response.json()['result']
-        assert len(results)==1
-        result: dict = results.pop()
-        super().__init__(mapping=result)
-
-    def export(self, file_path: Path, format: str = 'toml', overwrite: bool = False)->Path:
-        assert file_path.parent.exists()
-        if file_path.exists() and not overwrite:
-            raise RuntimeError(f"File already exists! file_path={file_path}, overwrite={overwrite}")
-        fd = file_path.open('w')
-        if format is 'toml':
-            toml.dump(self._serializable, fd)
-        if format is 'yaml':
-            yaml.dump(self._serializable, fd)
-        if format is 'json':
-            json.dump(self._serializable, fd, indent=4)
-        fd.close()
-        return file_path
 
 
 

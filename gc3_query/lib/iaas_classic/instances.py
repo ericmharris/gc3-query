@@ -28,7 +28,8 @@ from bravado.client import SwaggerClient
 ## Project Imports
 from gc3_query.lib import *
 from gc3_query.lib import gc3_cfg
-from . import IaaSServiceBase, IaaSServiceResponse
+from . import IaaSServiceBase
+from gc3_query.lib.iaas_classic.iaas_responses import IaaSServiceResponse
 from .iaas_requests_http_client import IaaSRequestsHTTPClient
 from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
 

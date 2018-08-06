@@ -15,13 +15,16 @@
 
 ################################################################################
 ## Standard Library Imports
+import json
 import sys, os
 from collections import OrderedDict
 from collections.__init__ import OrderedDict
 from collections.abc import MutableMapping, MutableSequence
 from collections.abc import KeysView, MappingView, Set, ItemsView, ValuesView
+from pathlib import Path
 from typing import Any, MutableSequence, MutableMapping
 
+import toml
 import yaml
 
 ################################################################################
@@ -383,3 +386,17 @@ class NestedOrderedDictAttrListBase(OrderedDictAttrBase):
 
     def __repr__(self):
         return "{0}()".format(type(self))
+
+    def export(self, file_path: Path, format: str = 'toml', overwrite: bool = False)->Path:
+        assert file_path.parent.exists()
+        if file_path.exists() and not overwrite:
+            raise RuntimeError(f"File already exists! file_path={file_path}, overwrite={overwrite}")
+        fd = file_path.open('w')
+        if format is 'toml':
+            toml.dump(self._serializable, fd)
+        if format is 'yaml':
+            yaml.dump(self._serializable, fd)
+        if format is 'json':
+            json.dump(self._serializable, fd, indent=4)
+        fd.close()
+        return file_path

@@ -32,6 +32,9 @@ image_metadata_bag: /oracle/machineimage_metadata/40fd26b4106b48e989a2ca1b1f90e9
 imagelist: null
 ip: 10.19.6.118
 label: OPC_OL6_8_EBS_1226_VISION_SINGLE_20180615175635
+metadata: {elapsed_time: 1.0320000000001528, is_fallback_result: false, processing_end_time: 6340.328,
+  request_elapsed_time: 1.0320000000001528, request_end_time: 6340.328, start_time: 6339.296,
+  status_code: 200, username: eric.harris@oracle.com}
 name: /Compute-587626604/eric.harris@oracle.com/gc3_naac_soar_ebs1226_demo_01/8706cea9-6f49-428f-b354-a3748478d1c2
 networking:
   eth0:

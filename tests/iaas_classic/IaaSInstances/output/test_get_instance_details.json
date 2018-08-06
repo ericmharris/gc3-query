@@ -101,5 +101,15 @@
     },
     "boot_order": [
         1
-    ]
+    ],
+    "metadata": {
+        "elapsed_time": 1.0320000000001528,
+        "is_fallback_result": false,
+        "processing_end_time": 6340.328,
+        "request_elapsed_time": 1.0320000000001528,
+        "request_end_time": 6340.328,
+        "start_time": 6339.296,
+        "status_code": 200,
+        "username": "eric.harris@oracle.com"
+    }
 }

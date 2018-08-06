@@ -25,7 +25,7 @@ import mongoengine
 ################################################################################
 ## Project Imports
 from gc3_query.lib import *
-from gc3_query.lib.iaas_classic import IaaSServiceResponse
+from gc3_query.lib.iaas_classic.iaas_responses import IaaSServiceResponse
 from gc3_query.lib.models.gc3_meta_data import GC3MetaData
 from gc3_query.lib.gc3logging import get_logging
 
