@@ -87,10 +87,11 @@ class IaaSServiceBase:
                 IaaSRequestsHTTPClient(idm_cfg=self.idm_cfg, skip_authentication=self.kwargs.get('skip_authentication', False))
             self.swagger_client = IaaSSwaggerClient.from_api_catalog_url(spec_url=self._spec_url,
                                                                          rest_endpoint=self.idm_cfg.rest_endpoint,
-                                                         http_client=self.http_client,
-                                                         request_headers=self.http_client.headers,
-                                                         config=self.swagger_client_config
-                                                         )
+                                                                         # rest_endpoint=f"{self.idm_cfg.rest_endpoint}/",
+                                                                         http_client=self.http_client,
+                                                                         # request_headers=self.http_client.headers,
+                                                                         config=self.swagger_client_config
+                                                                         )
             _debug(f"from_api_catalog_url: swagger_client={self.swagger_client}")
             # Setting this so calls go agasint the IDM REST endpoint instead of the api-catalog (where the spec was loaded from)
             # In[5]: instances.swagger_client.swagger_spec.api_url

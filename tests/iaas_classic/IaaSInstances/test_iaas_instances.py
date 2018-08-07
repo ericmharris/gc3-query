@@ -163,6 +163,26 @@ def test_get_instance_details(setup_gc30003):
 #     result = service_response.result
 #     assert service_response.metadata.status_code==200
 
+def test_discover_root_instance_from_url_01():
+    service = 'Instances'
+    idm_domain = 'gc30003'
+    gc3_config = GC3Config(atoml_config_dir=config_dir)
+    service_cfg = gc3_config.iaas_classic.services[service]
+    idm_cfg = gc3_config.idm.domains[idm_domain]
+    # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
+    assert service==service_cfg.name
+    assert idm_domain==idm_cfg.name
+    assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
+    instances = Instances(service_cfg=service_cfg, idm_cfg=idm_cfg, from_url=True)
+    # http_future = instances.swagger_client.Instances.discoverRootInstance()
+    http_future = instances.bravado_service_operations.discoverRootInstance()
+    # http_future.future.session.headers['Content-Type'] = http_future.operation.produces[0]
+    # http_future = instances.service_operations.discover_root_instance()
+    request_url = http_future.future.request.url
+    service_response = http_future.response()
+    result = service_response.result
+    assert service_response.metadata.status_code==200
+
 
 def test_discover_instance_from_url_01():
     service = 'Instances'
@@ -181,3 +201,31 @@ def test_discover_instance_from_url_01():
     service_response = http_future.response()
     result = service_response.result
     assert service_response.metadata.status_code==200
+
+
+def test_list_instance_from_url_01():
+    service = 'Instances'
+    idm_domain = 'gc30003'
+    gc3_config = GC3Config(atoml_config_dir=config_dir)
+    service_cfg = gc3_config.iaas_classic.services[service]
+    idm_cfg = gc3_config.idm.domains[idm_domain]
+    # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
+    assert service==service_cfg.name
+    assert idm_domain==idm_cfg.name
+    assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
+    instances = Instances(service_cfg=service_cfg, idm_cfg=idm_cfg, from_url=True)
+    container=instances.idm_container_name.replace('/', '')
+    old_container=instances.idm_container_name
+    # http_future = instances.bravado_service_operations.listInstance(container=instances.idm_user_container_name)
+    # http_future = instances.bravado_service_operations.listInstance(container=instances.idm_container_name)
+    http_future = instances.bravado_service_operations.listInstance(container=container)
+    # http_future = instances.service_operations.discover_root_instance()
+    request_url = http_future.future.request.url
+    service_response = http_future.response()
+    result = service_response.result
+    result_json = service_response.incoming_response.json()
+    assert service_response.metadata.status_code==200
+
+
+
+

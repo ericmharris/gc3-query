@@ -47,3 +47,11 @@ def test_load_atoml_files_individually(get_credential_setup):
     assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
     check_credential = gc3_config.get_credential(idm_domain_name='gc3test')
     assert check_credential==credential
+
+
+def test_get_main_credential():
+    gc3_config = GC3Config()
+    check_credential = gc3_config.get_credential(idm_domain_name='gc30003')
+    assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
+    assert check_credential.idm_domain_name=='gc30003'
+

@@ -26,7 +26,8 @@ from urllib.parse import ParseResult, urlunparse, unquote_plus, quote, urljoin, 
 from bravado.http_client import HttpClient
 from bravado.http_future import FutureAdapter
 from bravado.http_future import HttpFuture
-from bravado.requests_client import RequestsClient, RequestsFutureAdapter, RequestsResponseAdapter
+from bravado.requests_client import RequestsClient, RequestsFutureAdapter, RequestsResponseAdapter, BasicAuthenticator
+from requests.auth import HTTPBasicAuth
 
 ################################################################################
 ## Project Imports
@@ -34,6 +35,24 @@ from gc3_query.lib import *
 from gc3_query.lib import gc3_cfg
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
+
+
+class IaaSRequestsHTTPBasicAuth(HTTPBasicAuth):
+
+    def __init__(self, username, password):
+        super().__init__(username, password)
+
+    def __call__(self, r):
+        r.headers['Authorization'] = _basic_auth_str(self.username, self.password)
+        return r
+
+class IaaSRequestsBasicAuthenticator(BasicAuthenticator):
+
+    def __init__(self, host, username, password):
+        super().__init__(host, username, password)
+
+    def __call__(self, *args, **kwargs):
+        pass
 
 
 class IaaSRequestsHTTPClient(RequestsClient):
@@ -46,10 +65,10 @@ class IaaSRequestsHTTPClient(RequestsClient):
         self.skip_authentication = skip_authentication
         self.idm_domain_name = self.idm_cfg.name
         self.rest_endpoint: str = self.idm_cfg.rest_endpoint
-        self.headers = {'Content-Type': 'application/oracle-compute-v3+json',
-                        'Accept': 'application/oracle-compute-v3+json, json, text/html',
-                        }
-        self.session.headers.update(self.headers)
+        # self.headers = {'Content-Type': 'application/oracle-compute-v3+json',
+        #                 'Accept': 'application/oracle-compute-v3+json, json, text/html',
+        #                 }
+        self.session.headers['Content-Type'] = 'application/oracle-compute-v3+json'
         if gc3_cfg.user.use_proxy:
             _info(f"gc3_cfg.user.use_proxy={gc3_cfg.user.use_proxy}, configuring proxy.")
             self.proxies = {'http': gc3_cfg.network.http_proxy, 'https': gc3_cfg.network.https_proxy}
@@ -61,20 +80,25 @@ class IaaSRequestsHTTPClient(RequestsClient):
         _debug(f"rest_endpoint={self.rest_endpoint}")
         _debug(f"proxies={self.proxies}")
         _debug(f"idm_cfg={self.idm_cfg}")
-        _debug(f"headers={self.headers}")
+        # _debug(f"headers={self.headers}")
 
         if self.skip_authentication:
             _warning(f"skip_authentication={self.skip_authentication}, authentication disabled.")
             self.auth_cookie_header = None
         else:
             self.auth_cookie_header = self.authenticate()
-            self.session.headers.update(self.auth_cookie_header)
+            # self.session.headers.update(self.auth_cookie_header)
             _debug(f"self.session.headers={self.session.headers}")
 
-    def authenticate(self) -> str:
+    @property
+    def authenticated(self):
+        return 'nimbula' in self.session.cookies
+
+    def authenticate(self) -> dict:
         auth_url = f"{self.rest_endpoint}/authenticate/"
         idm_cred = gc3_cfg.get_credential(idm_domain_name=self.idm_cfg.name)
         json_data = {"user": f"/Compute-{self.idm_cfg.service_instance_id}/{idm_cred.username}", "password": idm_cred.password}
+        # json_data = {"user": f"/Compute-{self.idm_cfg.name}/{idm_cred.username}", "password": idm_cred.password}
         response = self.session.post(url=auth_url, json=json_data)
         if response.ok:
             _info(f'Response OK: {response.ok}, Status Code: {response.status_code}, URL: {response.url}')

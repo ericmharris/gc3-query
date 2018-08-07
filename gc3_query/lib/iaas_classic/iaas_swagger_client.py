@@ -16,6 +16,7 @@
 ################################################################################
 ## Standard Library Imports
 import sys, os
+from copy import deepcopy
 
 ################################################################################
 ## Third-Party Imports
@@ -63,9 +64,28 @@ class IaaSSwaggerClient(SwaggerClient):
         :rtype: :class:`bravado_core.spec.Spec`
         """
         _debug(u"Loading from %s", spec_url)
-        http_client = http_client or RequestsClient()
-        loader = Loader(http_client, request_headers=request_headers)
-        spec_dict = loader.load_spec(spec_url)
+
+
+
+        # http_client = http_client if http_client else RequestsClient()
+        # http_client.set_basic_auth(host='https://compute.uscom-central-1.oraclecloud.com', username="/Compute-gc30003/eric.harris@oracle.com", password="V@nadium123!")
+        http_client.set_basic_auth(host='https://compute.uscom-central-1.oraclecloud.com', username="/Compute-587626604/eric.harris@oracle.com", password="V@nadium123!")
+        if 'Content-Type' not in http_client.session.headers:
+            http_client.session.headers['Content-Type'] = 'application/oracle-compute-v3+json'
+            raise RuntimeError(f"shouldn't be here because we don't use Requestslient()")
+        # loader = Loader(http_client, request_headers=request_headers)
+        # loader = Loader(http_client=http_client)
+        #
+        # ## TODO: schemas need to be set to https
+        # spec_dict = loader.load_spec(spec_url)
+        # spec_schemes_correct = 'https' in set(spec_dict.get('schemes', ['']))
+        # if not spec_schemes_correct:
+        #     spec_dict['schemes'] = ['https']
+        #     _debug(f"Updated spec_dict['schemes'] = {spec_dict['schemes']}")
+
+        spec_client = SwaggerClient.from_url(spec_url=spec_url)
+        spec_dict = deepcopy(spec_client.swagger_spec.spec_dict)
+        spec_dict['schemes'] = ['https']
 
         # RefResolver may have to download additional json files (remote refs)
         # via http. Wrap http_client's request() so that request headers are
@@ -77,3 +97,7 @@ class IaaSSwaggerClient(SwaggerClient):
                 http_client.request, request_headers)
 
         return cls.from_spec(spec_dict=spec_dict, origin_url=rest_endpoint, http_client=http_client, config=config)
+
+
+
+
