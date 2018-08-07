@@ -11,7 +11,7 @@ from gc3_query.lib.gc3_config import GC3Config, IDMCredential
 from gc3_query.lib.iaas_classic.iaas_requests_http_client import IaaSRequestsHTTPClient
 from gc3_query.lib.iaas_classic import IaaSServiceBase, API_SPECS_DIR, IaaSRequestsHTTPClient
 from gc3_query.lib.iaas_classic.instances import Instances
-from gc3_query.lib.iaas_classic.models.instance import InstanceModel
+from gc3_query.lib.iaas_classic.models.instance_model import InstanceModel
 from gc3_query.lib.storage_adapters.mongodb import storage_adapter_init
 
 TEST_BASE_DIR: Path = Path(__file__).parent
@@ -74,18 +74,31 @@ def test_get_instance_details(setup_gc30003):
 
 
 
-def test_instance_model(setup_gc30003):
-    service_cfg, idm_cfg, http_client, connection_config = setup_gc30003
+
+
+@pytest.fixture()
+def setup_gc30003_instances():
+    service = 'Instances'
+    idm_domain = 'gc30003'
+    gc3_config = GC3Config(atoml_config_dir=config_dir)
+    service_cfg = gc3_config.iaas_classic.services[service]
+    idm_cfg = gc3_config.idm.domains[idm_domain]
+    http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
+    connection_config = storage_adapter_init()
     instances = Instances(service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client)
+    assert service==service_cfg.name
+    assert idm_domain==idm_cfg.name
+    assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
+    yield service_cfg, idm_cfg, http_client, connection_config, instances
+
+
+def test_instance_model_save(setup_gc30003_instances):
+    service_cfg, idm_cfg, http_client, connection_config, instances = setup_gc30003_instances
     name = 'Compute-587626604/eric.harris@oracle.com/gc3_naac_soar_ebs1226_demo_01/8706cea9-6f49-428f-b354-a3748478d1c2/'
     instance_details = instances.get_instance_details(name=name)
     assert instance_details.domain == 'compute-587626604.oraclecloud.internal.'
     instance_model = InstanceModel(instance_details=instance_details)
     # '/Compute-587626604/eric.harris@oracle.com/gc3_naac_soar_ebs1226_demo_01/8706cea9-6f49-428f-b354-a3748478d1c2'
     assert instance_model.name==instance_details.name
-
     saved = instance_model.save()
     assert saved
-
-
-

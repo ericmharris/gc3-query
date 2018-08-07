@@ -62,7 +62,8 @@ def test_discover_root_instance(setup_gc30003):
     service_cfg, idm_cfg, http_client = setup_gc30003
     instances = Instances(service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client)
     # http_future = instances.service_operations.discover_root_instance()
-    http_future = instances.bravado_service_operations.discoverRootInstance()
+    # http_future = instances.bravado_service_operations.discoverRootInstance()
+    http_future = instances.swagger_client.Instances.discoverRootInstance()
     request_url = http_future.future.request.url
     service_response = http_future.response()
     result = service_response.result
