@@ -63,7 +63,8 @@ def test_discover_root_instance(setup_gc30003):
     instances = Instances(service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client)
     # http_future = instances.service_operations.discover_root_instance()
     # http_future = instances.bravado_service_operations.discoverRootInstance()
-    http_future = instances.swagger_client.Instances.discoverRootInstance()
+    # http_future = instances.swagger_client.Instances.discoverRootInstance()
+    http_future = instances.swagger_client.Instances.discoverRootInstance(_request_options={"headers": {"Accept": "application/oracle-compute-v3+directory+json"}})
     request_url = http_future.future.request.url
     service_response = http_future.response()
     result = service_response.result
@@ -139,6 +140,12 @@ def test_get_instance_details(setup_gc30003):
     json_fd = instance_details.export(file_path=json_path, format='json', overwrite=True)
     assert json_fd.exists()
 
+def test_get_root_instance_name(setup_gc30003):
+    service_cfg, idm_cfg, http_client = setup_gc30003
+    instances = Instances(service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client)
+    root_instance_name = instances.get_idm_root_container_name()
+    assert root_instance_name
+    assert idm_cfg.service_instance_id in root_instance_name
 
 
 # @pytest.fixture()
@@ -175,7 +182,8 @@ def test_discover_root_instance_from_url_01():
     assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
     instances = Instances(service_cfg=service_cfg, idm_cfg=idm_cfg, from_url=True)
     # http_future = instances.swagger_client.Instances.discoverRootInstance()
-    http_future = instances.bravado_service_operations.discoverRootInstance()
+    # http_future = instances.bravado_service_operations.discoverRootInstance()
+    http_future = instances.bravado_service_operations.discoverRootInstance(_request_options={"headers": {"Accept": "application/oracle-compute-v3+directory+json"}})
     # http_future.future.session.headers['Content-Type'] = http_future.operation.produces[0]
     # http_future = instances.service_operations.discover_root_instance()
     request_url = http_future.future.request.url
@@ -225,7 +233,6 @@ def test_list_instance_from_url_01():
     result = service_response.result
     result_json = service_response.incoming_response.json()
     assert service_response.metadata.status_code==200
-
 
 
 
