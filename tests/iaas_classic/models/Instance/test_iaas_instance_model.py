@@ -102,3 +102,32 @@ def test_instance_model_save(setup_gc30003_instances):
     assert instance_model.name==instance_details.name
     saved = instance_model.save()
     assert saved
+
+
+def test_instances_model_save():
+    service = 'Instances'
+    idm_domain = 'gc30003'
+    gc3_config = GC3Config(atoml_config_dir=config_dir)
+    service_cfg = gc3_config.iaas_classic.services[service]
+    idm_cfg = gc3_config.idm.domains[idm_domain]
+    # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
+    assert service==service_cfg.name
+    assert idm_domain==idm_cfg.name
+    assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
+    instances = Instances(service_cfg=service_cfg, idm_cfg=idm_cfg, from_url=True)
+    container=instances.idm_container_name.replace('/', '')
+    old_container=instances.idm_container_name
+    # http_future = instances.bravado_service_operations.listInstance(container=instances.idm_user_container_name)
+    # http_future = instances.bravado_service_operations.listInstance(container=instances.idm_container_name)
+    http_future = instances.bravado_service_operations.listInstance(container=container)
+    # http_future = instances.service_operations.discover_root_instance()
+    request_url = http_future.future.request.url
+    service_response = http_future.response()
+    result = service_response.result
+    result_json = service_response.incoming_response.json()
+    assert service_response.metadata.status_code==200
+    # instance_model = InstanceModel(instance_details=instance_details)
+    # # '/Compute-587626604/eric.harris@oracle.com/gc3_naac_soar_ebs1226_demo_01/8706cea9-6f49-428f-b354-a3748478d1c2'
+    # assert instance_model.name==instance_details.name
+    # saved = instance_model.save()
+    # assert saved
