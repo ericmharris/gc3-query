@@ -1,0 +1,5 @@
+[atoml]
+config_dir: Path =  'etc/config'
+user_file_name = 'user.toml'
+user_file_search_paths = ['/.gc3', '{{config_dir}}' ]
+

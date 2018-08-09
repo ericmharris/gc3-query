@@ -14,4 +14,5 @@ from gc3_query.lib.gc3logging import get_logging
 gc3_cfg = GC3Config()
 
 BASE_DIR: Path = Path(__file__).parent.parent
-CONFIG_DIR: Path = BASE_DIR.joinpath('etc/config')
+CONFIG_DIR: Path = BASE_DIR.joinpath(gc3_cfg.atoml.config_dir)
+OPEN_API_CATALOG_DIR: Path = BASE_DIR.joinpath(gc3_cfg.open_api.api_catalog_dir)

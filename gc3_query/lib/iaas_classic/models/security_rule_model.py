@@ -111,50 +111,60 @@ data = {'name': '/Compute-587626604/manjunath.udupa@oracle.com/paas/JaaS/gc3olad
     }
 
 
-def __init__(self, *args, **kwargs):
-    _debug(f"{self.__class__.__name__}: created")
-    _fields = ['domain',
-               'placement_requirements',
-               'ip',
-               'fingerprint',
-               'image_metadata_bag',
-               'site',
-               'shape',
-               'imagelist',
-               'image_format',
-               'relationships',
-               'availability_domain',
-               'storage_attachments',
-               'hostname',
-               'quota_reservation',
-               'disk_attach',
-               'label',
-               'priority',
-               'platform',
-               'state',
-               'virtio',
-               'vnc',
-               'desired_state',
-               'tags',
-               'start_time',
-               'quota',
-               'entry',
-               'error_reason',
-               'sshkeys',
-               'resolvers',
-               'account',
-               'vcable_id',
-               'uri',
-               'reverse_dns',
-               # 'attributes',
-               #    'networking',
-               # 'metadata',
-               #    'hypervisor',
-               'boot_order',
-               'name'
-               ]
+    def __init__(self, data: DictStrAny, metadata: DictStrAny, embedded_data: DictStrAny, **kwargs):
+        # kwargs['sec_rule_id'] = kwargs.pop('id')
+        self.data = data
+        self.metadata = metadata
+        self.embedded_data = embedded_data
+        super().__init__(**data)
+        _debug(f"{self.__class__.__name__} created")
 
-    data = {k: v for k, v in kwargs.items() if k in _fields}
-    _debug(f'data={data}')
-    super().__init__(**data)
-    _debug('asdf')
+    # def __init__(self, *args, **kwargs):
+    #     _debug(f"{self.__class__.__name__}: created")
+    #     _fields = ['domain',
+    #                'placement_requirements',
+    #                'ip',
+    #                'fingerprint',
+    #                'image_metadata_bag',
+    #                'site',
+    #                'shape',
+    #                'imagelist',
+    #                'image_format',
+    #                'relationships',
+    #                'availability_domain',
+    #                'storage_attachments',
+    #                'hostname',
+    #                'quota_reservation',
+    #                'disk_attach',
+    #                'label',
+    #                'priority',
+    #                'platform',
+    #                'state',
+    #                'virtio',
+    #                'vnc',
+    #                'desired_state',
+    #                'tags',
+    #                'start_time',
+    #                'quota',
+    #                'entry',
+    #                'error_reason',
+    #                'sshkeys',
+    #                'resolvers',
+    #                'account',
+    #                'vcable_id',
+    #                'uri',
+    #                'reverse_dns',
+    #                # 'attributes',
+    #                #    'networking',
+    #                # 'metadata',
+    #                #    'hypervisor',
+    #                'boot_order',
+    #                'name'
+    #                ]
+    #
+    #     data = {k: v for k, v in kwargs.items() if k in _fields}
+    #     _debug(f'data={data}')
+    #     super().__init__(**data)
+    #     _debug('asdf')
+    #
+    #

@@ -1,0 +1,7 @@
+[open_api]
+api_catalog_name  = 'open_api_catalog'
+api_catalog_dir: Path =  'opt/open_api_catalog'
+
+
+[open_api.export]
+export_dir: Path =  'var/open_api_catalog'

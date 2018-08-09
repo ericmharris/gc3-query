@@ -35,10 +35,10 @@ class SetupHomeKitty:
 -folder: directly open a specific folder (for savemode=dir mode only)
 -fullscreen: start directly in full screen mode
 -keygen: start the integrated ssh key generator
--kload: load a .ktx file (that contains session settings)
+-kload: load_spec a .ktx file (that contains session settings)
 -launcher: start the session launcher
 -log: create a log file
--loginscript: load a login script file
+-loginscript: load_spec a login script file
 -nobgimage: to disable background image feature
 -noctrltab: disable CTRL+TAB feature
 -nofiles: disable the creation of default ini file if it does not exist

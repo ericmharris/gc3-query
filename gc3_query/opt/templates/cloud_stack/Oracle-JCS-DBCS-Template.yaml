@@ -125,7 +125,7 @@
           serviceType: JaaS
       useIdentityService:
         label: Enable authentication with Oracle Identity Cloud Service
-        description: "Select to authenticate WebLogic users against Oracle Identity Cloud Service instead of the default WebLogic identity store. Enabling this option also creates an Oracle managed load balancer for this service instance."
+        description: "Select to authenticate WebLogic users against Oracle Identity Cloud Service instead of the default WebLogic identity store. Enabling this option also creates an Oracle managed load_spec balancer for this service instance."
         type: Boolean
         default: false
       backupDestination:

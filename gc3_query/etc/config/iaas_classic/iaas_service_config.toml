@@ -1,4 +1,4 @@
-[iaas_classic.iaas_service_client_config]
+[iaas_classic.iaas_swagger_client_config]
 # On the client side, validate incoming responses
 validate_responses = true
 # validate_responses = false

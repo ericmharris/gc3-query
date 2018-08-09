@@ -121,7 +121,7 @@ class InstanceModel(DynamicDocument):
     image_metadata_bag = StringField()
     site = StringField()
     shape = StringField()
-    imagelist = StringField()               #  seems to come back None
+    imagelist = StringField()  # seems to come back None
     image_format = StringField()
     relationships = ListField()
     availability_domain = StringField()
@@ -219,8 +219,10 @@ class InstanceModel(DynamicDocument):
     #     super().__init__(**data)
     #     _debug('asdf')
 
-
-    def __init__(self, *args, **kwargs):
+    def __init__(self, data: DictStrAny, metadata: DictStrAny, embedded_data: DictStrAny, **kwargs):
         # kwargs['sec_rule_id'] = kwargs.pop('id')
-        super().__init__(**kwargs)
+        self.data = data
+        self.metadata = metadata
+        self.embedded_data = embedded_data
+        super().__init__(**data)
         _debug(f"{self.__class__.__name__} created")

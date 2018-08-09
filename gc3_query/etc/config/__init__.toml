@@ -1,5 +1,4 @@
-title = 'GC3 Configuration Data'
-decription = 'GC3 Configuration Data'
-
 [__init__]
-project_name = 'gc3_query'
+__decription__ = 'GC3 Configuration Data'
+__name__ = 'GC3 Configuration Data'
+__doc__ = """GC3 Configuration Data for gc3scan project"""
