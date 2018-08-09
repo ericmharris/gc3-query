@@ -91,7 +91,7 @@ class IaaSServiceBase:
                                                                          # rest_endpoint=f"{self.idm_cfg.rest_endpoint}/",
                                                                          http_client=self.http_client,
                                                                          # request_headers=self.http_client.headers,
-                                                                         config=self.swagger_client_config
+                                                                         # config=self.swagger_client_config
                                                                          )
             _debug(f"from_api_catalog_url: swagger_client={self.swagger_client}")
             # Setting this so calls go agasint the IDM REST endpoint instead of the api-catalog (where the spec was loaded from)
@@ -104,7 +104,8 @@ class IaaSServiceBase:
             self.swagger_client = SwaggerClient.from_spec(spec_dict=self.api_spec,
                                                           origin_url=self.idm_cfg.rest_endpoint,
                                                           http_client=self.http_client,
-                                                          config=self.swagger_client_config)
+                                                          # config=self.swagger_client_config
+                                                          )
 
         # This is the container from Bravado.client (SwaggerClient module) that holds CallableOperation created using the spec
         self.bravado_service_operations = getattr(self.swagger_client, service_cfg['service_name'])

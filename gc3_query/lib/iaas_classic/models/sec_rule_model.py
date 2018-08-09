@@ -58,8 +58,8 @@ class SecRuleModel(DynamicDocument):
     id          = 'bfc39682-3929-4635-9834-e95b8ba7c2c2',
     description = 'DO NOT MODIFY: Permit PSM to ssh to admin host'
     """
-    dst_is_ip = BooleanField()
-    src_is_ip = BooleanField()
+    dst_is_ip = StringField()
+    src_is_ip = StringField()
     dst_list = StringField()
     name = StringField()
     src_list = StringField()
@@ -84,6 +84,6 @@ class SecRuleModel(DynamicDocument):
 
 
 def __init__(self, *args, **kwargs):
-    kwargs['sec_rule_id'] = kwargs.pop('id')
+    # kwargs['sec_rule_id'] = kwargs.pop('id')
     super().__init__(**kwargs)
     _debug(f"{self.__class__.__name__} created")

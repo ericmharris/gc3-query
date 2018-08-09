@@ -97,6 +97,7 @@ def test_list_sec_rules_model_save_from_url():
     assert len(results_json) > 0
     result_json = results_json[0]
     assert 'src_list' in result_json
+    result_json['sec_rule_id'] = result_json.pop('id')
     sec_rule_model = SecRuleModel(**result_json)
     saved = sec_rule_model.save()
     assert saved
