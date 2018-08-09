@@ -50,7 +50,7 @@ class IaaSServiceBase:
                  idm_cfg: Dict[str, Any],
                  http_client: IaaSRequestsHTTPClient = None,
                  from_url: bool = False,
-                 storage_delagates: List[str] = None,
+                 storage_delegates: List[str] = None,
                  **kwargs: Dict[str, Any]):
         """
 

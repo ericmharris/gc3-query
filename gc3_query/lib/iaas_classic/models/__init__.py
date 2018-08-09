@@ -29,7 +29,7 @@ from mongoengine import IntField, FloatField, ComplexDateTimeField, EmailField, 
 ################################################################################
 ## Project Imports
 from gc3_query.lib import *
-from gc3_query.lib.storage_adapters.mongodb import storage_adapter_init
+from gc3_query.lib.storage_delegates.mongodb import storage_adapter_init
 
 
 class IaaSServiceModelDynamicDocument(DynamicDocument):
