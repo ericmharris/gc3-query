@@ -96,3 +96,4 @@ target/
 
 /gc3_query/opt/reference/bravado_10.1.0
 /gc3_query/opt/reference/bravado_core_5.0.4
+/tests/iaas_classic/**/output
