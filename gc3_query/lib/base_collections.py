@@ -361,21 +361,21 @@ class NestedConfigListBase(ListBase):
 
 class NestedOrderedDictAttrListBase(OrderedDictAttrBase):
 
-    def __init__(self, mapping):
+    def __init__(self, mapping: Union[MutableMapping, None]=None):
         super().__init__()
         self._serializable = dict()
 
-
-        for k, v in mapping.items():
-            if isinstance(v, MutableSequence):
-                self[k] = NestedConfigListBase(v)
-                self._serializable[k] = list(v)
-            if isinstance(v, MutableMapping):
-                self[k] = NestedOrderedDictAttrListBase(v)
-                self._serializable[k] = dict(v)
-            else:
-                self[k] = v
-                self._serializable[k] = v
+        if mapping:
+            for k, v in mapping.items():
+                if isinstance(v, MutableSequence):
+                    self[k] = NestedConfigListBase(v)
+                    self._serializable[k] = list(v)
+                if isinstance(v, MutableMapping):
+                    self[k] = NestedOrderedDictAttrListBase(v)
+                    self._serializable[k] = dict(v)
+                else:
+                    self[k] = v
+                    self._serializable[k] = v
 
 
     def __str__(self) -> str:
