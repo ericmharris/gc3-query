@@ -29,8 +29,8 @@ from gc3_query.lib import *
 from gc3_query.lib.iaas_classic.iaas_responses import IaaSServiceResponse
 from gc3_query.lib.models.gc3_meta_data import GC3MetaData
 from gc3_query.lib.gc3logging import get_logging
-
 from . import IaaSServiceModelDynamicDocument, IaaSServiceModelEmbeddedDocument
+from . import *
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
@@ -114,37 +114,47 @@ class InstanceModel(DynamicDocument):
     dhcp_options = []
 
     """
-    domain = mongoengine.StringField()
-    placement_requirements = mongoengine.ListField()
-    ip = mongoengine.StringField()
-    fingerprint = mongoengine.StringField()
-    image_metadata_bag = mongoengine.StringField()
-    site = mongoengine.StringField()
-    shape = mongoengine.StringField()
-    image_format = mongoengine.StringField()
-    relationships = mongoengine.ListField()
-    availability_domain = mongoengine.StringField()
-    hostname = mongoengine.StringField()
-    disk_attach = mongoengine.StringField()
-    label = mongoengine.StringField()
-    priority = mongoengine.StringField()
-    platform = mongoengine.StringField()
-    state = mongoengine.StringField()
-    vnc = mongoengine.StringField()
-    desired_state = mongoengine.StringField()
-    tags = mongoengine.ListField()
-    start_time = mongoengine.DateTimeField()
-    quota = mongoengine.StringField()
-    error_reason = mongoengine.StringField()
-    sshkeys = mongoengine.ListField()
-    account = mongoengine.StringField()
-    name = mongoengine.StringField()
-    vcable_id = mongoengine.StringField()
-    uri = mongoengine.StringField()
-    reverse_dns = mongoengine.BooleanField()
-    boot_order = mongoengine.ListField(mongoengine.IntField())
-    # attributes = mongoengine.DictField(mongoengine.StringField())
-    # metadata = mongoengine.DictField()
+    domain = StringField()
+    placement_requirements = ListField()
+    ip = StringField()
+    fingerprint = StringField()
+    image_metadata_bag = StringField()
+    site = StringField()
+    shape = StringField()
+    imagelist = StringField()               #  seems to come back None
+    image_format = StringField()
+    relationships = ListField()
+    availability_domain = StringField()
+    networking = DictField()
+    storage_attachments = ListField()
+
+    hostname = StringField()
+
+    disk_attach = StringField()
+    label = StringField()
+    priority = StringField()
+    platform = StringField()
+    state = StringField()
+    # virtio = StringField()    #  Its returned as a None, nothing in the spec about it
+    vnc = StringField()
+    desired_state = StringField()
+    tags = ListField()
+    start_time = DateTimeField()
+    quota = StringField()
+    # quota_reservation = StringField()     #  Its returned as a None, nothing in the spec about it
+    entry = IntField()
+    error_reason = StringField()
+    sshkeys = ListField()
+    resolvers = ListField()
+    account = StringField()
+    name = StringField()
+    vcable_id = StringField()
+    hypervisor = DictField()
+    uri = StringField()
+    reverse_dns = BooleanField()
+    attributes = DictField()
+    boot_order = ListField(IntField())
+    metadata = DictField()
 
     meta = {
         "db_alias": gc3_cfg.mongodb.db_alias,
@@ -160,55 +170,57 @@ class InstanceModel(DynamicDocument):
         ],
     }
 
-    def __init__(self, instance_details: IaaSServiceResponse, *args, **values):
-        _debug(f"{self.__class__.__name__}: created")
-        # super().__init__(**instance_details)
-        _fields = ['domain',
-                'placement_requirements',
-                'ip',
-                'fingerprint',
-                'image_metadata_bag',
-                'site',
-                'shape',
-                'imagelist',
-                'image_format',
-                'relationships',
-                'availability_domain',
-                'storage_attachments',
-                'hostname',
-                'quota_reservation',
-                'disk_attach',
-                'label',
-                'priority',
-                'platform',
-                'state',
-                'virtio',
-                'vnc',
-                'desired_state',
-                'tags',
-                'start_time',
-                'quota',
-                'entry',
-                'error_reason',
-                'sshkeys',
-                'resolvers',
-                'account',
-                'vcable_id',
-                'uri',
-                'reverse_dns',
-                # 'attributes',
-                #    'networking',
-                # 'metadata',
-                #    'hypervisor',
-                'boot_order',
-                'name'
-                   ]
-
-        data = {k:v for k,v in instance_details.items() if k in _fields}
-        _debug(f'data={data}')
-        super().__init__(**data)
-        _debug('asdf')
-
-
+    # def __init__(self, instance_details: IaaSServiceResponse, *args, **values):
+    #     _debug(f"{self.__class__.__name__}: created")
+    #     # super().__init__(**instance_details)
+    #     _fields = ['domain',
+    #                'placement_requirements',
+    #                'ip',
+    #                'fingerprint',
+    #                'image_metadata_bag',
+    #                'site',
+    #                'shape',
+    #                'imagelist',
+    #                'image_format',
+    #                'relationships',
+    #                'availability_domain',
+    #                'storage_attachments',
+    #                'hostname',
+    #                'quota_reservation',
+    #                'disk_attach',
+    #                'label',
+    #                'priority',
+    #                'platform',
+    #                'state',
+    #                'virtio',
+    #                'vnc',
+    #                'desired_state',
+    #                'tags',
+    #                'start_time',
+    #                'quota',
+    #                'entry',
+    #                'error_reason',
+    #                'sshkeys',
+    #                'resolvers',
+    #                'account',
+    #                'vcable_id',
+    #                'uri',
+    #                'reverse_dns',
+    #                'attributes',
+    #                #    'networking',
+    #                # 'metadata',
+    #                #    'hypervisor',
+    #                'boot_order',
+    #                'name'
+    #                ]
+    #
+    #     data = {k: v for k, v in instance_details.items() if k in _fields}
+    #     _debug(f'data={data}')
+    #     super().__init__(**data)
+    #     _debug('asdf')
 
 
+    def __init__(self, *args, **kwargs):
+        # kwargs['sec_rule_id'] = kwargs.pop('id')
+        super().__init__(**kwargs)
+        _debug(f"{self.__class__.__name__} created")

@@ -83,7 +83,7 @@ class SecRuleModel(DynamicDocument):
     }
 
 
-def __init__(self, *args, **kwargs):
-    # kwargs['sec_rule_id'] = kwargs.pop('id')
-    super().__init__(**kwargs)
-    _debug(f"{self.__class__.__name__} created")
+    def __init__(self, *args, **kwargs):
+        # kwargs['sec_rule_id'] = kwargs.pop('id')
+        super().__init__(**kwargs)
+        _debug(f"{self.__class__.__name__} created")
