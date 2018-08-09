@@ -131,7 +131,7 @@ class IaaSServiceBase:
             so.__dict__[so_camel_name] = so[so_camel_name]
         return so
 
-    def get_idm_container_name(self, cloud_username: str = None) -> str:
+    def get_idm_user_container_name(self, cloud_username: str = None) -> str:
         """ Return Compute-identityDomain/ or Compute-identityDomain/{cloud_username}/  eg. 'Compute-587626604/eric.harris@oracle.com' for gc30003
 
         Specify /Compute-identityDomain/user/ to retrieve the names of objects that you can access. Specify /Compute-identityDomain/ to retrieve the names of containers that contain objects that you can access.
@@ -153,7 +153,7 @@ class IaaSServiceBase:
 
         :return:
         """
-        return self.get_idm_container_name()
+        return self.get_idm_user_container_name()
 
     @property
     def idm_user_container_name(self) -> str:
@@ -163,4 +163,4 @@ class IaaSServiceBase:
 
         :return:
         """
-        return self.get_idm_container_name(cloud_username=gc3_cfg.user.cloud_username)
+        return self.get_idm_user_container_name(cloud_username=gc3_cfg.user.cloud_username)

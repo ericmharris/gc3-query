@@ -21,10 +21,11 @@
 
 from bravado.response import BravadoResponseMetadata
 
+
 ################################################################################
 ## Project Imports
 from gc3_query.lib import *
-from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
+from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase, ListBase
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
@@ -55,5 +56,18 @@ class IaaSServiceResponse(NestedOrderedDictAttrListBase):
         assert len(results)==1
         result: dict = results.pop()
         result['metadata'] = IaaSResponseMetadata(service_response.metadata)
+        super().__init__(mapping=result)
+        _debug(f"{self.__class__.__name__} created.")
+
+
+class IaaSServiceResponses():
+
+    def __init__(self, service_response: BravadoResponseMetadata):
+        responses = []
+        results: list = service_response.incoming_response.json()['result']
+        result: dict = results.pop()
+        result['metadata'] = IaaSResponseMetadata(service_response.metadata)
+        for result in results:
+            responses.append()
         super().__init__(mapping=result)
         _debug(f"{self.__class__.__name__} created.")

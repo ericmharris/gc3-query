@@ -70,9 +70,9 @@ class IaaSSwaggerClient(SwaggerClient):
         # http_client = http_client if http_client else RequestsClient()
         # http_client.set_basic_auth(host='https://compute.uscom-central-1.oraclecloud.com', username="/Compute-gc30003/eric.harris@oracle.com", password="V@nadium123!")
         http_client.set_basic_auth(host='https://compute.uscom-central-1.oraclecloud.com', username="/Compute-587626604/eric.harris@oracle.com", password="V@nadium123!")
-        if 'Content-Type' not in http_client.session.headers:
-            http_client.session.headers['Content-Type'] = 'application/oracle-compute-v3+json'
-            raise RuntimeError(f"shouldn't be here because we don't use Requestslient()")
+        # if 'Content-Type' not in http_client.session.headers:
+        #     http_client.session.headers['Content-Type'] = 'application/oracle-compute-v3+json'
+        #     raise RuntimeError(f"shouldn't be here because we don't use Requestslient()")
         # loader = Loader(http_client, request_headers=request_headers)
         # loader = Loader(http_client=http_client)
         #

@@ -55,7 +55,8 @@ def test_service_call(setup_gc30003):
     service_cfg, idm_cfg = setup_gc30003
     iaas_service_base = IaaSServiceBase(service_cfg=service_cfg, idm_cfg=idm_cfg)
     assert 'nimbula' in iaas_service_base.http_client.auth_cookie_header['Cookie']
-    http_future = iaas_service_base.service_operations.discover_root_instance(_request_options={"headers": {"Accept": "application/oracle-compute-v3+directory+json"}})
+    # http_future = iaas_service_base.service_operations.discover_root_instance(_request_options={"headers": {"Accept": "application/oracle-compute-v3+directory+json"}})
+    http_future = iaas_service_base.service_operations.discover_root_instance()
     service_response = http_future.response()
     assert service_response.metadata.status_code==200
     assert "/Compute-" in service_response.result
@@ -66,7 +67,8 @@ def test_bravado_service_call(setup_gc30003):
     iaas_service_base = IaaSServiceBase(service_cfg=service_cfg, idm_cfg=idm_cfg)
     assert 'nimbula' in iaas_service_base.http_client.auth_cookie_header['Cookie']
     # http_future = iaas_service_base.service_operations.discover_root_instance(_request_options={"headers": {"Accept": "application/oracle-compute-v3+directory+json"}})
-    http_future = iaas_service_base.bravado_service_operations.discoverRootInstance(_request_options={"headers": {"Accept": "application/oracle-compute-v3+directory+json"}})
+    # http_future = iaas_service_base.bravado_service_operations.discoverRootInstance(_request_options={"headers": {"Accept": "application/oracle-compute-v3+directory+json"}})
+    http_future = iaas_service_base.service_operations.discover_root_instance()
     service_response = http_future.response()
     assert service_response.metadata.status_code==200
     assert "/Compute-" in service_response.result
@@ -85,7 +87,8 @@ def test_pre_authenticated_http_client(setup_gc30003):
     iaas_service_base = IaaSServiceBase(service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client)
     assert 'nimbula' in iaas_service_base.http_client.auth_cookie_header['Cookie']
     # http_future = iaas_service_base.service_operations.discover_root_instance()
-    http_future = iaas_service_base.service_operations.discover_root_instance(_request_options={"headers": {"Accept": "application/oracle-compute-v3+directory+json"}})
+    # http_future = iaas_service_base.service_operations.discover_root_instance(_request_options={"headers": {"Accept": "application/oracle-compute-v3+directory+json"}})
+    http_future = iaas_service_base.service_operations.discover_root_instance()
     service_response = http_future.response()
     assert service_response.metadata.status_code==200
     assert "/Compute-" in service_response.result
@@ -112,17 +115,30 @@ def test_get_idm_container_names(setup_preauthed_gc30003):
     service_cfg, idm_cfg, http_client = setup_preauthed_gc30003
     iaas_service_base = IaaSServiceBase(service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client)
     # http_future = iaas_service_base.service_operations.discover_root_instance()
-    http_future = iaas_service_base.service_operations.discover_root_instance(_request_options={"headers": {"Accept": "application/oracle-compute-v3+directory+json"}})
+    # http_future = iaas_service_base.service_operations.discover_root_instance(_request_options={"headers": {"Accept": "application/oracle-compute-v3+directory+json"}})
+    http_future = iaas_service_base.service_operations.discover_root_instance()
     service_response = http_future.response()
     # '/Compute-587626604/'
-    idm_container_name = service_response.incoming_response.json()['result'][0].lstrip('/')
+    idm_container_name = service_response.incoming_response.json()['result'][0].lstrip('/').rstrip('/')
     # '/Compute-587626604/eric.harris@oracle.com/'
-    idm_user_container_name = f"{idm_container_name}{gc3_cfg.user.cloud_username}/"
+    idm_user_container_name = f"{idm_container_name}/{gc3_cfg.user.cloud_username}"
+    idm_container_name = f"{idm_container_name}"
+    idm_root_container_name = f"{idm_container_name}"
     assert iaas_service_base.idm_container_name==idm_container_name
     assert iaas_service_base.idm_user_container_name==idm_user_container_name
-    assert iaas_service_base.get_idm_container_name(cloud_username="foo.bar@oracle.com")==f"{idm_container_name}foo.bar@oracle.com/"
+    assert iaas_service_base.idm_root_container_name==idm_root_container_name
+    assert iaas_service_base.get_idm_user_container_name(cloud_username="foo.bar@oracle.com") == f"{idm_container_name}/foo.bar@oracle.com"
 
 
+def test_idm_root_container_name(setup_preauthed_gc30003):
+    service_cfg, idm_cfg, http_client = setup_preauthed_gc30003
+    instances = IaaSServiceBase(service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client)
+    idm_root_container_name = instances.idm_root_container_name
+    assert idm_root_container_name
+    expected_name = f"Compute-{idm_cfg.service_instance_id}"
+    literal_name = 'Compute-587626604'
+    assert expected_name==idm_root_container_name
+    assert literal_name==idm_root_container_name
 
 
 

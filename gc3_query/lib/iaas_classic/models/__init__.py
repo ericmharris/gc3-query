@@ -21,7 +21,10 @@ import sys, os
 ## Third-Party Imports
 from dataclasses import dataclass
 
-from mongoengine import DynamicDocument, EmbeddedDocument
+import mongoengine
+from mongoengine import DynamicDocument, Document, DynamicEmbeddedDocument, EmbeddedDocument
+from mongoengine import StringField, ListField, BooleanField, DateTimeField, DictField, SortedListField, URLField
+from mongoengine import IntField, FloatField, ComplexDateTimeField, EmailField, MultiLineStringField, FileField
 
 ################################################################################
 ## Project Imports

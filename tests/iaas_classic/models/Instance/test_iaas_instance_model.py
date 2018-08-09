@@ -115,8 +115,14 @@ def test_instances_model_save():
     assert idm_domain==idm_cfg.name
     assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
     instances = Instances(service_cfg=service_cfg, idm_cfg=idm_cfg, from_url=True)
-    container=instances.idm_container_name.replace('/', '')
-    old_container=instances.idm_container_name
+
+    # container=instances.idm_container_name.replace('/', '')
+    # old_container=instances.idm_container_name
+
+    # container='/Compute-587626604'
+    # container='Compute-587626604'
+    container=instances.idm_root_container_name
+
     # http_future = instances.bravado_service_operations.listInstance(container=instances.idm_user_container_name)
     # http_future = instances.bravado_service_operations.listInstance(container=instances.idm_container_name)
     http_future = instances.bravado_service_operations.listInstance(container=container)

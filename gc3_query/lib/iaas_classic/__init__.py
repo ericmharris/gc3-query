@@ -15,6 +15,7 @@
 
 ################################################################################
 ## Standard Library Imports
+from functools import partialmethod, partial
 
 ################################################################################
 ## Third-Party Imports
@@ -114,6 +115,8 @@ class IaaSServiceBase:
         self.service_operations = self.populate_service_operations(
             service_operations=getattr(self.swagger_client, service_cfg['service_name']))
 
+        _debug(f"{self.__class__.__name__} created")
+
     @property
     def api_spec(self) -> str:
         """Returns Open API spec"""
@@ -131,11 +134,17 @@ class IaaSServiceBase:
         so = OrderedDictAttrBase()
         for service_operation_name in dir(service_operations):
             so_camel_name = camelcase_to_snake(service_operation_name)
-            so[so_camel_name] = getattr(service_operations, service_operation_name)
+            service_operation = getattr(service_operations, service_operation_name)
+            operation_headers = {"Accept": ','.join(service_operation.operation.produces),
+                                 "Content-Type": ','.join(service_operation.operation.consumes)
+                                 }
+            # partial_service_operation = partial(service_operation, _request_options={"headers": {"Accept": "application/oracle-compute-v3+directory+json"}})
+            partial_service_operation = partial(service_operation, _request_options={"headers": operation_headers})
+            so[so_camel_name] = partial_service_operation
             so.__dict__[so_camel_name] = so[so_camel_name]
         return so
 
-    def get_idm_container_name(self, cloud_username: str = None) -> str:
+    def get_idm_user_container_name(self, cloud_username: str = None) -> str:
         """ Return Compute-identityDomain/ or Compute-identityDomain/{cloud_username}/  eg. 'Compute-587626604/eric.harris@oracle.com' for gc30003
 
         Specify /Compute-identityDomain/user/ to retrieve the names of objects that you can access. Specify /Compute-identityDomain/ to retrieve the names of containers that contain objects that you can access.
@@ -143,10 +152,10 @@ class IaaSServiceBase:
         :return:
         """
         if cloud_username:
-            return f"Compute-{self.idm_cfg.service_instance_id}/{cloud_username}/"
-            # return  f"/Compute-{self.idm_cfg.service_instance_id}/{cloud_username}/"
+            return f"Compute-{self.idm_cfg.service_instance_id}/{cloud_username}"
+            # return  f"/Compute-{self.idm_cfg.service_instance_id}/{cloud_username}"
         else:
-            return f"Compute-{self.idm_cfg.service_instance_id}/"
+            return self.idm_user_container_name
             # return  f"/Compute-{self.idm_cfg.service_instance_id}/"
 
     @property
@@ -157,7 +166,7 @@ class IaaSServiceBase:
 
         :return:
         """
-        return self.get_idm_container_name()
+        return self.idm_root_container_name
 
     @property
     def idm_user_container_name(self) -> str:
@@ -167,9 +176,17 @@ class IaaSServiceBase:
 
         :return:
         """
-        return self.get_idm_container_name(cloud_username=gc3_cfg.user.cloud_username)
+        # return self.get_idm_user_container_name(cloud_username=gc3_cfg.user.cloud_username)
+        return f"{self.idm_root_container_name}/{gc3_cfg.user.cloud_username}"
 
 
+    @property
+    def idm_root_container_name(self) -> str:
+        """Return IDM container name used in multi-part naming (eg. Compute-587626604)
+
+        :return:
+        """
+        return f"Compute-{self.idm_cfg.service_instance_id}"
 
 
 

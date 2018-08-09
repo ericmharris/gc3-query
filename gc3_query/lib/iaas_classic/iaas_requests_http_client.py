@@ -68,7 +68,7 @@ class IaaSRequestsHTTPClient(RequestsClient):
         # self.headers = {'Content-Type': 'application/oracle-compute-v3+json',
         #                 'Accept': 'application/oracle-compute-v3+json, json, text/html',
         #                 }
-        self.session.headers['Content-Type'] = 'application/oracle-compute-v3+json'
+        # self.session.headers['Content-Type'] = 'application/oracle-compute-v3+json'
         if gc3_cfg.user.use_proxy:
             _info(f"gc3_cfg.user.use_proxy={gc3_cfg.user.use_proxy}, configuring proxy.")
             self.proxies = {'http': gc3_cfg.network.http_proxy, 'https': gc3_cfg.network.https_proxy}

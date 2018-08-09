@@ -25,12 +25,25 @@ spec_url = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apic
 spec_furl: fstr = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/{api_version}/apis/{service_name}/canonical'
 spec_file = 'SecurityRules.json'
 api_doc_url = 'https://docs.oracle.com/en/cloud/iaas/compute-iaas-cloud/stcsa/api-security-rules.html'
-swagger_ui2_url = 'https://apicatalog.oraclecloud.com/ui/views/apicollection/oracle-public/compute/18.1.2/Instances'
+swagger_ui2_url = 'https://apicatalog.oraclecloud.com/ui/views/apicollection/oracle-public/compute/18.1.2/SecurityRules'
 swagger_ui3_url = 'https://apicatalog.oraclecloud.com/ui/views/swaggerui3/oracle-public/compute/18.1.2?urls.primaryName=SecurityRules'
 swagger_ui2_furl: fstr = 'https://apicatalog.oraclecloud.com/ui/views/apicollection/oracle-public/compute/{api_version}/{service_name}'
 swagger_ui3_furl: fstr = 'https://apicatalog.oraclecloud.com/ui/views/swaggerui3/oracle-public/compute/{api_version}?urls.primaryName={service_name}'
 
 
+
+[iaas_classic.services.SecRules]
+service_name = 'SecRules'
+name = 'SecRules'
+api_version = '18.1.2'
+spec_url = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/18.1.2/apis/SecRules/canonical'
+spec_furl: fstr = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/{api_version}/apis/{service_name}/canonical'
+spec_file = 'SecRules.json'
+api_doc_url = 'https://docs.oracle.com/en/cloud/iaas/compute-iaas-cloud/stcsa/api-secrules.html'
+swagger_ui2_url = 'https://apicatalog.oraclecloud.com/ui/views/apicollection/oracle-public/compute/18.1.2/SecRules'
+swagger_ui3_url = 'https://apicatalog.oraclecloud.com/ui/views/swaggerui3/oracle-public/compute/18.1.2?urls.primaryName=SecRules'
+swagger_ui2_furl: fstr = 'https://apicatalog.oraclecloud.com/ui/views/apicollection/oracle-public/compute/{api_version}/{service_name}'
+swagger_ui3_furl: fstr = 'https://apicatalog.oraclecloud.com/ui/views/swaggerui3/oracle-public/compute/{api_version}?urls.primaryName={service_name}'
 
 
 
