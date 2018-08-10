@@ -74,10 +74,13 @@ class OpenApiSpec():
         self._api_spec = self.create_api_spec(spec_dict=self._spec_dict)
         self.api_spec = NestedOrderedDictAttrListBase(mapping=self._api_spec)
 
-        self.gc3_type = GC3VersionedType(name=__class__.__name__,
+        self.gc3_type = GC3Type(name=__class__.__name__,
+                                         descr="OpenApiSpec is a wrapper around bravado.Spec for Oracle Cloud.",
+                                         class_type=__class__)
+
+        self.gc3_vtype = GC3VersionedType(name=__class__.__name__,
                            descr="OpenApiSpec is a wrapper around bravado.Spec for Oracle Cloud.",
-                           class_type=__class__,
-                                         version=self.version)
+                           class_type=__class__, version=self.version)
 
     def load_spec(self, from_url: bool) -> DictStrAny:
         if from_url:
