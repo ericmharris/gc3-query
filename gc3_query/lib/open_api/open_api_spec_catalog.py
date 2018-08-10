@@ -33,7 +33,10 @@ _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 class OpenApiSpecCatalog(NestedOrderedDictAttrListBase):
 
-    def __init__(self, api_catalog_config: DictStrAny, services_config: Dict[str, Any], idm_cfg: DictStrAny, from_url: bool = False):
+    def __init__(self, api_catalog_config: DictStrAny,
+                 services_config: Dict[str, Any],
+                 idm_cfg: DictStrAny,
+                 from_url: bool = False):
         super().__init__()
         self.api_catalog_name = api_catalog_config.api_catalog_name
         spec_catalog_path = OPEN_API_CATALOG_DIR.joinpath(api_catalog_config.api_catalog_name)

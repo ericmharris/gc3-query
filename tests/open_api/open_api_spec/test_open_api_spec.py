@@ -94,3 +94,29 @@ def test_from_url():
     assert core_spec.origin_url==idm_cfg.rest_endpoint
     assert core_spec.spec_dict['info']['title']==service
 
+def test_check_spec_properties():
+    idm_domain = 'gc30003'
+    service: str = 'Instances'
+    gc3_config = GC3Config(atoml_config_dir=config_dir)
+    idm_cfg = gc3_config.idm.domains[idm_domain]
+    service_cfg = gc3_config.iaas_classic.services[service]
+    api_catalog_config = gc3_config.iaas_classic.api_catalog
+    oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg, idm_cfg=idm_cfg)
+    assert oapi_spec.name == service
+    assert oapi_spec.api_spec['schemes'] == ['https']
+    assert oapi_spec.title==service
+    version_tupple = oapi_spec.version.split('.')
+    assert version_tupple[0].isnumeric()
+    assert service.lower() in oapi_spec.description
+    service_paths = oapi_spec.paths
+    in_paths = ['instance' in p for p in service_paths]
+    assert all(in_paths)
+    operation_ids = oapi_spec.operation_ids
+    assert len(operation_ids) > 0
+    assert 'discoverInstance' in operation_ids
+    assert 'deleteInstance' in operation_ids
+    operation_id_descrs = oapi_spec.operation_id_descrs
+    assert operation_id_descrs
+    assert 'deleteInstance' in operation_id_descrs
+
+
