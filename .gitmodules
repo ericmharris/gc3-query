@@ -16,3 +16,6 @@
 [submodule "gc3_query/opt/reference/mongoengine"]
 	path = gc3_query/opt/reference/mongoengine
 	url = https://github.com/MongoEngine/mongoengine.git
+[submodule "gc3_query/opt/pycharm/pycharm-settings"]
+	path = gc3_query/opt/pycharm/pycharm-settings
+	url = https://oauth2:Zuiaf9BiugbYEdsxvU9E@gitlab.com/emharris/pycharm-settings.git
