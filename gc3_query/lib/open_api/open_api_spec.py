@@ -149,5 +149,8 @@ class OpenApiSpec():
 
 
 
+    def __eq__(self, other):
+        same_title = self.title==other.title
+        same_version = self.version==other.version
 
 
