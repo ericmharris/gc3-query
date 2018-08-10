@@ -28,6 +28,7 @@ from bravado.swagger_model import load_file, load_url
 ## Project Imports
 from gc3_query.lib import *
 from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
+from gc3_query.lib.signatures import GC3Type, GC3VersionedType
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
@@ -73,6 +74,10 @@ class OpenApiSpec():
         self._api_spec = self.create_api_spec(spec_dict=self._spec_dict)
         self.api_spec = NestedOrderedDictAttrListBase(mapping=self._api_spec)
 
+        self.gc3_type = GC3VersionedType(name=__class__.__name__,
+                           descr="OpenApiSpec is a wrapper around bravado.Spec for Oracle Cloud.",
+                           class_type=__class__,
+                                         version=self.version)
 
     def load_spec(self, from_url: bool) -> DictStrAny:
         if from_url:
@@ -85,6 +90,9 @@ class OpenApiSpec():
             spec_dict: dict = load_file(spec_file=spec_file_path)
             self.from_url = False
         return spec_dict
+
+
+
 
     def create_api_spec(self, spec_dict: DictStrAny) -> DictStrAny:
         """Returns a new spec_dict that sucks less

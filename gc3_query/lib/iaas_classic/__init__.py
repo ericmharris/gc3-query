@@ -33,6 +33,7 @@ from gc3_query.lib.iaas_classic.iaas_requests_http_client import IaaSRequestsHTT
 from gc3_query.lib.iaas_classic.iaas_swagger_client import IaaSSwaggerClient
 from gc3_query.lib.utils import camelcase_to_snake
 from gc3_query.lib.base_collections import OrderedDictAttrBase
+from gc3_query.lib.signatures import GC3Type, GC3VersionedType
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
@@ -116,6 +117,12 @@ class IaaSServiceBase:
         #
         self.service_operations = self.populate_service_operations(
             service_operations=getattr(self.swagger_client, service_cfg['service_name']))
+
+        ### TODO:
+        # self.gc3_type = GC3VersionedType(name=__class__.__name__,
+        #                                  descr="OpenApiSpec is a wrapper around bravado.Spec for Oracle Cloud.",
+        #                                  class_type=__class__,
+        #                                  version=self.api_spec.version)
 
         _debug(f"{self.__class__.__name__} created")
 
