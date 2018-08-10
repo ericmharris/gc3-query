@@ -22,9 +22,11 @@ output_dir = TEST_BASE_DIR.joinpath('output')
 
 def test_setup():
     assert TEST_BASE_DIR.exists()
-    assert config_dir.exists()
     assert API_SPECS_DIR.exists()
-    assert output_dir.exists()
+    if not config_dir.exists():
+        config_dir.mkdir()
+    if not output_dir.exists():
+        output_dir.mkdir()
 
 
 
