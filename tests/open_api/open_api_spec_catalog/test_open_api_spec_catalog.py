@@ -12,7 +12,7 @@ from gc3_query.lib.iaas_classic.iaas_requests_http_client import IaaSRequestsHTT
 from gc3_query.lib.iaas_classic import IaaSServiceBase, API_SPECS_DIR, IaaSRequestsHTTPClient
 from gc3_query.lib.iaas_classic.instances import Instances
 from gc3_query.lib.open_api.open_api_spec import OpenApiSpec
-from gc3_query.lib.open_api.open_api_specs import OpenApiSpecCatalog
+from gc3_query.lib.open_api.open_api_spec_catalog import OpenApiSpecCatalog
 
 TEST_BASE_DIR: Path = Path(__file__).parent
 # config_dir = TEST_BASE_DIR.joinpath("config")
@@ -31,11 +31,13 @@ def test_setup():
 
 
 def test_init():
+    idm_domain = 'gc30003'
     gc3_config = GC3Config(atoml_config_dir=config_dir)
+    idm_cfg = gc3_config.idm.domains[idm_domain]
     api_catalog_config = gc3_config.iaas_classic.api_catalog
     services_config = gc3_config.iaas_classic.services
     # oapi_spec_catalog = OpenApiSpecCatalog(api_catalog_config=api_catalog_config, services_cfg=services_config)
-    oapi_spec_catalog = OpenApiSpecCatalog(api_catalog_config=api_catalog_config, services_config=services_config)
+    oapi_spec_catalog = OpenApiSpecCatalog(api_catalog_config=api_catalog_config, services_config=services_config, idm_cfg=idm_cfg)
     assert oapi_spec_catalog
     assert oapi_spec_catalog.api_catalog_name=='iaas_classic'
     assert 'Instances' in oapi_spec_catalog
