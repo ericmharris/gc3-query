@@ -79,7 +79,7 @@ class IaaSServiceBase:
         #           'default_type_to_object': False,
         #           'internally_dereference_refs': False,
         #           'also_return_response': True}
-        self.swagger_client_config = dict(gc3_cfg.iaas_classic.iaas_service_client_config)
+        self.swagger_client_config = dict(gc3_cfg.swagger_client_config)
         if from_url:
             self._spec_url = f"{service_cfg.spec_furl}".format_map(service_cfg)
             _debug(f"self._spec_url={self._spec_url}")

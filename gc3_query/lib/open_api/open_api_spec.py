@@ -36,7 +36,7 @@ _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
 
-class OpenApiSpec(Spec):
+class OpenApiSpec():
 
     def __init__(self,  api_catalog_config: DictStrAny, service_cfg: Dict[str, Any], from_url:bool = False):
         self.api_catalog_config = api_catalog_config
@@ -47,8 +47,8 @@ class OpenApiSpec(Spec):
         self._spec_dict = self.load_spec()
         self._api_spec = self.create_api_spec(spec_dict=self._spec_dict)
         self.api_spec = NestedOrderedDictAttrListBase(mapping=self._api_spec)
-        super().__init__(spec_dict=self.api_spec, origin_url=None, http_client=None, config=None)
-
+        # self.core_spec = Spec(spec_dict=self._api_spec, origin_url=fixme)
+    #
 
 
     def load_spec(self) -> DictStrAny:
@@ -73,4 +73,7 @@ class OpenApiSpec(Spec):
         return spec_dict
 
 
+    def get_spec(self, origin_url: str) -> Spec:
+        core_spec = Spec(spec_dict=self._api_spec, origin_url=origin_url, http_client=None, config=gc3_cfg.swagger_client_config)
+        return core_spec
 
