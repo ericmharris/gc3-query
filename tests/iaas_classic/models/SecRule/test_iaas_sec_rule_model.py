@@ -12,7 +12,7 @@ from gc3_query.lib.iaas_classic.iaas_requests_http_client import IaaSRequestsHTT
 from gc3_query.lib.iaas_classic import IaaSServiceBase, API_SPECS_DIR, IaaSRequestsHTTPClient
 from gc3_query.lib.iaas_classic.sec_rules import SecRules
 from gc3_query.lib.iaas_classic.models.sec_rule_model import SecRuleModel
-from gc3_query.lib.storage_delegates.mongodb import storage_adapter_init
+from gc3_query.lib.export_delegates.mongodb import storage_adapter_init
 
 TEST_BASE_DIR: Path = Path(__file__).parent
 # config_dir = TEST_BASE_DIR.joinpath("config")

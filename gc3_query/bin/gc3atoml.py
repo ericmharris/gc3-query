@@ -17,7 +17,9 @@
 ## Standard Library Imports
 import sys, os
 import json
+import subprocess
 from pprint import pprint, pformat
+from distutils.spawn import find_executable
 
 
 ################################################################################
@@ -86,13 +88,30 @@ def print(ctx: click.core.Context) -> None:
 
 
 @cli.command(help="Export TOML to var/config_data.py", short_help="ATOML export ", epilog="export ATOML ")
+@click.option("--open-in-editor", "-e", help="Open exported file using the first hit found in user.windows_editors/or linux_editors",
+              default=False, is_flag=True)
 @click.pass_context
-def export(ctx: click.core.Context) -> None:
+def export(ctx: click.core.Context, open_in_editor: bool = False) -> None:
     gc3_cfg = ctx.obj.gc3_cfg
     output_file = BASE_DIR.joinpath('var/config/config_data.py')
     with output_file.open('w') as fd:
         fd.write(pformat(gc3_cfg._serializable))
     click.echo(click.style(f"Config data written to {output_file}", fg="green"))
+    if open_in_editor:
+        found_editor = False
+        if sys.platform.startswith('win'):
+            editors = gc3_cfg.user.windows_editors
+        else:
+            editors = gc3_cfg.user.linux_editors
+        editors_found = [find_executable(e) for e in editors]
+        _debug(f"editors={editors}, editors_found={editors_found}")
+        for editor in editors_found:
+            if editor:
+                args = f"{editor} {output_file}".split()
+                click.echo(click.style(f"Opening: {editor} {output_file}", fg="green"))
+                # subprocess.run(args=args, check=False)
+                subprocess.Popen(args=args)
+                break
     sys.exit(0)
 
 

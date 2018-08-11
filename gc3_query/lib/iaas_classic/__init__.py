@@ -31,6 +31,7 @@ from gc3_query.lib import gc3_cfg
 ## TODO: either change or add a snake_case function for camelCase
 from gc3_query.lib.iaas_classic.iaas_requests_http_client import IaaSRequestsHTTPClient
 from gc3_query.lib.iaas_classic.iaas_swagger_client import IaaSSwaggerClient
+from gc3_query.lib.open_api.open_api_spec_catalog import OpenApiSpecCatalog
 from gc3_query.lib.utils import camelcase_to_snake
 from gc3_query.lib.base_collections import OrderedDictAttrBase
 from gc3_query.lib.signatures import GC3VersionTypedMixin
@@ -83,33 +84,45 @@ class IaaSServiceBase(GC3VersionTypedMixin):
         #           'internally_dereference_refs': False,
         #           'also_return_response': True}
         self.swagger_client_config = dict(gc3_cfg.swagger_client_config)
-        if from_url:
-            self._spec_url = f"{service_cfg.spec_furl}".format_map(service_cfg)
-            _debug(f"self._spec_url={self._spec_url}")
-            # self.swagger_client_config['origin_url'] = self.idm_cfg.rest_endpoint
-            # self.swagger_client_config['api_url'] = self.idm_cfg.rest_endpoint
-            self.http_client = http_client if http_client else \
-                IaaSRequestsHTTPClient(idm_cfg=self.idm_cfg, skip_authentication=self.kwargs.get('skip_authentication', False))
-            self.swagger_client = IaaSSwaggerClient.from_api_catalog_url(spec_url=self._spec_url,
-                                                                         rest_endpoint=self.idm_cfg.rest_endpoint,
-                                                                         # rest_endpoint=f"{self.idm_cfg.rest_endpoint}/",
-                                                                         http_client=self.http_client,
-                                                                         # request_headers=self.http_client.headers,
-                                                                         # config=self.swagger_client_config
-                                                                         )
-            _debug(f"from_api_catalog_url: swagger_client={self.swagger_client}")
-            # Setting this so calls go agasint the IDM REST endpoint instead of the api-catalog (where the spec was loaded from)
-            # In[5]: instances.swagger_client.swagger_spec.api_url
-            # Out[4]: 'http://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/18.1.2/apis/Instances/canonical'
-            # self.swagger_client.swagger_spec.api_url = self.idm_cfg.rest_endpoint
-        else:
-            self.http_client = http_client if http_client else \
-                IaaSRequestsHTTPClient(idm_cfg=self.idm_cfg, skip_authentication=self.kwargs.get('skip_authentication', False))
-            self.swagger_client = SwaggerClient.from_spec(spec_dict=self.api_spec,
-                                                          origin_url=self.idm_cfg.rest_endpoint,
-                                                          http_client=self.http_client,
-                                                          # config=self.swagger_client_config
-                                                          )
+        self.oapi_spec_catalog = OpenApiSpecCatalog(api_catalog_config=gc3_cfg.iaas_classic.api_catalog,
+                                                    services_config=gc3_cfg.iaas_classic.services,
+                                                    idm_cfg=self.idm_cfg,
+                                                    from_url=from_url)
+        # if from_url:
+        #     self._spec_url = f"{service_cfg.spec_furl}".format_map(service_cfg)
+        #     _debug(f"self._spec_url={self._spec_url}")
+        #     # self.swagger_client_config['origin_url'] = self.idm_cfg.rest_endpoint
+        #     # self.swagger_client_config['api_url'] = self.idm_cfg.rest_endpoint
+        #     self.http_client = http_client if http_client else \
+        #         IaaSRequestsHTTPClient(idm_cfg=self.idm_cfg, skip_authentication=self.kwargs.get('skip_authentication', False))
+        #     self.swagger_client = IaaSSwaggerClient.from_api_catalog_url(spec_url=self._spec_url,
+        #                                                                  rest_endpoint=self.idm_cfg.rest_endpoint,
+        #                                                                  # rest_endpoint=f"{self.idm_cfg.rest_endpoint}/",
+        #                                                                  http_client=self.http_client,
+        #                                                                  # request_headers=self.http_client.headers,
+        #                                                                  # config=self.swagger_client_config
+        #                                                                  )
+        #     _debug(f"from_api_catalog_url: swagger_client={self.swagger_client}")
+        #     # Setting this so calls go agasint the IDM REST endpoint instead of the api-catalog (where the spec was loaded from)
+        #     # In[5]: instances.swagger_client.swagger_spec.api_url
+        #     # Out[4]: 'http://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/18.1.2/apis/Instances/canonical'
+        #     # self.swagger_client.swagger_spec.api_url = self.idm_cfg.rest_endpoint
+        # else:
+        #     self.http_client = http_client if http_client else \
+        #         IaaSRequestsHTTPClient(idm_cfg=self.idm_cfg, skip_authentication=self.kwargs.get('skip_authentication', False))
+        #     self.swagger_client = SwaggerClient.from_spec(spec_dict=self.api_spec,
+        #                                                   origin_url=self.idm_cfg.rest_endpoint,
+        #                                                   http_client=self.http_client,
+        #                                                   # config=self.swagger_client_config
+        #                                                   )
+
+
+        self.http_client = http_client if http_client else  IaaSRequestsHTTPClient(idm_cfg=self.idm_cfg, skip_authentication=self.kwargs.get('skip_authentication', False))
+        self.swagger_client = SwaggerClient.from_spec(spec_dict=self.api_spec,
+                                                      origin_url=self.idm_cfg.rest_endpoint,
+                                                      http_client=self.http_client,
+                                                      # config=self.swagger_client_config
+                                                      )
 
         # This is the container from Bravado.client (SwaggerClient module) that holds CallableOperation created using the spec
         self.bravado_service_operations = getattr(self.swagger_client, service_cfg['service_name'])

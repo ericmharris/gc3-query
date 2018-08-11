@@ -30,6 +30,7 @@ from bravado.swagger_model import load_file, load_url
 from gc3_query.lib import *
 from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
 from gc3_query.lib.signatures import GC3Type, GC3VersionedType, GC3VersionTypedMixin
+from .spec_overlays import SpecOverlayBase
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
@@ -71,8 +72,8 @@ class OpenApiSpec(GC3VersionTypedMixin):
 
         self.spec_file_path = OPEN_API_CATALOG_DIR.joinpath(api_catalog_config.api_catalog_name).joinpath(service_cfg.service_name)
         self._spec_dict = self.load_spec(from_url=from_url)
-        self._api_spec = self.create_api_spec(spec_dict=self._spec_dict)
-        self.api_spec = NestedOrderedDictAttrListBase(mapping=self._api_spec)
+        self._api_spec_dict = self.create_api_spec(spec_dict=self._spec_dict)
+        self.api_spec = NestedOrderedDictAttrListBase(mapping=self._api_spec_dict)
         _debug(f"{self.name} created")
 
         # self.gc3_type = GC3Type(name=__class__.__name__,
@@ -112,7 +113,7 @@ class OpenApiSpec(GC3VersionTypedMixin):
         rest_endpoint = rest_endpoint if rest_endpoint else self.rest_endpoint
         if not rest_endpoint:
             raise RuntimeError("rest_endpoint not provided in either method call or in **wkargs={self.kwargs}")
-        core_spec: Spec = Spec(spec_dict=self._api_spec, origin_url=rest_endpoint, http_client=None, config=gc3_cfg.swagger_client_config)
+        core_spec: Spec = Spec(spec_dict=self._api_spec_dict, origin_url=rest_endpoint, http_client=None, config=gc3_cfg.swagger_client_config)
         return core_spec
 
     @property

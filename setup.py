@@ -94,6 +94,7 @@ setup(
             'gc3scan=gc3_query.bin.gc3scan:cli',
             'gc3keygen=gc3_query.bin.gc3keygen:cli',
             'gc3atoml=gc3_query.bin.gc3atoml:cli',
+            'gc3export=gc3_query.bin.gc3export:cli',
             'gc3admin=gc3_query.sbin.gc3admin:cli'
         ]
     },

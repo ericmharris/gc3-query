@@ -100,6 +100,9 @@ def test_pre_authenticated_http_client(setup_gc30003):
 
 
 
+
+
+
 @pytest.fixture()
 def setup_preauthed_gc30003():
     service = 'Instances'
@@ -142,6 +145,32 @@ def test_idm_root_container_name(setup_preauthed_gc30003):
     literal_name = 'Compute-587626604'
     assert expected_name==idm_root_container_name
     assert literal_name==idm_root_container_name
+
+
+
+@pytest.fixture()
+def setup_gc30003_oapi_spec_catalog() -> Tuple[Dict[str, Any]]:
+    service = 'Instances'
+    idm_domain = 'gc30003'
+    gc3_config = GC3Config(atoml_config_dir=config_dir)
+    service_cfg = gc3_config.iaas_classic.services[service]
+    idm_cfg = gc3_config.idm.domains[idm_domain]
+    assert service==service_cfg.name
+    assert idm_domain==idm_cfg.name
+    assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
+    yield service_cfg, idm_cfg
+
+
+def test_oapi_spec_catalog(setup_gc30003_oapi_spec_catalog):
+    service_cfg, idm_cfg = setup_gc30003_oapi_spec_catalog
+    iaas_service_base = IaaSServiceBase(service_cfg=service_cfg, idm_cfg=idm_cfg)
+    assert 'nimbula' in iaas_service_base.http_client.auth_cookie_header['Cookie']
+    # http_future = iaas_service_base.service_operations.discover_root_instance(_request_options={"headers": {"Accept": "application/oracle-compute-v3+directory+json"}})
+    # http_future = iaas_service_base.bravado_service_operations.discoverRootInstance(_request_options={"headers": {"Accept": "application/oracle-compute-v3+directory+json"}})
+    http_future = iaas_service_base.service_operations.discover_root_instance()
+    service_response = http_future.response()
+    assert service_response.metadata.status_code==200
+    assert "/Compute-" in service_response.result
 
 
 
