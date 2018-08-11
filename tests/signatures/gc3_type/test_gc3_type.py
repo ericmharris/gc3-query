@@ -120,7 +120,7 @@ def test_eqality(test_equality_setup):
 #     oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg)
 #     assert oapi_spec.name == service
 #     assert oapi_spec.api_spec['schemes'] == ['https']
-#     core_spec = oapi_spec.get_spec(rest_endpoint=idm_cfg.rest_endpoint)
+#     core_spec = oapi_spec.get_bravado_spec(rest_endpoint=idm_cfg.rest_endpoint)
 #     assert core_spec.origin_url==idm_cfg.rest_endpoint
 #     assert core_spec.spec_dict['info']['title']==service
 #
@@ -134,7 +134,7 @@ def test_eqality(test_equality_setup):
 #     oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg, rest_endpoint=idm_cfg.rest_endpoint)
 #     assert oapi_spec.name == service
 #     assert oapi_spec.api_spec['schemes'] == ['https']
-#     core_spec = oapi_spec.get_spec()
+#     core_spec = oapi_spec.get_bravado_spec()
 #     assert core_spec.origin_url==idm_cfg.rest_endpoint
 #     assert oapi_spec.rest_endpoint==idm_cfg.rest_endpoint
 #
@@ -150,7 +150,7 @@ def test_eqality(test_equality_setup):
 #     assert oapi_spec.api_spec['schemes'] == ['https']
 #     assert oapi_spec.from_url==True
 #
-#     core_spec = oapi_spec.get_spec(rest_endpoint=idm_cfg.rest_endpoint)
+#     core_spec = oapi_spec.get_bravado_spec(rest_endpoint=idm_cfg.rest_endpoint)
 #     assert core_spec.origin_url==idm_cfg.rest_endpoint
 #     assert core_spec.spec_dict['info']['title']==service
 #

@@ -1,7 +1,11 @@
 [open_api]
-api_catalog_name  = 'open_api_catalog'
-api_catalog_dir: Path =  'opt/open_api_catalog'
+__doc__ = "API catalog"
 
+[open_api.open_api_spec_catalog]
+name  = 'open_api_spec_catalog'
+api_catalog_dir: Path =  'opt/open_api_catalog'
+json_export_indent_spaces: int = 2
 
 [open_api.export]
 export_dir: Path =  'var/open_api_catalog'
+

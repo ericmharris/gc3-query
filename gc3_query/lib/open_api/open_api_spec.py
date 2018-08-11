@@ -18,6 +18,7 @@
 import sys, os
 from copy import deepcopy
 from functools import total_ordering
+import json
 
 ################################################################################
 ## Third-Party Imports
@@ -30,7 +31,6 @@ from bravado.swagger_model import load_file, load_url
 from gc3_query.lib import *
 from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
 from gc3_query.lib.signatures import GC3Type, GC3VersionedType, GC3VersionTypedMixin
-from .spec_overlays import SpecOverlayBase
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
@@ -69,11 +69,20 @@ class OpenApiSpec(GC3VersionTypedMixin):
         self.kwargs = kwargs
         #  The ultimate form of the Spec depends on the specific REST Endpoint of a given IDM domain which differs from the API Catalog.
         self.rest_endpoint = kwargs.get('rest_endpoint', None)
+        if not self.rest_endpoint:
+            self.rest_endpoint = idm_cfg['rest_endpoint'] if idm_cfg else self.rest_endpoint
 
-        self.spec_file_path = OPEN_API_CATALOG_DIR.joinpath(api_catalog_config.api_catalog_name).joinpath(service_cfg.service_name)
+        self.spec_dir_path = OPEN_API_CATALOG_DIR.joinpath(api_catalog_config.api_catalog_name).joinpath(service_cfg.service_name)
+        self.spec_file_path = self.spec_dir_path.joinpath(f"{service_cfg.service_name}.json")
+        self.spec_export_dir_path = BASE_DIR.joinpath('var/open_api_catalog', api_catalog_config.api_catalog_name, service_cfg.service_name)
+        _debug(f"self.spec_dir_path={self.spec_dir_path}\nself.spec_file_path={self.spec_file_path}\nself.spec_export_dir_path={self.spec_export_dir_path}")
+
         self._spec_dict = self.load_spec(from_url=from_url)
         self._api_spec_dict = self.create_api_spec(spec_dict=self._spec_dict)
         self.api_spec = NestedOrderedDictAttrListBase(mapping=self._api_spec_dict)
+        if not self.spec_file_path.exists():
+            _warning(f"Spec file not found in catalog, saving to {self.spec_file_path}")
+            self.save_spec_to_catalog()
         _debug(f"{self.name} created")
 
         # self.gc3_type = GC3Type(name=__class__.__name__,
@@ -91,11 +100,21 @@ class OpenApiSpec(GC3VersionTypedMixin):
             spec_dict: dict = load_url(spec_url=spec_url)
             self.from_url = True
         else:
+            if not self.spec_file_path.exists():
+                _warning(f"Spec file not found: {self.spec_file_path}!\nAttempting to load it from the API Catalog")
+                return self.load_spec(from_url=True)
             spec_file_path = str(self.spec_file_path)
             spec_dict: dict = load_file(spec_file=spec_file_path)
             self.from_url = False
         return spec_dict
 
+
+    def save_spec_to_catalog(self, overwrite: bool = False) -> Path:
+        _debug(f"Saving spec to self.spec_file_path={self.spec_file_path}")
+        if self.spec_file_path.exists() and not overwrite:
+            raise RuntimeError(f"Can not save with overwrite={overwrite}, spec file already exists!")
+        json.dump(obj=self._spec_dict, fp=self.spec_file_path.open('w'), indent=gc3_cfg.open_api.open_api_spec_catalog.json_export_indent_spaces)
+        return self.spec_file_path
 
 
 
@@ -109,7 +128,12 @@ class OpenApiSpec(GC3VersionTypedMixin):
         spec_dict['schemes'] = ['https']
         return spec_dict
 
-    def get_spec(self, rest_endpoint: Union[str, None] = None) -> Spec:
+    def get_bravado_spec(self, rest_endpoint: Union[str, None] = None) -> Spec:
+        """
+
+        :param rest_endpoint:
+        :return:
+        """
         rest_endpoint = rest_endpoint if rest_endpoint else self.rest_endpoint
         if not rest_endpoint:
             raise RuntimeError("rest_endpoint not provided in either method call or in **wkargs={self.kwargs}")
@@ -167,6 +191,18 @@ class OpenApiSpec(GC3VersionTypedMixin):
         return operation_ids_d
 
 
+    def export(self) -> List[Path]:
+        exported_file_paths: List[Path] = []
+        export_formats = ['json', 'yaml', 'toml']
+        export_paths = {export_format:self.spec_export_dir_path.joinpath(f"{self.name}.{export_format}") for export_format in export_formats}
+        _debug(f"export_formats={export_formats}, export_paths={export_paths}")
+        if not self.spec_export_dir_path.exists():
+            _warning(f"spec_export_dir_path={self.spec_export_dir_path} did not exist, attempting to create.")
+            self.spec_export_dir_path.mkdir()
+        for f,p in export_paths.items():
+            exported_file_path = self.api_spec.export(file_path=p, format=f, overwrite=True)
+            exported_file_paths.append(exported_file_path)
+        return exported_file_paths
 
     # def __eq__(self, other):
     #     same_title = self.title==other.title

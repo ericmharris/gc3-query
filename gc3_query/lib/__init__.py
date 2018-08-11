@@ -15,4 +15,4 @@ gc3_cfg = GC3Config()
 
 BASE_DIR: Path = Path(__file__).parent.parent
 CONFIG_DIR: Path = BASE_DIR.joinpath(gc3_cfg.atoml.config_dir)
-OPEN_API_CATALOG_DIR: Path = BASE_DIR.joinpath(gc3_cfg.open_api.api_catalog_dir)
+OPEN_API_CATALOG_DIR: Path = BASE_DIR.joinpath(gc3_cfg.open_api.open_api_spec_catalog.api_catalog_dir)

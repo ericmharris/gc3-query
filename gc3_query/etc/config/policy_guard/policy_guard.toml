@@ -1,0 +1,4 @@
+
+[policy_guard.__init__]
+__doc__ = 'Policy checker for gc3'
+
