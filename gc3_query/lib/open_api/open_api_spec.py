@@ -88,6 +88,8 @@ class OpenApiSpec(GC3VersionTypedMixin):
         self.spec_archive_dir_path = self.spec_dir_path.joinpath(gc3_cfg.open_api.open_api_spec_catalog.archive_dir)
         self.spec_archive_file_name = gc3_cfg.open_api.open_api_spec_catalog.archive_file_format.format(name=self.name, version=self.version)
         self.spec_archive_file_path = self.spec_archive_dir_path.joinpath(self.spec_archive_file_name)
+        if not self.spec_archive_file_path.exists():
+            archived_path = self.archive_spec_to_catalog()
         _debug(f"{self.name} created")
 
         # self.gc3_type = GC3Type(name=__class__.__name__,

@@ -17,8 +17,13 @@ mongodb-for-python-for-developers
 
 lib/
 lib64/
-var/
+#var/
 gc3_query/var/*.zip
+gc3_query/var/bookstore
+gc3_query/var/mongodb*
+gc3_query/var/config
+gc3_query/var/api_specs
+gc3_query/var/scratchpad
 gc3_query/opt/scripts/key_store
 
 # Package subdirs
@@ -97,3 +102,5 @@ target/
 /gc3_query/opt/reference/bravado_10.1.0
 /gc3_query/opt/reference/bravado_core_5.0.4
 /tests/iaas_classic/**/output
+!/gc3_query/var/open_api_catalog/**
+!/gc3_query/**/open_api_catalog
