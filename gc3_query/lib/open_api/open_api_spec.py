@@ -82,7 +82,8 @@ class OpenApiSpec(GC3VersionTypedMixin):
         self.api_spec = NestedOrderedDictAttrListBase(mapping=self._api_spec_dict)
         if not self.spec_file_path.exists():
             _warning(f"Spec file not found in catalog, saving to {self.spec_file_path}")
-            self.save_spec_to_catalog()
+            saved_path = self.save_spec_to_catalog()
+            exported_paths = self.export()
         _debug(f"{self.name} created")
 
         # self.gc3_type = GC3Type(name=__class__.__name__,
@@ -113,6 +114,9 @@ class OpenApiSpec(GC3VersionTypedMixin):
         _debug(f"Saving spec to self.spec_file_path={self.spec_file_path}")
         if self.spec_file_path.exists() and not overwrite:
             raise RuntimeError(f"Can not save with overwrite={overwrite}, spec file already exists!")
+        if not self.spec_dir_path.exists():
+            _warning(f"spec_dir_path={self.spec_dir_path} did not already exist, attempting to create.")
+            self.spec_dir_path.mkdir()
         json.dump(obj=self._spec_dict, fp=self.spec_file_path.open('w'), indent=gc3_cfg.open_api.open_api_spec_catalog.json_export_indent_spaces)
         return self.spec_file_path
 
