@@ -33,28 +33,17 @@ _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
 
-class OracleApiSpecOverlay(NestedOrderedDictAttrListBase):
+class OracleApiSpecOverlay():
     """A dict of updates that are applied to correct mistakes in a OpenApiSpec. (eg. spec_dict['schemes'] = ['https'])
 
     """
 
     def __init__(self, open_api_spec: OpenApiSpec, overlays_spec_dict: DictStrAny=None):
-        super().__init__(mapping=overlays_spec_dict)
         self.open_api_spec = open_api_spec
-        self['schemes'] = ['https']
-
-
-
-    def overlay_spec_dict(self, spec_dict: DictStrAny) -> DictStrAny:
-        """Return a copy of spec_dict with corrections applied/overlayed
-
-        :param spec_dict:
-        :return:
-        """
-        spec_dict_copy = deepcopy(spec_dict)
-        return self.update(spec_dict_copy.update(self))
-
-
+        self.spec_dir_path = OPEN_API_CATALOG_DIR.joinpath(open_api_spec.api_catalog_config.api_catalog_name).joinpath(open_api_spec.service_cfg.service_name)
+        self.spec_overlay_file_path = self.spec_dir_path.joinpath(f"{service_cfg.service_name}_overlay.json")
+        self.overlays_spec_dict = NestedOrderedDictAttrListBase(mapping=overlays_spec_dict)
+        self.overlays_spec_dict['schemes'] = ['https']
 
 
     def apply_overlays(self, overlay_spec_dict):
@@ -63,3 +52,4 @@ class OracleApiSpecOverlay(NestedOrderedDictAttrListBase):
         :param overlay_spec_dict:
         :return:
         """
+        pass
