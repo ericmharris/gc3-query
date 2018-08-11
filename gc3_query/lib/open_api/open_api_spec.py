@@ -76,14 +76,18 @@ class OpenApiSpec(GC3VersionTypedMixin):
         self.spec_file_path = self.spec_dir_path.joinpath(f"{service_cfg.service_name}.json")
         self.spec_export_dir_path = BASE_DIR.joinpath('var/open_api_catalog', api_catalog_config.api_catalog_name, service_cfg.service_name)
         _debug(f"self.spec_dir_path={self.spec_dir_path}\nself.spec_file_path={self.spec_file_path}\nself.spec_export_dir_path={self.spec_export_dir_path}")
-
         self._spec_dict = self.load_spec(from_url=from_url)
         self._api_spec_dict = self.create_api_spec(spec_dict=self._spec_dict)
         self.api_spec = NestedOrderedDictAttrListBase(mapping=self._api_spec_dict)
+
         if not self.spec_file_path.exists():
             _warning(f"Spec file not found in catalog, saving to {self.spec_file_path}")
             saved_path = self.save_spec_to_catalog()
             exported_paths = self.export()
+
+        self.spec_archive_dir_path = self.spec_dir_path.joinpath(gc3_cfg.open_api.open_api_spec_catalog.archive_dir)
+        self.spec_archive_file_name = gc3_cfg.open_api.open_api_spec_catalog.archive_file_format.format(name=self.name, version=self.version)
+        self.spec_archive_file_path = self.spec_archive_dir_path.joinpath(self.spec_archive_file_name)
         _debug(f"{self.name} created")
 
         # self.gc3_type = GC3Type(name=__class__.__name__,
@@ -120,6 +124,15 @@ class OpenApiSpec(GC3VersionTypedMixin):
         json.dump(obj=self._spec_dict, fp=self.spec_file_path.open('w'), indent=gc3_cfg.open_api.open_api_spec_catalog.json_export_indent_spaces)
         return self.spec_file_path
 
+    def archive_spec_to_catalog(self) -> Path:
+        _debug(f"Archiving spec to self.spec_archive_file_path={self.spec_archive_file_path}")
+        if self.spec_archive_file_path.exists():
+            return self.spec_archive_file_path
+        if not self.spec_archive_dir_path.exists():
+            _warning(f"spec_archive_dir_path={self.spec_archive_dir_path} did not already exist, attempting to create.")
+            self.spec_archive_dir_path.mkdir()
+        json.dump(obj=self._spec_dict, fp=self.spec_archive_file_path.open('w'), indent=gc3_cfg.open_api.open_api_spec_catalog.json_export_indent_spaces)
+        return self.spec_archive_file_path
 
 
     def create_api_spec(self, spec_dict: DictStrAny) -> DictStrAny:
