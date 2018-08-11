@@ -37,7 +37,6 @@ _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
 class SecRules(IaaSServiceBase):
-    service_name = 'SecRules'
 
     def __init__(self, service_cfg: Dict[str, Any], idm_cfg: Dict[str, Any], http_client: IaaSRequestsHTTPClient = None,
                  from_url: bool = False, storage_delegates: List[str] = None, **kwargs: Dict[str, Any]):

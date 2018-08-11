@@ -151,9 +151,10 @@ def test_equality(test_equality_setup):
     instances_service: str = 'Instances'
     gc3_config = GC3Config(atoml_config_dir=config_dir)
     idm_cfg = gc3_config.idm.domains[idm_domain]
-    service_cfg = gc3_config.iaas_classic.services[instances_service]
+    instances_service_cfg = gc3_config.iaas_classic.services[instances_service]
     api_catalog_config = gc3_config.iaas_classic.api_catalog
-    instances_oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg, idm_cfg=idm_cfg)
+    instances_oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=instances_service_cfg, idm_cfg=idm_cfg)
+    instances_oapi_spec_2 = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=instances_service_cfg, idm_cfg=idm_cfg)
     assert instances_oapi_spec.name == instances_service
     assert instances_oapi_spec.api_spec['schemes'] == ['https']
     assert instances_oapi_spec.title==instances_service
@@ -161,9 +162,19 @@ def test_equality(test_equality_setup):
     secrules_service: str = 'SecRules'
     gc3_config = GC3Config(atoml_config_dir=config_dir)
     idm_cfg = gc3_config.idm.domains[idm_domain]
-    service_cfg = gc3_config.iaas_classic.services[secrules_service]
+    sec_rules_service_cfg = gc3_config.iaas_classic.services[secrules_service]
     api_catalog_config = gc3_config.iaas_classic.api_catalog
-    instances_oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg, idm_cfg=idm_cfg)
-    assert instances_oapi_spec.name == secrules_service
-    assert instances_oapi_spec.api_spec['schemes'] == ['https']
-    assert instances_oapi_spec.title==secrules_service
+    sec_rules_oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=sec_rules_service_cfg, idm_cfg=idm_cfg)
+    assert sec_rules_oapi_spec.name == secrules_service
+    assert sec_rules_oapi_spec.api_spec['schemes'] == ['https']
+    assert sec_rules_oapi_spec.title==secrules_service
+
+    assert instances_oapi_spec==instances_oapi_spec_2
+    assert sec_rules_oapi_spec!=instances_oapi_spec
+    assert sec_rules_oapi_spec!=instances_oapi_spec_2
+
+
+
+
+
+

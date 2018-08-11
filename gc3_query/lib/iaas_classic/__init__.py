@@ -15,7 +15,7 @@
 
 ################################################################################
 ## Standard Library Imports
-from functools import partialmethod, partial
+from functools import partialmethod, partial, total_ordering
 
 ################################################################################
 ## Third-Party Imports
@@ -33,7 +33,7 @@ from gc3_query.lib.iaas_classic.iaas_requests_http_client import IaaSRequestsHTT
 from gc3_query.lib.iaas_classic.iaas_swagger_client import IaaSSwaggerClient
 from gc3_query.lib.utils import camelcase_to_snake
 from gc3_query.lib.base_collections import OrderedDictAttrBase
-from gc3_query.lib.signatures import GC3Type, GC3VersionedType
+from gc3_query.lib.signatures import GC3VersionTypedMixin
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
@@ -41,7 +41,7 @@ API_SPECS_DIR = BASE_DIR.joinpath('lib/iaas_classic/api_specs')
 MONGODB_MODELS_DIR = BASE_DIR.joinpath('lib/iaas_classic/models')
 
 
-class IaaSServiceBase:
+class IaaSServiceBase(GC3VersionTypedMixin):
     idm_cfg: Dict[str, Any]
     service_cfg: Dict[str, Any]
     from_url: bool
@@ -65,7 +65,9 @@ class IaaSServiceBase:
         self.service_cfg = service_cfg
         self.idm_cfg = idm_cfg
         self.kwargs = kwargs
-        self._service_name = service_cfg['service_name']
+        self.service_name = service_cfg['service_name']
+
+
         # self.http_client = http_client if http_client else \
         #     IaaSRequestsHTTPClient(idm_cfg=self.idm_cfg, skip_authentication=self.kwargs.get('skip_authentication', False))
 
@@ -124,7 +126,7 @@ class IaaSServiceBase:
         #                                  class_type=__class__,
         #                                  version=self.api_spec.version)
 
-        _debug(f"{self.__class__.__name__} created")
+        _debug(f"{self.name} created")
 
     @property
     def api_spec(self) -> str:
@@ -133,6 +135,25 @@ class IaaSServiceBase:
         spec_dict = load_file(spec_file_path)
         spec_dict['schemes'].append('https')
         return spec_dict
+
+    @property
+    def name(self):
+        return self.service_name
+
+    @property
+    def version(self) -> Union[Dict[str, Any], None, str]:
+        if self.kwargs.get('mock_version', False):
+            return self.kwargs.get('mock_version')
+        return self.api_spec['info']['version']
+
+    @property
+    def description(self) -> str:
+        return self.descr
+
+    @property
+    def descr(self) -> str:
+        descr = self.api_spec['info']['description']
+        return descr
 
     def populate_service_operations(self, service_operations: ResourceDecorator) -> OrderedDictAttrBase:
         """Return container of callable operations with names converted from camel to python/snake-case

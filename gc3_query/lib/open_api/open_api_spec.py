@@ -17,6 +17,7 @@
 ## Standard Library Imports
 import sys, os
 from copy import deepcopy
+from functools import total_ordering
 
 ################################################################################
 ## Third-Party Imports
@@ -28,7 +29,7 @@ from bravado.swagger_model import load_file, load_url
 ## Project Imports
 from gc3_query.lib import *
 from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
-from gc3_query.lib.signatures import GC3Type, GC3VersionedType
+from gc3_query.lib.signatures import GC3Type, GC3VersionedType, GC3VersionTypedMixin
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
@@ -52,8 +53,7 @@ class OperationIdDescr():
 
 
 
-
-class OpenApiSpec():
+class OpenApiSpec(GC3VersionTypedMixin):
 
     def __init__(self, api_catalog_config: DictStrAny,
                  service_cfg: Dict[str, Any],
@@ -73,14 +73,15 @@ class OpenApiSpec():
         self._spec_dict = self.load_spec(from_url=from_url)
         self._api_spec = self.create_api_spec(spec_dict=self._spec_dict)
         self.api_spec = NestedOrderedDictAttrListBase(mapping=self._api_spec)
+        _debug(f"{self.name} created")
 
-        self.gc3_type = GC3Type(name=__class__.__name__,
-                                         descr="OpenApiSpec is a wrapper around bravado.Spec for Oracle Cloud.",
-                                         class_type=__class__)
-
-        self.gc3_vtype = GC3VersionedType(name=__class__.__name__,
-                           descr="OpenApiSpec is a wrapper around bravado.Spec for Oracle Cloud.",
-                           class_type=__class__, version=self.version)
+        # self.gc3_type = GC3Type(name=__class__.__name__,
+        #                                  descr="OpenApiSpec is a wrapper around bravado.Spec for Oracle Cloud.",
+        #                                  class_type=__class__)
+        #
+        # self.gc3_vtype = GC3VersionedType(name=__class__.__name__,
+        #                    descr="OpenApiSpec is a wrapper around bravado.Spec for Oracle Cloud.",
+        #                    class_type=__class__, version=self.version)
 
     def load_spec(self, from_url: bool) -> DictStrAny:
         if from_url:
@@ -120,10 +121,16 @@ class OpenApiSpec():
 
     @property
     def version(self) -> str:
+        if self.kwargs.get('mock_version', False):
+            return self.kwargs.get('mock_version')
         return self.api_spec.info.version
 
     @property
     def description(self) -> str:
+        return self.api_spec.info.description
+
+    @property
+    def descr(self) -> str:
         return self.api_spec.info.description
 
 
@@ -160,8 +167,10 @@ class OpenApiSpec():
 
 
 
-    def __eq__(self, other):
-        same_title = self.title==other.title
-        same_version = self.version==other.version
+    # def __eq__(self, other):
+    #     same_title = self.title==other.title
+    #     same_version = self.version==other.version
+    #     is_eq = all([same_title, same_version])
+    #     return is_eq
 
 

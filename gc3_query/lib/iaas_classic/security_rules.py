@@ -37,7 +37,6 @@ _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
 class SecurityRules(IaaSServiceBase):
-    service_name = 'SecurityRules'
 
     def __init__(self,
                  service_cfg: Dict[str, Any],
