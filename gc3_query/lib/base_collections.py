@@ -38,6 +38,8 @@ from gc3_query.lib.gc3logging import get_logging
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
+DEFAULT_INDENT = 4
+DEFAULT_FLOW_STYLE = False
 
 class ListBase(MutableSequence):
     """A container for manipulating lists of hosts"""
@@ -387,16 +389,17 @@ class NestedOrderedDictAttrListBase(OrderedDictAttrBase):
     def __repr__(self):
         return "{0}()".format(type(self))
 
-    def export(self, file_path: Path, format: str = 'toml', overwrite: bool = False)->Path:
+    def export(self, file_path: Path, format: str = 'toml', overwrite: bool = False, export_formatting: DictStrAny=None)->Path:
         assert file_path.parent.exists()
+        default_flow_style = export_formatting.get('default_flow_style', DEFAULT_FLOW_STYLE) if export_formatting else DEFAULT_FLOW_STYLE
+        indent = export_formatting.get('indent', DEFAULT_INDENT) if export_formatting else DEFAULT_INDENT
         if file_path.exists() and not overwrite:
             raise RuntimeError(f"File already exists! file_path={file_path}, overwrite={overwrite}")
-        fd = file_path.open('w')
-        if format is 'toml':
-            toml.dump(self._serializable, fd)
-        if format is 'yaml':
-            yaml.dump(self._serializable, fd, default_flow_style=False, indent=4)
-        if format is 'json':
-            json.dump(self._serializable, fd, indent=4)
-        fd.close()
+        with file_path.open('w') as fd:
+            if format=='toml':
+                toml.dump(self._serializable, fd)
+            if format=='yaml':
+                yaml.dump(self._serializable, fd, default_flow_style=default_flow_style, indent=indent)
+            if format=='json':
+                json.dump(self._serializable, fd, indent=indent)
         return file_path

@@ -49,6 +49,7 @@ aliases['Ghvs'] = r'cd $DEVEL_DIR/gc3-query/gc3_query/var/scratchpad'
 aliases['GA'] = r'gc3atoml'
 aliases['GAp'] = r'gc3atoml print'
 aliases['GAe'] = r'gc3atoml export'
+aliases['GAee'] = r'gc3atoml export --editor'
 
 
 

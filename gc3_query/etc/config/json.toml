@@ -1,2 +1,4 @@
 [json]
-export_indentations = 4
+[json.export]
+[json.export.formatting]
+indent = 4

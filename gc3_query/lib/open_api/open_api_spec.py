@@ -31,7 +31,7 @@ from bravado.swagger_model import load_file, load_url
 from gc3_query.lib import *
 from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
 from gc3_query.lib.signatures import GC3Type, GC3VersionedType, GC3VersionTypedMixin
-from .spec_overlays import OracleApiSpecOverlay
+from .open_api_spec_overlay import OpenApiSpecOverlay
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
@@ -75,10 +75,11 @@ class OpenApiSpec(GC3VersionTypedMixin):
 
         self.spec_dir_path = OPEN_API_CATALOG_DIR.joinpath(api_catalog_config.api_catalog_name).joinpath(service_cfg.service_name)
         self.spec_file_path = self.spec_dir_path.joinpath(f"{service_cfg.service_name}.json")
-        self.json_spec_overlay_path = self.spec_dir_path.joinpath(f"{service_cfg.service_name}_overlay.json")
-        self.yaml_spec_overlay_path = self.spec_dir_path.joinpath(f"{service_cfg.service_name}_overlay.yaml")
-        self.toml_spec_overlay_path = self.spec_dir_path.joinpath(f"{service_cfg.service_name}_overlay.toml")
-        self.python_spec_overlay_path = self.spec_dir_path.joinpath(f"{service_cfg.service_name}_overlay.py")
+
+        self.spec_overlay_format = gc3_cfg.open_api.open_api_spec_overlay.spec_overlay_format
+        self.spec_overlay_export_formatting = gc3_cfg[self.spec_overlay_format]['export']['formatting']
+        self.spec_overlay_path = self.spec_dir_path.joinpath(f"{service_cfg.service_name}_overlay.{self.spec_overlay_format}")
+
         self.spec_export_dir_path = BASE_DIR.joinpath('var/open_api_catalog', api_catalog_config.api_catalog_name, service_cfg.service_name)
         _debug(f"self.spec_dir_path={self.spec_dir_path}\nself.spec_file_path={self.spec_file_path}\nself.spec_export_dir_path={self.spec_export_dir_path}")
         self._spec_dict = self.load_spec(from_url=from_url)
@@ -87,18 +88,24 @@ class OpenApiSpec(GC3VersionTypedMixin):
 
         if not self.spec_file_path.exists():
             _warning(f"Spec file not found in catalog, saving to {self.spec_file_path}")
-            saved_path = self.save_spec_to_catalog()
+            saved_path = self.save_spec()
             exported_paths = self.export()
 
-        if not self.json_spec_overlay_path.exists():
+        if not self.spec_overlay_path.exists():
             _warning(f"Spec overlay file not found in catalog, saving to {self.spec_file_path}")
-            saved_path = self.save_spec_to_catalog()
+            saved_path = self.save_spec_overlay()
 
         self.spec_archive_dir_path = self.spec_dir_path.joinpath(gc3_cfg.open_api.open_api_spec_catalog.archive_dir)
         self.spec_archive_file_name = gc3_cfg.open_api.open_api_spec_catalog.archive_file_format.format(name=self.name, version=self.version)
         self.spec_archive_file_path = self.spec_archive_dir_path.joinpath(self.spec_archive_file_name)
+
+        self.spec_overlay_archive_dir_path = self.spec_dir_path.joinpath(gc3_cfg.open_api.open_api_spec_catalog.archive_dir)
+        self.spec_overlay_archive_path = self.spec_overlay_archive_dir_path.joinpath(f"{service_cfg.service_name}_overlay_{self.version}.{self.spec_overlay_format}")
+
         if not self.spec_archive_file_path.exists():
             archived_path = self.archive_spec_to_catalog()
+        if not self.spec_overlay_archive_path.exists():
+            archived_path = self.archive_spec_overlay_to_catalog()
         _debug(f"{self.name} created")
 
         # self.gc3_type = GC3Type(name=__class__.__name__,
@@ -125,36 +132,45 @@ class OpenApiSpec(GC3VersionTypedMixin):
         return spec_dict
 
 
-    def save_spec_to_catalog(self, overwrite: bool = False) -> Path:
-        _debug(f"Saving spec to self.spec_file_path={self.spec_file_path}")
-        if self.spec_file_path.exists() and not overwrite:
-            raise RuntimeError(f"Can not save with overwrite={overwrite}, spec file already exists!")
+    def save_spec(self, file_path=None, overwrite: bool = False) -> Path:
+        spec_file_path = file_path if file_path else self.spec_file_path
+        if not spec_file_path.parent.exists():
+            spec_file_path.parent.mkdir()
+        _debug(f"Saving spec to spec_file_path={spec_file_path}")
+        if spec_file_path.exists() and not overwrite:
+            _warning(f"spec_file_path={spec_file_path} already exists and overwrite={overwrite}, leaving unchanged")
         if not self.spec_dir_path.exists():
             _warning(f"spec_dir_path={self.spec_dir_path} did not already exist, attempting to create.")
             self.spec_dir_path.mkdir()
-        json.dump(obj=self._spec_dict, fp=self.spec_file_path.open('w'), indent=gc3_cfg.open_api.open_api_spec_catalog.json_export_indent_spaces)
-        return self.spec_file_path
+        try:
+            json.dump(obj=self._spec_dict, fp=spec_file_path.open('w'), indent=gc3_cfg.open_api.open_api_spec_catalog.json_export_indent_spaces)
+        except Exception as e:
+            _error(e)
+        return spec_file_path
 
-    def save_spec_overlays_to_catalog(self, overwrite: bool = False) -> Path:
-        _debug(f"Saving spec to self.spec_file_path={self.spec_file_path}")
-        if self.spec_file_path.exists() and not overwrite:
-            raise RuntimeError(f"Can not save with overwrite={overwrite}, spec file already exists!")
+    def save_spec_overlay(self, file_path: Path = None, overwrite: bool = False) -> Path:
+        spec_overlay_path = file_path if file_path else self.spec_overlay_path
+        if not spec_overlay_path.parent.exists():
+            spec_overlay_path.parent.mkdir()
+        _debug(f"Saving spec to spec_overlay_path={spec_overlay_path}")
+        if spec_overlay_path.exists() and not overwrite:
+            _warning(f"spec_overlay_path={spec_overlay_path} already exists and overwrite={overwrite}, leaving unchanged")
+            return spec_overlay_path
         if not self.spec_dir_path.exists():
             _warning(f"spec_dir_path={self.spec_dir_path} did not already exist, attempting to create.")
             self.spec_dir_path.mkdir()
-        json.dump(obj=self._spec_dict, fp=self.spec_file_path.open('w'), indent=gc3_cfg.open_api.open_api_spec_catalog.json_export_indent_spaces)
-        return self.spec_file_path
+        export_path = self.api_spec.export(file_path=spec_overlay_path, format=self.spec_overlay_format, overwrite=overwrite, export_formatting=self.spec_overlay_export_formatting)
+        return export_path
 
     def archive_spec_to_catalog(self) -> Path:
         _debug(f"Archiving spec to self.spec_archive_file_path={self.spec_archive_file_path}")
-        if self.spec_archive_file_path.exists():
-            return self.spec_archive_file_path
-        if not self.spec_archive_dir_path.exists():
-            _warning(f"spec_archive_dir_path={self.spec_archive_dir_path} did not already exist, attempting to create.")
-            self.spec_archive_dir_path.mkdir()
-        json.dump(obj=self._spec_dict, fp=self.spec_archive_file_path.open('w'), indent=gc3_cfg.open_api.open_api_spec_catalog.json_export_indent_spaces)
-        return self.spec_archive_file_path
+        spec_archive_file_path = self.save_spec(file_path=self.spec_archive_file_path)
+        return spec_archive_file_path
 
+    def archive_spec_overlay_to_catalog(self) -> Path:
+        _debug(f"Archiving spec overlay to self.spec_archive_file_path={self.spec_overlay_archive_path}")
+        spec_overlay_archive_path = self.save_spec_overlay(file_path=self.spec_overlay_archive_path)
+        return spec_overlay_archive_path
 
     def create_api_spec(self, spec_dict: DictStrAny) -> DictStrAny:
         """Returns a new spec_dict that sucks less

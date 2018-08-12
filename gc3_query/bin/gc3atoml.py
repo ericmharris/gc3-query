@@ -88,16 +88,16 @@ def print(ctx: click.core.Context) -> None:
 
 
 @cli.command(help="Export TOML to var/config_data.py", short_help="ATOML export ", epilog="export ATOML ")
-@click.option("--open-in-editor", "-e", help="Open exported file using the first hit found in user.windows_editors/or linux_editors",
+@click.option("--editor", "-e", help="Open exported file using the first hit found in user.windows_editors/or linux_editors",
               default=False, is_flag=True)
 @click.pass_context
-def export(ctx: click.core.Context, open_in_editor: bool = False) -> None:
+def export(ctx: click.core.Context, editor: bool = False) -> None:
     gc3_cfg = ctx.obj.gc3_cfg
     output_file = BASE_DIR.joinpath('var/config/config_data.py')
     with output_file.open('w') as fd:
         fd.write(pformat(gc3_cfg._serializable))
     click.echo(click.style(f"Config data written to {output_file}", fg="green"))
-    if open_in_editor:
+    if editor:
         found_editor = False
         if sys.platform.startswith('win'):
             editors = gc3_cfg.user.windows_editors

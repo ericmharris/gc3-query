@@ -11,3 +11,6 @@ archive_file_format: fstr = '{name}_{version}.json'
 [open_api.export]
 export_dir: Path =  'var/open_api_catalog'
 
+[open_api.open_api_spec_overlay]
+spec_overlay_format = 'toml'
+

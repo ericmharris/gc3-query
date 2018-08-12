@@ -13,7 +13,7 @@ from gc3_query.lib.iaas_classic import IaaSServiceBase, API_SPECS_DIR, IaaSReque
 from gc3_query.lib.iaas_classic.instances import Instances
 from gc3_query.lib.iaas_classic.sec_rules import SecRules
 from gc3_query.lib.open_api.open_api_spec import OpenApiSpec
-from gc3_query.lib.open_api.spec_overlays import OracleApiSpecOverlay
+from gc3_query.lib.open_api.open_api_spec_overlay import OpenApiSpecOverlay
 
 TEST_BASE_DIR: Path = Path(__file__).parent
 # config_dir = TEST_BASE_DIR.joinpath("config")
@@ -39,7 +39,7 @@ def test_init():
     service_cfg = gc3_config.iaas_classic.services[service]
     api_catalog_config = gc3_config.iaas_classic.api_catalog
     oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg)
-    oapi_spec_overlay = OracleApiSpecOverlay(open_api_spec=oapi_spec)
+    oapi_spec_overlay = OpenApiSpecOverlay(open_api_spec=oapi_spec)
     assert oapi_spec.name == service
 
 #
@@ -208,10 +208,10 @@ def test_init():
 #     if spec_file_path.exists():
 #         spec_file_path.unlink()
 #     assert not spec_file_path.exists()
-#     saved_path = oapi_spec.save_spec_to_catalog(overwrite=False)
+#     saved_path = oapi_spec.save_spec(overwrite=False)
 #     assert saved_path==spec_file_path
 #     saved_path_stat = saved_path.stat()
-#     saved_path = oapi_spec.save_spec_to_catalog(overwrite=True)
+#     saved_path = oapi_spec.save_spec(overwrite=True)
 #     assert saved_path_stat!=saved_path.stat()
 #
 #
@@ -257,5 +257,5 @@ def test_init():
 #     archive_path = oapi_spec.archive_spec_to_catalog()
 #     assert archive_path==spec_archive_file_path
 #     archive_path_stat = archive_path.stat()
-#     archive_path = oapi_spec.save_spec_to_catalog(overwrite=True)
+#     archive_path = oapi_spec.save_spec(overwrite=True)
 #     assert archive_path_stat!=archive_path.stat()

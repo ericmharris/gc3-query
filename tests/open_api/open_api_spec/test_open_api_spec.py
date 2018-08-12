@@ -1,5 +1,6 @@
 import pytest
 import toml
+import time
 from pathlib import Path
 # from pprint import pprint, pformat
 from prettyprinter import pprint, pformat
@@ -206,12 +207,45 @@ def test_save_spec_to_catalog():
     if spec_file_path.exists():
         spec_file_path.unlink()
     assert not spec_file_path.exists()
-    saved_path = oapi_spec.save_spec_to_catalog(overwrite=False)
+    saved_path = oapi_spec.save_spec(overwrite=False)
     assert saved_path==spec_file_path
+
+    fd = spec_file_path.open('w')
+    fd.close()
     saved_path_stat = saved_path.stat()
-    saved_path = oapi_spec.save_spec_to_catalog(overwrite=True)
+
+    saved_path = oapi_spec.save_spec(overwrite=True)
     assert saved_path_stat!=saved_path.stat()
 
+def test_save_spec_overlay_to_catalog():
+    idm_domain = 'gc30003'
+    service = 'Instances'
+    gc3_config = GC3Config(atoml_config_dir=config_dir)
+    idm_cfg = gc3_config.idm.domains[idm_domain]
+    service_cfg = gc3_config.iaas_classic.services[service]
+    api_catalog_config = gc3_config.iaas_classic.api_catalog
+    oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg, from_url=True)
+    assert oapi_spec.name == service
+    assert oapi_spec.api_spec['schemes'] == ['https']
+    assert oapi_spec.from_url==True
+    spec_overlay_path = oapi_spec.spec_overlay_path
+
+    if spec_overlay_path.exists():
+        spec_overlay_path.unlink()
+    assert not spec_overlay_path.exists()
+    saved_path = oapi_spec.save_spec_overlay(overwrite=False)
+    assert spec_overlay_path.exists()
+    assert saved_path==spec_overlay_path
+
+    fd = spec_overlay_path.open('w')
+    fd.close()
+
+    saved_spec_overlay_path_stat = spec_overlay_path.stat()
+    spec_overlay_path.touch()
+
+    saved_path = oapi_spec.save_spec_overlay(overwrite=True)
+    new_saved_spec_overlay_path_stat =  saved_path.stat()
+    assert saved_spec_overlay_path_stat!=new_saved_spec_overlay_path_stat
 
 def test_spec_file_not_found():
     idm_domain = 'gc30003'
@@ -255,5 +289,5 @@ def test_archive_spec_to_catalog():
     archive_path = oapi_spec.archive_spec_to_catalog()
     assert archive_path==spec_archive_file_path
     archive_path_stat = archive_path.stat()
-    archive_path = oapi_spec.save_spec_to_catalog(overwrite=True)
+    archive_path = oapi_spec.save_spec(overwrite=True)
     assert archive_path_stat!=archive_path.stat()

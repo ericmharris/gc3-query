@@ -30,7 +30,7 @@ from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
-class OracleApiSpecOverlay():
+class OpenApiSpecOverlay():
     """A dict of updates that are applied to correct mistakes in a OpenApiSpec. (eg. spec_dict['schemes'] = ['https'])
 
     """
