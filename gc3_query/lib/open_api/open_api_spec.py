@@ -31,6 +31,7 @@ from bravado.swagger_model import load_file, load_url
 from gc3_query.lib import *
 from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
 from gc3_query.lib.signatures import GC3Type, GC3VersionedType, GC3VersionTypedMixin
+from .spec_overlays import OracleApiSpecOverlay
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
