@@ -395,7 +395,7 @@ class NestedOrderedDictAttrListBase(OrderedDictAttrBase):
         if format is 'toml':
             toml.dump(self._serializable, fd)
         if format is 'yaml':
-            yaml.dump(self._serializable, fd)
+            yaml.dump(self._serializable, fd, default_flow_style=False, indent=4)
         if format is 'json':
             json.dump(self._serializable, fd, indent=4)
         fd.close()

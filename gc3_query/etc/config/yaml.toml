@@ -1,0 +1,3 @@
+[yaml]
+export_indentations = 4
+default_flow_style = false
