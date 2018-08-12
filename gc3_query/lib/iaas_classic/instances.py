@@ -48,18 +48,7 @@ class Instances(IaaSServiceBase):
                          **kwargs)
         _debug(f"{self.service_name} created using service_cfg: {self.service_cfg}")
 
-    def get_instance_name(self, name: str, swagger_client_config: DictStrAny = None) -> DictStrAny:
-        pass
 
-    # TODO:  need to be able to override call configuration
-    # swagger_client_config = {'validate_responses': True,
-    #           'validate_requests': True,
-    #           'validate_swagger_spec': True,
-    #           'use_models': True,
-    #           'include_missing_properties': True,
-    #           'default_type_to_object': False,
-    #           'internally_dereference_refs': False,
-    #           'also_return_response': True}
     def get_instance_details(self, name: str, swagger_client_config: DictStrAny = None) -> IaaSServiceResponse:
         """
 
@@ -72,48 +61,4 @@ class Instances(IaaSServiceBase):
         # http_response = service_response.incoming_response
         instance_details = IaaSServiceResponse(service_response=service_response)
         return instance_details
-
-    # @property
-    # @lru_cache(maxsize=1)
-    # def idm_root_container_name(self) -> str:
-    #     """
-    #
-    #     :return:
-    #     """
-    #     http_future = self.bravado_service_operations.discoverRootInstance(
-    #         _request_options={"headers": {"Accept": "application/oracle-compute-v3+directory+json"}})
-    #     request_url = http_future.future.request.url
-    #     service_response = http_future.response()
-    #     # result = service_response.result
-    #     # http_response = service_response.incoming_response
-    #     root_instance_result = service_response.incoming_response.json().get('result', None)
-    #     root_instance_name = root_instance_result[0] if root_instance_result else None
-    #     return root_instance_name.replace('/', '')
-
-    # @property
-    # def idm_root_container_name(self) -> str:
-    #     """
-    #
-    #     :return:
-    #     """
-    #     http_future = self.bravado_service_operations.discoverRootInstance(
-    #         _request_options={"headers": {"Accept": "application/oracle-compute-v3+directory+json"}})
-    #     request_url = http_future.future.request.url
-    #     service_response = http_future.response()
-    #     # result = service_response.result
-    #     # http_response = service_response.incoming_response
-    #     root_instance_result = service_response.incoming_response.json().get('result', None)
-    #     root_instance_name = root_instance_result[0] if root_instance_result else None
-    #     if root_instance_name[-1] is '/':
-    #         return root_instance_name[0:-1]
-    #     return root_instance_name
-
-
-    def get_all_instances_details(self) -> List[IaaSServiceResponse]:
-        root_container_name = self.idm_root_container_name
-        http_future = self.bravado_service_operations.listInstance(container=self.idm_root_container_name)
-        service_response = http_future.response()
-        result_json = service_response.incoming_response.json().get('result', None)
-        return
-
 

@@ -170,54 +170,6 @@ class InstanceModel(DynamicDocument):
         ],
     }
 
-    # def __init__(self, instance_details: IaaSServiceResponse, *args, **values):
-    #     _debug(f"{self.__class__.__name__}: created")
-    #     # super().__init__(**instance_details)
-    #     _fields = ['domain',
-    #                'placement_requirements',
-    #                'ip',
-    #                'fingerprint',
-    #                'image_metadata_bag',
-    #                'site',
-    #                'shape',
-    #                'imagelist',
-    #                'image_format',
-    #                'relationships',
-    #                'availability_domain',
-    #                'storage_attachments',
-    #                'hostname',
-    #                'quota_reservation',
-    #                'disk_attach',
-    #                'label',
-    #                'priority',
-    #                'platform',
-    #                'state',
-    #                'virtio',
-    #                'vnc',
-    #                'desired_state',
-    #                'tags',
-    #                'start_time',
-    #                'quota',
-    #                'entry',
-    #                'error_reason',
-    #                'sshkeys',
-    #                'resolvers',
-    #                'account',
-    #                'vcable_id',
-    #                'uri',
-    #                'reverse_dns',
-    #                'attributes',
-    #                #    'networking',
-    #                # 'metadata',
-    #                #    'hypervisor',
-    #                'boot_order',
-    #                'name'
-    #                ]
-    #
-    #     data = {k: v for k, v in instance_details.items() if k in _fields}
-    #     _debug(f'data={data}')
-    #     super().__init__(**data)
-    #     _debug('asdf')
 
     def __init__(self, data: DictStrAny, metadata: DictStrAny, embedded_data: DictStrAny, **kwargs):
         # kwargs['sec_rule_id'] = kwargs.pop('id')
