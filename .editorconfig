@@ -1,21 +1,35 @@
-# http://editorconfig.org
-
-root = true
-
 [*]
-indent_style = space
-indent_size = 4
-trim_trailing_whitespace = true
-insert_final_newline = true
-charset = utf-8
-end_of_line = lf
+charset=utf-8
+end_of_line=crlf
+insert_final_newline=false
+indent_style=space
+indent_size=4
 
-[*.bat]
-indent_style = tab
-end_of_line = crlf
+[{.babelrc,.stylelintrc,jest.config,.eslintrc,*.json,*.jsb3,*.jsb2,*.bowerrc}]
+indent_style=space
+indent_size=2
 
-[LICENSE]
-insert_final_newline = false
+[{*.jscs.json,*.jscsrc}]
+indent_style=space
+indent_size=2
 
-[Makefile]
-indent_style = tab
+[*.js.map]
+indent_style=space
+indent_size=2
+
+[{*.coffee,*.cjsx}]
+indent_style=space
+indent_size=2
+
+[*.less]
+indent_style=space
+indent_size=2
+
+[*.scss]
+indent_style=space
+indent_size=2
+
+[{*.yml,*.yaml}]
+indent_style=space
+indent_size=2
+
