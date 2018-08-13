@@ -88,6 +88,7 @@ class IaaSServiceBase(GC3VersionTypedMixin):
                                                     services_config=gc3_cfg.iaas_classic.services,
                                                     idm_cfg=self.idm_cfg,
                                                     from_url=from_url)
+        self.open_api_spec = self.oapi_spec_catalog[self.service_name]
         # if from_url:
         #     self._spec_url = f"{service_cfg.spec_furl}".format_map(service_cfg)
         #     _debug(f"self._spec_url={self._spec_url}")
@@ -110,7 +111,7 @@ class IaaSServiceBase(GC3VersionTypedMixin):
         # else:
         #     self.http_client = http_client if http_client else \
         #         IaaSRequestsHTTPClient(idm_cfg=self.idm_cfg, skip_authentication=self.kwargs.get('skip_authentication', False))
-        #     self.swagger_client = SwaggerClient.from_spec(spec_dict=self.api_spec,
+        #     self.swagger_client = SwaggerClient.from_spec(spec_dict=self.spec_dict,
         #                                                   origin_url=self.idm_cfg.rest_endpoint,
         #                                                   http_client=self.http_client,
         #                                                   # config=self.swagger_client_config
@@ -118,7 +119,7 @@ class IaaSServiceBase(GC3VersionTypedMixin):
 
 
         self.http_client = http_client if http_client else IaaSRequestsHTTPClient(idm_cfg=self.idm_cfg, skip_authentication=self.kwargs.get('skip_authentication', False))
-        self.swagger_client = SwaggerClient.from_spec(spec_dict=self.api_spec,
+        self.swagger_client = SwaggerClient.from_spec(spec_dict=self.spec_dict,
                                                       origin_url=self.idm_cfg.rest_endpoint,
                                                       http_client=self.http_client,
                                                       config=self.swagger_client_config
@@ -137,17 +138,14 @@ class IaaSServiceBase(GC3VersionTypedMixin):
         # self.gc3_type = GC3VersionedType(name=__class__.__name__,
         #                                  descr="OpenApiSpec is a wrapper around bravado.Spec for Oracle Cloud.",
         #                                  class_type=__class__,
-        #                                  version=self.api_spec.version)
+        #                                  version=self.spec_dict.version)
 
         _debug(f"{self.name} created")
 
     @property
-    def api_spec(self) -> str:
+    def spec_dict(self) -> str:
         """Returns Open API spec"""
-        spec_file_path = API_SPECS_DIR.joinpath(self.service_cfg.spec_file)
-        spec_dict = load_file(spec_file_path)
-        spec_dict['schemes'].append('https')
-        return spec_dict
+        return self.open_api_spec.spec_dict
 
     @property
     def name(self):
@@ -157,7 +155,7 @@ class IaaSServiceBase(GC3VersionTypedMixin):
     def version(self) -> Union[Dict[str, Any], None, str]:
         if self.kwargs.get('mock_version', False):
             return self.kwargs.get('mock_version')
-        return self.api_spec['info']['version']
+        return self.spec_dict['info']['version']
 
     @property
     def description(self) -> str:
@@ -165,7 +163,7 @@ class IaaSServiceBase(GC3VersionTypedMixin):
 
     @property
     def descr(self) -> str:
-        descr = self.api_spec['info']['description']
+        descr = self.spec_dict['info']['description']
         return descr
 
     def populate_service_operations(self, service_operations: ResourceDecorator) -> OrderedDictAttrBase:

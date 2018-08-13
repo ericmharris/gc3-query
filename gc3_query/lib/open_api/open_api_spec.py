@@ -80,9 +80,9 @@ class OpenApiSpec(GC3VersionTypedMixin):
 
         self.spec_export_dir_path = BASE_DIR.joinpath('var/open_api_catalog', api_catalog_config.api_catalog_name, service_cfg.service_name)
         _debug(f"self.spec_dir_path={self.spec_dir_path}\nself.spec_file_path={self.spec_file_path}\nself.spec_export_dir_path={self.spec_export_dir_path}")
-        self._spec_dict = self.load_spec(from_url=from_url)
-        self._api_spec_dict = self.create_api_spec(spec_dict=self._spec_dict)
-        self.api_spec = NestedOrderedDictAttrListBase(mapping=self._api_spec_dict)
+        self._not_overlaid_spec_dict = self.load_spec(from_url=from_url)
+        # self.spec_dict = self.create_api_spec(spec_dict=self._spec_dict)
+        self.api_spec = NestedOrderedDictAttrListBase(mapping=self._not_overlaid_spec_dict)
 
         if not self.spec_file_path.exists():
             _warning(f"Spec file not found in catalog, saving to {self.spec_file_path}")
@@ -98,7 +98,7 @@ class OpenApiSpec(GC3VersionTypedMixin):
             archived_path = self.archive_spec_to_catalog()
 
         self.api_spec_overlay = OpenApiSpecOverlay(open_api_spec=self, idm_cfg=self.idm_cfg)
-
+        self.api_spec.update(self.api_spec_overlay.overlays)
         _debug(f"{self.name} created")
 
 
@@ -131,7 +131,7 @@ class OpenApiSpec(GC3VersionTypedMixin):
             _warning(f"spec_dir_path={self.spec_dir_path} did not already exist, attempting to create.")
             self.spec_dir_path.mkdir()
         try:
-            json.dump(obj=self._spec_dict, fp=spec_file_path.open('w'), indent=gc3_cfg.open_api.open_api_spec_catalog.json_export_indent_spaces)
+            json.dump(obj=self._not_overlaid_spec_dict, fp=spec_file_path.open('w'), indent=gc3_cfg.open_api.open_api_spec_catalog.json_export_indent_spaces)
         except Exception as e:
             _error(e)
         return spec_file_path
@@ -143,15 +143,19 @@ class OpenApiSpec(GC3VersionTypedMixin):
         return spec_archive_file_path
 
 
-    def create_api_spec(self, spec_dict: DictStrAny) -> DictStrAny:
-        """Returns a new spec_dict that sucks less
-
-        :param spec_dict:
-        :return:
-        """
-        spec_dict = deepcopy(spec_dict)
-        spec_dict['schemes'] = ['https']
-        return spec_dict
+    # def create_api_spec(self, spec_dict: DictStrAny) -> DictStrAny:
+    #     """Returns a new spec_dict that sucks less
+    # 
+    #     :param spec_dict:
+    #     :return:
+    #     """
+    #     spec_dict = deepcopy(spec_dict)
+    #     spec_dict['schemes'] = ['https']
+    #     return spec_dict
+    
+    @property
+    def spec_dict(self):
+        return self.api_spec._serializable
 
     def get_bravado_spec(self, rest_endpoint: Union[str, None] = None) -> Spec:
         """
@@ -162,7 +166,7 @@ class OpenApiSpec(GC3VersionTypedMixin):
         rest_endpoint = rest_endpoint if rest_endpoint else self.rest_endpoint
         if not rest_endpoint:
             raise RuntimeError("rest_endpoint not provided in either method call or in **wkargs={self.kwargs}")
-        core_spec: Spec = Spec(spec_dict=self._api_spec_dict, origin_url=rest_endpoint, http_client=None, config=gc3_cfg.swagger_client_config)
+        core_spec: Spec = Spec(spec_dict=self.spec_dict, origin_url=rest_endpoint, http_client=None, config=gc3_cfg.swagger_client_config)
         return core_spec
 
     @property

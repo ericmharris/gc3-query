@@ -368,16 +368,40 @@ class NestedOrderedDictAttrListBase(OrderedDictAttrBase):
         self._serializable = dict()
 
         if mapping:
-            for k, v in mapping.items():
-                if isinstance(v, MutableSequence):
-                    self[k] = NestedConfigListBase(v)
-                    self._serializable[k] = list(v)
-                if isinstance(v, MutableMapping):
-                    self[k] = NestedOrderedDictAttrListBase(v)
-                    self._serializable[k] = dict(v)
+            for key, value in mapping.items():
+                if isinstance(value, MutableSequence):
+                    self[key] = NestedConfigListBase(value)
+                    self._serializable[key] = list(value)
+                if isinstance(value, MutableMapping):
+                    self[key] = NestedOrderedDictAttrListBase(value)
+                    self._serializable[key] = dict(value)
                 else:
-                    self[k] = v
-                    self._serializable[k] = v
+                    self[key] = value
+                    self._serializable[key] = value
+
+    def __setitem__(self, key, value):
+        # make sure we're storing the fqdn
+        super().__setitem__(key, value)
+        if isinstance(value, MutableSequence):
+            self._serializable[key] = list(value)
+        if isinstance(value, MutableMapping):
+            self._serializable[key] = dict(value)
+        else:
+            self._serializable[key] = value
+
+    def __delitem__(self, key):
+        super().__delitem__(key)
+        self._serializable.__delitem__(key)
+
+    def __iter__(self):
+        return iter(self._d)
+
+    def __getattr__(self, key):
+        return self._d[key]
+
+    # The next five methods are requirements of the ABC.
+    def __getitem__(self, key):
+        return self.__dict__[key]
 
 
     def __str__(self) -> str:
@@ -403,3 +427,5 @@ class NestedOrderedDictAttrListBase(OrderedDictAttrBase):
             if format=='json':
                 json.dump(self._serializable, fd, indent=indent)
         return file_path
+
+

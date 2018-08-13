@@ -50,7 +50,7 @@ def test_init():
 #     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
 #     oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg)
 #     assert oapi_spec.name == service
-#     assert oapi_spec.api_spec['schemes'] == ['https']
+#     assert oapi_spec.spec_dict['schemes'] == ['https']
 
 
 
