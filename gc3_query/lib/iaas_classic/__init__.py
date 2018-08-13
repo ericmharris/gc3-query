@@ -30,7 +30,7 @@ from gc3_query.lib import *
 from gc3_query.lib import gc3_cfg
 ## TODO: either change or add a snake_case function for camelCase
 from gc3_query.lib.iaas_classic.iaas_requests_http_client import IaaSRequestsHTTPClient
-from gc3_query.lib.iaas_classic.iaas_swagger_client import IaaSSwaggerClient
+from gc3_query.lib.iaas_classic.iaas_swagger_client import IaaSSwaggerClient, BRAVADO_CONFIG
 from gc3_query.lib.open_api.open_api_spec_catalog import OpenApiSpecCatalog
 from gc3_query.lib.utils import camelcase_to_snake
 from gc3_query.lib.base_collections import OrderedDictAttrBase
@@ -83,7 +83,7 @@ class IaaSServiceBase(GC3VersionTypedMixin):
         #           'default_type_to_object': False,
         #           'internally_dereference_refs': False,
         #           'also_return_response': True}
-        self.swagger_client_config = dict(gc3_cfg.swagger_client_config)
+        # self.swagger_client_config = gc3_cfg.swagger_client_config
         self.oapi_spec_catalog = OpenApiSpecCatalog(api_catalog_config=gc3_cfg.iaas_classic.open_api_spec_catalog,
                                                     services_config=gc3_cfg.iaas_classic.services,
                                                     idm_cfg=self.idm_cfg,
@@ -119,10 +119,15 @@ class IaaSServiceBase(GC3VersionTypedMixin):
 
 
         self.http_client = http_client if http_client else IaaSRequestsHTTPClient(idm_cfg=self.idm_cfg, skip_authentication=self.kwargs.get('skip_authentication', False))
-        self.swagger_client = SwaggerClient.from_spec(spec_dict=self.open_api_spec.spec_dict,
+        # self.swagger_client = SwaggerClient.from_spec(spec_dict=self.open_api_spec.spec_dict,
+        #                                               origin_url=self.idm_cfg.rest_endpoint,
+        #                                               http_client=self.http_client,
+        #                                               config=self.swagger_client_config
+        #                                               )
+        self.swagger_client = IaaSSwaggerClient.from_spec(spec_dict=self.open_api_spec.spec_dict,
                                                       origin_url=self.idm_cfg.rest_endpoint,
                                                       http_client=self.http_client,
-                                                      config=self.swagger_client_config
+                                                      config=BRAVADO_CONFIG
                                                       )
 
         # This is the container from Bravado.client (SwaggerClient module) that holds CallableOperation created using the spec

@@ -33,6 +33,7 @@ from melddict import MeldDict
 from gc3_query.lib import *
 from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
 from gc3_query.lib.signatures import GC3Type, GC3VersionedType, GC3VersionTypedMixin
+from gc3_query.lib.iaas_classic.iaas_swagger_client import  BRAVADO_CONFIG
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
@@ -221,7 +222,7 @@ class OpenApiSpec(GC3VersionTypedMixin):
         rest_endpoint = rest_endpoint if rest_endpoint else self.rest_endpoint
         if not rest_endpoint:
             raise RuntimeError("rest_endpoint not provided in either method call or in **wkargs={self.kwargs}")
-        core_spec: Spec = Spec(spec_dict=self.spec_dict, origin_url=rest_endpoint, http_client=None, config=gc3_cfg.swagger_client_config)
+        core_spec: Spec = Spec(spec_dict=self.spec_dict, origin_url=rest_endpoint, http_client=None, config=BRAVADO_CONFIG)
         return core_spec
 
     @property

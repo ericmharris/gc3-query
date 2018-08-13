@@ -47,3 +47,12 @@ class SecRules(IaaSServiceBase):
                          storage_delegates=storage_delegates,
                          **kwargs)
         _debug(f"{self.service_name} created using service_cfg: {self.service_cfg}")
+
+
+
+    def get_all_sec_rules(self):
+        http_future = self.service_operations.list_sec_rule(container=self.idm_root_container_name)
+        request_url = http_future.future.request.url
+        service_response = http_future.response()
+        result_json = service_response.incoming_response.json()
+        return result_json

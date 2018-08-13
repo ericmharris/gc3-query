@@ -83,3 +83,36 @@ def test_overlays_applied():
     assert isinstance(result_json['result'][0]['dst_is_ip'], bool)
 
 
+
+def test_get_all_sec_rules_data_types_correct():
+    service = 'SecRules'
+    idm_domain = 'gc30003'
+    gc3_config = GC3Config(atoml_config_dir=config_dir)
+    service_cfg = gc3_config.iaas_classic.services[service]
+    idm_cfg = gc3_config.idm.domains[idm_domain]
+    # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
+    assert service==service_cfg.name
+    assert idm_domain==idm_cfg.name
+    assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
+    sec_rules = SecRules(service_cfg=service_cfg, idm_cfg=idm_cfg)
+    result_json = sec_rules.get_all_sec_rules()
+    assert len(result_json['result']) > 0
+    assert 'src_list' in result_json['result'][0]
+    assert isinstance(result_json['result'][0]['dst_is_ip'], bool)
+
+
+def test_get_all_sec_rules():
+    service = 'SecRules'
+    idm_domain = 'gc30003'
+    gc3_config = GC3Config(atoml_config_dir=config_dir)
+    service_cfg = gc3_config.iaas_classic.services[service]
+    idm_cfg = gc3_config.idm.domains[idm_domain]
+    # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
+    assert service==service_cfg.name
+    assert idm_domain==idm_cfg.name
+    assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
+    sec_rules = SecRules(service_cfg=service_cfg, idm_cfg=idm_cfg)
+    result_json = sec_rules.get_all_sec_rules()
+    assert len(result_json['result']) > 0
+    assert 'src_list' in result_json['result'][0]
+

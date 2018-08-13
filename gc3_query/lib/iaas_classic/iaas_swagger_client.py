@@ -21,6 +21,7 @@ from copy import deepcopy
 ################################################################################
 ## Third-Party Imports
 from dataclasses import dataclass
+from melddict import MeldDict
 
 ################################################################################
 ## Project Imports
@@ -39,9 +40,12 @@ from bravado.http_future import HttpFuture
 from bravado.swagger_model import Loader
 
 
+
+BRAVADO_CORE_CONFIG: DictStrAny = gc3_cfg.bravado.core_config.as_dict()
+BRAVADO_CLIENT_CONFIG: DictStrAny = gc3_cfg.bravado.client_config.as_dict()
+BRAVADO_CONFIG: DictStrAny = gc3_cfg.bravado.core_config.as_dict_melded_with(gc3_cfg.bravado.client_config)
+
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
-
-
 
 
 class IaaSSwaggerClient(SwaggerClient):
@@ -65,6 +69,7 @@ class IaaSSwaggerClient(SwaggerClient):
         """
         _debug(u"Loading from %s", spec_url)
 
+        config = config if config else BRAVADO_CONFIG
 
 
         # http_client = http_client if http_client else RequestsClient()
@@ -83,9 +88,10 @@ class IaaSSwaggerClient(SwaggerClient):
         #     spec_dict['schemes'] = ['https']
         #     _debug(f"Updated spec_dict['schemes'] = {spec_dict['schemes']}")
 
-        spec_client = SwaggerClient.from_url(spec_url=spec_url)
-        spec_dict = deepcopy(spec_client.swagger_spec.spec_dict)
-        spec_dict['schemes'] = ['https']
+        raise RuntimeError('TODO:  use OpenApiSpecCatalog')
+        # spec_client = SwaggerClient.from_url(spec_url=spec_url)
+        # spec_dict = deepcopy(spec_client.swagger_spec.spec_dict)
+        # spec_dict['schemes'] = ['https']
 
         # RefResolver may have to download additional json files (remote refs)
         # via http. Wrap http_client's request() so that request headers are

@@ -22,7 +22,9 @@ from collections.__init__ import OrderedDict
 from collections.abc import MutableMapping, MutableSequence
 from collections.abc import KeysView, MappingView, Set, ItemsView, ValuesView
 from pathlib import Path
+from copy import deepcopy
 from typing import Any, MutableSequence, MutableMapping
+
 
 import toml
 import yaml
@@ -30,6 +32,7 @@ import yaml
 ################################################################################
 ## Third-Party Imports
 from dataclasses import dataclass
+from melddict import MeldDict
 
 ################################################################################
 ## Project Imports
@@ -399,6 +402,7 @@ class NestedOrderedDictAttrListBase(OrderedDictAttrBase):
     def __getattr__(self, key):
         return self._d[key]
 
+
     # The next five methods are requirements of the ABC.
     def __getitem__(self, key):
         return self.__dict__[key]
@@ -430,4 +434,14 @@ class NestedOrderedDictAttrListBase(OrderedDictAttrBase):
                 json.dump(self._serializable, fd, indent=indent)
         return file_path
 
+
+    def as_dict(self) -> DictStrAny:
+        return deepcopy(self._serializable)
+
+    def as_dict_melded_with(self, other) -> DictStrAny:
+        melded = MeldDict(self.as_dict())
+        if hasattr(other, 'as_dict'):
+            other = other.as_dict()
+        melded.add(other)
+        return melded
 
