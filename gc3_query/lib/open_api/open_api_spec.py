@@ -84,21 +84,24 @@ class OpenApiSpec(GC3VersionTypedMixin):
         # self.spec_dict = self.create_api_spec(spec_dict=self._spec_dict)
         self.api_spec = NestedOrderedDictAttrListBase(mapping=self._not_overlaid_spec_dict)
 
-        if not self.spec_file_path.exists():
-            _warning(f"Spec file not found in catalog, saving to {self.spec_file_path}")
-            saved_path = self.save_spec()
-            exported_paths = self.export()
 
         self.spec_archive_dir_path = self.spec_dir_path.joinpath(gc3_cfg.open_api.open_api_spec_catalog.archive_dir)
         self.spec_archive_file_name = gc3_cfg.open_api.open_api_spec_catalog.archive_file_format.format(name=self.name, version=self.version)
         self.spec_archive_file_path = self.spec_archive_dir_path.joinpath(self.spec_archive_file_name)
+        self.api_spec_overlay = OpenApiSpecOverlay(open_api_spec=self, idm_cfg=self.idm_cfg)
+        self.api_spec.update(self.api_spec_overlay.overlays)
 
+        if not self.spec_file_path.exists():
+            _warning(f"Spec file not found in catalog, saving to {self.spec_file_path}")
+            saved_path = self.save_spec()
+
+        if not all([p.exists() for p in self.export_paths.values()]):
+            exported_paths = self.export()
+            _debug(f"Exported files not found in var, created export files: {self.export_paths.values()}")
 
         if not self.spec_archive_file_path.exists():
             archived_path = self.archive_spec_to_catalog()
 
-        self.api_spec_overlay = OpenApiSpecOverlay(open_api_spec=self, idm_cfg=self.idm_cfg)
-        self.api_spec.update(self.api_spec_overlay.overlays)
         _debug(f"{self.name} created")
 
 
@@ -220,15 +223,20 @@ class OpenApiSpec(GC3VersionTypedMixin):
         return operation_ids_d
 
 
-    def export(self) -> List[Path]:
-        exported_file_paths: List[Path] = []
+    @property
+    def export_paths(self):
         export_formats = ['json', 'yaml', 'toml']
         export_paths = {export_format:self.spec_export_dir_path.joinpath(f"{self.name}.{export_format}") for export_format in export_formats}
         _debug(f"export_formats={export_formats}, export_paths={export_paths}")
+        return export_paths
+
+
+    def export(self) -> List[Path]:
+        exported_file_paths: List[Path] = []
         if not self.spec_export_dir_path.exists():
             _warning(f"spec_export_dir_path={self.spec_export_dir_path} did not exist, attempting to create.")
             self.spec_export_dir_path.mkdir()
-        for f,p in export_paths.items():
+        for f,p in self.export_paths.items():
             exported_file_path = self.api_spec.export(file_path=p, format=f, overwrite=True)
             exported_file_paths.append(exported_file_path)
         return exported_file_paths
