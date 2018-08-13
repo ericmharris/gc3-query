@@ -414,7 +414,9 @@ class NestedOrderedDictAttrListBase(OrderedDictAttrBase):
         return "{0}()".format(type(self))
 
     def export(self, file_path: Path, format: str = 'toml', overwrite: bool = False, export_formatting: DictStrAny=None)->Path:
-        assert file_path.parent.exists()
+        if not file_path.parent.exists():
+            _warning(f"Parent directory, {file_path.parent}, does not exist, creating it")
+            file_path.parent.mkdir()
         default_flow_style = export_formatting.get('default_flow_style', DEFAULT_FLOW_STYLE) if export_formatting else DEFAULT_FLOW_STYLE
         indent = export_formatting.get('indent', DEFAULT_INDENT) if export_formatting else DEFAULT_INDENT
         if file_path.exists() and not overwrite:

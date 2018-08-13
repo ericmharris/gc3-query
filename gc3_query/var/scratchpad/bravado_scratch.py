@@ -96,19 +96,19 @@ print(f'\njson_data: {json_data}')
 #
 #
 # cwd = os.getcwd()
-# spec_file_path = Path().joinpath('open_api_definitions/iaas_instances.json').resolve()
-# print(f'spec_file_path exists: {spec_file_path.exists()}, spec_file_path: {spec_file_path}')
+# spec_file = Path().joinpath('open_api_definitions/iaas_instances.json').resolve()
+# print(f'spec_file exists: {spec_file.exists()}, spec_file: {spec_file}')
 #
 # #### http://bravado.readthedocs.io/en/latest/advanced.html#loading-swagger-json-by-file-path
 # ## needed for: client = SwaggerClient.from_url('file:///some/file_path/swagger.json')
-# spec_file_uri = f"file:///{spec_file_path}"
-# print(f'spec_file_uri: {spec_file_path}')
+# spec_file_uri = f"file:///{spec_file}"
+# print(f'spec_file_uri: {spec_file}')
 #
 #
 # # In[14]:
 #
 #
-# spec_dict = load_file(spec_file_path)
+# spec_dict = load_file(spec_file)
 # spec_dict['schemes']
 # print(f"Original spec: spec_dict['schemes']: {spec_dict['schemes']}")
 # spec_dict['schemes'] = ['https']

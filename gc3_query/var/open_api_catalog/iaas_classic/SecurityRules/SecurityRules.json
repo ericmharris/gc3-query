@@ -6,7 +6,7 @@
         "title": "SecurityRules"
     },
     "schemes": [
-        "http"
+        "https"
     ],
     "consumes": [
         "application/oracle-compute-v3+json",

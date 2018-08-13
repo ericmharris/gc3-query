@@ -203,7 +203,7 @@ def test_save_spec_to_catalog():
     assert oapi_spec.name == service
     assert oapi_spec.spec_data['schemes'] == ['https']
     assert oapi_spec.from_url==True
-    spec_file_path = oapi_spec.spec_file_path
+    spec_file_path = oapi_spec.spec_file
     if spec_file_path.exists():
         spec_file_path.unlink()
     assert not spec_file_path.exists()
@@ -226,7 +226,7 @@ def test_spec_file_not_found():
     service_cfg = gc3_config.iaas_classic.services[service]
     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
     oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg)
-    spec_file_path = oapi_spec.spec_file_path
+    spec_file_path = oapi_spec.spec_file
     if spec_file_path.exists():
         spec_file_path.unlink()
     assert not spec_file_path.exists()
@@ -253,7 +253,7 @@ def test_archive_spec_to_catalog():
     assert oapi_spec.name == service
     assert oapi_spec.spec_data['schemes'] == ['https']
     assert oapi_spec.from_url==True
-    spec_archive_file_path = oapi_spec.spec_archive_file_path
+    spec_archive_file_path = oapi_spec.spec_archive_file
     if spec_archive_file_path.exists():
         spec_archive_file_path.unlink()
     assert not spec_archive_file_path.exists()

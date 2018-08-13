@@ -1,5 +1,5 @@
 swagger = "2.0"
-schemes = [ "http",]
+schemes = [ "https",]
 consumes = [ "application/oracle-compute-v3+json", "application/oracle-compute-v3+directory+json",]
 produces = [ "application/oracle-compute-v3+json", "application/oracle-compute-v3+directory+json",]
 [[tags]]

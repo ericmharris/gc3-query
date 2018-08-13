@@ -527,7 +527,7 @@ produces:
 - application/oracle-compute-v3+json
 - application/oracle-compute-v3+directory+json
 schemes:
-- http
+- https
 swagger: '2.0'
 tags:
 -   description: ' A security rule permits traffic from a specified source or to a

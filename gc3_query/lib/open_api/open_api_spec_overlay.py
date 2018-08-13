@@ -44,7 +44,7 @@ class OpenApiSpecOverlay(GC3VersionTypedMixin):
         self.service_cfg = open_api_spec.service_cfg
         self.idm_cfg = idm_cfg if idm_cfg else open_api_spec.idm_cfg
         self.name = open_api_spec.service_cfg.name
-        self.spec_file_path = open_api_spec.spec_file_path
+        self.spec_file_path = open_api_spec.spec_file
 
         self._default_overlays = self.api_catalog_config.open_api_spec_overlays
         # self._default_overlays = deepcopy(self.open_api_spec.api_catalog_config.open_api_spec_overlays)
@@ -61,7 +61,7 @@ class OpenApiSpecOverlay(GC3VersionTypedMixin):
         self.spec_overlay_archive_path = self.spec_overlay_archive_dir_path.joinpath(f"{self.service_cfg.service_name}_overlay_{self.version}.{self.spec_overlay_format}")
 
         if not self.spec_overlay_path.exists():
-            _warning(f"Spec overlay file not found in catalog, saving to {self.spec_file_path}")
+            _warning(f"Spec overlay file not found in catalog, saving to {self.spec_file}")
             saved_path = self.save_spec_overlay()
 
         if not self.spec_overlay_archive_path.exists():
@@ -89,7 +89,7 @@ class OpenApiSpecOverlay(GC3VersionTypedMixin):
 
 
     def archive_spec_overlay_to_catalog(self) -> Path:
-        _debug(f"Archiving spec overlay to self.spec_archive_file_path={self.spec_overlay_archive_path}")
+        _debug(f"Archiving spec overlay to self.spec_archive_file={self.spec_overlay_archive_path}")
         spec_overlay_archive_path = self.spec_overlay_archive_path
         _debug(f"Saving spec to spec_overlay_archive_path={spec_overlay_archive_path}")
         if spec_overlay_archive_path.exists():
