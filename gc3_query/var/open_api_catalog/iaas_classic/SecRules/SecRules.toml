@@ -174,6 +174,20 @@ in = "header"
 type = "string"
 description = "The Cookie: header must be included with every request to the service. It must be set to the value of the set-cookie header in the response received to the POST /authenticate/ call."
 
+[[paths."/secrule/{container}/".get.parameters]]
+name = "dst_is_ip"
+in = "query"
+description = "<p>Indicates whether the security rule destination is an IP (set to <code>false</code>) or disabled (<code>true</code>)."
+required = false
+type = "boolean"
+
+[[paths."/secrule/{container}/".get.parameters]]
+name = "src_is_ip"
+in = "query"
+description = "<p>Indicates whether the security rule source is an IP (set to <code>false</code>) or disabled (<code>true</code>)."
+required = false
+type = "boolean"
+
 [paths."/secrule/{name}".put]
 tags = [ "SecRules",]
 summary = "Update a Security Rule"

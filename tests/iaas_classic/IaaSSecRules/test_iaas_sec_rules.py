@@ -80,6 +80,6 @@ def test_overlays_applied():
     assert service_response.metadata.status_code==200
     assert len(result_json['result']) > 0
     assert 'src_list' in result_json['result'][0]
-    assert isinstance(result_json['result'][0]['src_list'], bool)
+    assert isinstance(result_json['result'][0]['dst_is_ip'], bool)
 
 
