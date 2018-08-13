@@ -51,7 +51,7 @@ def test_schemes_updated():
     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
     oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg)
     assert oapi_spec.name == service
-    assert oapi_spec.api_spec['schemes'] == ['https']
+    assert oapi_spec.spec_data['schemes'] == ['https']
 
 
 def test_get_spec():
@@ -63,7 +63,7 @@ def test_get_spec():
     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
     oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg)
     assert oapi_spec.name == service
-    assert oapi_spec.api_spec['schemes'] == ['https']
+    assert oapi_spec.spec_data['schemes'] == ['https']
     core_spec = oapi_spec.get_bravado_spec(rest_endpoint=idm_cfg.rest_endpoint)
     assert core_spec.origin_url==idm_cfg.rest_endpoint
     assert core_spec.spec_dict['info']['title']==service
@@ -77,7 +77,7 @@ def test_get_spec_from_kwargs():
     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
     oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg, rest_endpoint=idm_cfg.rest_endpoint)
     assert oapi_spec.name == service
-    assert oapi_spec.api_spec['schemes'] == ['https']
+    assert oapi_spec.spec_data['schemes'] == ['https']
     core_spec = oapi_spec.get_bravado_spec()
     assert core_spec.origin_url==idm_cfg.rest_endpoint
     assert oapi_spec.rest_endpoint==idm_cfg.rest_endpoint
@@ -91,7 +91,7 @@ def test_from_url():
     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
     oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg, from_url=True)
     assert oapi_spec.name == service
-    assert oapi_spec.api_spec['schemes'] == ['https']
+    assert oapi_spec.spec_data['schemes'] == ['https']
     assert oapi_spec.from_url==True
 
     core_spec = oapi_spec.get_bravado_spec(rest_endpoint=idm_cfg.rest_endpoint)
@@ -107,7 +107,7 @@ def test_check_spec_properties():
     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
     oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg, idm_cfg=idm_cfg)
     assert oapi_spec.name == service
-    assert oapi_spec.api_spec['schemes'] == ['https']
+    assert oapi_spec.spec_data['schemes'] == ['https']
     assert oapi_spec.title==service
     version_tupple = oapi_spec.version.split('.')
     assert version_tupple[0].isnumeric()
@@ -157,7 +157,7 @@ def test_equality(test_equality_setup):
     instances_oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=instances_service_cfg, idm_cfg=idm_cfg)
     instances_oapi_spec_2 = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=instances_service_cfg, idm_cfg=idm_cfg)
     assert instances_oapi_spec.name == instances_service
-    assert instances_oapi_spec.api_spec['schemes'] == ['https']
+    assert instances_oapi_spec.spec_data['schemes'] == ['https']
     assert instances_oapi_spec.title==instances_service
 
     secrules_service: str = 'SecRules'
@@ -167,7 +167,7 @@ def test_equality(test_equality_setup):
     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
     sec_rules_oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=sec_rules_service_cfg, idm_cfg=idm_cfg)
     assert sec_rules_oapi_spec.name == secrules_service
-    assert sec_rules_oapi_spec.api_spec['schemes'] == ['https']
+    assert sec_rules_oapi_spec.spec_data['schemes'] == ['https']
     assert sec_rules_oapi_spec.title==secrules_service
 
     assert instances_oapi_spec==instances_oapi_spec_2
@@ -185,7 +185,7 @@ def test_export():
     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
     oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg)
     assert oapi_spec.name == service
-    assert oapi_spec.api_spec['schemes'] == ['https']
+    assert oapi_spec.spec_data['schemes'] == ['https']
     core_spec = oapi_spec.get_bravado_spec(rest_endpoint=idm_cfg.rest_endpoint)
     exported_file_paths = oapi_spec.export()
     for exported_file_path in exported_file_paths:
@@ -201,7 +201,7 @@ def test_save_spec_to_catalog():
     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
     oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg, from_url=True)
     assert oapi_spec.name == service
-    assert oapi_spec.api_spec['schemes'] == ['https']
+    assert oapi_spec.spec_data['schemes'] == ['https']
     assert oapi_spec.from_url==True
     spec_file_path = oapi_spec.spec_file_path
     if spec_file_path.exists():
@@ -235,7 +235,7 @@ def test_spec_file_not_found():
     assert spec_file_path.exists()
 
     assert oapi_spec.name == service
-    assert oapi_spec.api_spec['schemes'] == ['https']
+    assert oapi_spec.spec_data['schemes'] == ['https']
     core_spec = oapi_spec.get_bravado_spec(rest_endpoint=idm_cfg.rest_endpoint)
     exported_file_paths = oapi_spec.export()
     for exported_file_path in exported_file_paths:
@@ -251,7 +251,7 @@ def test_archive_spec_to_catalog():
     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
     oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg, from_url=True)
     assert oapi_spec.name == service
-    assert oapi_spec.api_spec['schemes'] == ['https']
+    assert oapi_spec.spec_data['schemes'] == ['https']
     assert oapi_spec.from_url==True
     spec_archive_file_path = oapi_spec.spec_archive_file_path
     if spec_archive_file_path.exists():

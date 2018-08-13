@@ -195,7 +195,7 @@ def test_equality_with_mixin(test_equality_with_mixin_setup):
     instances_oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=instances_service_cfg, idm_cfg=idm_cfg)
     instances_oapi_spec_2 = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=instances_service_cfg, idm_cfg=idm_cfg)
     assert instances_oapi_spec.name == instances_service
-    assert instances_oapi_spec.api_spec['schemes'] == ['https']
+    assert instances_oapi_spec.spec_data['schemes'] == ['https']
     assert instances_oapi_spec.title==instances_service
 
     secrules_service: str = 'SecRules'
@@ -205,7 +205,7 @@ def test_equality_with_mixin(test_equality_with_mixin_setup):
     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
     sec_rules_oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=sec_rules_service_cfg, idm_cfg=idm_cfg)
     assert sec_rules_oapi_spec.name == secrules_service
-    assert sec_rules_oapi_spec.api_spec['schemes'] == ['https']
+    assert sec_rules_oapi_spec.spec_data['schemes'] == ['https']
     assert sec_rules_oapi_spec.title==secrules_service
 
     assert instances_oapi_spec==instances_oapi_spec_2

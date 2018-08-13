@@ -97,7 +97,7 @@ class OpenApiSpecOverlay(GC3VersionTypedMixin):
             return spec_overlay_archive_path
         if not spec_overlay_archive_path.parent.exists():
             spec_overlay_archive_path.parent.mkdir()
-        export_path = self.open_api_spec.api_spec.export(file_path=spec_overlay_archive_path, format=self.spec_overlay_format, overwrite=False, export_formatting=self.spec_overlay_export_formatting)
+        export_path = self.open_api_spec.spec_data.export(file_path=spec_overlay_archive_path, format=self.spec_overlay_format, overwrite=False, export_formatting=self.spec_overlay_export_formatting)
         return export_path
 
 
