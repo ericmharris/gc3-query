@@ -119,7 +119,7 @@ class IaaSServiceBase(GC3VersionTypedMixin):
 
 
         self.http_client = http_client if http_client else IaaSRequestsHTTPClient(idm_cfg=self.idm_cfg, skip_authentication=self.kwargs.get('skip_authentication', False))
-        self.swagger_client = SwaggerClient.from_spec(spec_dict=self.spec_dict,
+        self.swagger_client = SwaggerClient.from_spec(spec_dict=self.open_api_spec.spec_dict,
                                                       origin_url=self.idm_cfg.rest_endpoint,
                                                       http_client=self.http_client,
                                                       config=self.swagger_client_config

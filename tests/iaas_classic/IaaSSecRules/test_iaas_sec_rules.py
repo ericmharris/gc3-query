@@ -54,3 +54,32 @@ def test_list_sec_rules_from_url():
     assert 'src_list' in result_json['result'][0]
 
 
+def test_overlays_applied():
+    service = 'SecRules'
+    idm_domain = 'gc30003'
+    gc3_config = GC3Config(atoml_config_dir=config_dir)
+    service_cfg = gc3_config.iaas_classic.services[service]
+    idm_cfg = gc3_config.idm.domains[idm_domain]
+    # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
+    assert service==service_cfg.name
+    assert idm_domain==idm_cfg.name
+    assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
+    sec_rules = SecRules(service_cfg=service_cfg, idm_cfg=idm_cfg)
+    # container=sec_rules.idm_container_name.replace('/', '')
+    container=sec_rules.idm_root_container_name
+    old_container=sec_rules.idm_container_name
+    # http_future = sec_rules.bravado_service_operations.listInstance(container=sec_rules.idm_user_container_name)
+    # http_future = sec_rules.bravado_service_operations.listInstance(container=sec_rules.idm_container_name)
+    # http_future = sec_rules.bravado_service_operations.listSecRule(container=container)
+    http_future = sec_rules.service_operations.list_sec_rule(container=container)
+    # http_future = sec_rules.service_operations.discover_root_instance()
+    request_url = http_future.future.request.url
+    service_response = http_future.response()
+    result = service_response.result
+    result_json = service_response.incoming_response.json()
+    assert service_response.metadata.status_code==200
+    assert len(result_json['result']) > 0
+    assert 'src_list' in result_json['result'][0]
+    assert isinstance(result_json['result'][0]['src_list'], bool)
+
+
