@@ -39,41 +39,60 @@ def test_init():
     idm_cfg = gc3_config.idm.domains[idm_domain]
     service_cfg = gc3_config.iaas_classic.services[service]
     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
-    oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg, from_url=True)
+    oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg)
     oapi_spec_overlay = OpenApiSpecOverlay(open_api_spec=oapi_spec)
     assert oapi_spec.name == service
     assert oapi_spec_overlay.name == service
     assert 'schemes' in oapi_spec_overlay.overlays
 
-# def test_save_spec_overlay_to_catalog():
-#     idm_domain = 'gc30003'
-#     service = 'Instances'
-#     gc3_config = GC3Config(atoml_config_dir=config_dir)
-#     idm_cfg = gc3_config.idm.domains[idm_domain]
-#     service_cfg = gc3_config.iaas_classic.services[service]
-#     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
-#     oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg, from_url=True)
-#     assert oapi_spec.name == service
-#     assert oapi_spec.api_spec['schemes'] == ['https']
-#     assert oapi_spec.from_url==True
-#     spec_overlay_path = oapi_spec.spec_overlay_path
-#
-#     if spec_overlay_path.exists():
-#         spec_overlay_path.unlink()
-#     assert not spec_overlay_path.exists()
-#     saved_path = oapi_spec.save_spec_overlay(overwrite=False)
-#     assert spec_overlay_path.exists()
-#     assert saved_path==spec_overlay_path
-#
-#     fd = spec_overlay_path.open('w')
-#     fd.close()
-#
-#     saved_spec_overlay_path_stat = spec_overlay_path.stat()
-#     spec_overlay_path.touch()
-#
-#     saved_path = oapi_spec.save_spec_overlay(overwrite=True)
-#     new_saved_spec_overlay_path_stat =  saved_path.stat()
-#     assert saved_spec_overlay_path_stat!=new_saved_spec_overlay_path_stat
+
+def test_overlay():
+    idm_domain = 'gc30003'
+    service = 'SecRules'
+    gc3_config = GC3Config(atoml_config_dir=config_dir)
+    idm_cfg = gc3_config.idm.domains[idm_domain]
+    service_cfg = gc3_config.iaas_classic.services[service]
+    api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
+    oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg)
+    oapi_spec_overlay = OpenApiSpecOverlay(open_api_spec=oapi_spec)
+    assert oapi_spec.name == service
+    assert oapi_spec_overlay.name == service
+    assert 'schemes' in oapi_spec_overlay.overlays
+    assert 'definitions' in oapi_spec_overlay.overlays
+
+
+
+
+
+def test_save_spec_overlay_to_catalog():
+    idm_domain = 'gc30003'
+    service = 'Instances'
+    gc3_config = GC3Config(atoml_config_dir=config_dir)
+    idm_cfg = gc3_config.idm.domains[idm_domain]
+    service_cfg = gc3_config.iaas_classic.services[service]
+    api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
+    oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg, from_url=True)
+    oapi_spec_overlay = OpenApiSpecOverlay(open_api_spec=oapi_spec)
+    assert oapi_spec_overlay.name == service
+    assert oapi_spec_overlay.overlays['schemes'] == ['https']
+    spec_overlay_path = oapi_spec_overlay.spec_overlay_path
+
+    if spec_overlay_path.exists():
+        spec_overlay_path.unlink()
+    assert not spec_overlay_path.exists()
+    saved_path = oapi_spec_overlay.save_spec_overlay(overwrite=False)
+    assert spec_overlay_path.exists()
+    assert saved_path==spec_overlay_path
+
+    fd = spec_overlay_path.open('w')
+    fd.close()
+
+    saved_spec_overlay_path_stat = spec_overlay_path.stat()
+    spec_overlay_path.touch()
+
+    saved_path = oapi_spec_overlay.save_spec_overlay(overwrite=True)
+    new_saved_spec_overlay_path_stat =  saved_path.stat()
+    assert saved_spec_overlay_path_stat!=new_saved_spec_overlay_path_stat
 
 
 

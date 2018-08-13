@@ -21,6 +21,7 @@ from copy import deepcopy
 ################################################################################
 ## Third-Party Imports
 from dataclasses import dataclass, field
+import toml
 
 ################################################################################
 ## Project Imports
@@ -51,7 +52,6 @@ class OpenApiSpecOverlay(GC3VersionTypedMixin):
             self.overlays.update(overlays_spec_dict)
 
         self.spec_dir_path = OPEN_API_CATALOG_DIR.joinpath(open_api_spec.api_catalog_config.api_catalog_name).joinpath(self.service_cfg.service_name)
-        self.spec_overlay_file_path = self.spec_dir_path.joinpath(f"{self.service_cfg.service_name}_overlay.json")
         self.spec_overlay_format = gc3_cfg.open_api.open_api_spec_overlay.spec_overlay_format
         self.spec_overlay_export_formatting = gc3_cfg[self.spec_overlay_format]['export']['formatting']
         self.spec_overlay_path = self.spec_dir_path.joinpath(f"{self.service_cfg.service_name}_overlay.{self.spec_overlay_format}")
@@ -59,13 +59,15 @@ class OpenApiSpecOverlay(GC3VersionTypedMixin):
         self.spec_overlay_archive_dir_path = self.spec_dir_path.joinpath(gc3_cfg.open_api.open_api_spec_catalog.archive_dir)
         self.spec_overlay_archive_path = self.spec_overlay_archive_dir_path.joinpath(f"{self.service_cfg.service_name}_overlay_{self.version}.{self.spec_overlay_format}")
 
-
         if not self.spec_overlay_path.exists():
             _warning(f"Spec overlay file not found in catalog, saving to {self.spec_file_path}")
             saved_path = self.save_spec_overlay()
 
         if not self.spec_overlay_archive_path.exists():
             archived_path = self.archive_spec_overlay_to_catalog()
+
+        self.overlays.update(self.load_spec_overlay())
+
 
     def save_spec_overlay(self, file_path: Path = None, overwrite: bool = False) -> Path:
         spec_overlay_path = file_path if file_path else self.spec_overlay_path
@@ -96,13 +98,17 @@ class OpenApiSpecOverlay(GC3VersionTypedMixin):
 
 
 
-    def apply_overlays(self, overlay_spec_dict):
+    def load_spec_overlay(self, spec_overlay_path: Path = None) -> DictStrAny:
         """
 
         :param overlay_spec_dict:
         :return:
         """
-        pass
+        spec_overlay_path = spec_overlay_path if spec_overlay_path else self.spec_overlay_path
+        with spec_overlay_path.open() as fd:
+            overlays = toml.load(f=fd)
+        return overlays
+
 
 
     @property
