@@ -1,6 +1,6 @@
 [iaas_classic.services]
-spec_url = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/{{iaas_classic.api_catalog.api_version}}/apis/{{service_name}}/canonical'
-spec_file = '{{service_name | lower}}{{iaas_classic.api_catalog.api_version}}.json'
+spec_url = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/{{iaas_classic.open_api_spec_catalog.api_version}}/apis/{{service_name}}/canonical'
+spec_file = '{{service_name | lower}}{{iaas_classic.open_api_spec_catalog.api_version}}.json'
 
 
 [iaas_classic.services.instances]

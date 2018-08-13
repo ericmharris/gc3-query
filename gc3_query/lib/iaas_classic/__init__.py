@@ -84,7 +84,7 @@ class IaaSServiceBase(GC3VersionTypedMixin):
         #           'internally_dereference_refs': False,
         #           'also_return_response': True}
         self.swagger_client_config = dict(gc3_cfg.swagger_client_config)
-        self.oapi_spec_catalog = OpenApiSpecCatalog(api_catalog_config=gc3_cfg.iaas_classic.api_catalog,
+        self.oapi_spec_catalog = OpenApiSpecCatalog(api_catalog_config=gc3_cfg.iaas_classic.open_api_spec_catalog,
                                                     services_config=gc3_cfg.iaas_classic.services,
                                                     idm_cfg=self.idm_cfg,
                                                     from_url=from_url)

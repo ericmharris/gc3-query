@@ -34,7 +34,7 @@ def test_init():
     idm_domain = 'gc30003'
     gc3_config = GC3Config(atoml_config_dir=config_dir)
     idm_cfg = gc3_config.idm.domains[idm_domain]
-    api_catalog_config = gc3_config.iaas_classic.api_catalog
+    api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
     services_config = gc3_config.iaas_classic.services
     # oapi_spec_catalog = OpenApiSpecCatalog(api_catalog_config=api_catalog_config, services_cfg=services_config)
     oapi_spec_catalog = OpenApiSpecCatalog(api_catalog_config=api_catalog_config, services_config=services_config, idm_cfg=idm_cfg)
@@ -47,7 +47,7 @@ def test_init():
 #     service = 'Instances'
 #     gc3_config = GC3Config(atoml_config_dir=config_dir)
 #     service_cfg = gc3_config.iaas_classic.services[service]
-#     api_catalog_config = gc3_config.iaas_classic.api_catalog
+#     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
 #     oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg)
 #     assert oapi_spec.name == service
 #     assert oapi_spec.api_spec['schemes'] == ['https']

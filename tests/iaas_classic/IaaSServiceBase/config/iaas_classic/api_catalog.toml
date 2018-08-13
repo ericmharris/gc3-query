@@ -1,4 +1,4 @@
-[iaas_classic.api_catalog]
+[iaas_classic.open_api_spec_catalog]
 api_version = '18.1.2'
-base_url = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/{{iaas_classic.api_catalog.api_version}}/apis/{{service_name}}/canonical'
-ui_url = 'https://apicatalog.oraclecloud.com/ui/views/swaggerui3/oracle-public/compute/{{iaas_classic.api_catalog.api_version}}'
+base_url = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/{{iaas_classic.open_api_spec_catalog.api_version}}/apis/{{service_name}}/canonical'
+ui_url = 'https://apicatalog.oraclecloud.com/ui/views/swaggerui3/oracle-public/compute/{{iaas_classic.open_api_spec_catalog.api_version}}'
