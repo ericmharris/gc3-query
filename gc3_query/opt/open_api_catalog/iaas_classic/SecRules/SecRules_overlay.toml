@@ -2,10 +2,12 @@ schemes = [ "https",]
 [definitions.SecRule-response.properties.dst_is_ip]
 type = "boolean"
 description = "<p>Indicates whether the security rule destination is an IP (set to <code>false</code>) or disabled (<code>true</code>)."
+pattern = '"(^[a-z]+)"'
 
 [definitions.SecRule-response.properties.src_is_ip]
 type = "boolean"
 description = "<p>Indicates whether the security rule source is an IP (set to <code>false</code>) or disabled (<code>true</code>)."
+pattern = '"(^[a-z]+)"'
 
 [[paths."/secrule/{container}/".get.parameters]]
 name = "dst_is_ip"
@@ -13,6 +15,7 @@ in = "query"
 description = "<p>Indicates whether the security rule destination is an IP (set to <code>false</code>) or disabled (<code>true</code>)."
 required = false
 type = "boolean"
+pattern = '"(^[a-z]+)"'
 
 [[paths."/secrule/{container}/".get.parameters]]
 name = "src_is_ip"
@@ -20,3 +23,4 @@ in = "query"
 description = "<p>Indicates whether the security rule source is an IP (set to <code>false</code>) or disabled (<code>true</code>)."
 required = false
 type = "boolean"
+pattern = '"(^[a-z]+)"'
