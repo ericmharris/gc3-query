@@ -22,6 +22,7 @@ from copy import deepcopy
 ## Third-Party Imports
 from dataclasses import dataclass, field
 import toml
+from melddict import MeldDict
 
 ################################################################################
 ## Project Imports
@@ -47,9 +48,9 @@ class OpenApiSpecOverlay(GC3VersionTypedMixin):
 
         self._default_overlays = self.api_catalog_config.open_api_spec_overlays
         # self._default_overlays = deepcopy(self.open_api_spec.api_catalog_config.open_api_spec_overlays)
-        self.overlays: NestedOrderedDictAttrListBase = NestedOrderedDictAttrListBase(mapping=self._default_overlays)
+        self.overlays: MeldDict = MeldDict(self._default_overlays)
         if overlays_spec_dict:
-            self.overlays.update(overlays_spec_dict)
+            self.overlays.add(overlays_spec_dict)
 
         self.spec_dir_path = OPEN_API_CATALOG_DIR.joinpath(open_api_spec.api_catalog_config.api_catalog_name).joinpath(self.service_cfg.service_name)
         self.spec_overlay_format = gc3_cfg.open_api.open_api_spec_overlay.spec_overlay_format
@@ -66,7 +67,10 @@ class OpenApiSpecOverlay(GC3VersionTypedMixin):
         if not self.spec_overlay_archive_path.exists():
             archived_path = self.archive_spec_overlay_to_catalog()
 
-        self.overlays.update(self.load_spec_overlay())
+        self.overlays.add(self.load_spec_overlay())
+
+        _debug(f"{self.name} created")
+
 
 
     def save_spec_overlay(self, file_path: Path = None, overwrite: bool = False) -> Path:
@@ -98,7 +102,7 @@ class OpenApiSpecOverlay(GC3VersionTypedMixin):
 
 
 
-    def load_spec_overlay(self, spec_overlay_path: Path = None) -> DictStrAny:
+    def load_spec_overlay(self, spec_overlay_path: Path = None) -> MeldDict:
         """
 
         :param overlay_spec_dict:
@@ -106,7 +110,7 @@ class OpenApiSpecOverlay(GC3VersionTypedMixin):
         """
         spec_overlay_path = spec_overlay_path if spec_overlay_path else self.spec_overlay_path
         with spec_overlay_path.open() as fd:
-            overlays = toml.load(f=fd)
+            overlays = MeldDict(toml.load(f=fd))
         return overlays
 
 

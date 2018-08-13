@@ -25,6 +25,7 @@ import json
 from dataclasses import dataclass
 from bravado_core.spec import Spec
 from bravado.swagger_model import load_file, load_url
+from melddict import MeldDict
 
 ################################################################################
 ## Project Imports
@@ -80,17 +81,19 @@ class OpenApiSpec(GC3VersionTypedMixin):
 
         self.spec_export_dir_path = BASE_DIR.joinpath('var/open_api_catalog', api_catalog_config.api_catalog_name, service_cfg.service_name)
         _debug(f"self.spec_dir_path={self.spec_dir_path}\nself.spec_file_path={self.spec_file_path}\nself.spec_export_dir_path={self.spec_export_dir_path}")
-        self._not_overlaid_spec_dict = self.load_spec(from_url=from_url)
-        # self.spec_dict = self.create_api_spec(spec_dict=self._spec_dict)
-        self.api_spec = NestedOrderedDictAttrListBase(mapping=self._not_overlaid_spec_dict)
 
+        self._not_overlaid_spec_dict = self.load_spec(from_url=from_url)
+        self._overlaid_spec_dict = MeldDict(self._not_overlaid_spec_dict)
+        # self.spec_dict = self.create_api_spec(spec_dict=self._spec_dict)
+        self.api_spec_overlay = OpenApiSpecOverlay(open_api_spec=self, idm_cfg=self.idm_cfg)
+        self._overlaid_spec_dict.add(self.api_spec_overlay.overlays)
+
+        # self.api_spec.update(self.api_spec_overlay.overlays)
+        self.api_spec = NestedOrderedDictAttrListBase(mapping=self._overlaid_spec_dict)
 
         self.spec_archive_dir_path = self.spec_dir_path.joinpath(gc3_cfg.open_api.open_api_spec_catalog.archive_dir)
         self.spec_archive_file_name = gc3_cfg.open_api.open_api_spec_catalog.archive_file_format.format(name=self.name, version=self.version)
         self.spec_archive_file_path = self.spec_archive_dir_path.joinpath(self.spec_archive_file_name)
-        self.api_spec_overlay = OpenApiSpecOverlay(open_api_spec=self, idm_cfg=self.idm_cfg)
-        self.api_spec.update(self.api_spec_overlay.overlays)
-
         if not self.spec_file_path.exists():
             _warning(f"Spec file not found in catalog, saving to {self.spec_file_path}")
             saved_path = self.save_spec()
@@ -158,7 +161,7 @@ class OpenApiSpec(GC3VersionTypedMixin):
     
     @property
     def spec_dict(self):
-        return self.api_spec._serializable
+        return self._overlaid_spec_dict
 
     def get_bravado_spec(self, rest_endpoint: Union[str, None] = None) -> Spec:
         """
