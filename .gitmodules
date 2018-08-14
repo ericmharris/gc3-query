@@ -16,3 +16,6 @@
 [submodule "gc3_query/opt/reference/mongoengine"]
 	path = gc3_query/opt/reference/mongoengine
 	url = https://github.com/MongoEngine/mongoengine.git
+[submodule "gc3_query/opt/reference/bravado-core"]
+	path = gc3_query/opt/reference/bravado-core
+	url = https://github.com/Yelp/bravado-core.git
