@@ -37,14 +37,14 @@ use_models = true
 
 # Fill with None all the missing properties during object unmarshalling
 # 'include_missing_properties': True,
-include_missing_properties = false
+include_missing_properties = true
 
 
 # What to do when a type is missing
 # If True, set the type to object and validate
 # If False, do no validation
 # 'default_type_to_object': False,
-default_type_to_object = false
+default_type_to_object = true
 
 # Completely dereference $refs to maximize marshaling and unmarshalling performances.
 # NOTE: this depends on validate_swagger_spec
@@ -57,5 +57,5 @@ internally_dereference_refs = false
 # addition to the swagger_formats already supported by the Swagger 2.0
 # Specification.
 # 'swagger_formats': [],
-formats = ['boolean_string']
+# formats = [boolean_string]
 

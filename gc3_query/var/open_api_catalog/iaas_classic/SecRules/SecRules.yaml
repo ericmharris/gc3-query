@@ -195,7 +195,8 @@ definitions:
                     dst_is_ip:
                         description: <p>Indicates whether the security rule destination
                             is an IP (set to <code>false</code>) or disabled (<code>true</code>).
-                        type: boolean
+                        format: boolean_string
+                        type: string
                     dst_list:
                         description: '<p>The three-part name (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object_name</em></code>)
                             of the destination security list or security IP list.<p>You
@@ -213,7 +214,8 @@ definitions:
                     src_is_ip:
                         description: <p>Indicates whether the security rule source
                             is an IP (set to <code>false</code>) or disabled (<code>true</code>).
-                        type: boolean
+                        format: boolean_string
+                        type: string
                     src_list:
                         description: '<p>The three-part name (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object_name</em></code>)
                             of the source security list or security IP list.<p>You
@@ -439,16 +441,18 @@ paths:
                         type: string
                     -   description: <p>Indicates whether the security rule destination
                             is an IP (set to <code>false</code>) or disabled (<code>true</code>).
+                        format: boolean_string
                         in: query
                         name: dst_is_ip
                         required: false
-                        type: boolean
+                        type: string
                     -   description: <p>Indicates whether the security rule source
                             is an IP (set to <code>false</code>) or disabled (<code>true</code>).
+                        format: boolean_string
                         in: query
                         name: src_is_ip
                         required: false
-                        type: boolean
+                        type: string
                     produces:
                     - application/oracle-compute-v3+json
                     responses:

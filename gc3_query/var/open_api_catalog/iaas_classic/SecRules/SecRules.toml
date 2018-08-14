@@ -179,14 +179,16 @@ name = "dst_is_ip"
 in = "query"
 description = "<p>Indicates whether the security rule destination is an IP (set to <code>false</code>) or disabled (<code>true</code>)."
 required = false
-type = "boolean"
+type = "string"
+format = "boolean_string"
 
 [[paths."/secrule/{container}/".get.parameters]]
 name = "src_is_ip"
 in = "query"
 description = "<p>Indicates whether the security rule source is an IP (set to <code>false</code>) or disabled (<code>true</code>)."
 required = false
-type = "boolean"
+type = "string"
+format = "boolean_string"
 
 [paths."/secrule/{name}".put]
 tags = [ "SecRules",]
@@ -371,12 +373,14 @@ type = "string"
 description = "Uniform Resource Identifier"
 
 [definitions.SecRule-response.properties.dst_is_ip]
-type = "boolean"
 description = "<p>Indicates whether the security rule destination is an IP (set to <code>false</code>) or disabled (<code>true</code>)."
+type = "string"
+format = "boolean_string"
 
 [definitions.SecRule-response.properties.src_is_ip]
-type = "boolean"
 description = "<p>Indicates whether the security rule source is an IP (set to <code>false</code>) or disabled (<code>true</code>)."
+type = "string"
+format = "boolean_string"
 
 [paths."/secrule/".post.responses.201]
 description = "Created. See <a class=\"xref\" href=\"Status%20Codes.html\">Status Codes</a> for information about other possible HTTP status codes."

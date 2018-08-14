@@ -82,7 +82,7 @@ class IaaSServiceBase(GC3VersionTypedMixin):
         self.swagger_client = IaaSSwaggerClient.from_spec(spec_dict=self.open_api_spec.spec_dict,
                                                       origin_url=self.idm_cfg.rest_endpoint,
                                                       http_client=self.http_client,
-                                                      config=BRAVADO_CONFIG
+                                                      config=self.bravado_config
                                                       )
 
         # This is the container from Bravado.client (SwaggerClient module) that holds CallableOperation created using the spec

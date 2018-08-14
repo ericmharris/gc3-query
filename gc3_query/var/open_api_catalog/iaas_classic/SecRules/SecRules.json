@@ -233,14 +233,16 @@
                         "in": "query",
                         "description": "<p>Indicates whether the security rule destination is an IP (set to <code>false</code>) or disabled (<code>true</code>).",
                         "required": false,
-                        "type": "boolean"
+                        "type": "string",
+                        "format": "boolean_string"
                     },
                     {
                         "name": "src_is_ip",
                         "in": "query",
                         "description": "<p>Indicates whether the security rule source is an IP (set to <code>false</code>) or disabled (<code>true</code>).",
                         "required": false,
-                        "type": "boolean"
+                        "type": "string",
+                        "format": "boolean_string"
                     }
                 ]
             }
@@ -615,12 +617,14 @@
                     "description": "Uniform Resource Identifier"
                 },
                 "dst_is_ip": {
-                    "type": "boolean",
-                    "description": "<p>Indicates whether the security rule destination is an IP (set to <code>false</code>) or disabled (<code>true</code>)."
+                    "description": "<p>Indicates whether the security rule destination is an IP (set to <code>false</code>) or disabled (<code>true</code>).",
+                    "type": "string",
+                    "format": "boolean_string"
                 },
                 "src_is_ip": {
-                    "type": "boolean",
-                    "description": "<p>Indicates whether the security rule source is an IP (set to <code>false</code>) or disabled (<code>true</code>)."
+                    "description": "<p>Indicates whether the security rule source is an IP (set to <code>false</code>) or disabled (<code>true</code>).",
+                    "type": "string",
+                    "format": "boolean_string"
                 }
             }
         }
