@@ -64,7 +64,7 @@ def test_get_spec():
     oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg)
     assert oapi_spec.name == service
     assert oapi_spec.spec_data['schemes'] == ['https']
-    core_spec = oapi_spec.get_bravado_spec(rest_endpoint=idm_cfg.rest_endpoint)
+    core_spec = oapi_spec.get_swagger_spec(rest_endpoint=idm_cfg.rest_endpoint)
     assert core_spec.origin_url==idm_cfg.rest_endpoint
     assert core_spec.spec_dict['info']['title']==service
 
@@ -78,7 +78,7 @@ def test_get_spec_from_kwargs():
     oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg, rest_endpoint=idm_cfg.rest_endpoint)
     assert oapi_spec.name == service
     assert oapi_spec.spec_data['schemes'] == ['https']
-    core_spec = oapi_spec.get_bravado_spec()
+    core_spec = oapi_spec.get_swagger_spec()
     assert core_spec.origin_url==idm_cfg.rest_endpoint
     assert oapi_spec.rest_endpoint==idm_cfg.rest_endpoint
 
@@ -94,7 +94,7 @@ def test_from_url():
     assert oapi_spec.spec_data['schemes'] == ['https']
     assert oapi_spec.from_url==True
 
-    core_spec = oapi_spec.get_bravado_spec(rest_endpoint=idm_cfg.rest_endpoint)
+    core_spec = oapi_spec.get_swagger_spec(rest_endpoint=idm_cfg.rest_endpoint)
     assert core_spec.origin_url==idm_cfg.rest_endpoint
     assert core_spec.spec_dict['info']['title']==service
 
@@ -186,7 +186,7 @@ def test_export():
     oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg)
     assert oapi_spec.name == service
     assert oapi_spec.spec_data['schemes'] == ['https']
-    core_spec = oapi_spec.get_bravado_spec(rest_endpoint=idm_cfg.rest_endpoint)
+    core_spec = oapi_spec.get_swagger_spec(rest_endpoint=idm_cfg.rest_endpoint)
     exported_file_paths = oapi_spec.export()
     for exported_file_path in exported_file_paths:
         assert exported_file_path.exists()
@@ -236,7 +236,7 @@ def test_spec_file_not_found():
 
     assert oapi_spec.name == service
     assert oapi_spec.spec_data['schemes'] == ['https']
-    core_spec = oapi_spec.get_bravado_spec(rest_endpoint=idm_cfg.rest_endpoint)
+    core_spec = oapi_spec.get_swagger_spec(rest_endpoint=idm_cfg.rest_endpoint)
     exported_file_paths = oapi_spec.export()
     for exported_file_path in exported_file_paths:
         assert exported_file_path.exists()

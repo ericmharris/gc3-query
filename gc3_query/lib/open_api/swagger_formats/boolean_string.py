@@ -75,7 +75,7 @@ class BooleanString:
         return _str_to_python
 
 
-boolean_string = SwaggerFormat(
+boolean_string_format = SwaggerFormat(
     # name of the format as used in the Swagger spec
     format='boolean_string',
 

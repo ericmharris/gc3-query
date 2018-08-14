@@ -21,13 +21,17 @@ import sys, os
 ## Third-Party Imports
 from dataclasses import dataclass, field
 import pytest
+from bravado_core.formatter import SwaggerFormat
+from bravado_core.exception import SwaggerValidationError
+
 
 ################################################################################
 ## Project Imports
 from gc3_query.lib import *
 from gc3_query.lib import gc3_cfg
-from gc3_query.lib.open_api.swagger_formats.boolean_string import boolean_string, BooleanString
+from gc3_query.lib.open_api.swagger_formats.boolean_string import boolean_string_format, BooleanString
 from gc3_query.lib.iaas_classic.iaas_swagger_client import BRAVADO_CONFIG, BRAVADO_CORE_CONFIG
+from gc3_query.lib.open_api.swagger_formats.boolean_string import BooleanString, boolean_string_format
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 

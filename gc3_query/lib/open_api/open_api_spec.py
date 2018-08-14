@@ -27,6 +27,7 @@ from dataclasses import dataclass
 from bravado_core.spec import Spec
 from bravado.swagger_model import load_file, load_url
 from melddict import MeldDict
+from bravado_core.spec import Spec
 
 ################################################################################
 ## Project Imports
@@ -68,7 +69,10 @@ class OpenApiSpec(GC3VersionTypedMixin):
         self.idm_cfg = idm_cfg
         self.name = service_cfg.name
 
-        self.kwargs = kwargs
+        self.kwargs = {'rest_endpoint': None,   #
+                       'mock_version': None,    # Used for unit tests,
+                       }
+        self.kwargs.update(kwargs)
         #  The ultimate form of the Spec depends on the specific REST Endpoint of a given IDM domain which differs from the API Catalog.
         self.rest_endpoint = kwargs.get('rest_endpoint', None)
         if not self.rest_endpoint:
@@ -213,7 +217,8 @@ class OpenApiSpec(GC3VersionTypedMixin):
     def spec_dict(self):
         return self._overlaid_spec_dict
 
-    def get_bravado_spec(self, rest_endpoint: Union[str, None] = None) -> Spec:
+
+    def get_swagger_spec(self, rest_endpoint: Union[str, None] = None) -> Spec:
         """
 
         :param rest_endpoint:
@@ -224,6 +229,10 @@ class OpenApiSpec(GC3VersionTypedMixin):
             raise RuntimeError("rest_endpoint not provided in either method call or in **wkargs={self.kwargs}")
         core_spec: Spec = Spec(spec_dict=self.spec_dict, origin_url=rest_endpoint, http_client=None, config=BRAVADO_CONFIG)
         return core_spec
+
+    @property
+    def swagger_spec(self) -> Spec:
+        return self.get_swagger_spec(rest_endpoint=self.rest_endpoint)
 
     @property
     def title(self) -> str:

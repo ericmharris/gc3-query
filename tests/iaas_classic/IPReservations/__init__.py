@@ -2,7 +2,7 @@
 
 """
 #@Filename : __init__.py
-#@Date : [8/13/2018 4:04 PM]
+#@Date : [8/14/2018 2:26 PM]
 #@Poject: gc3-query
 #@AUTHOR : emharris
 
@@ -20,7 +20,6 @@ import sys, os
 ################################################################################
 ## Third-Party Imports
 from dataclasses import dataclass, field
-from bravado_core.formatter import SwaggerFormat
 
 ################################################################################
 ## Project Imports
@@ -28,13 +27,3 @@ from gc3_query.lib import *
 from gc3_query.lib import gc3_cfg
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
-
-
-from .boolean_string import BooleanString
-from .boolean_string import boolean_string_format
-from .integer import integer_format, mydouble, int64_format
-
-formats: List[SwaggerFormat] = [boolean_string_format, integer_format, mydouble, int64_format]
-
-
-
