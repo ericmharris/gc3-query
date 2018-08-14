@@ -22,12 +22,6 @@ from copy import deepcopy
 ## Third-Party Imports
 from dataclasses import dataclass
 from melddict import MeldDict
-
-################################################################################
-## Project Imports
-from gc3_query.lib import *
-from dataclasses import dataclass
-import bravado
 from bravado.requests_client import RequestsClient
 from bravado.client import SwaggerClient
 from bravado.client import SwaggerClient, ResourceDecorator, inject_headers_for_remote_refs
@@ -39,11 +33,19 @@ from bravado.exception import HTTPBadRequest
 from bravado.http_future import HttpFuture
 from bravado.swagger_model import Loader
 
+################################################################################
+## Project Imports
+from gc3_query.lib import *
+from gc3_query.lib.open_api.swagger_formats import formats
+
+
 
 
 BRAVADO_CORE_CONFIG: DictStrAny = gc3_cfg.bravado.core_config.as_dict()
+BRAVADO_CORE_CONFIG['formats'] = formats
 BRAVADO_CLIENT_CONFIG: DictStrAny = gc3_cfg.bravado.client_config.as_dict()
 BRAVADO_CONFIG: DictStrAny = gc3_cfg.bravado.core_config.as_dict_melded_with(gc3_cfg.bravado.client_config)
+BRAVADO_CONFIG['formats'] = formats
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 

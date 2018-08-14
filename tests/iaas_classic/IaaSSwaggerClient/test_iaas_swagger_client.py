@@ -30,8 +30,12 @@ def test_setup():
 
 
 def test_bravado_client_and_core_config():
+    bravado_client_config = BRAVADO_CLIENT_CONFIG
+    bravado_core_config = BRAVADO_CORE_CONFIG
+    bravado_config = BRAVADO_CONFIG
     assert BRAVADO_CLIENT_CONFIG
     assert BRAVADO_CORE_CONFIG
+    assert BRAVADO_CONFIG
     assert 'include_missing_properties' in BRAVADO_CORE_CONFIG
     assert not 'include_missing_properties' in BRAVADO_CLIENT_CONFIG
     assert 'include_missing_properties' in BRAVADO_CONFIG

@@ -35,6 +35,8 @@ from gc3_query.lib.open_api.open_api_spec_catalog import OpenApiSpecCatalog
 from gc3_query.lib.utils import camelcase_to_snake
 from gc3_query.lib.base_collections import OrderedDictAttrBase
 from gc3_query.lib.signatures import GC3VersionTypedMixin
+from gc3_query.lib.open_api.swagger_formats import BooleanString, boolean_string
+
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
@@ -73,6 +75,8 @@ class IaaSServiceBase(GC3VersionTypedMixin):
                                                     idm_cfg=self.idm_cfg,
                                                     from_url=from_url)
         self.open_api_spec = self.oapi_spec_catalog[self.service_name]
+
+        self.bravado_config = BRAVADO_CONFIG
 
         self.http_client = http_client if http_client else IaaSRequestsHTTPClient(idm_cfg=self.idm_cfg, skip_authentication=self.kwargs.get('skip_authentication', False))
         self.swagger_client = IaaSSwaggerClient.from_spec(spec_dict=self.open_api_spec.spec_dict,

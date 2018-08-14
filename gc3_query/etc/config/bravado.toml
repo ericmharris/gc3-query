@@ -35,13 +35,6 @@ validate_swagger_spec = true
 # 'use_models': True,
 use_models = true
 
-# List of user-defined formats of type
-# :class:`bravado_core.formatter.SwaggerFormat`. These formats are in
-# addition to the formats already supported by the Swagger 2.0
-# Specification.
-# 'formats': [],
-## formats = [my_super_duper_format]
-
 # Fill with None all the missing properties during object unmarshalling
 # 'include_missing_properties': True,
 include_missing_properties = false
@@ -57,3 +50,12 @@ default_type_to_object = false
 # NOTE: this depends on validate_swagger_spec
 # 'internally_dereference_refs': False,
 internally_dereference_refs = false
+
+
+# List of user-defined swagger_formats of type
+# :class:`bravado_core.formatter.SwaggerFormat`. These swagger_formats are in
+# addition to the swagger_formats already supported by the Swagger 2.0
+# Specification.
+# 'swagger_formats': [],
+formats = ['boolean_string']
+
