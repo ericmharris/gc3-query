@@ -130,8 +130,10 @@ def test_get_all_sec_rules():
     assert service==service_cfg.name
     assert idm_domain==idm_cfg.name
     assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
+
     # sec_rules = SecRules(service_cfg=service_cfg, idm_cfg=idm_cfg, spec_dict=spec_dict, swagger_spec=swagger_spec)
     sec_rules = SecRules(service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client, spec_dict=None, swagger_spec=swagger_spec)
+
     assert 'boolean_string' in [f.format for f in sec_rules.bravado_config['formats']]
     result_json = sec_rules.get_all_sec_rules()
     assert len(result_json['result']) > 0

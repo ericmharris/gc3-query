@@ -54,9 +54,9 @@ class IaaSServiceBase(GC3VersionTypedMixin):
     def __init__(self,
                  service_cfg: Dict[str, Any],
                  idm_cfg: Dict[str, Any],
-                 http_client: IaaSRequestsHTTPClient = None,
-                 from_url: bool = False,
-                 storage_delegates: List[str] = None,
+                 http_client: Union[IaaSRequestsHTTPClient, None] = None,
+                 from_url: Optional[bool] = False,
+                 storage_delegates: Optional[List[str]]= None,
                  **kwargs: Dict[str, Any]):
         """
 
@@ -70,15 +70,19 @@ class IaaSServiceBase(GC3VersionTypedMixin):
         self.service_cfg = service_cfg
         self.idm_cfg = idm_cfg
         self.service_name = service_cfg['service_name']
+        self.storage_delegates = storage_delegates
 
         self.bravado_config: DictStrAny = BRAVADO_CONFIG
 
+        if kwargs.get('spec_dict', False) and kwargs.get('swagger_spec', False):
+            raise RuntimeError(f"Supplying both a spec_dict and swagger_spec not allowed")
         self.kwargs = {'swagger_spec': None,            #  bravado_core.spec.Spec
                        'mock_version': None,            # Used for unit tests,
                        'skip_authentication': None,    #  self.http_client won't authenticate against the IDM
                        'spec_dict': None,               #  Di
                        }
         self.kwargs.update(kwargs)
+
 
         self.oapi_spec_catalog = OpenApiSpecCatalog(api_catalog_config=gc3_cfg.iaas_classic.open_api_spec_catalog,
                                                     services_config=gc3_cfg.iaas_classic.services,

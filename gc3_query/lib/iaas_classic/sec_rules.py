@@ -38,8 +38,13 @@ _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 class SecRules(IaaSServiceBase):
 
-    def __init__(self, service_cfg: Dict[str, Any], idm_cfg: Dict[str, Any], http_client: IaaSRequestsHTTPClient = None,
-                 from_url: bool = False, storage_delegates: List[str] = None, **kwargs: Dict[str, Any]):
+    def __init__(self,
+                 service_cfg: Dict[str, Any],
+                 idm_cfg: Dict[str, Any],
+                 http_client: Union[IaaSRequestsHTTPClient, None] = None,
+                 from_url: Optional[bool] = False,
+                 storage_delegates: Optional[List[str]]= None,
+                 **kwargs: Dict[str, Any]):
         super().__init__(service_cfg=service_cfg,
                          idm_cfg=idm_cfg,
                          http_client=http_client,
@@ -51,7 +56,8 @@ class SecRules(IaaSServiceBase):
 
 
     def get_all_sec_rules(self):
-        http_future = self.service_operations.list_sec_rule(container=self.idm_root_container_name)
+        # http_future = self.service_operations.list_sec_rule(container=self.idm_root_container_name)
+        http_future = self.bravado_service_operations.listSecRule(container=self.idm_root_container_name)
         request_url = http_future.future.request.url
         service_response = http_future.response()
         result_json = service_response.incoming_response.json()
