@@ -92,11 +92,14 @@ class IaaSServiceBase(GC3VersionTypedMixin):
 
 
         self.http_client = http_client if http_client else IaaSRequestsHTTPClient(idm_cfg=self.idm_cfg, skip_authentication=self.kwargs.get('skip_authentication', False))
-        self.swagger_client = IaaSSwaggerClient.from_spec(spec_dict=self.spec_dict,
-                                                      origin_url=self.idm_cfg.rest_endpoint,
-                                                      http_client=self.http_client,
-                                                      config=self.bravado_config
-                                                      )
+        if self._swagger_spec:
+            self.swagger_client = IaaSSwaggerClient(swagger_spec=self._swagger_spec, also_return_response=self.bravado_config['also_return_response'])
+        else:
+            self.swagger_client = IaaSSwaggerClient.from_spec(spec_dict=self.spec_dict,
+                                                          origin_url=self.idm_cfg.rest_endpoint,
+                                                          http_client=self.http_client,
+                                                          config=self.bravado_config
+                                                          )
 
         # This is the container from Bravado.client (SwaggerClient module) that holds CallableOperation created using the spec
         self.bravado_service_operations = getattr(self.swagger_client, service_cfg['service_name'])

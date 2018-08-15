@@ -122,14 +122,16 @@ def test_get_all_sec_rules():
     with spec_file.open() as fd:
         spec_dict = json.load(fp=fd)
     assert spec_dict
+    http_client: IaaSRequestsHTTPClient =  IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     bravado_config = BRAVADO_CONFIG
     assert 'boolean_string' in [f.format for f in bravado_config['formats']]
-    swagger_spec = Spec.from_dict(spec_dict=spec_dict, origin_url=idm_cfg.rest_endpoint, config=bravado_config)
+    swagger_spec = Spec.from_dict(spec_dict=spec_dict, origin_url=idm_cfg.rest_endpoint, http_client=http_client, config=bravado_config)
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     assert service==service_cfg.name
     assert idm_domain==idm_cfg.name
     assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
-    sec_rules = SecRules(service_cfg=service_cfg, idm_cfg=idm_cfg, spec_dict=spec_dict, swagger_spec=swagger_spec)
+    # sec_rules = SecRules(service_cfg=service_cfg, idm_cfg=idm_cfg, spec_dict=spec_dict, swagger_spec=swagger_spec)
+    sec_rules = SecRules(service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client, spec_dict=None, swagger_spec=swagger_spec)
     assert 'boolean_string' in [f.format for f in sec_rules.bravado_config['formats']]
     result_json = sec_rules.get_all_sec_rules()
     assert len(result_json['result']) > 0

@@ -17,8 +17,6 @@ swagger_ui3_furl: fstr = 'https://apicatalog.oraclecloud.com/ui/views/swaggerui3
 
 [iaas_classic.open_api_spec_catalog.open_api_spec_overlays]
 schemes = ['https']
-[[info]]
-contact = {name = 'gc3', url = 'https://docs.oracle.com', email = 'eric.harris@oracle.com'}
 
 [iaas_classic.open_api_spec_catalog.open_api_spec_deletions]
 schemes = ['http']
