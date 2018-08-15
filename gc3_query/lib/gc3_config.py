@@ -20,6 +20,9 @@
 ## Third-Party Imports
 from dataclasses import dataclass
 import keyring
+from copy import deepcopy
+from functools import lru_cache
+
 
 ################################################################################
 ## Project Imports
@@ -28,8 +31,10 @@ from gc3_query.lib import *
 from gc3_query import GC3_QUERY_HOME
 from gc3_query.lib.atoml.atoml_config import ATomlConfig
 from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
-from gc3_query.lib.gc3logging import get_logging
+from gc3_query.lib.open_api.swagger_formats import formats
 
+
+from gc3_query.lib.gc3logging import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
@@ -60,7 +65,6 @@ class GC3Config(NestedOrderedDictAttrListBase):
         super().__init__(mapping=gc3_cfg)
         _debug(f"{self._name} created: {self}")
 
-
     # def __getattr__(self, key):
     #     value = self._d[key]
     #     return value
@@ -69,7 +73,6 @@ class GC3Config(NestedOrderedDictAttrListBase):
     # def __getitem__(self, key):
     #     value = self._d[key]
     #     return value
-
 
     def get_credential(self, idm_domain_name: str) -> IDMCredential:
         if idm_domain_name not in self['idm']['domains']:
@@ -90,7 +93,6 @@ class GC3Config(NestedOrderedDictAttrListBase):
         else:
             raise RuntimeError(f"Failed to get password for service_name={service_name}, username={service_name}")
 
-
     def set_credential(self, idm_domain_name: str, password: str) -> IDMCredential:
         """Stores password for idm_domain_name in system/OS keystore
 
@@ -110,9 +112,47 @@ class GC3Config(NestedOrderedDictAttrListBase):
                                               password=password)
 
         check_credential = self.get_credential(idm_domain_name=idm_domain_name)
-        if check_credential.password == password and check_credential.idm_domain_name==idm_domain_name and check_credential.username==username:
+        if check_credential.password == password and check_credential.idm_domain_name == idm_domain_name and check_credential.username == username:
             return check_credential
         else:
             raise RuntimeError(f"Failed to set password for service_name={service_name}, username={service_name}")
 
+    def get_bravado_config(self, config_type: str = 'bravado') -> DictStrAny:
+        """
+        bravado.client.SwaggerClient#from_spec
+        # Apply bravado config defaults
+        config = config or {}
+        bravado_config = BravadoConfig.from_config_dict(config)
+        # remove bravado configs from config dict
+        for key in set(bravado_config._fields).intersection(set(config)):
+            del config[key]
+        # set bravado config object
+        config['bravado'] = bravado_config
 
+        :param config_type:
+        :return:
+        """
+        config_types = {'bravado': self.bravado.core_config.as_dict_melded_with(self.bravado.client_config),  # All config
+                        'bravado_client': self.bravado.client_config.as_dict(),                                  # Only config for client
+                        'bravado_core': self.bravado.core_config.as_dict()                                       # core
+                        }
+        if config_type not in config_types:
+            _error(f"config_type={config_type} not found in {config_types.keys()}")
+            raise RuntimeError(f"config_type={config_type} not found in {config_types.keys()}")
+        config: dict = config_types[config_type]
+        if config_type in ['bravado', 'bravado_core']:
+            config['formats'] = formats
+        return deepcopy(config)
+
+
+    @property
+    def bravado_config(self):
+        return self.get_bravado_config(config_type='bravado')
+
+    @property
+    def bravado_core_config(self):
+        return self.get_bravado_config(config_type='bravado_core')
+
+    @property
+    def bravado_client_config(self):
+        return self.get_bravado_config(config_type='bravado_client')
