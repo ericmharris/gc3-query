@@ -443,5 +443,6 @@ class NestedOrderedDictAttrListBase(OrderedDictAttrBase):
         if hasattr(other, 'as_dict'):
             other = other.as_dict()
         melded.add(other)
-        return melded
+        melded_dict = melded.copy()
+        return melded_dict
 

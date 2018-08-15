@@ -136,6 +136,7 @@ def test_get_all_sec_rules():
 
     assert 'boolean_string' in [f.format for f in sec_rules.bravado_config['formats']]
     result_json = sec_rules.get_all_sec_rules()
+    assert isinstance(result_json['result'][0]['dst_is_ip'], bool)
     assert len(result_json['result']) > 0
     assert 'src_list' in result_json['result'][0]
 

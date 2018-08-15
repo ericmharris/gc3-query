@@ -32,6 +32,9 @@ from bravado_core.exception import MatchingResponseNotFound
 from bravado.exception import HTTPBadRequest
 from bravado.http_future import HttpFuture
 from bravado.swagger_model import Loader
+from bravado.config import BravadoConfig
+from bravado_core.spec import Spec
+
 
 ################################################################################
 ## Project Imports
@@ -94,4 +97,31 @@ class IaaSSwaggerClient(SwaggerClient):
 
 
 
+    @classmethod
+    def from_spec(cls, spec_dict, origin_url=None, http_client=None,
+                  config=None):
+        """
+        Build a :class:`SwaggerClient` from a Swagger spec in dict form.
 
+        :param spec_dict: a dict with a Swagger spec in json-like form
+        :param origin_url: the url used to retrieve the spec_dict
+        :type  origin_url: str
+        :param config: Configuration dict - see spec.CONFIG_DEFAULTS
+
+        :rtype: :class:`bravado_core.spec.Spec`
+        """
+        http_client = http_client or RequestsClient()
+        config = config or {}
+
+        # Apply bravado config defaults
+        bravado_config = BravadoConfig.from_config_dict(config)
+        # remove bravado configs from config dict
+        for key in set(bravado_config._fields).intersection(set(config)):
+            del config[key]
+        # set bravado config object
+        config['bravado'] = bravado_config
+
+        swagger_spec = Spec.from_dict(
+            spec_dict, origin_url, http_client, config,
+        )
+        return cls(swagger_spec, also_return_response=bravado_config.also_return_response)

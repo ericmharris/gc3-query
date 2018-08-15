@@ -22,12 +22,13 @@ import json
 
 ################################################################################
 ## Third-Party Imports
-import toml
 from dataclasses import dataclass
 from bravado_core.spec import Spec
 from bravado.swagger_model import load_file, load_url
 from melddict import MeldDict
 from bravado_core.spec import Spec
+import toml
+from toml import TomlDecodeError
 
 ################################################################################
 ## Project Imports
@@ -210,7 +211,11 @@ class OpenApiSpec(GC3VersionTypedMixin):
         """
         spec_overlay_file = spec_overlay_file if spec_overlay_file else self.spec_overlay_file
         with spec_overlay_file.open() as fd:
-            overlays = MeldDict(toml.load(f=fd))
+            try:
+                overlays = MeldDict(toml.load(f=fd))
+            except TomlDecodeError as e:
+                _error(f"TomlDecodeError while loading spec overlay: {fd}")
+                raise
         return overlays
 
     @property
@@ -228,7 +233,11 @@ class OpenApiSpec(GC3VersionTypedMixin):
         if not rest_endpoint:
             raise RuntimeError("rest_endpoint not provided in either method call or in **wkargs={self.kwargs}")
         core_spec: Spec = Spec(spec_dict=self.spec_dict, origin_url=rest_endpoint, http_client=None, config=BRAVADO_CONFIG)
-        return core_spec
+        #### bravado_core.spec.Spec#client_spec_dict
+        # Return a copy of spec_dict with x-scope metadata removed so that it
+        #         is suitable for consumption by Swagger clients.
+        client_spec_dict = core_spec.client_spec_dict
+        return client_spec_dict
 
     @property
     def swagger_spec(self) -> Spec:

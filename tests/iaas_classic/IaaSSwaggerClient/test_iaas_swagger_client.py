@@ -44,4 +44,8 @@ def test_bravado_client_and_core_config():
     assert 'also_return_response' in BRAVADO_CLIENT_CONFIG
     assert 'also_return_response' in BRAVADO_CONFIG
 
+    assert isinstance(BRAVADO_CLIENT_CONFIG, dict)
+    assert isinstance(BRAVADO_CORE_CONFIG, dict)
+    assert isinstance(BRAVADO_CONFIG, dict)
+
 
