@@ -21,8 +21,6 @@ config_dir = BASE_DIR.joinpath("etc/config")
 output_dir = TEST_BASE_DIR.joinpath('output')
 
 
-
-
 def test_setup():
     assert TEST_BASE_DIR.exists()
     assert API_SPECS_DIR.exists()
@@ -30,7 +28,6 @@ def test_setup():
         config_dir.mkdir()
     if not output_dir.exists():
         output_dir.mkdir()
-
 
 
 def test_init():
@@ -65,8 +62,9 @@ def test_get_spec():
     assert oapi_spec.name == service
     assert oapi_spec.spec_data['schemes'] == ['https']
     core_spec = oapi_spec.get_swagger_spec(rest_endpoint=idm_cfg.rest_endpoint)
-    assert core_spec.origin_url==idm_cfg.rest_endpoint
-    assert core_spec.spec_dict['info']['title']==service
+    assert core_spec.origin_url == idm_cfg.rest_endpoint
+    assert core_spec.spec_dict['info']['title'] == service
+
 
 def test_get_spec_from_kwargs():
     idm_domain = 'gc30003'
@@ -79,8 +77,9 @@ def test_get_spec_from_kwargs():
     assert oapi_spec.name == service
     assert oapi_spec.spec_data['schemes'] == ['https']
     core_spec = oapi_spec.get_swagger_spec()
-    assert core_spec.origin_url==idm_cfg.rest_endpoint
-    assert oapi_spec.rest_endpoint==idm_cfg.rest_endpoint
+    assert core_spec.origin_url == idm_cfg.rest_endpoint
+    assert oapi_spec.rest_endpoint == idm_cfg.rest_endpoint
+
 
 def test_from_url():
     idm_domain = 'gc30003'
@@ -92,11 +91,12 @@ def test_from_url():
     oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg, from_url=True)
     assert oapi_spec.name == service
     assert oapi_spec.spec_data['schemes'] == ['https']
-    assert oapi_spec.from_url==True
+    assert oapi_spec.from_url == True
 
     core_spec = oapi_spec.get_swagger_spec(rest_endpoint=idm_cfg.rest_endpoint)
-    assert core_spec.origin_url==idm_cfg.rest_endpoint
-    assert core_spec.spec_dict['info']['title']==service
+    assert core_spec.origin_url == idm_cfg.rest_endpoint
+    assert core_spec.spec_dict['info']['title'] == service
+
 
 def test_check_spec_properties():
     idm_domain = 'gc30003'
@@ -108,7 +108,7 @@ def test_check_spec_properties():
     oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg, idm_cfg=idm_cfg)
     assert oapi_spec.name == service
     assert oapi_spec.spec_data['schemes'] == ['https']
-    assert oapi_spec.title==service
+    assert oapi_spec.title == service
     version_tupple = oapi_spec.version.split('.')
     assert version_tupple[0].isnumeric()
     assert service.lower() in oapi_spec.description
@@ -122,8 +122,6 @@ def test_check_spec_properties():
     operation_id_descrs = oapi_spec.operation_id_descrs
     assert operation_id_descrs
     assert 'deleteInstance' in operation_id_descrs
-
-
 
 
 @pytest.fixture()
@@ -145,6 +143,7 @@ def test_equality_setup():
     instances = Instances(service_cfg=instances_service_cfg, idm_cfg=idm_cfg, from_url=True)
     yield sec_rules, instances, idm_cfg, idm_domain
 
+
 def test_equality(test_equality_setup):
     sec_rules, instances, idm_cfg, idm_domain = test_equality_setup
     idm_domain = 'gc30003'
@@ -158,7 +157,7 @@ def test_equality(test_equality_setup):
     instances_oapi_spec_2 = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=instances_service_cfg, idm_cfg=idm_cfg)
     assert instances_oapi_spec.name == instances_service
     assert instances_oapi_spec.spec_data['schemes'] == ['https']
-    assert instances_oapi_spec.title==instances_service
+    assert instances_oapi_spec.title == instances_service
 
     secrules_service: str = 'SecRules'
     gc3_config = GC3Config(atoml_config_dir=config_dir)
@@ -168,12 +167,11 @@ def test_equality(test_equality_setup):
     sec_rules_oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=sec_rules_service_cfg, idm_cfg=idm_cfg)
     assert sec_rules_oapi_spec.name == secrules_service
     assert sec_rules_oapi_spec.spec_data['schemes'] == ['https']
-    assert sec_rules_oapi_spec.title==secrules_service
+    assert sec_rules_oapi_spec.title == secrules_service
 
-    assert instances_oapi_spec==instances_oapi_spec_2
-    assert sec_rules_oapi_spec!=instances_oapi_spec
-    assert sec_rules_oapi_spec!=instances_oapi_spec_2
-
+    assert instances_oapi_spec == instances_oapi_spec_2
+    assert sec_rules_oapi_spec != instances_oapi_spec
+    assert sec_rules_oapi_spec != instances_oapi_spec_2
 
 
 def test_export():
@@ -202,20 +200,23 @@ def test_save_spec_to_catalog():
     oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg, from_url=True)
     assert oapi_spec.name == service
     assert oapi_spec.spec_data['schemes'] == ['https']
-    assert oapi_spec.from_url==True
+    assert oapi_spec.from_url == True
     spec_file_path = oapi_spec.spec_file
     if spec_file_path.exists():
         spec_file_path.unlink()
     assert not spec_file_path.exists()
     saved_path = oapi_spec.save_spec(overwrite=False)
-    assert saved_path==spec_file_path
+    assert saved_path == spec_file_path
 
     fd = spec_file_path.open('w')
     fd.close()
     saved_path_stat = saved_path.stat()
 
     saved_path = oapi_spec.save_spec(overwrite=True)
-    assert saved_path_stat!=saved_path.stat()
+    assert saved_path_stat != saved_path.stat()
+
+
+
 
 
 def test_spec_file_not_found():
@@ -230,7 +231,7 @@ def test_spec_file_not_found():
     if spec_file_path.exists():
         spec_file_path.unlink()
     assert not spec_file_path.exists()
-    del(oapi_spec)
+    del (oapi_spec)
     oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg)
     assert spec_file_path.exists()
 
@@ -252,13 +253,13 @@ def test_archive_spec_to_catalog():
     oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg, from_url=True)
     assert oapi_spec.name == service
     assert oapi_spec.spec_data['schemes'] == ['https']
-    assert oapi_spec.from_url==True
+    assert oapi_spec.from_url == True
     spec_archive_file_path = oapi_spec.spec_archive_file
     if spec_archive_file_path.exists():
         spec_archive_file_path.unlink()
     assert not spec_archive_file_path.exists()
     archive_path = oapi_spec.archive_spec_to_catalog()
-    assert archive_path==spec_archive_file_path
+    assert archive_path == spec_archive_file_path
     archive_path_stat = archive_path.stat()
     archive_path = oapi_spec.save_spec(overwrite=True)
-    assert archive_path_stat!=archive_path.stat()
+    assert archive_path_stat != archive_path.stat()
