@@ -153,6 +153,12 @@
                     }
                 ],
                 "responses":{
+                    "200":{
+                        "description":"OK. See <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_statuses'>Status Codes</a> for information about other possible HTTP status codes.",
+                        "schema":{
+                            "$ref":"#/definitions/view-all-instances"
+                        }
+                    },
                     "202":{
                         "description":"Accepted. See <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_statuses'>Status Codes</a> for information about other possible HTTP status codes.",
                         "schema":{
@@ -616,7 +622,7 @@
     },
     "definitions":{
         "monitor-instance":{
-            "title":"Response Body",
+            "title":"Response Body, monitor",
             "type":"object",
             "description":"",
             "properties":{
@@ -784,8 +790,9 @@
             }
         },
         "create-instance":{
-            "title":"Request Body",
+            "title":"Request Body, create-instance",
             "type":"object",
+            "description":"create-instances",
             "required":[
                 "edition",
                 "level",
@@ -1068,9 +1075,9 @@
             }
         },
         "view-all-instances":{
-            "title":"Response Body",
+            "title":"Response Body (view-all-instance)",
             "type":"object",
-            "description":"",
+            "description":"view-all-instances",
             "properties":{
                 "uri":{
                     "type":"string",
@@ -1145,7 +1152,7 @@
             }
         },
         "view-instance":{
-            "title":"Response Body",
+            "title":"Response Body, view-instances",
             "type":"object",
             "description":"",
             "properties":{
@@ -1340,7 +1347,7 @@
             }
         },
         "view-instance-nodes":{
-            "title":"Response Body",
+            "title":"Response Body, veiwasdf",
             "type":"array",
             "description":"Array of JSON object elements, with one element for each of the service instance's compute nodes.",
             "items":{
@@ -1418,7 +1425,7 @@
             }
         },
         "stop-start-restart-instance":{
-            "title":"Request Body",
+            "title":"Request Body, start-stop",
             "type":"object",
             "description":"",
             "properties":{
@@ -1437,9 +1444,9 @@
             }
         },
         "scale-putrequest":{
-            "title":"Request Body",
+            "title":"Request Body, scale-put",
             "type":"object",
-            "description":"",
+            "description":"scale-putrequest",
             "properties":{
                 "shape":{
                     "type":"string",
@@ -1460,9 +1467,9 @@
             }
         },
         "change-role-postrequest":{
-            "title":"Request Body",
+            "title":"Request Body, change-role-post",
             "type":"object",
-            "description":"",
+            "description":"change-role-postrequest",
             "properties":{
                 "action":{
                     "type":"string",
@@ -1475,9 +1482,9 @@
             }
         },
         "jobstatus-response":{
-            "title":"Response Body",
+            "title":"Response Body, jobstatus-response",
             "type":"object",
-            "description":"",
+            "description":"jobstatus-response",
             "properties":{
                 "service_name":{
                     "type":"string",
