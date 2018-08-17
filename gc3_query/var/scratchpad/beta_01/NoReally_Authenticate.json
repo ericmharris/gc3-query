@@ -1,0 +1,427 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "version" : "18.1.2-20180126.052521",
+    "description" : "A launch plan is a JSON-formatted file that defines the properties of one or more instances. You can use a launch plan to quickly create and start multiple, nonpersistent instances in Compute Classic. Note that while you can reuse your launch plan JSON file to create instances any number of times, the launch plan itself does not persist in Compute Classic.<p>When you create an instance, the initial state is <code>preparing</code>, as Compute Classic allocates resources and prepares to create the instance. Next, the state changes to <code>initializing</code>, which indicates that the specified image is being installed. When initializing is complete, the state changes to <code>running</code>, which indicates that the OS has started. When an instance is in the <code>running</code> state, you can connect to it.",
+    "title" : "Authenticate"
+  },
+  "schemes" : [ "https" ],
+  "consumes" : [ "application/oracle-compute-v3+json", "application/oracle-compute-v3+directory+json" ],
+  "produces" : [ "application/oracle-compute-v3+json", "application/oracle-compute-v3+directory+json" ],
+  "paths" : {
+    "/authenticate/" : {
+      "post" : {
+        "tags" : [ "Authenticate" ],
+        "summary" : "Create Instances Using Launch Plans",
+        "description" : "A launch plan is a JSON-formatted file that defines the properties of one or more instances. You can use a launch plan to quickly create and start multiple, non-persistent instances in Compute Classic.<p>A launch plan specifies the provisioning sequence and attributes of the instances that you want to create. Note that while you can reuse your launch plan JSON file to create new instances based on the attributes and provisioning sequence specified in the JSON file, the launch plan itself doesn't persist in Compute Classic.<p>For information about the attributes you can specify in a launch plan JSON file, see <a target=\"_blank\" href=\"http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=STCSG-GUID-433AEA3E-F569-45BB-8373-6108524EE25E\">Creating Instances Using Launch Plans</a> in <em>Using Oracle Cloud Infrastructure Compute Classic</em>.<p><b>Required Role: </b>To complete this task, you must have the <code>Compute_Operations</code> role. If this role isn't assigned to you or you're not sure, then ask your system administrator to ensure that the role is assigned to you in Oracle Cloud My Services. See <a target=\"_blank\" href=\"http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6\">Modifying User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.",
+        "operationId" : "authenticateUser",
+        "responses" : {
+          "201" : {
+            "headers" : {
+              "set-cookie" : {
+                "type" : "string",
+                "description" : "The cookie value is returned if the session is extended"
+              }
+            },
+            "description" : "Created. See <a class=\"xref\" href=\"Status%20Codes.html\">Status Codes</a> for information about other possible HTTP status codes.",
+            "schema" : {
+              "$ref" : "#/definitions/LaunchPlan-response"
+            }
+          }
+        },
+        "consumes" : [ "application/oracle-compute-v3+json" ],
+        "produces" : [ "application/oracle-compute-v3+json" ],
+        "parameters" : [ {
+          "name" : "body",
+          "in" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/LaunchPlan-post-request"
+          }
+        }, {
+          "name" : "Cookie",
+          "in" : "header",
+          "type" : "string",
+          "description" : "The Cookie: header must be included with every request to the service. It must be set to the value of the set-cookie header in the response received to the POST /authenticate/ call."
+        } ]
+      }
+    }
+  },
+  "definitions" : {
+    "DailyWeeklyInterval" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/Interval"
+      }, {
+        "type" : "object",
+        "properties" : {
+          "userTimeZone" : {
+            "type" : "string",
+            "description" : "Any IANA time zone. e.g: America/Los_Angeles"
+          },
+          "timeOfDay" : {
+            "pattern" : "([01]?[0-9]|2[0-3]):[0-5][0-9]",
+            "type" : "string",
+            "description" : "Time of the day to run a backup"
+          },
+          "daysOfWeek" : {
+            "items" : {
+              "enum" : [ "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY" ],
+              "type" : "string"
+            },
+            "type" : "array",
+            "description" : "Days of the week to run a backup"
+          }
+        },
+        "description" : "Backup Interval running once a day on certain days of the week"
+      } ]
+    },
+    "HourlyInterval" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/Interval"
+      }, {
+        "type" : "object",
+        "properties" : {
+          "hourlyInterval" : {
+            "type" : "integer",
+            "description" : "Hours to wait before starting the next backup",
+            "format" : "int32"
+          }
+        },
+        "description" : "Backup Interval running every X hours"
+      } ]
+    },
+    "Instance-post-request" : {
+      "required" : [ "shape" ],
+      "description" : "The request body contains details of the instance that you want to create. ",
+      "properties" : {
+        "attributes" : {
+          "additionalProperties" : {
+            "type" : "object"
+          },
+          "type" : "object",
+          "description" : "A JSON object or dictionary of user-defined attributes to be made available to the instance."
+        },
+        "boot_order" : {
+          "items" : {
+            "type" : "integer"
+          },
+          "type" : "array",
+          "description" : "The index number of the bootable storage volume that should be used to boot the instance. The only valid value is 1. If you set this attribute, you must also specify a bootable storage volume with index number 1 in the volume sub-parameter of storage_attachments. When you specify boot_order, you don't need to specify the imagelist attribute, because the instance is booted using the image on the specified bootable storage volume. If you specify both boot_order and imagelist, the imagelist attribute is ignored."
+        },
+        "desired_state" : {
+          "type" : "string",
+          "description" : "Desired state for the instance.<p>* Set the value of the <code>desired_state</code> parameter as <code>shutdown</code> to shut down the instance.<p>* Set the value of the <code>desired_state</code> parameter as <code>running</code> to restart an instance that you had previously shutdown. The instance is restarted without losing any of the instance data or configuration."
+        },
+        "entry" : {
+          "type" : "integer",
+          "description" : "Optional imagelistentry number (default will be used if not specified)."
+        },
+        "hostname" : {
+          "type" : "string",
+          "description" : "The host name assigned to the instance. On an Oracle Linux instance, this host name is displayed in response to the hostname command. Only relative DNS is supported. The domain name is suffixed to the host name that you specify. The host name must not end with a period. If you don't specify a host name, then a name is generated automatically."
+        },
+        "imagelist" : {
+          "type" : "string",
+          "description" : "The three-part name (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>) of the image list containing the image to be used. You must use this attribute if you don't specify a bootable storage volume by using the boot_order attribute. If you specify the imagelist attribute as well as the boot_order attribute, then the imagelist attribute is ignored."
+        },
+        "label" : {
+          "type" : "string",
+          "description" : "A label assigned by the user, specifically for defining inter-instance relationships."
+        },
+        "name" : {
+          "type" : "string",
+          "description" : "The three-part name of the instance(<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>). If you don't specify this parameter, it will be autogenerated."
+        },
+        "networking" : {
+          "additionalProperties" : {
+            "type" : "object"
+          },
+          "type" : "object",
+          "description" : "Mapping of device name to network specifiers for virtual NICs to be attached to this instance."
+        },
+        "reverse_dns" : {
+          "type" : "boolean",
+          "description" : "If set to true (default), then reverse DNS records are created. If set to false, no reverse DNS records are created."
+        },
+        "shape" : {
+          "type" : "string",
+          "description" : "The name of the shape that defines the number of CPUs and the RAM that you require for the instance."
+        },
+        "sshkeys" : {
+          "items" : {
+            "type" : "string"
+          },
+          "type" : "array",
+          "description" : "A list of the SSH public keys that you want to associate with the instance."
+        },
+        "storage_attachments" : {
+          "items" : {
+            "type" : "string"
+          },
+          "type" : "array",
+          "description" : "If you specify the storage_attachments parameter, then specify the following subparameters for each attachment:<p>volume: The three-part name (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>) of the storage volume that you want to attach to the instance. Note that volumes attached to an instance at launch time can't be detached.<p>index:  The index number for the volume. The allowed range is 1 to 10. If you want to use a storage volume as the boot disk for an instance, you must specify the index number for that volume as 1. The index determines the device name by which the volume is exposed to the instance."
+        },
+        "tags" : {
+          "items" : {
+            "type" : "string"
+          },
+          "type" : "array",
+          "description" : "A JSON array or list of strings used to tag the instance. By assigning a human-friendly tag to an instance, you can identify the instance easily when you perform an instance listing. These tags aren't available from within the instance."
+        }
+      }
+    },
+    "Instance-response" : {
+      "properties" : {
+        "account" : {
+          "type" : "string",
+          "description" : "Shows the default account for your identity domain."
+        },
+        "attributes" : {
+          "additionalProperties" : {
+            "type" : "object"
+          },
+          "type" : "object",
+          "description" : "A dictionary of attributes to be made available to the instance. A value with the key \"userdata\" will be made available in an EC2-compatible manner."
+        },
+        "availability_domain" : {
+          "type" : "string",
+          "description" : "The availability domain the instance is in"
+        },
+        "boot_order" : {
+          "items" : {
+            "type" : "integer"
+          },
+          "type" : "array",
+          "description" : "Boot order list."
+        },
+        "desired_state" : {
+          "type" : "string",
+          "description" : "Desired state for the instance. The value can be <code>shutdown</code> or <code>running</code> to shutdown an instance or to restart a previously shutdown instance respectively."
+        },
+        "disk_attach" : {
+          "type" : "string",
+          "description" : "A label assigned by the user to identify disks."
+        },
+        "domain" : {
+          "type" : "string",
+          "description" : "The default domain to use for the hostname and for DNS lookups."
+        },
+        "entry" : {
+          "type" : "integer",
+          "description" : "Optional imagelistentry number (default will be used if not specified)."
+        },
+        "error_reason" : {
+          "type" : "string",
+          "description" : "The reason for the instance going to error state, if available."
+        },
+        "fingerprint" : {
+          "type" : "string",
+          "description" : "SSH server fingerprint presented by the instance."
+        },
+        "hostname" : {
+          "type" : "string",
+          "description" : "The hostname for this instance."
+        },
+        "hypervisor" : {
+          "additionalProperties" : {
+            "type" : "object"
+          },
+          "type" : "object",
+          "description" : "A dictionary of hypervisor-specific attributes."
+        },
+        "image_format" : {
+          "type" : "string",
+          "description" : "The format of the image."
+        },
+        "imagelist" : {
+          "type" : "string",
+          "description" : "Name of imagelist to be launched."
+        },
+        "ip" : {
+          "type" : "string",
+          "description" : "IP address of the instance."
+        },
+        "label" : {
+          "type" : "string",
+          "description" : "A label assigned by the user, specifically for defining inter-instance relationships."
+        },
+        "name" : {
+          "type" : "string",
+          "description" : "Multipart name of the instance."
+        },
+        "networking" : {
+          "additionalProperties" : {
+            "type" : "object"
+          },
+          "type" : "object",
+          "description" : "Mapping of <device name> to network specifiers for virtual NICs to be attached to this instance."
+        },
+        "placement_requirements" : {
+          "items" : {
+            "type" : "string"
+          },
+          "type" : "array",
+          "description" : "A list of strings specifying arbitrary tags on nodes to be matched on placement."
+        },
+        "platform" : {
+          "type" : "string",
+          "description" : "The OS platform for the instance."
+        },
+        "priority" : {
+          "type" : "string",
+          "description" : "The priority at which this instance will be run."
+        },
+        "quota" : {
+          "type" : "string",
+          "description" : "Not used"
+        },
+        "relationships" : {
+          "items" : {
+            "additionalProperties" : {
+              "type" : "object"
+            },
+            "type" : "object"
+          },
+          "type" : "array",
+          "description" : "A list of relationship specifications to be satisfied on this instance's placement"
+        },
+        "resolvers" : {
+          "items" : {
+            "type" : "string"
+          },
+          "type" : "array",
+          "description" : "Resolvers to use instead of the default resolvers."
+        },
+        "reverse_dns" : {
+          "type" : "boolean",
+          "description" : "Add PTR records for the hostname."
+        },
+        "shape" : {
+          "type" : "string",
+          "description" : "A shape is a resource profile that specifies the number of CPU threads and the amount of memory (in MB) to be allocated to an instance."
+        },
+        "sshkeys" : {
+          "items" : {
+            "type" : "string"
+          },
+          "type" : "array",
+          "description" : "SSH keys that will be exposed to the instance."
+        },
+        "start_time" : {
+          "type" : "string",
+          "description" : "Start time of the instance."
+        },
+        "state" : {
+          "type" : "string",
+          "description" : "State of the instance."
+        },
+        "storage_attachments" : {
+          "items" : {
+            "type" : "string"
+          },
+          "type" : "array",
+          "description" : "List of dictionaries containing storage attachment Information."
+        },
+        "tags" : {
+          "items" : {
+            "type" : "string"
+          },
+          "type" : "array",
+          "description" : "Comma-separated list of strings used to tag the instance."
+        },
+        "uri" : {
+          "type" : "string",
+          "description" : "Uniform Resource Identifier"
+        },
+        "vcable_id" : {
+          "type" : "string",
+          "description" : "vCable for this instance."
+        },
+        "vnc" : {
+          "type" : "string",
+          "description" : "IP address and port of the VNC console for the instance."
+        }
+      }
+    },
+    "Interval" : {
+      "x-oneOf-instructions" : "Provide one of the valid object representations documented here.  For more information about oneOf see http://json-schema.org/latest/json-schema-validation.html#anchor88",
+      "type" : "object",
+      "description" : "There are two kinds of Intervals. Each Interval has its own JSON format. Your Interval field should look like one of the following:<p><ul><li><code>\"interval\":{\"Hourly\":{\"hourlyInterval\":2}}</code></li><li><code>{\"DailyWeekly\":{\"daysOfWeek\":[\"MONDAY\"],\"timeOfDay\":\"03:15\",\"userTimeZone\":\"America/Los_Angeles\"}}</code></li></ul><p>Days of the week is any day of the week fully capitalized (MONDAY, TUESDAY, etc). The user time zone is any IANA user timezone.  For example user time zones see <a href=\"https://en.wikipedia.org/wiki/IANA_time_zone_database\">List of IANA time zones</a>.",
+      "x-oneOf" : {
+        "oneOf" : [ {
+          "type" : "object",
+          "properties" : {
+            "DailyWeekly" : {
+              "allOf" : [ {
+                "$ref" : "#/definitions/DailyWeeklyInterval"
+              }, {
+                "type" : "object",
+                "properties" : { }
+              } ]
+            }
+          }
+        }, {
+          "type" : "object",
+          "properties" : {
+            "Hourly" : {
+              "allOf" : [ {
+                "$ref" : "#/definitions/HourlyInterval"
+              }, {
+                "type" : "object",
+                "properties" : { }
+              } ]
+            }
+          }
+        } ]
+      }
+    },
+    "LaunchPlan-post-request" : {
+      "required" : [ "instances" ],
+      "description" : "The request body contains details of the launch plan that you want to create. ",
+      "properties" : {
+        "instances" : {
+          "items" : {
+            "$ref" : "#/definitions/Instance-post-request"
+          },
+          "type" : "array",
+          "description" : "<p>A list of instances.<p>Each instance is defined using the instance attributes."
+        },
+        "relationships" : {
+          "items" : {
+            "additionalProperties" : {
+              "type" : "object"
+            },
+            "type" : "object"
+          },
+          "type" : "array",
+          "description" : "<p>The relationships between various instances.<p>Valid values:<ul><li>same_node: The specified instances are created on the same physical server. This is useful if you want to ensure low latency across instances.</li><li>different_node: The specified instances aren't created on the same physical server. This is useful if you want to isolate instances for security or redundancy.</li></ul>"
+        }
+      }
+    },
+    "LaunchPlan-response" : {
+      "properties" : {
+        "instances" : {
+          "items" : {
+            "$ref" : "#/definitions/Instance-response"
+          },
+          "type" : "array",
+          "description" : "<p>A list of instances.<p>Each instance is defined using the instance attributes."
+        },
+        "relationships" : {
+          "items" : {
+            "additionalProperties" : {
+              "type" : "object"
+            },
+            "type" : "object"
+          },
+          "type" : "array",
+          "description" : "<p>The relationships between various instances.<p>Valid values:<ul><li>same_node: The specified instances are created on the same physical server. This is useful if you want to ensure low latency across instances.</li><li>different_node: The specified instances aren't created on the same physical server. This is useful if you want to isolate instances for security or redundancy.</li></ul>"
+        }
+      }
+    }
+  },
+  "tags" : [ {
+    "name" : "Authenticate",
+    "description" : "A launch plan is a JSON-formatted file that defines the properties of one or more instances. You can use a launch plan to quickly create and start multiple, nonpersistent instances in Compute Classic. Note that while you can reuse your launch plan JSON file to create instances any number of times, the launch plan itself does not persist in Compute Classic.<p>When you create an instance, the initial state is <code>preparing</code>, as Compute Classic allocates resources and prepares to create the instance. Next, the state changes to <code>initializing</code>, which indicates that the specified image is being installed. When initializing is complete, the state changes to <code>running</code>, which indicates that the OS has started. When an instance is in the <code>running</code> state, you can connect to it."
+  } ]
+}

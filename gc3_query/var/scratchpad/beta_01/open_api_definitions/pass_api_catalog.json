@@ -1,0 +1,1449 @@
+{
+  "basePath" : "/",
+  "parameters" : {
+    "pageNumberParam" : {
+      "description" : "The page number to return, where the first page number is <code>1</code>. Defaults to <code>1</code>.",
+      "default" : 1,
+      "in" : "query",
+      "name" : "page",
+      "required" : false,
+      "type" : "integer"
+    },
+    "pageSizeParam" : {
+      "description" : "The number of items per page. Defaults to <code>10</code>.",
+      "default" : 10,
+      "in" : "query",
+      "name" : "pageSize",
+      "required" : false,
+      "type" : "integer"
+    },
+    "orgParam" : {
+      "description" : "The name of the organization.",
+      "in" : "path",
+      "name" : "org",
+      "required" : true,
+      "type" : "string"
+    },
+    "apiNameParam" : {
+      "description" : "The API's unique name. For example, for the <code>mobile-platform</code> service, two of the API names are <code>users</code> and <code>devices</code>.",
+      "in" : "path",
+      "name" : "apiName",
+      "required" : true,
+      "type" : "string"
+    },
+    "apiCollectionNameParam" : {
+      "description" : "The API collection's name. Examples:<code>mobile-platform</code> and <code>java</code>.",
+      "in" : "path",
+      "name" : "apiCollectionName",
+      "required" : true,
+      "type" : "string"
+    },
+    "apiCollectionVersionParam" : {
+      "description" : "The API collection's version.",
+      "in" : "path",
+      "name" : "apiCollectionVersion",
+      "required" : true,
+      "type" : "string"
+    },
+    "ifMatchParam" : {
+      "description" : "Optionally use this header to specify the value from the ETag header returned from an HTTP GET request of this resource. When specified, the server will complete the operation only when the <code>If-Match</code> header value is equal to the server's value.",
+      "in" : "header",
+      "name" : "If-Match",
+      "required" : false,
+      "type" : "string"
+    },
+    "filterParam" : {
+      "description" : "An optional query parameter to filter the results. You can filter the response by <code>organization</code>, <code>name</code>, <code>version</code>, <code>title</code>, <code>category</code>, and <code>description</code>. The filter values must exactly match. For example, to retrieve the API collections for the category <code>/platform</code>, use <code>?filter=category:/platform</code><br><br>Use ampersand (<code>&amp;</code>) to combine filters. For example, to fetch both versions 1.0 and 1.1 of the API collections in the <code>/platform</code> category, combine these filters: <br><br><code>filter=category:/platform&amp;filter=version:1.0&amp;filter=version:1.1</code>",
+      "in" : "query",
+      "name" : "filter",
+      "required" : false,
+      "type" : "string"
+    },
+    "fieldsParam" : {
+      "description" : "A comma-separated list of fields to include in the JSON response. Use dot notation to specify nested fields. For example, to include the link href, set the value to <code>links.self.href</code>. You can use the exclamation point (<code>!</code>) to exclude fields. For example, to exclude the links field, but include all other fields, set the value to <code>!links</code>.",
+      "in" : "query",
+      "name" : "fields",
+      "required" : false,
+      "type" : "string"
+    },
+    "searchParam" : {
+      "description" : "The search text. This parameter is required if the <code>fq</code> parameter is not specified. The query string supports the following special characters:<ul><li><code>+</code> signifies the AND operation.</li> <li><code>|</code> signifies the OR operation.</li><li><code>-</code> negates a single token.</li><li><code>\"</code> around multiple tokens signifies a phrase to search for.</li><li><code>*</code> at the end of a term signifies a prefix query.</li> <li><code>(</code> and <code>)</code> around one or more tokens signifies precedence.</li> <li><code>~N</code> after a word signifies edit distance (fuzziness).</li> <li><code>~N</code> after a phrase signifies slop amount.</li></ul>To search for any of these special characters, escape the character with a backslash.",
+      "in" : "query",
+      "name" : "q",
+      "required" : false,
+      "type" : "string"
+    },
+    "filteredSearchParam" : {
+      "description" : "Filtered query to limit search results. This parameter is required if the <code>q</code> parameter is not specified. This parameter is experimental and it may change in future releases.",
+      "in" : "query",
+      "name" : "fq",
+      "required" : false,
+      "type" : "string"
+    }
+  },
+  "responses" : {
+    "noContent" : {
+      "description" : "No Content"
+    },
+    "error" : {
+      "description" : "Error",
+      "schema" : {
+        "$ref" : "#/definitions/CatalogServiceErrorMessage"
+      }
+    },
+    "conflict" : {
+      "description" : "Either the request attempted to create an entity that already exists or another request locked this entity.",
+      "schema" : {
+        "$ref" : "#/definitions/CatalogServiceErrorMessage"
+      }
+    },
+    "preconditionFailed" : {
+      "description" : "The underlying entity has been modified and does not match the entity tag submitted with the request.",
+      "schema" : {
+        "$ref" : "#/definitions/CatalogServiceErrorMessage"
+      }
+    },
+    "apiCollectionResponse" : {
+      "description" : "Success.",
+      "schema" : {
+        "$ref" : "#/definitions/ApiCollectionResponse"
+      },
+      "examples" : {
+        "application/json" : {
+          "apis" : [ {
+            "description" : "Oracle API Catalog Cloud Service provides APIs for browsing and searching popular Oracle Public Cloud APIs",
+            "links" : {
+              "canonical" : {
+                "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/apicatalog/1.0/apis/apicatalog/canonical",
+                "rel" : "canonical",
+                "title" : "Canonical API Description",
+                "type" : "application/swagger+json;version=2.0"
+              },
+              "parent" : {
+                "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/apicatalog/1.0",
+                "rel" : "parent",
+                "title" : "Oracle API Catalog Cloud Service",
+                "type" : "application/json"
+              },
+              "raw" : {
+                "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/apicatalog/1.0/apis/apicatalog/raw",
+                "rel" : "raw",
+                "title" : "Raw API Description",
+                "type" : "application/swagger+json;version=2.0"
+              },
+              "self" : {
+                "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/apicatalog/1.0/apis/apicatalog",
+                "rel" : "self",
+                "title" : "REST API for Oracle API Catalog Cloud Service",
+                "type" : "application/json"
+              }
+            },
+            "name" : "apicatalog",
+            "title" : "REST API for Oracle API Catalog Cloud Service"
+          } ],
+          "category" : "/infrastructure",
+          "defaultVersion" : true,
+          "description" : "<p>You can use the APIs provided by the Oracle API Catalog Cloud Service to search and browse popular Oracle SaaS and PaaS APIs. The Oracle API Catalog Cloud Service also lets you export machine-readable OpenAPI (formerly Swagger) descriptions of the APIs in the catalog. You can then use code generation tools to generate code stubs from these API descriptions.</p><p>The operations that this service provides let you:<ul><li>Browse the API category tree</li><li>Search for an API</li><li>Retrieve API metadata and OpenAPI (formerly Swagger) descriptions</li></ul></p>",
+          "links" : {
+            "self" : {
+              "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/apicatalog/1.0",
+              "rel" : "self",
+              "title" : "Oracle API Catalog Cloud Service",
+              "type" : "application/json"
+            }
+          },
+          "name" : "apicatalog",
+          "organization" : "oracle-public",
+          "tags" : [ ],
+          "title" : "Oracle API Catalog Cloud Service",
+          "version" : "1.0"
+        }
+      }
+    },
+    "apiResponse" : {
+      "description" : "Success.",
+      "schema" : {
+        "$ref" : "#/definitions/ApiResponse"
+      },
+      "examples" : {
+        "application/json" : {
+          "description" : "Oracle API Catalog Cloud Service provides APIs for browsing and searching popular Oracle Public Cloud APIs",
+          "links" : {
+            "canonical" : {
+              "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/apicatalog/1.0/apis/apicatalog/canonical",
+              "rel" : "canonical",
+              "title" : "Canonical API Description",
+              "type" : "application/swagger+json;version=2.0"
+            },
+            "parent" : {
+              "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/apicatalog/1.0",
+              "rel" : "parent",
+              "title" : "Oracle API Catalog Cloud Service",
+              "type" : "application/json"
+            },
+            "raw" : {
+              "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/apicatalog/1.0/apis/apicatalog/raw",
+              "rel" : "raw",
+              "title" : "Raw API Description",
+              "type" : "application/swagger+json;version=2.0"
+            },
+            "self" : {
+              "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/apicatalog/1.0/apis/apicatalog",
+              "rel" : "self",
+              "title" : "REST API for Oracle API Catalog Cloud Service",
+              "type" : "application/json"
+            }
+          },
+          "name" : "apicatalog",
+          "title" : "REST API for Oracle API Catalog Cloud Service"
+        }
+      }
+    },
+    "apiDescriptionResponse" : {
+      "description" : "Success",
+      "schema" : {
+        "type" : "object"
+      },
+      "examples" : {
+        "application/swagger+json;version=2.0" : {
+          "swagger" : "2.0",
+          "info" : {
+            "version" : "1.0.0",
+            "title" : "Swagger Petstore",
+            "description" : "A sample API that uses a petstore as an example to demonstrate features in the swagger-2.0 specification",
+            "termsOfService" : "http://swagger.io/terms/",
+            "contact" : {
+              "name" : "Swagger API Team"
+            },
+            "license" : {
+              "name" : "MIT"
+            }
+          },
+          "host" : "petstore.swagger.io",
+          "basePath" : "/api",
+          "schemes" : [ "https" ],
+          "consumes" : [ "application/json" ],
+          "produces" : [ "application/json" ],
+          "paths" : {
+            "/pets" : {
+              "get" : {
+                "description" : "Returns all pets from the system that the user has access to",
+                "operationId" : "listPets",
+                "produces" : [ "application/json" ],
+                "responses" : {
+                  "200" : {
+                    "description" : "A list of pets.",
+                    "schema" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "CreatedAt" : {
+      "description" : "The timestamp when the entity was created.",
+      "type" : "string",
+      "format" : "date-time"
+    },
+    "UpdatedAt" : {
+      "description" : "The timestamp when the entity was last updated.",
+      "type" : "string",
+      "format" : "date-time"
+    },
+    "CategoryDisplayName" : {
+      "description" : "The category's display name. Example: <code>Application Development</code>.",
+      "type" : "string"
+    },
+    "CategoryPath" : {
+      "description" : "The category's path. Examples: <ul> <li><code>/platform</code></li> <li><code>/platform/application-development</code></li> </ul>",
+      "type" : "string",
+      "pattern" : "^(/|(/[a-z][a-z0-9]*(-[a-z0-9]+)*)+)$"
+    },
+    "CategorySortOrder" : {
+      "description" : "The preferred order in which to display this category in relation to the other categories.",
+      "type" : "integer",
+      "default" : 100
+    },
+    "OrganizationNameReference" : {
+      "description" : "The name of the organization.",
+      "type" : "string",
+      "pattern" : "^[a-zA-Z][a-zA-Z0-9]+([-_.][a-zA-Z0-9]+)*$"
+    },
+    "ApiDescriptionSpec" : {
+      "description" : "A string containing the API's OpenAPI (formerly Swagger) description.",
+      "type" : "object"
+    },
+    "ApiCollectionDescription" : {
+      "description" : "The description of the API collection.",
+      "type" : "string"
+    },
+    "ApiCollectionDefaultVersion" : {
+      "description" : "Set to <code>true</code> when this is the default version of API collections with the same organization and name as this API collection.",
+      "type" : "boolean"
+    },
+    "ApiCollectionName" : {
+      "description" : "The API collection's short name.",
+      "type" : "string",
+      "pattern" : "^[a-zA-Z][a-zA-Z0-9]+([-_.][a-zA-Z0-9]+)*$"
+    },
+    "ApiCollectionVersion" : {
+      "description" : "The API collection's version.",
+      "type" : "string",
+      "pattern" : "^([a-zA-Z0-9]+[._-]{0,1})*[0-9]+([._-]{0,1}[a-zA-Z0-9]+)*$"
+    },
+    "ApiCollectionTags" : {
+      "description" : "A set of user-defined tags.",
+      "items" : {
+        "type" : "string",
+        "pattern" : "^(?=.{2,35}$)[a-zA-Z][a-zA-Z0-9]+(_[a-zA-Z][a-zA-Z0-9]+)*"
+      },
+      "type" : "array"
+    },
+    "ApiCollectionTitle" : {
+      "description" : "The API collection's title.",
+      "type" : "string"
+    },
+    "ApiCollectionResponse" : {
+      "properties" : {
+        "apis" : {
+          "description" : "An array of API metadata.",
+          "items" : {
+            "$ref" : "#/definitions/ApiResponse"
+          },
+          "type" : "array"
+        },
+        "category" : {
+          "$ref" : "#/definitions/CategoryPath"
+        },
+        "defaultVersion" : {
+          "$ref" : "#/definitions/ApiCollectionDefaultVersion"
+        },
+        "description" : {
+          "$ref" : "#/definitions/ApiCollectionDescription"
+        },
+        "links" : {
+          "description" : "The link to this (<code>self</code>) resource.",
+          "$ref" : "#/definitions/ApiCollectionResponseLinks"
+        },
+        "name" : {
+          "description" : "The API collection's short name.",
+          "type" : "string"
+        },
+        "organization" : {
+          "$ref" : "#/definitions/OrganizationNameReference",
+          "description" : "The organization the API collection belongs to."
+        },
+        "tags" : {
+          "$ref" : "#/definitions/ApiCollectionTags"
+        },
+        "title" : {
+          "$ref" : "#/definitions/ApiCollectionTitle"
+        },
+        "version" : {
+          "description" : "The API collection's version.",
+          "type" : "string"
+        }
+      }
+    },
+    "ApiRequest" : {
+      "properties" : {
+        "apiDescription" : {
+          "$ref" : "#/definitions/ApiDescriptionSpec"
+        },
+        "description" : {
+          "description" : "The short description of the API.",
+          "type" : "string"
+        },
+        "name" : {
+          "description" : "The name of the API.",
+          "type" : "string"
+        },
+        "title" : {
+          "description" : "The title of the API.",
+          "type" : "string"
+        }
+      }
+    },
+    "ApiResponse" : {
+      "properties" : {
+        "description" : {
+          "description" : "The description of the API.",
+          "type" : "string"
+        },
+        "links" : {
+          "$ref" : "#/definitions/ApiResponseLinks",
+          "description" : "The links to the user-uploaded machine-readable API description (<code>raw</code>), the OpenAPI (formerly Swagger) description (<code>canonical</code>), the API collection that this API belongs to (<code>parent</code>) and this API (<code>self</code>). The <code>rel</code> property indicates which type of link it is."
+        },
+        "name" : {
+          "description" : "The name of the API.",
+          "type" : "string"
+        },
+        "title" : {
+          "description" : "The title of the API.",
+          "type" : "string"
+        }
+      }
+    },
+    "CategoryResponse" : {
+      "properties" : {
+        "children" : {
+          "description" : "The category's immediate children.",
+          "items" : {
+            "$ref" : "#/definitions/CategoryResponse"
+          },
+          "type" : "array"
+        },
+        "createdAt" : {
+          "$ref" : "#/definitions/CreatedAt"
+        },
+        "displayName" : {
+          "$ref" : "#/definitions/CategoryDisplayName"
+        },
+        "links" : {
+          "$ref" : "#/definitions/CategoryResponseLinks",
+          "description" : "An array that contains the links to this category (<code>self</code>) and its <code>parent</code> category resource. A link to fetch the API collections in this category is provided also. The <code>rel</code> property indicates which type of link it is."
+        },
+        "name" : {
+          "description" : "The category's short name. For example: <code>application-development</code>.",
+          "type" : "string"
+        },
+        "path" : {
+          "$ref" : "#/definitions/CategoryPath"
+        },
+        "sortOrder" : {
+          "$ref" : "#/definitions/CategorySortOrder"
+        },
+        "updatedAt" : {
+          "$ref" : "#/definitions/UpdatedAt"
+        }
+      }
+    },
+    "PaginatedResponseLinks" : {
+      "description" : "The links to the current page (<code>self</code>), <code>next</code> page and <code>previous</code> page of results. The <code>next</code> link is included only if there are more results. The <code>previous</code> link is included only if the current page (<code>self</code>) is not the first page.",
+      "properties" : {
+        "next" : {
+          "$ref" : "#/definitions/Link",
+          "description" : "The link to the next page of results. Only included if there are more results."
+        },
+        "prev" : {
+          "$ref" : "#/definitions/Link",
+          "description" : "The link to the previous page of results. Only included if this is not the first page."
+        },
+        "self" : {
+          "$ref" : "#/definitions/Link",
+          "description" : "The link to this page of results."
+        }
+      },
+      "required" : [ "self" ]
+    },
+    "ApiCollectionRequest" : {
+      "properties" : {
+        "apis" : {
+          "description" : "An array of API metadata.",
+          "items" : {
+            "$ref" : "#/definitions/ApiRequest"
+          },
+          "type" : "array",
+          "minItems" : 0
+        },
+        "category" : {
+          "$ref" : "#/definitions/CategoryPath",
+          "description" : "The category that the API collection belongs to."
+        },
+        "defaultVersion" : {
+          "$ref" : "#/definitions/ApiCollectionDefaultVersion"
+        },
+        "description" : {
+          "$ref" : "#/definitions/ApiCollectionDescription"
+        },
+        "name" : {
+          "$ref" : "#/definitions/ApiCollectionName"
+        },
+        "organization" : {
+          "$ref" : "#/definitions/OrganizationNameReference"
+        },
+        "tags" : {
+          "$ref" : "#/definitions/ApiCollectionTags"
+        },
+        "title" : {
+          "$ref" : "#/definitions/ApiCollectionTitle"
+        },
+        "version" : {
+          "$ref" : "#/definitions/ApiCollectionVersion"
+        }
+      },
+      "required" : [ "name", "organization", "title", "version" ]
+    },
+    "ApiCollectionPatchRequest" : {
+      "properties" : {
+        "category" : {
+          "description" : "The category that the API collection belongs to.",
+          "$ref" : "#/definitions/CategoryPath"
+        },
+        "description" : {
+          "$ref" : "#/definitions/ApiCollectionDescription"
+        },
+        "newTags" : {
+          "$ref" : "#/definitions/ApiCollectionTags",
+          "description" : "A set of user-defined tags to add to the API collection's existing set of tags."
+        },
+        "removedTags" : {
+          "$ref" : "#/definitions/ApiCollectionTags",
+          "description" : "A set of user-defined tags to remove from the API collection's existing set of tags."
+        },
+        "title" : {
+          "$ref" : "#/definitions/ApiCollectionTitle"
+        }
+      }
+    },
+    "ApiCollectionResponseLinks" : {
+      "description" : "The link to this (<code>self</code>) API collection.",
+      "properties" : {
+        "self" : {
+          "$ref" : "#/definitions/Link",
+          "description" : "The link to this API collection."
+        }
+      }
+    },
+    "ApiResponseLinks" : {
+      "description" : "The links to the user-uploaded machine-readable API description (<code>raw</code>), the OpenAPI (formerly Swagger) description (<code>canonical</code>), the API collection that this API belongs to (<code>parent</code>) and this API (<code>self</code>). The <code>rel</code> property indicates which type of link it is.",
+      "properties" : {
+        "canonical" : {
+          "$ref" : "#/definitions/Link",
+          "description" : "The link to the machine-readable OpenAPI (formerly Swagger) description for this API."
+        },
+        "parent" : {
+          "$ref" : "#/definitions/Link",
+          "description" : "The link to the API collection this API belongs to."
+        },
+        "raw" : {
+          "$ref" : "#/definitions/Link",
+          "description" : "The link to the user-uploaded machine-readable API description for this API."
+        },
+        "self" : {
+          "$ref" : "#/definitions/Link",
+          "description" : "The link to this API."
+        }
+      }
+    },
+    "CategoryResponseLinks" : {
+      "description" : "An array that contains links to this category (<code>self</code>) and its <code>parent</code> category resource. A link to fetch the API collections in this category is provided also. The <code>rel</code> property indicates which type of link it is.",
+      "properties" : {
+        "apis" : {
+          "$ref" : "#/definitions/Link",
+          "description" : "The link to fetch the APIs in this category."
+        },
+        "parent" : {
+          "$ref" : "#/definitions/Link",
+          "description" : "The link to the <code>parent</code> category."
+        },
+        "self" : {
+          "$ref" : "#/definitions/Link",
+          "description" : "The link to this category."
+        }
+      }
+    },
+    "CategoryTree" : {
+      "properties" : {
+        "category" : {
+          "$ref" : "#/definitions/CategoryResponse",
+          "description" : "The root category of this tree."
+        },
+        "children" : {
+          "description" : "The children categories.",
+          "items" : {
+            "$ref" : "#/definitions/CategoryTree"
+          },
+          "type" : "array"
+        }
+      }
+    },
+    "PaginatedApiCollectionResponse" : {
+      "properties" : {
+        "data" : {
+          "description" : "An array of API collections.",
+          "items" : {
+            "$ref" : "#/definitions/ApiCollectionResponse"
+          },
+          "type" : "array"
+        },
+        "links" : {
+          "$ref" : "#/definitions/PaginatedResponseLinks",
+          "description" : "Pagination links related to this result."
+        },
+        "pageNumber" : {
+          "description" : "The current page number.",
+          "type" : "integer"
+        },
+        "pageSize" : {
+          "description" : "The number of items per page.",
+          "type" : "integer"
+        },
+        "totalCount" : {
+          "description" : "The total number of results in the entire result set.",
+          "type" : "integer"
+        }
+      }
+    },
+    "CatalogServiceErrorMessage" : {
+      "properties" : {
+        "message" : {
+          "description" : "The description of the error condition.",
+          "type" : "string"
+        },
+        "status" : {
+          "description" : "The HTTP status code of the response.",
+          "type" : "integer"
+        }
+      }
+    },
+    "Link" : {
+      "properties" : {
+        "href" : {
+          "description" : "The URI associated with this link.",
+          "type" : "string"
+        },
+        "rel" : {
+          "description" : "The relation type of this link as defined in RFC5988.",
+          "type" : "string"
+        },
+        "title" : {
+          "description" : "The title of the destination of this link as defined in RFC5988.",
+          "type" : "string"
+        },
+        "type" : {
+          "description" : "A hint indicating the media type of the result of dereferencing this link as defined in RFC5988.",
+          "type" : "string"
+        }
+      },
+      "required" : [ "href" ]
+    }
+  },
+  "securityDefinitions" : {
+    "basic_auth" : {
+      "type" : "basic"
+    }
+  },
+  "security" : [ {
+    "basic_auth" : [ ]
+  } ],
+  "info" : {
+    "description" : "The API Collections API lets you retrieve the API Collections metadata and API descriptions in OpenAPI (formerly Swagger) format.",
+    "title" : "API Collections",
+    "version" : "v1"
+  },
+  "externalDocs" : {
+    "description" : "API Catalog Documentation on Oracle Help Center",
+    "url" : "http://www.oracle.com/pls/topic/lookup?ctx=en/cloud/paas/apicatalog-cloud&id=APIUG-GUID-860FEB9E-0719-4B2C-9901-97EB78CCE0E4"
+  },
+  "paths" : {
+    "/v1/apicollections/" : {
+      "get" : {
+        "description" : "Retrieves API collections in the catalog. For each collection, it lists the metadata for all APIs in the collection, including the links to the canonical OpenAPI (formerly Swagger) descriptions.<br><br><p>You can use the <code>filter</code> query parameter to filter the results.</p>",
+        "operationId" : "findApiCollectionsByQuery",
+        "parameters" : [ {
+          "$ref" : "#/parameters/filterParam"
+        }, {
+          "$ref" : "#/parameters/pageNumberParam"
+        }, {
+          "$ref" : "#/parameters/pageSizeParam"
+        }, {
+          "$ref" : "#/parameters/fieldsParam"
+        } ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/PaginatedApiCollectionResponse"
+            },
+            "examples" : {
+              "application/json" : {
+                "data" : [ {
+                  "apis" : [ {
+                    "description" : "This API is used to manage <strong>archive</strong> containers and objects in Oracle Storage Cloud Service.",
+                    "links" : {
+                      "canonical" : {
+                        "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/storage-archive/1.0/apis/archive/canonical",
+                        "rel" : "canonical",
+                        "title" : "Canonical API Description",
+                        "type" : "application/swagger+json;version=2.0"
+                      },
+                      "parent" : {
+                        "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/storage-archive/1.0",
+                        "rel" : "parent",
+                        "title" : "Archive Storage in Oracle Storage Cloud Service",
+                        "type" : "application/json"
+                      },
+                      "raw" : {
+                        "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/storage-archive/1.0/apis/archive/raw",
+                        "rel" : "raw",
+                        "title" : "Raw API Description",
+                        "type" : "application/swagger+json;version=2.0"
+                      },
+                      "self" : {
+                        "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/storage-archive/1.0/apis/archive",
+                        "rel" : "self",
+                        "title" : "Archive",
+                        "type" : "application/json"
+                      }
+                    },
+                    "name" : "archive",
+                    "title" : "Archive"
+                  } ],
+                  "category" : "/infrastructure",
+                  "defaultVersion" : true,
+                  "description" : "<p>Use the REST API for <strong>Archive Storage</strong> in Oracle Storage Cloud Service to manage archive containers and objects in your service instance, and to manage account metadata for your service instance.</p>\n\n<p><strong>Note</strong>: This document includes content from OpenStack documentation. For the copyright and license notices, see <em>Licensing Information User Manual for Oracle Storage Cloud Service</em>.</p>",
+                  "links" : {
+                    "self" : {
+                      "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/storage-archive/1.0",
+                      "rel" : "self",
+                      "title" : "Archive Storage in Oracle Storage Cloud Service",
+                      "type" : "application/json"
+                    }
+                  },
+                  "name" : "storage-archive",
+                  "organization" : "oracle-public",
+                  "tags" : [ ],
+                  "title" : "Archive Storage in Oracle Storage Cloud Service",
+                  "version" : "1.0"
+                }, {
+                  "apis" : [ {
+                    "description" : "Oracle API Catalog Cloud Service provides APIs for browsing and searching popular Oracle Public Cloud APIs",
+                    "links" : {
+                      "canonical" : {
+                        "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/apicatalog/1.0/apis/apicatalog/canonical",
+                        "rel" : "canonical",
+                        "title" : "Canonical API Description",
+                        "type" : "application/swagger+json;version=2.0"
+                      },
+                      "parent" : {
+                        "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/apicatalog/1.0",
+                        "rel" : "parent",
+                        "title" : "Oracle API Catalog Cloud Service",
+                        "type" : "application/json"
+                      },
+                      "raw" : {
+                        "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/apicatalog/1.0/apis/apicatalog/raw",
+                        "rel" : "raw",
+                        "title" : "Raw API Description",
+                        "type" : "application/swagger+json;version=2.0"
+                      },
+                      "self" : {
+                        "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/apicatalog/1.0/apis/apicatalog",
+                        "rel" : "self",
+                        "title" : "REST API for Oracle API Catalog Cloud Service",
+                        "type" : "application/json"
+                      }
+                    },
+                    "name" : "apicatalog",
+                    "title" : "REST API for Oracle API Catalog Cloud Service"
+                  } ],
+                  "category" : "/infrastructure",
+                  "defaultVersion" : true,
+                  "description" : "<p>You can use the APIs provided by the Oracle API Catalog Cloud Service to search and browse popular Oracle SaaS and PaaS APIs. The Oracle API Catalog Cloud Service also lets you export machine-readable OpenAPI (formerly Swagger) descriptions of the APIs in the catalog. You can then use code generation tools to generate code stubs from these API descriptions.</p><p>The operations that this service provides let you:<ul><li>Browse the API category tree</li><li>Search for an API</li><li>Retrieve API metadata and OpenAPI (formerly Swagger) descriptions</li></ul></p>",
+                  "links" : {
+                    "self" : {
+                      "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/apicatalog/1.0",
+                      "rel" : "self",
+                      "title" : "Oracle API Catalog Cloud Service",
+                      "type" : "application/json"
+                    }
+                  },
+                  "name" : "apicatalog",
+                  "organization" : "oracle-public",
+                  "tags" : [ ],
+                  "title" : "Oracle API Catalog Cloud Service",
+                  "version" : "1.0"
+                } ],
+                "links" : {
+                  "next" : {
+                    "href" : "https://apicatalog.oraclecloud.com/v1/apicollections/?page=2",
+                    "rel" : "next",
+                    "title" : "Next",
+                    "type" : "application/json"
+                  },
+                  "self" : {
+                    "href" : "https://apicatalog.oraclecloud.com/v1/apicollections/",
+                    "rel" : "self",
+                    "title" : "Page 1",
+                    "type" : "application/json"
+                  }
+                },
+                "pageNumber" : 1,
+                "pageSize" : 10,
+                "totalCount" : 2
+              }
+            }
+          },
+          "default" : {
+            "$ref" : "#/responses/error"
+          }
+        },
+        "summary" : "Query API Collections by Filter",
+        "tags" : [ "API Collections" ]
+      }
+    },
+    "/v1/user/apicollections/" : {
+      "get" : {
+        "description" : "Retrieves the authenticated user's API collections in the catalog.",
+        "operationId" : "readUserApiCollection",
+        "parameters" : [ {
+          "$ref" : "#/parameters/filterParam"
+        }, {
+          "$ref" : "#/parameters/pageNumberParam"
+        }, {
+          "$ref" : "#/parameters/pageSizeParam"
+        }, {
+          "$ref" : "#/parameters/fieldsParam"
+        } ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/PaginatedApiCollectionResponse"
+            },
+            "examples" : {
+              "application/json" : {
+                "data" : [ {
+                  "apis" : [ {
+                    "description" : "This API is used to manage <strong>archive</strong> containers and objects in Oracle Storage Cloud Service.",
+                    "links" : {
+                      "canonical" : {
+                        "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/storage-archive/1.0/apis/archive/canonical",
+                        "rel" : "canonical",
+                        "title" : "Canonical API Description",
+                        "type" : "application/swagger+json;version=2.0"
+                      },
+                      "parent" : {
+                        "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/storage-archive/1.0",
+                        "rel" : "parent",
+                        "title" : "Archive Storage in Oracle Storage Cloud Service",
+                        "type" : "application/json"
+                      },
+                      "raw" : {
+                        "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/storage-archive/1.0/apis/archive/raw",
+                        "rel" : "raw",
+                        "title" : "Raw API Description",
+                        "type" : "application/swagger+json;version=2.0"
+                      },
+                      "self" : {
+                        "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/storage-archive/1.0/apis/archive",
+                        "rel" : "self",
+                        "title" : "Archive",
+                        "type" : "application/json"
+                      }
+                    },
+                    "name" : "archive",
+                    "title" : "Archive"
+                  } ],
+                  "category" : "/infrastructure",
+                  "defaultVersion" : true,
+                  "description" : "<p>Use the REST API for <strong>Archive Storage</strong> in Oracle Storage Cloud Service to manage archive containers and objects in your service instance, and to manage account metadata for your service instance.</p>\n\n<p><strong>Note</strong>: This document includes content from OpenStack documentation. For the copyright and license notices, see <em>Licensing Information User Manual for Oracle Storage Cloud Service</em>.</p>",
+                  "links" : {
+                    "self" : {
+                      "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/storage-archive/1.0",
+                      "rel" : "self",
+                      "title" : "Archive Storage in Oracle Storage Cloud Service",
+                      "type" : "application/json"
+                    }
+                  },
+                  "name" : "storage-archive",
+                  "organization" : "oracle-public",
+                  "tags" : [ ],
+                  "title" : "Archive Storage in Oracle Storage Cloud Service",
+                  "version" : "1.0"
+                }, {
+                  "apis" : [ {
+                    "description" : "Oracle API Catalog Cloud Service provides APIs for browsing and searching popular Oracle Public Cloud APIs",
+                    "links" : {
+                      "canonical" : {
+                        "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/apicatalog/1.0/apis/apicatalog/canonical",
+                        "rel" : "canonical",
+                        "title" : "Canonical API Description",
+                        "type" : "application/swagger+json;version=2.0"
+                      },
+                      "parent" : {
+                        "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/apicatalog/1.0",
+                        "rel" : "parent",
+                        "title" : "Oracle API Catalog Cloud Service",
+                        "type" : "application/json"
+                      },
+                      "raw" : {
+                        "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/apicatalog/1.0/apis/apicatalog/raw",
+                        "rel" : "raw",
+                        "title" : "Raw API Description",
+                        "type" : "application/swagger+json;version=2.0"
+                      },
+                      "self" : {
+                        "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/apicatalog/1.0/apis/apicatalog",
+                        "rel" : "self",
+                        "title" : "REST API for Oracle API Catalog Cloud Service",
+                        "type" : "application/json"
+                      }
+                    },
+                    "name" : "apicatalog",
+                    "title" : "REST API for Oracle API Catalog Cloud Service"
+                  } ],
+                  "category" : "/infrastructure",
+                  "defaultVersion" : true,
+                  "description" : "<p>You can use the APIs provided by the Oracle API Catalog Cloud Service to search and browse popular Oracle SaaS and PaaS APIs. The Oracle API Catalog Cloud Service also lets you export machine-readable OpenAPI (formerly Swagger) descriptions of the APIs in the catalog. You can then use code generation tools to generate code stubs from these API descriptions.</p><p>The operations that this service provides let you:<ul><li>Browse the API category tree</li><li>Search for an API</li><li>Retrieve API metadata and OpenAPI (formerly Swagger) descriptions</li></ul></p>",
+                  "links" : {
+                    "self" : {
+                      "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/apicatalog/1.0",
+                      "rel" : "self",
+                      "title" : "Oracle API Catalog Cloud Service",
+                      "type" : "application/json"
+                    }
+                  },
+                  "name" : "apicatalog",
+                  "organization" : "oracle-public",
+                  "tags" : [ ],
+                  "title" : "Oracle API Catalog Cloud Service",
+                  "version" : "1.0"
+                } ],
+                "links" : {
+                  "next" : {
+                    "href" : "https://apicatalog.oraclecloud.com/v1/user/apicollections/?page=2",
+                    "rel" : "next",
+                    "title" : "Next",
+                    "type" : "application/json"
+                  },
+                  "self" : {
+                    "href" : "https://apicatalog.oraclecloud.com/v1/user/apicollections/",
+                    "rel" : "self",
+                    "title" : "Page 1",
+                    "type" : "application/json"
+                  }
+                },
+                "pageNumber" : 1,
+                "pageSize" : 10,
+                "totalCount" : 2
+              }
+            }
+          },
+          "default" : {
+            "$ref" : "#/responses/error"
+          }
+        },
+        "summary" : "Retrieve User API Collections",
+        "tags" : [ "API Collections" ]
+      }
+    },
+    "/v1/orgs/{org}/apicollections" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/orgParam"
+      } ],
+      "get" : {
+        "description" : "Retrieves all API collections in the organization specified by the <code>org</code> path parameter. For each API collection, it lists the metadata for the APIs in the collection, including the links to the canonical OpenAPI (formerly Swagger) descriptions.<br><p> You can use the <code>filter</code> query parameter to filter the results.</p><br>",
+        "operationId" : "getAllApiCollectionsInOrganization",
+        "parameters" : [ {
+          "$ref" : "#/parameters/filterParam"
+        }, {
+          "$ref" : "#/parameters/pageNumberParam"
+        }, {
+          "$ref" : "#/parameters/pageSizeParam"
+        }, {
+          "$ref" : "#/parameters/fieldsParam"
+        } ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/PaginatedApiCollectionResponse"
+            },
+            "examples" : {
+              "application/json" : {
+                "data" : [ {
+                  "apis" : [ {
+                    "description" : "This API is used to manage <strong>archive</strong> containers and objects in Oracle Storage Cloud Service.",
+                    "links" : {
+                      "canonical" : {
+                        "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/storage-archive/1.0/apis/archive/canonical",
+                        "rel" : "canonical",
+                        "title" : "Canonical API Description",
+                        "type" : "application/swagger+json;version=2.0"
+                      },
+                      "parent" : {
+                        "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/storage-archive/1.0",
+                        "rel" : "parent",
+                        "title" : "Archive Storage in Oracle Storage Cloud Service",
+                        "type" : "application/json"
+                      },
+                      "raw" : {
+                        "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/storage-archive/1.0/apis/archive/raw",
+                        "rel" : "raw",
+                        "title" : "Raw API Description",
+                        "type" : "application/swagger+json;version=2.0"
+                      },
+                      "self" : {
+                        "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/storage-archive/1.0/apis/archive",
+                        "rel" : "self",
+                        "title" : "Archive",
+                        "type" : "application/json"
+                      }
+                    },
+                    "name" : "archive",
+                    "title" : "Archive"
+                  } ],
+                  "category" : "/infrastructure",
+                  "defaultVersion" : true,
+                  "description" : "<p>Use the REST API for <strong>Archive Storage</strong> in Oracle Storage Cloud Service to manage archive containers and objects in your service instance, and to manage account metadata for your service instance.</p>\n\n<p><strong>Note</strong>: This document includes content from OpenStack documentation. For the copyright and license notices, see <em>Licensing Information User Manual for Oracle Storage Cloud Service</em>.</p>",
+                  "links" : {
+                    "self" : {
+                      "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/storage-archive/1.0",
+                      "rel" : "self",
+                      "title" : "Archive Storage in Oracle Storage Cloud Service",
+                      "type" : "application/json"
+                    }
+                  },
+                  "name" : "storage-archive",
+                  "organization" : "oracle-public",
+                  "tags" : [ ],
+                  "title" : "Archive Storage in Oracle Storage Cloud Service",
+                  "version" : "1.0"
+                }, {
+                  "apis" : [ {
+                    "description" : "Oracle API Catalog Cloud Service provides APIs for browsing and searching popular Oracle Public Cloud APIs",
+                    "links" : {
+                      "canonical" : {
+                        "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/apicatalog/1.0/apis/apicatalog/canonical",
+                        "rel" : "canonical",
+                        "title" : "Canonical API Description",
+                        "type" : "application/swagger+json;version=2.0"
+                      },
+                      "parent" : {
+                        "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/apicatalog/1.0",
+                        "rel" : "parent",
+                        "title" : "Oracle API Catalog Cloud Service",
+                        "type" : "application/json"
+                      },
+                      "raw" : {
+                        "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/apicatalog/1.0/apis/apicatalog/raw",
+                        "rel" : "raw",
+                        "title" : "Raw API Description",
+                        "type" : "application/swagger+json;version=2.0"
+                      },
+                      "self" : {
+                        "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/apicatalog/1.0/apis/apicatalog",
+                        "rel" : "self",
+                        "title" : "REST API for Oracle API Catalog Cloud Service",
+                        "type" : "application/json"
+                      }
+                    },
+                    "name" : "apicatalog",
+                    "title" : "REST API for Oracle API Catalog Cloud Service"
+                  } ],
+                  "category" : "/infrastructure",
+                  "defaultVersion" : true,
+                  "description" : "<p>You can use the APIs provided by the Oracle API Catalog Cloud Service to search and browse popular Oracle SaaS and PaaS APIs. The Oracle API Catalog Cloud Service also lets you export machine-readable OpenAPI (formerly Swagger) descriptions of the APIs in the catalog. You can then use code generation tools to generate code stubs from these API descriptions.</p><p>The operations that this service provides let you:<ul><li>Browse the API category tree</li><li>Search for an API</li><li>Retrieve API metadata and OpenAPI (formerly Swagger) descriptions</li></ul></p>",
+                  "links" : {
+                    "self" : {
+                      "href" : "https://apicatalog.oraclecloud.com/v1/orgs/oracle-public/apicollections/apicatalog/1.0",
+                      "rel" : "self",
+                      "title" : "Oracle API Catalog Cloud Service",
+                      "type" : "application/json"
+                    }
+                  },
+                  "name" : "apicatalog",
+                  "organization" : "oracle-public",
+                  "tags" : [ ],
+                  "title" : "Oracle API Catalog Cloud Service",
+                  "version" : "1.0"
+                } ],
+                "links" : {
+                  "next" : {
+                    "href" : "https://apicatalog.oraclecloud.com/v1/apicollections/?page=2",
+                    "rel" : "next",
+                    "title" : "Next",
+                    "type" : "application/json"
+                  },
+                  "self" : {
+                    "href" : "https://apicatalog.oraclecloud.com/v1/apicollections/",
+                    "rel" : "self",
+                    "title" : "Page 1",
+                    "type" : "application/json"
+                  }
+                },
+                "pageNumber" : 1,
+                "pageSize" : 10,
+                "totalCount" : 2
+              }
+            }
+          },
+          "default" : {
+            "$ref" : "#/responses/error"
+          }
+        },
+        "summary" : "Retrieve All API Collections in an Organization",
+        "tags" : [ "API Collections" ]
+      },
+      "post" : {
+        "consumes" : [ "application/json" ],
+        "description" : "Create an API collection in the organization that's identified by the <code>org</code> path parameter.",
+        "operationId" : "createApiCollection",
+        "parameters" : [ {
+          "description" : "The API collection to create.",
+          "in" : "body",
+          "name" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/ApiCollectionRequest"
+          }
+        } ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "201" : {
+            "$ref" : "#/responses/apiCollectionResponse"
+          },
+          "default" : {
+            "$ref" : "#/responses/error"
+          }
+        },
+        "summary" : "Create an API Collection",
+        "tags" : [ "API Collections" ]
+      }
+    },
+    "/v1/orgs/{org}/apicollections/{apiCollectionName}/{apiCollectionVersion}" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/apiCollectionVersionParam"
+      }, {
+        "$ref" : "#/parameters/apiCollectionNameParam"
+      }, {
+        "$ref" : "#/parameters/orgParam"
+      } ],
+      "delete" : {
+        "description" : "Delete the metadata of the API collection that's identified by the <code>org</code>, <code>apiCollectionName</code> and <code>apiCollectionVersion</code> path parameters.",
+        "operationId" : "deleteApiCollection",
+        "parameters" : [ {
+          "$ref" : "#/parameters/ifMatchParam"
+        } ],
+        "responses" : {
+          "204" : {
+            "$ref" : "#/responses/noContent"
+          },
+          "409" : {
+            "$ref" : "#/responses/conflict"
+          },
+          "412" : {
+            "$ref" : "#/responses/preconditionFailed"
+          },
+          "default" : {
+            "$ref" : "#/responses/error"
+          }
+        },
+        "summary" : "Delete an API Collection",
+        "tags" : [ "API Collections" ]
+      },
+      "get" : {
+        "description" : "Retrieves the metadata for the API collection that's identified by the <code>org</code>, <code>apiCollectionName</code> and <code>apiCollectionVersion</code> path parameters.<br><p>The metadata includes the version, title, description, and category, as well as a list of the APIs in the collection. The list contains links to each API's related resources, including its canonical description in OpenAPI (formerly Swagger) format.</p><br>",
+        "operationId" : "getApiCollection",
+        "parameters" : [ {
+          "$ref" : "#/parameters/fieldsParam"
+        } ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "$ref" : "#/responses/apiCollectionResponse"
+          },
+          "default" : {
+            "$ref" : "#/responses/error"
+          }
+        },
+        "summary" : "Retrieve an API Collection",
+        "tags" : [ "API Collections" ]
+      },
+      "put" : {
+        "consumes" : [ "application/json" ],
+        "description" : "Creates an API collection or updates an existing one that's identified by the <code>org</code>, <code>apiCollectionName</code> and <code>apiCollectionVersion</code> path parameters.",
+        "operationId" : "upsertApiCollection",
+        "parameters" : [ {
+          "$ref" : "#/parameters/ifMatchParam"
+        }, {
+          "description" : "The API collection to create or update.",
+          "in" : "body",
+          "name" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/ApiCollectionRequest"
+          }
+        } ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "$ref" : "#/responses/apiCollectionResponse"
+          },
+          "201" : {
+            "$ref" : "#/responses/apiCollectionResponse"
+          },
+          "409" : {
+            "$ref" : "#/responses/conflict"
+          },
+          "412" : {
+            "$ref" : "#/responses/preconditionFailed"
+          },
+          "default" : {
+            "$ref" : "#/responses/error"
+          }
+        },
+        "summary" : "Create or Update an API Collection",
+        "tags" : [ "API Collections" ]
+      },
+      "patch" : {
+        "consumes" : [ "application/json" ],
+        "description" : "Updates an existing API collection that is identified by the <code>org</code>,  <code>apiCollectionName</code> and <code>apiCollectionVersion</code> path parameters.",
+        "operationId" : "updateApiCollection",
+        "parameters" : [ {
+          "$ref" : "#/parameters/ifMatchParam"
+        }, {
+          "description" : "API collection patch data",
+          "in" : "body",
+          "name" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/ApiCollectionPatchRequest"
+          }
+        } ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "$ref" : "#/responses/apiCollectionResponse"
+          },
+          "409" : {
+            "$ref" : "#/responses/conflict"
+          },
+          "412" : {
+            "$ref" : "#/responses/preconditionFailed"
+          },
+          "default" : {
+            "$ref" : "#/responses/error"
+          }
+        },
+        "summary" : "Update an API Collection",
+        "tags" : [ "API Collections" ]
+      }
+    },
+    "/v1/orgs/{org}/apicollections/{apiCollectionName}/{apiCollectionVersion}/apis" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/apiCollectionVersionParam"
+      }, {
+        "$ref" : "#/parameters/apiCollectionNameParam"
+      }, {
+        "$ref" : "#/parameters/orgParam"
+      } ],
+      "post" : {
+        "consumes" : [ "application/json" ],
+        "description" : "Adds an API to the API collection that's identified by the <code>org</code>, <code>apiCollectionName</code> and <code>apiCollectionVersion</code> path parameters.",
+        "operationId" : "createApi",
+        "parameters" : [ {
+          "description" : "The API to add.",
+          "in" : "body",
+          "name" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/ApiRequest"
+          }
+        } ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "201" : {
+            "$ref" : "#/responses/apiResponse"
+          },
+          "default" : {
+            "$ref" : "#/responses/error"
+          }
+        },
+        "summary" : "Create an API",
+        "tags" : [ "API Collections" ]
+      }
+    },
+    "/v1/orgs/{org}/apicollections/{apiCollectionName}/{apiCollectionVersion}/apis/{apiName}" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/apiNameParam"
+      }, {
+        "$ref" : "#/parameters/apiCollectionVersionParam"
+      }, {
+        "$ref" : "#/parameters/apiCollectionNameParam"
+      }, {
+        "$ref" : "#/parameters/orgParam"
+      } ],
+      "get" : {
+        "description" : "Retrieves the metadata for the API that's identified by the <code>apiName</code> path param. The metadata includes the name, title, short description, and links to related resources that includes its canonical description in OpenAPI (formerly Swagger) format.",
+        "operationId" : "getApi",
+        "parameters" : [ {
+          "$ref" : "#/parameters/fieldsParam"
+        } ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "$ref" : "#/responses/apiResponse"
+          },
+          "default" : {
+            "$ref" : "#/responses/error"
+          }
+        },
+        "summary" : "Retrieve API Metadata",
+        "tags" : [ "API Collections" ]
+      },
+      "put" : {
+        "consumes" : [ "application/json" ],
+        "description" : "Updates the API that's identified by the  <code>org</code>, <code>apiCollectionName</code> and  <code>apiCollectionVersion</code>, and <code>apiName</code> path parameters.",
+        "operationId" : "updateApi",
+        "parameters" : [ {
+          "$ref" : "#/parameters/ifMatchParam"
+        }, {
+          "description" : "Updated API.",
+          "in" : "body",
+          "name" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/ApiRequest"
+          }
+        } ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "$ref" : "#/responses/apiResponse"
+          },
+          "409" : {
+            "$ref" : "#/responses/conflict"
+          },
+          "412" : {
+            "$ref" : "#/responses/preconditionFailed"
+          },
+          "default" : {
+            "$ref" : "#/responses/error"
+          }
+        },
+        "summary" : "Update Existing API",
+        "tags" : [ "API Collections" ]
+      },
+      "delete" : {
+        "consumes" : [ "application/json" ],
+        "description" : "Deletes the API that's identified by the <code>org</code>, <code>apiCollectionName</code> and <code>apiCollectionVersion</code>, and <code>apiName</code path parameters.",
+        "operationId" : "deleteApi",
+        "parameters" : [ {
+          "$ref" : "#/parameters/ifMatchParam"
+        } ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "204" : {
+            "$ref" : "#/responses/noContent"
+          },
+          "412" : {
+            "$ref" : "#/responses/preconditionFailed"
+          },
+          "default" : {
+            "$ref" : "#/responses/error"
+          }
+        },
+        "summary" : "Delete an API",
+        "tags" : [ "API Collections" ]
+      }
+    },
+    "/v1/orgs/{org}/apicollections/{apiCollectionName}/{apiCollectionVersion}/apis/{apiName}/canonical" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/apiNameParam"
+      }, {
+        "$ref" : "#/parameters/apiCollectionVersionParam"
+      }, {
+        "$ref" : "#/parameters/apiCollectionNameParam"
+      }, {
+        "$ref" : "#/parameters/orgParam"
+      } ],
+      "get" : {
+        "description" : "Retrieves the machine-readable OpenAPI (formerly Swagger) description for the API that's identified by the <code>org</code>, <code>apiCollectionName</code>, <code>apiCollectionVersion</code>, and <code>apiName</code> path parameters.",
+        "operationId" : "getApiCanonical",
+        "produces" : [ "application/swagger+json;version=2.0", "application/json" ],
+        "responses" : {
+          "200" : {
+            "$ref" : "#/responses/apiDescriptionResponse"
+          },
+          "default" : {
+            "$ref" : "#/responses/error"
+          }
+        },
+        "summary" : "Retrieve OpenAPI (formerly Swagger) Description",
+        "tags" : [ "API Collections" ]
+      }
+    },
+    "/v1/orgs/{org}/apicollections/{apiCollectionName}/{apiCollectionVersion}/apis/{apiName}/raw" : {
+      "parameters" : [ {
+        "$ref" : "#/parameters/apiNameParam"
+      }, {
+        "$ref" : "#/parameters/apiCollectionVersionParam"
+      }, {
+        "$ref" : "#/parameters/apiCollectionNameParam"
+      }, {
+        "$ref" : "#/parameters/orgParam"
+      } ],
+      "get" : {
+        "description" : "Retrieves the API description that exactly matches the description that the user uploaded for the API that's identified by the <code>org</code>, <code>apiCollectionName</code>, <code>apiCollectionVersion</code>, and <code>apiName</code> path parameters.",
+        "operationId" : "getApiRaw",
+        "produces" : [ "application/swagger+json;version=2.0", "application/json" ],
+        "responses" : {
+          "200" : {
+            "$ref" : "#/responses/apiDescriptionResponse"
+          },
+          "default" : {
+            "$ref" : "#/responses/error"
+          }
+        },
+        "summary" : "Retrieve User-Uploaded API Description",
+        "tags" : [ "API Collections" ]
+      },
+      "put" : {
+        "description" : "Updates the OpenAPI definition for the API that's identified by the <code>org</code>, <code>apiCollectionName</code>, <code>apiCollectionVersion</code>, and <code>apiName</code path parameters.",
+        "operationId" : "updateRawApiDescription",
+        "consumes" : [ "application/swagger+json;version=2.0" ],
+        "produces" : [ "application/swagger+json;version=2.0" ],
+        "parameters" : [ {
+          "$ref" : "#/parameters/ifMatchParam"
+        }, {
+          "description" : "API description to update.",
+          "in" : "body",
+          "name" : "body",
+          "required" : true,
+          "schema" : {
+            "type" : "object"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "type" : "object"
+            }
+          },
+          "409" : {
+            "$ref" : "#/responses/conflict"
+          },
+          "412" : {
+            "$ref" : "#/responses/preconditionFailed"
+          },
+          "default" : {
+            "$ref" : "#/responses/error"
+          }
+        },
+        "summary" : "Update API Definition",
+        "tags" : [ "API Collections" ]
+      }
+    }
+  },
+  "swagger" : "2.0",
+  "tags" : [ {
+    "description" : "The API Collections API lets you retrieve the API Collections metadata and API descriptions in OpenAPI (formerly Swagger) format.",
+    "name" : "API Collections"
+  } ]
+}

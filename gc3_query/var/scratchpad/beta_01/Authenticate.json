@@ -1,0 +1,190 @@
+{
+  "basePath" : "/api",
+  "info" : {
+    "description" : "<p>Use this category of endpoints to authenticate the specified user and then return an authentication token. You can then use that authentication token in subsequent API calls to the Oracle Container Cloud Service.</p><p>The process of obtaining a authorization token is as follows:</p><ol><li>Use the <tt>/auth</tt> endpoint to receive a session token.</li><li>Use the session token and the <tt>/token</tt> endpoint to receive a bearer token.</li><li>Use the bearer token in the header of any subsequent API calls to the Container service.</li></ol><p>Note that the session token has a limited lifetime, but the bearer token does not expire until the <tt>/api/token/new</tt> endpoint is invoked.</p>",
+    "title" : "Authenticate",
+    "version" : "2018.01.12",
+    "x-summary" : "The Oracle Container Cloud Service REST API enables you to programmatically manage the images, containers, and registries in your Oracle Container Cloud Service environment."
+  },
+  "paths" : {
+    "/auth" : {
+      "post" : {
+        "consumes" : [ "application/json" ],
+        "deprecated" : false,
+        "description" : "Use this endpoint to request a session token, which you can use with the <tt>/token</tt> endpoint to request a bearer token. The bearer token can be used to authenticate all subsequent API calls to the Oracle Container Cloud Service instance.",
+        "operationId" : "POST_auth",
+        "parameters" : [ {
+          "description" : "Body parameters",
+          "in" : "body",
+          "name" : "Body",
+          "required" : true,
+          "schema" : {
+            "properties" : {
+              "password" : {
+                "type" : "string"
+              },
+              "username" : {
+                "type" : "string"
+              }
+            },
+            "required" : [ "password", "username" ],
+            "type" : "object"
+          }
+        } ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 Response",
+            "schema" : {
+              "items" : {
+                "properties" : {
+                  "first_name" : {
+                    "type" : "string"
+                  },
+                  "group" : {
+                    "type" : "string"
+                  },
+                  "id" : {
+                    "type" : "integer"
+                  },
+                  "last_name" : {
+                    "type" : "string"
+                  },
+                  "last_password_reset_date" : {
+                    "type" : "string"
+                  },
+                  "password" : {
+                    "type" : "string"
+                  },
+                  "role" : {
+                    "type" : "integer"
+                  },
+                  "token" : {
+                    "type" : "string"
+                  },
+                  "type" : {
+                    "type" : "integer"
+                  },
+                  "username" : {
+                    "type" : "string"
+                  }
+                },
+                "required" : [ "first_name", "group", "id", "last_name", "last_password_reset_date", "password", "role", "token", "type", "username" ],
+                "type" : "object"
+              }
+            }
+          },
+          "default" : {
+            "description" : "Error Payload",
+            "schema" : {
+              "items" : {
+                "type" : "string"
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "summary" : "Authenticate with the Service Instance",
+        "tags" : [ "Authenticate" ],
+        "x-internal-id" : "auth-post"
+      }
+    },
+    "/token" : {
+      "post" : {
+        "consumes" : [ ],
+        "deprecated" : false,
+        "description" : "Use this endpoint and a session token to receive a bearer token, which can be used to authenticate all subsequent calls to the Oracle Container Cloud service.",
+        "operationId" : "POST_token",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 Response",
+            "schema" : {
+              "items" : {
+                "properties" : {
+                  "token" : {
+                    "type" : "string"
+                  }
+                },
+                "required" : [ "token" ],
+                "type" : "object"
+              }
+            }
+          },
+          "default" : {
+            "description" : "Error Payload",
+            "schema" : {
+              "items" : {
+                "type" : "string"
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "summary" : "Get an bearer token to be passed in the header for all API transactions.",
+        "tags" : [ "Authenticate" ],
+        "x-internal-id" : "token-post"
+      }
+    },
+    "/token/new" : {
+      "post" : {
+        "consumes" : [ ],
+        "deprecated" : false,
+        "description" : "Use this endpoint to cancel an existing bearer token and receive a new bearer token in the response.",
+        "operationId" : "POST_token_new",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 Response",
+            "schema" : {
+              "items" : {
+                "properties" : {
+                  "token" : {
+                    "type" : "string"
+                  }
+                },
+                "required" : [ "token" ],
+                "type" : "object"
+              }
+            }
+          },
+          "default" : {
+            "description" : "Error Payload",
+            "schema" : {
+              "items" : {
+                "type" : "string"
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "Bearer" : [ ]
+        } ],
+        "summary" : "Generate a new authentication token and invalidate the prior token",
+        "tags" : [ "Authenticate" ],
+        "x-internal-id" : "token-new-post"
+      }
+    }
+  },
+  "produces" : [ "application/json", "text/plain" ],
+  "schemes" : [ "https" ],
+  "security" : [ {
+    "Bearer" : [ ]
+  } ],
+  "securityDefinitions" : {
+    "Bearer" : {
+      "in" : "header",
+      "name" : "Authorization",
+      "type" : "apiKey"
+    }
+  },
+  "swagger" : "2.0",
+  "tags" : [ {
+    "description" : "<p>Use this category of endpoints to authenticate the specified user and then return an authentication token. You can then use that authentication token in subsequent API calls to the Oracle Container Cloud Service.</p><p>The process of obtaining a authorization token is as follows:</p><ol><li>Use the <tt>/auth</tt> endpoint to receive a session token.</li><li>Use the session token and the <tt>/token</tt> endpoint to receive a bearer token.</li><li>Use the bearer token in the header of any subsequent API calls to the Container service.</li></ol><p>Note that the session token has a limited lifetime, but the bearer token does not expire until the <tt>/api/token/new</tt> endpoint is invoked.</p>",
+    "name" : "Authenticate"
+  } ]
+}
