@@ -1,0 +1,713 @@
+
+{
+    "swagger":"2.0",
+    "info":{
+        "title":"SSH Keys",
+        "description":"View and manage secure shell (SSH) public keys for Database Cloud Service instances.",
+        "version":"1.1"
+    },
+    "schemes":[
+        "https"
+    ],
+    "paths":{
+        "/paas/api/v1.1/activitylog/{identityDomainId}/job/{jobId}":{
+            "get":{
+                "operationId":"getJobJobid",
+                "summary":"View Status of an Add SSH Key Job",
+                "description":"Returns information about the job to add an SSH Key.",
+                "produces":[
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "name":"identityDomainId",
+                        "in":"path",
+                        "description":"Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For a Cloud account with Identity Cloud Service</b>: the identity service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>. You can find this ID in the <b>Identity Service Id</b> field on the Overview tab of the Service Details page for Database Cloud Service in My Services.</p></li><li><p><b>For a traditional cloud account</b>: the name of the identity domain.</p></li></ul>",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"jobId",
+                        "in":"path",
+                        "description":"Job ID of the operation.",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"Authorization",
+                        "in":"header",
+                        "description":"Base64 encoding of the user name and password of the user making the request. For more information, see <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_secauth'>Security, Authentication and Authorization</a>.",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"X-ID-TENANT-NAME",
+                        "in":"header",
+                        "description":"Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For a Cloud account with Identity Cloud Service</b>: the identity service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>. You can find this ID in the <b>Identity Service Id</b> field on the Overview tab of the Service Details page for Database Cloud Service in My Services.</p></li><li><p><b>For a traditional cloud account</b>: the name of the identity domain.</p></li></ul>",
+                        "required":true,
+                        "type":"string"
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"OK. See <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_statuses'>Status Codes</a> for information about other possible HTTP status codes.",
+                        "schema":{
+                            "$ref":"#/definitions/view-job-status"
+                        }
+                    }
+                }
+            }
+        },
+        "/paas/api/v1.1/instancemgmt/{identityDomainId}/services/dbaas/credentials":{
+            "get":{
+                "operationId":"getCredentials",
+                "summary":"View Selected SSH Keys' Details",
+                "description":"Returns detailed information about SSH keys for one or more Database Cloud Service instances as determined by query parameters you provide.<p>By default, a single request returns a maximum of 50 keys. Use the <code>limitRowCount</code> query parameter to control maximum number returned, and use the <code>offset</code> query parameter to fetch additional results, if available.",
+                "produces":[
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "name":"identityDomainId",
+                        "in":"path",
+                        "description":"Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For a Cloud account with Identity Cloud Service</b>: the identity service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>. You can find this ID in the <b>Identity Service Id</b> field on the Overview tab of the Service Details page for Database Cloud Service in My Services.</p></li><li><p><b>For a traditional cloud account</b>: the name of the identity domain.</p></li></ul>",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"serviceName",
+                        "in":"query",
+                        "description":"Name of a Database Cloud Service instance. The response is limited to SSH keys for this service instance. If omitted, SSH keys for all Database Cloud Service instances in the identity domain are returned.",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"limitRowCount",
+                        "in":"query",
+                        "description":"The maximum number of keys to include in the response. If omitted, a maximum of 50 keys are included in the response.",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"offset",
+                        "in":"query",
+                        "description":"The number of keys to skip before starting to collect keys for the response. If omitted, zero keys are skipped so that the response begins with the first key.",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"Authorization",
+                        "in":"header",
+                        "description":"Base64 encoding of the user name and password of the user making the request. For more information, see <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_secauth'>Security, Authentication and Authorization</a>.",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"X-ID-TENANT-NAME",
+                        "in":"header",
+                        "description":"Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For a Cloud account with Identity Cloud Service</b>: the identity service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>. You can find this ID in the <b>Identity Service Id</b> field on the Overview tab of the Service Details page for Database Cloud Service in My Services.</p></li><li><p><b>For a traditional cloud account</b>: the name of the identity domain.</p></li></ul>",
+                        "required":true,
+                        "type":"string"
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"OK. See <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_statuses'>Status Codes</a> for information about other possible HTTP status codes.",
+                        "schema":{
+                            "$ref":"#/definitions/view-details-selected"
+                        }
+                    }
+                }
+            }
+        },
+        "/paas/api/v1.1/instancemgmt/{identityDomainId}/services/dbaas/credentials/crednames":{
+            "get":{
+                "operationId":"getCredentialsCrednames",
+                "summary":"View Selected SSH Keys' Summaries",
+                "description":"Returns summary information about SSH keys for one or more Database Cloud Service instances as determined by query parameters you provide.<p>By default, a single request returns a maximum of 50 keys. Use the <code>limitRowCount</code> query parameter to control maximum number returned, and use the <code>offset</code> query parameter to fetch additional results, if available.",
+                "produces":[
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "name":"identityDomainId",
+                        "in":"path",
+                        "description":"Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For a Cloud account with Identity Cloud Service</b>: the identity service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>. You can find this ID in the <b>Identity Service Id</b> field on the Overview tab of the Service Details page for Database Cloud Service in My Services.</p></li><li><p><b>For a traditional cloud account</b>: the name of the identity domain.</p></li></ul>",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"serviceName",
+                        "in":"query",
+                        "description":"Name of a Database Cloud Service instance. The response is limited to SSH keys for this service instance. If omitted, SSH keys for all Database Cloud Service instances in the identity domain are returned.",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"limitRowCount",
+                        "in":"query",
+                        "description":"The maximum number of keys to include in the response. If omitted, a maximum of 50 keys are included in the response.",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"offset",
+                        "in":"query",
+                        "description":"The number of keys to skip before starting to collect keys for the response. If omitted, zero keys are skipped so that the response begins with the first key.",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"Authorization",
+                        "in":"header",
+                        "description":"Base64 encoding of the user name and password of the user making the request. For more information, see <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_secauth'>Security, Authentication and Authorization</a>.",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"X-ID-TENANT-NAME",
+                        "in":"header",
+                        "description":"Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For a Cloud account with Identity Cloud Service</b>: the identity service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>. You can find this ID in the <b>Identity Service Id</b> field on the Overview tab of the Service Details page for Database Cloud Service in My Services.</p></li><li><p><b>For a traditional cloud account</b>: the name of the identity domain.</p></li></ul>",
+                        "required":true,
+                        "type":"string"
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"OK. See <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_statuses'>Status Codes</a> for information about other possible HTTP status codes.",
+                        "schema":{
+                            "$ref":"#/definitions/view-summaries-selected"
+                        }
+                    }
+                }
+            }
+        },
+        "/paas/api/v1.1/instancemgmt/{identityDomainId}/services/dbaas/instances/{serviceId}/credentials/crednames/{credentialName}":{
+            "get":{
+                "operationId":"getCredentialsCrednamesCredentialName",
+                "summary":"View an SSH Key's Summary",
+                "description":"Returns summary information about the SSH key for a Database Cloud Service instance.",
+                "produces":[
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "name":"identityDomainId",
+                        "in":"path",
+                        "description":"Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For a Cloud account with Identity Cloud Service</b>: the identity service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>. You can find this ID in the <b>Identity Service Id</b> field on the Overview tab of the Service Details page for Database Cloud Service in My Services.</p></li><li><p><b>For a traditional cloud account</b>: the name of the identity domain.</p></li></ul>",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"serviceId",
+                        "in":"path",
+                        "description":"Name of the Database Cloud Service instance.",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"credentialName",
+                        "in":"path",
+                        "description":"The value <code>vmspublickey</code>.",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"Authorization",
+                        "in":"header",
+                        "description":"Base64 encoding of the user name and password of the user making the request. For more information, see <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_secauth'>Security, Authentication and Authorization</a>.",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"X-ID-TENANT-NAME",
+                        "in":"header",
+                        "description":"Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For a Cloud account with Identity Cloud Service</b>: the identity service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>. You can find this ID in the <b>Identity Service Id</b> field on the Overview tab of the Service Details page for Database Cloud Service in My Services.</p></li><li><p><b>For a traditional cloud account</b>: the name of the identity domain.</p></li></ul>",
+                        "required":true,
+                        "type":"string"
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"OK. See <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_statuses'>Status Codes</a> for information about other possible HTTP status codes.",
+                        "schema":{
+                            "$ref":"#/definitions/view-summary"
+                        }
+                    }
+                }
+            },
+            "post":{
+                "operationId":"postCredentialsCrednamesCredentialName",
+                "summary":"Add an SSH Public Key",
+                "description":"Adds an SSH public key to a Database Cloud Service instance.",
+                "consumes":[
+                    "application/json"
+                ],
+                "produces":[
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "name":"identityDomainId",
+                        "in":"path",
+                        "description":"Identity domain ID for the Database Cloud Service account.",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"serviceId",
+                        "in":"path",
+                        "description":"Name of the Database Cloud Service instance.",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"credentialName",
+                        "in":"path",
+                        "description":"The value <code>vmspublickey</code>.",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"body",
+                        "in":"body",
+                        "description":"",
+                        "required":true,
+                        "schema":{
+                            "$ref":"#/definitions/add-key-request"
+                        }
+                    }
+                ],
+                "responses":{
+                    "202":{
+                        "headers":{
+                            "Location":{
+                                "description":"A REST URI you can use to check the progress and completion of the operation.",
+                                "type":"string"
+                            }
+                        },
+                        "description":"Accepted. See <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_statuses'>Status Codes</a> for information about other possible HTTP status codes.",
+                        "schema":{
+                            "$ref":"#/definitions/add-key-response"
+                        }
+                    }
+                }
+            }
+        },
+        "/paas/api/v1.1/instancemgmt/{identityDomainId}/services/dbaas/instances/{serviceId}/credentials/{credentialName}":{
+            "get":{
+                "operationId":"getServiceidCredentialsCredentialName",
+                "summary":"View an SSH Key's Details",
+                "description":"Returns detailed information about the SSH key for a Database Cloud Service instance.",
+                "produces":[
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "name":"identityDomainId",
+                        "in":"path",
+                        "description":"Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For a Cloud account with Identity Cloud Service</b>: the identity service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>. You can find this ID in the <b>Identity Service Id</b> field on the Overview tab of the Service Details page for Database Cloud Service in My Services.</p></li><li><p><b>For a traditional cloud account</b>: the name of the identity domain.</p></li></ul>",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"serviceId",
+                        "in":"path",
+                        "description":"Name of the Database Cloud Service instance.",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"credentialName",
+                        "in":"path",
+                        "description":"The value <code>vmspublickey</code>.",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"Authorization",
+                        "in":"header",
+                        "description":"Base64 encoding of the user name and password of the user making the request. For more information, see <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_secauth'>Security, Authentication and Authorization</a>.",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"X-ID-TENANT-NAME",
+                        "in":"header",
+                        "description":"Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For a Cloud account with Identity Cloud Service</b>: the identity service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>. You can find this ID in the <b>Identity Service Id</b> field on the Overview tab of the Service Details page for Database Cloud Service in My Services.</p></li><li><p><b>For a traditional cloud account</b>: the name of the identity domain.</p></li></ul>",
+                        "required":true,
+                        "type":"string"
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"OK. See <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_statuses'>Status Codes</a> for information about other possible HTTP status codes.",
+                        "schema":{
+                            "$ref":"#/definitions/view-details"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions":{
+        "view-details-selected":{
+            "title":"Response Body",
+            "type":"object",
+            "description":"",
+            "properties":{
+                "hasMore":{
+                    "type":"boolean",
+                    "description":"Indicates whether more keys are available to be requested, with the value <code>true</code> indicating that more are available."
+                },
+                "items":{
+                    "title":"items Array",
+                    "type":"array",
+                    "description":"Array of JSON objects, with one element for each key returned.",
+                    "items":{
+                        "$ref":"#/definitions/view-details-selected-items-array-item"
+                    }
+                },
+                "totalResults":{
+                    "type":"integer",
+                    "description":"Number of keys returned by this request."
+                }
+            }
+        },
+        "view-details-selected-items-array-item":{
+            "title":"items Array Item",
+            "type":"object",
+            "properties":{
+                "componentType":{
+                    "type":"string",
+                    "description":"The value <code>DB</code>."
+                },
+                "computeKeyName":{
+                    "type":"string",
+                    "description":"The fully qualified name of the SSH Key object in Oracle Compute Cloud Service where the SSH public key value is stored."
+                },
+                "credName":{
+                    "type":"string",
+                    "description":"The value <code>vmspublickey</code>."
+                },
+                "credType":{
+                    "type":"string",
+                    "description":"The value <code>SSH</code>."
+                },
+                "description":{
+                    "type":"string",
+                    "description":"A description of the key."
+                },
+                "identityDomain":{
+                    "type":"string",
+                    "description":"The name of the identity domain for the Database Cloud Service account."
+                },
+                "lastUpdateMessage":{
+                    "type":"string",
+                    "description":"The message returned from the last update of the SSH key. For example: <code>newly created</code>, <code>updated by <em>username</em></code>."
+                },
+                "lastUpdateStatus":{
+                    "type":"string",
+                    "description":"Status of the last update of the SSH key."
+                },
+                "lastUpdateTime":{
+                    "type":"string",
+                    "description":"Date and time of the last update of the SSH key."
+                },
+                "osUserName":{
+                    "type":"string",
+                    "description":"The value <code>opc</code>."
+                },
+                "parentType":{
+                    "type":"string",
+                    "description":"The value <code>SERVICE</code>."
+                },
+                "publicKey":{
+                    "type":"string",
+                    "description":"The value of the SSH public key, with any slashes (<code>/</code>) it contains preceded by backslashes, as in <code>\\/</code>."
+                },
+                "serviceName":{
+                    "type":"string",
+                    "description":"The name of the Database Cloud Service instance."
+                },
+                "serviceState":{
+                    "type":"string",
+                    "description":"The status of the service instance. For example, <code>RUNNING</code>."
+                },
+                "serviceType":{
+                    "type":"string",
+                    "description":"The value <code>DBaaS</code>."
+                }
+            }
+        },
+        "view-summaries-selected":{
+            "title":"Response Body",
+            "type":"object",
+            "description":"",
+            "properties":{
+                "hasMore":{
+                    "type":"boolean",
+                    "description":"Indicates whether more keys are available to be requested, with the value <code>true</code> indicating that more are available."
+                },
+                "items":{
+                    "title":"items Array",
+                    "type":"array",
+                    "description":"Array of JSON objects, with one element for each key returned.",
+                    "items":{
+                        "$ref":"#/definitions/view-summaries-selected-items-array-item"
+                    }
+                },
+                "totalResults":{
+                    "type":"integer",
+                    "description":"Number of keys returned by this request."
+                }
+            }
+        },
+        "view-summaries-selected-items-array-item":{
+            "title":"items Array Item",
+            "type":"object",
+            "properties":{
+                "canonicalUrl":{
+                    "type":"string",
+                    "description":"URL to query the credential key value."
+                },
+                "credName":{
+                    "type":"string",
+                    "description":"The value <code>vmspublickey</code>."
+                },
+                "credType":{
+                    "type":"string",
+                    "description":"The value <code>SSH</code>."
+                },
+                "description":{
+                    "type":"string",
+                    "description":"A description of the key."
+                },
+                "identityDomain":{
+                    "type":"string",
+                    "description":"The name of the identity domain for the Database Cloud Service account."
+                },
+                "serviceName":{
+                    "type":"string",
+                    "description":"The name of the Database Cloud Service instance."
+                },
+                "serviceType":{
+                    "type":"string",
+                    "description":"The value <code>DBaaS</code>."
+                }
+            }
+        },
+        "view-summary":{
+            "title":"Response Body",
+            "type":"object",
+            "description":"",
+            "properties":{
+                "canonicalUrl":{
+                    "type":"string",
+                    "description":"URL to query the credential key value."
+                },
+                "credName":{
+                    "type":"string",
+                    "description":"The value <code>vmspublickey</code>."
+                },
+                "credType":{
+                    "type":"string",
+                    "description":"The value <code>SSH</code>."
+                },
+                "description":{
+                    "type":"string",
+                    "description":"A description of the key."
+                },
+                "identityDomain":{
+                    "type":"string",
+                    "description":"The name of the identity domain for the Database Cloud Service account."
+                },
+                "serviceName":{
+                    "type":"string",
+                    "description":"The name of the Database Cloud Service instance."
+                },
+                "serviceType":{
+                    "type":"string",
+                    "description":"The value <code>DBaaS</code>."
+                }
+            }
+        },
+        "view-details":{
+            "title":"Response Body",
+            "type":"object",
+            "description":"",
+            "properties":{
+                "componentType":{
+                    "type":"string",
+                    "description":"The value <code>DB</code>."
+                },
+                "computeKeyName":{
+                    "type":"string",
+                    "description":"The fully qualified name of the SSH Key object in Oracle Compute Cloud Service where the SSH public key value is stored."
+                },
+                "credName":{
+                    "type":"string",
+                    "description":"The value <code>vmspublickey</code>."
+                },
+                "credType":{
+                    "type":"string",
+                    "description":"The value <code>SSH</code>."
+                },
+                "description":{
+                    "type":"string",
+                    "description":"A description of the key."
+                },
+                "identityDomain":{
+                    "type":"string",
+                    "description":"The name of the identity domain for the Database Cloud Service account."
+                },
+                "lastUpdateMessage":{
+                    "type":"string",
+                    "description":"The message returned from the last update of the SSH key. For example: <code>newly created</code>, <code>updated by <em>username</em></code>."
+                },
+                "lastUpdateStatus":{
+                    "type":"string",
+                    "description":"Status of the last update of the SSH key."
+                },
+                "lastUpdateTime":{
+                    "type":"string",
+                    "description":"Date and time of the last update of the SSH key."
+                },
+                "osUserName":{
+                    "type":"string",
+                    "description":"The value <code>opc</code>."
+                },
+                "parentType":{
+                    "type":"string",
+                    "description":"The value <code>SERVICE</code>."
+                },
+                "publicKey":{
+                    "type":"string",
+                    "description":"The value of the SSH public key, with any slashes (<code>/</code>) it contains preceded by backslashes, as in <code>\\/</code>."
+                },
+                "serviceName":{
+                    "type":"string",
+                    "description":"The name of the Database Cloud Service instance."
+                },
+                "serviceType":{
+                    "type":"string",
+                    "description":"The value <code>DBaaS</code>."
+                }
+            }
+        },
+        "add-key-request":{
+            "title":"Request Body",
+            "type":"object",
+            "description":"",
+            "required":[
+                "public-key"
+            ],
+            "properties":{
+                "public-key":{
+                    "type":"string",
+                    "description":"The value of the SSH public key, with any slashes (<code>/</code>) it contains preceded by backslashes, as in <code>\\/</code>."
+                }
+            }
+        },
+        "add-key-response":{
+            "title":"Response Body",
+            "type":"object",
+            "description":"",
+            "properties":{
+                "status":{
+                    "type":"string",
+                    "description":"Status description. For example: <code>submitted job</code>."
+                }
+            }
+        },
+        "view-job-status":{
+            "title":"Response Body",
+            "type":"object",
+            "description":"",
+            "properties":{
+                "activityLogId":{
+                    "type":"integer",
+                    "description":"ID of the activity log."
+                },
+                "authDomain":{
+                    "type":"string",
+                    "description":"Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For a Cloud account with Identity Cloud Service</b>: the identity service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>. You can find this ID in the <b>Identity Service Id</b> field on the Overview tab of the Service Details page for Database Cloud Service in My Services.</p></li><li><p><b>For a traditional cloud account</b>: the name of the identity domain.</p></li></ul>"
+                },
+                "authUser":{
+                    "type":"string",
+                    "description":"Name of the Oracle Cloud user that initiated the add operation."
+                },
+                "endDate":{
+                    "type":"string",
+                    "description":"Date and time the job ended."
+                },
+                "identityDomain":{
+                    "type":"string",
+                    "description":"Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For a Cloud account with Identity Cloud Service</b>: the identity service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>. You can find this ID in the <b>Identity Service Id</b> field on the Overview tab of the Service Details page for Database Cloud Service in My Services.</p></li><li><p><b>For a traditional cloud account</b>: the name of the identity domain.</p></li></ul>"
+                },
+                "initiatedBy":{
+                    "type":"string",
+                    "description":"The value <code>USER</code>."
+                },
+                "jobId":{
+                    "type":"integer",
+                    "description":"Job ID returned in the <code>Location</code> header when the Add SSH Key request was made."
+                },
+                "messages":{
+                    "title":"messages Array",
+                    "type":"array",
+                    "description":"Array of JSON objects, with one element for each message reported during the job.",
+                    "items":{
+                        "$ref":"#/definitions/view-job-status-messages-item"
+                    }
+                },
+                "operationId":{
+                    "type":"integer",
+                    "description":"ID of the operation."
+                },
+                "operationType":{
+                    "type":"string",
+                    "description":"The value <code>SSH_PUBLIC_KEY_RESET</code>."
+                },
+                "serviceId":{
+                    "type":"integer",
+                    "description":"ID of the Database Cloud Service instance."
+                },
+                "serviceName":{
+                    "type":"string",
+                    "description":"Name of the Database Cloud Service instance."
+                },
+                "serviceType":{
+                    "type":"string",
+                    "description":"The value <code>dbaas</code>."
+                },
+                "startDate":{
+                    "type":"string",
+                    "description":"Date and time the job started."
+                },
+                "status":{
+                    "type":"string",
+                    "description":"Status of the job. Valid statuses include <code>RUNNING</code>, <code>SUCCEED</code> and <code>FAILED</code>."
+                },
+                "summaryMessage":{
+                    "type":"string",
+                    "description":"The value <code>SSH_PUBLIC_KEY_RESET</code>."
+                }
+            }
+        },
+        "view-job-status-messages-item":{
+            "title":"messages Array Item",
+            "type":"object",
+            "properties":{
+                "activityDate":{
+                    "type":"string",
+                    "description":"Date and time the activity was logged."
+                },
+                "message":{
+                    "type":"string",
+                    "description":"Details of the activity."
+                }
+            }
+        }
+    }
+}

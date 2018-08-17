@@ -54,6 +54,7 @@ requirements = [
     'cryptography',
     'melddict',
     'cachetools',
+    'maya',
     # 'ASDF',
     # 'ASDF',
     # 'ASDF',

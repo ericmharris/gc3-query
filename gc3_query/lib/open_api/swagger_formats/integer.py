@@ -30,7 +30,6 @@ from bravado_core.exception import SwaggerValidationError
 
 ################################################################################
 ## Project Imports
-from numpy import long
 
 from gc3_query.lib import *
 from gc3_query.lib.gc3logging import get_logging

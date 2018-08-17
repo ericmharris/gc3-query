@@ -1,14 +1,14 @@
 import pytest
 
 from gc3_query.lib.atoml import cfg
-from gc3_query.lib.atoml.toml_config import ATOMLConfig
+from gc3_query.lib.atoml.atoml_config import ATomlConfig
 
 from gc3_query.lib.models.gc3_meta_data import GC3MetaData
 
 
 @pytest.fixture()
-def session_setup() -> ATOMLConfig:
-    config = ATOMLConfig()
+def session_setup() -> ATomlConfig:
+    config = ATomlConfig()
     yield config
     print(f"setup_session closing Session...")
 

@@ -113,8 +113,9 @@ def test_get_all_sec_rules_data_types_correct():
 def test_get_all_sec_rules():
     service = 'SecRules'
     idm_domain = 'gc30003'
-    spec_file_name = 'SecRules_string_type.json'
-    spec_file = spec_files_dir.joinpath(spec_file_name)
+    # spec_file_name = 'SecRules_string_type.json'
+    # spec_file = spec_files_dir.joinpath(spec_file_name)
+    spec_file = BASE_DIR.joinpath('etc/open_api/iaas_classic/SecRules/SecRules.json')
     assert spec_file.exists()
     gc3_config = GC3Config(atoml_config_dir=config_dir)
     service_cfg = gc3_config.iaas_classic.services[service]

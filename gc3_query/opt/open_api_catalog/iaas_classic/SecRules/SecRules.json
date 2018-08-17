@@ -3,7 +3,8 @@
   "info": {
     "version": "18.1.2-20180126.052521",
     "description": "A security rule defines network access over a specified protocol between instances in two security lists, or from a set of external hosts (an IP list) to instances in a security list.<p>Security rules tie the security list, security IP list, and security application entities together.<p>You can create, delete, update, and view security rules using the HTTP requests listed below. For more information about security rules, see <a target=\"_blank\" href=\"http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=STCSG-GUID-1AEDDA2C-3561-4759-B5AD-FB4CD9C2FBD8\">About Security Rules</a> in <em>Using Oracle Cloud Infrastructure Compute Classic</em>.",
-    "title": "SecRules"
+    "title": "SecRules",
+    "contact": {"name": "Eric Harris", "email": "eric.harris@oracle.com"}
   },
   "schemes": [
     "http"

@@ -1,0 +1,30 @@
+[mongodb]
+__descr__ = 'MongoDB setup data'
+db_name = 'gc3db'
+db_alias = 'gc3core'
+
+[mongodb.security]
+username = 'gc3user'
+password = 'keyring'
+
+[mongodb.net]
+listen_port = 7117
+listen_address = '127.0.0.1'
+use_ssl = false
+use_auth = false
+
+[mongodb.storage]
+directory_per_db = true
+db_path = '{{gc3_query.gc3_query_home}}\var\mongodb\data'
+db_fpath: fstr = '{BASE_DIR}\var\mongodb\data'
+[mongodb.storage.journal]
+enabled = true
+
+[mongodb.system_log]
+destination = 'file'
+service_path = '{{gc3_query.gc3_query_home}}\var\mongodb\logs\mongo-service.log'
+service_fpath: fstr = '{BASE_DIR}\var\mongodb\logs\mongo-service.log'
+cmd_path = '{{gc3_query.gc3_query_home}}\var\mongodb\logs\mongo-cmd.log'
+cmd_fpath: fstr = '{BASE_DIR}\var\mongodb\logs\mongo-cmd.log'
+log_append = true
+

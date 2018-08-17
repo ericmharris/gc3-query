@@ -1,0 +1,508 @@
+consumes:
+- application/oracle-compute-v3+json
+- application/oracle-compute-v3+directory+json
+definitions:
+    DailyWeeklyInterval:
+        allOf:
+        -   $ref: '#/definitions/Interval'
+        -   description: Backup Interval running once a day on certain days of the
+                week
+            properties:
+                daysOfWeek:
+                    description: Days of the week to run a backup
+                    items:
+                        enum:
+                        - MONDAY
+                        - TUESDAY
+                        - WEDNESDAY
+                        - THURSDAY
+                        - FRIDAY
+                        - SATURDAY
+                        - SUNDAY
+                        type: string
+                    type: array
+                timeOfDay:
+                    description: Time of the day to run a backup
+                    pattern: ([01]?[0-9]|2[0-3]):[0-5][0-9]
+                    type: string
+                userTimeZone:
+                    description: 'Any IANA time zone. e.g: America/Los_Angeles'
+                    type: string
+            type: object
+    HourlyInterval:
+        allOf:
+        -   $ref: '#/definitions/Interval'
+        -   description: Backup Interval running every X hours
+            properties:
+                hourlyInterval:
+                    description: Hours to wait before starting the next backup
+                    format: int32
+                    type: integer
+            type: object
+    Interval:
+        description: There are two kinds of Intervals. Each Interval has its own JSON
+            format. Your Interval field should look like one of the following:<p><ul><li><code>"interval":{"Hourly":{"hourlyInterval":2}}</code></li><li><code>{"DailyWeekly":{"daysOfWeek":["MONDAY"],"timeOfDay":"03:15","userTimeZone":"America/Los_Angeles"}}</code></li></ul><p>Days
+            of the week is any day of the week fully capitalized (MONDAY, TUESDAY,
+            etc). The user time zone is any IANA user timezone.  For example user
+            time zones see <a href="https://en.wikipedia.org/wiki/IANA_time_zone_database">List
+            of IANA time zones</a>.
+        type: object
+        x-oneOf:
+            oneOf:
+            -   properties:
+                    DailyWeekly:
+                        allOf:
+                        -   $ref: '#/definitions/DailyWeeklyInterval'
+                        -   properties: {}
+                            type: object
+                type: object
+            -   properties:
+                    Hourly:
+                        allOf:
+                        -   $ref: '#/definitions/HourlyInterval'
+                        -   properties: {}
+                            type: object
+                type: object
+        x-oneOf-instructions: Provide one of the valid object representations documented
+            here.  For more information about oneOf see http://json-schema.org/latest/json-schema-validation.html#anchor88
+    SecList-discover-response:
+        properties:
+            result:
+                items:
+                    type: string
+                type: array
+    SecList-list-response:
+        properties:
+            result:
+                items:
+                    $ref: '#/definitions/SecList-response'
+                type: array
+    SecList-post-request:
+        description: 'The request body contains details of the security list that
+            you want to create. '
+        properties:
+            description:
+                description: <p>A description of the security list.
+                type: string
+            name:
+                description: <p>The three-part name of the object (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>).<p>Object
+                    names can contain only alphanumeric characters, hyphens, underscores,
+                    and periods. Object names are case-sensitive.
+                type: string
+            outbound_cidr_policy:
+                description: '<p>The policy for outbound traffic from the security
+                    list. You can specify one of the following values:<ul><li><code>deny</code>:
+                    Packets are dropped. No response is sent.</li><li><code>reject</code>:
+                    Packets are dropped, but a response is sent.</li><li><code>permit</code>(default):
+                    Packets are allowed.</li>'
+                type: string
+            policy:
+                description: '<p>The policy for inbound traffic to the security list.
+                    You can specify one of the following values:<ul><li><code>deny</code>(default):
+                    Packets are dropped. No response is sent.</li><li><code>reject</code>:
+                    Packets are dropped, but a response is sent.</li><li><code>permit</code>:
+                    Packets are allowed. This policy effectively turns off the firewall
+                    for all instances in this security list.</li></ul>'
+                type: string
+        required:
+        - name
+    SecList-put-request:
+        description: 'The request body contains details of the security list that
+            you want to update. '
+        properties:
+            description:
+                description: <p>A description of the security list.
+                type: string
+            name:
+                description: <p>The three-part name of the object (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>).
+                type: string
+            outbound_cidr_policy:
+                description: '<p>The policy for outbound traffic from the security
+                    list. You can specify one of the following values:<ul><li><code>deny</code>:
+                    Packets are dropped. No response is sent.</li><li><code>reject</code>:
+                    Packets are dropped, but a response is sent.</li><li><code>permit</code>(default):
+                    Packets are allowed.</li>'
+                type: string
+            policy:
+                description: '<p>The policy for inbound traffic to the security list.
+                    You can specify one of the following values:<ul><li><code>deny</code>(default):
+                    Packets are dropped. No response is sent.</li><li><code>reject</code>:
+                    Packets are dropped, but a response is sent.</li><li><code>permit</code>:
+                    Packets are allowed. This policy effectively turns off the firewall
+                    for all instances in this security list.</li></ul>'
+                type: string
+        required:
+        - name
+    SecList-response:
+        properties:
+            account:
+                description: Shows the default account for your identity domain.
+                type: string
+            description:
+                description: <p>A description of the security list.
+                type: string
+            name:
+                description: <p>The three-part name of the object (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>).
+                type: string
+            outbound_cidr_policy:
+                description: '<p>The policy for outbound traffic from the security
+                    list. You can specify one of the following values:<ul><li><code>deny</code>:
+                    Packets are dropped. No response is sent.</li><li><code>reject</code>:
+                    Packets are dropped, but a response is sent.</li><li><code>permit</code>(default):
+                    Packets are allowed.</li>'
+                type: string
+            policy:
+                description: '<p>The policy for inbound traffic to the security list.
+                    You can specify one of the following values:<ul><li><code>deny</code>(default):
+                    Packets are dropped. No response is sent.</li><li><code>reject</code>:
+                    Packets are dropped, but a response is sent.</li><li><code>permit</code>:
+                    Packets are allowed. This policy effectively turns off the firewall
+                    for all instances in this security list.</li></ul>'
+                type: string
+            uri:
+                description: Uniform Resource Identifier
+                type: string
+info:
+    description: A security list is a group of one or more instances that you can
+        specify as the destination or source in a security rule. Instances within
+        a security list can communicate fully with one another on all ports. When
+        you attach an instance to a security list, the inbound and outbound policies
+        defined in the security list are applicable to that instance. All instances
+        within a security list can communicate fully with one another on all protocols
+        and ports.<p>While creating an instance, if you do not attach it to any security
+        list, the instance gets attached automatically to the predefined <code>/Compute-<em>identity_domain</em>/default/default</code>
+        security list, which has the inbound policy set to <code>DENY</code> and the
+        outbound policy set to <code>PERMIT</code>.<p>You can create, delete, update,
+        and view security lists using the HTTP requests listed below. For more information
+        about security lists, see <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=STCSG-GUID-FF5C676A-12B3-4521-90D2-CA0F26CAD101">About
+        Security Lists</a> in <em>Using Oracle Cloud Infrastructure Compute Classic</em>.
+    title: SecLists
+    version: 18.1.2-20180126.052521
+paths:
+    /seclist/:
+        get:
+            consumes:
+            - application/oracle-compute-v3+json
+            description: 'Retrieves the names of containers that contain objects that
+                you can access. You can use this information to construct the multipart
+                name of an object.<p><b>Required Role: </b>To complete this task,
+                you must have the <code>Compute_Monitor</code> or <code>Compute_Operations</code>
+                role. If this role isn''t assigned to you or you''re not sure, then
+                ask your system administrator to ensure that the role is assigned
+                to you in Oracle Cloud My Services. See <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6">Modifying
+                User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.'
+            operationId: discoverRootSecList
+            parameters:
+            -   description: 'The Cookie: header must be included with every request
+                    to the service. It must be set to the value of the set-cookie
+                    header in the response received to the POST /authenticate/ call.'
+                in: header
+                name: Cookie
+                type: string
+            produces:
+            - application/oracle-compute-v3+directory+json
+            responses:
+                '200':
+                    description: OK. See <a class="xref" href="Status%20Codes.html">Status
+                        Codes</a> for information about other possible HTTP status
+                        codes.
+                    headers:
+                        set-cookie:
+                            description: The cookie value is returned if the session
+                                is extended
+                            type: string
+                    schema:
+                        $ref: '#/definitions/SecList-discover-response'
+            summary: Retrieve Names of Containers
+            tags:
+            - SecLists
+        post:
+            consumes:
+            - application/oracle-compute-v3+json
+            description: 'Creates a security list. After creating security lists,
+                you can add instances to them by using the HTTP request, POST /secassociation/
+                <a class="xref" href="op-secassociation--post.html">(Create a Security
+                Association)</a>.<p><b>Required Role: </b>To complete this task, you
+                must have the <code>Compute_Operations</code> role. If this role isn''t
+                assigned to you or you''re not sure, then ask your system administrator
+                to ensure that the role is assigned to you in Oracle Cloud My Services.
+                See <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6">Modifying
+                User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.'
+            operationId: addSecList
+            parameters:
+            -   in: body
+                name: body
+                required: true
+                schema:
+                    $ref: '#/definitions/SecList-post-request'
+            -   description: 'The Cookie: header must be included with every request
+                    to the service. It must be set to the value of the set-cookie
+                    header in the response received to the POST /authenticate/ call.'
+                in: header
+                name: Cookie
+                type: string
+            produces:
+            - application/oracle-compute-v3+json
+            responses:
+                '201':
+                    description: Created. See <a class="xref" href="Status%20Codes.html">Status
+                        Codes</a> for information about other possible HTTP status
+                        codes.
+                    headers:
+                        set-cookie:
+                            description: The cookie value is returned if the session
+                                is extended
+                            type: string
+                    schema:
+                        $ref: '#/definitions/SecList-response'
+            summary: Create a Security List
+            tags:
+            - SecLists
+    /seclist/{container}:
+        get:
+            consumes:
+            - application/oracle-compute-v3+json
+            description: 'Retrieves the names of objects and subcontainers that you
+                can access in the specified container.<p><b>Required Role: </b>To
+                complete this task, you must have the <code>Compute_Monitor</code>
+                or <code>Compute_Operations</code> role. If this role isn''t assigned
+                to you or you''re not sure, then ask your system administrator to
+                ensure that the role is assigned to you in Oracle Cloud My Services.
+                See <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6">Modifying
+                User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.'
+            operationId: discoverSecList
+            parameters:
+            -   description: Specify <code>/Compute-<i>identityDomain</i>/<i>user</i>/</code>
+                    to retrieve the names of objects that you can access. Specify
+                    <code>/Compute-<i>identityDomain</i>/</code> to retrieve the names
+                    of containers that contain objects that you can access. Specify
+                    <code>/Compute-<i>identity_domain</i>/default</code> to retrieve
+                    name of the predefined default security list.
+                in: path
+                name: container
+                required: true
+                type: string
+            -   description: 'The Cookie: header must be included with every request
+                    to the service. It must be set to the value of the set-cookie
+                    header in the response received to the POST /authenticate/ call.'
+                in: header
+                name: Cookie
+                type: string
+            produces:
+            - application/oracle-compute-v3+directory+json
+            responses:
+                '200':
+                    description: OK. See <a class="xref" href="Status%20Codes.html">Status
+                        Codes</a> for information about other possible HTTP status
+                        codes.
+                    headers:
+                        set-cookie:
+                            description: The cookie value is returned if the session
+                                is extended
+                            type: string
+                    schema:
+                        $ref: '#/definitions/SecList-discover-response'
+            summary: Retrieve Names of all Security Lists and Subcontainers in a Container
+            tags:
+            - SecLists
+    /seclist/{container}/:
+        get:
+            consumes:
+            - application/oracle-compute-v3+json
+            description: 'Retrieves details of the security lists that are in the
+                specified container and match the specified query criteria. If you
+                don''t specify any query criteria, then details of all the security
+                lists in the container are displayed. To filter the search results,
+                you can pass one or more of the following query parameters, by appending
+                them to the URI in the following syntax:<p><code>?parameter1=value1&ampparameter2=value2&ampparameterN=valueN</code><p><b>Required
+                Role: </b>To complete this task, you must have the <code>Compute_Monitor</code>
+                or <code>Compute_Operations</code> role. If this role isn''t assigned
+                to you or you''re not sure, then ask your system administrator to
+                ensure that the role is assigned to you in Oracle Cloud My Services.
+                See <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6">Modifying
+                User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.'
+            operationId: listSecList
+            parameters:
+            -   description: <code>/Compute-<em>identity_domain</em>/<em>user</em></code>
+                    and <p><code>/Compute-<em>identity_domain</em>/</code>for user-defined
+                    security lists and <code>/Compute-<em>identity_domain</em>/default</code>
+                    for the predefined default security list.
+                in: path
+                name: container
+                required: true
+                type: string
+            -   description: The three-part name of the object (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>
+                    or <code>/Compute-<em>identity_domain</em>/default/default</code>).
+                in: query
+                name: name
+                required: false
+                type: string
+            -   description: 'The Cookie: header must be included with every request
+                    to the service. It must be set to the value of the set-cookie
+                    header in the response received to the POST /authenticate/ call.'
+                in: header
+                name: Cookie
+                type: string
+            produces:
+            - application/oracle-compute-v3+json
+            responses:
+                '200':
+                    description: OK. See <a class="xref" href="Status%20Codes.html">Status
+                        Codes</a> for information about other possible HTTP status
+                        codes.
+                    headers:
+                        set-cookie:
+                            description: The cookie value is returned if the session
+                                is extended
+                            type: string
+                    schema:
+                        $ref: '#/definitions/SecList-list-response'
+            summary: Retrieve Details of all Security Lists in a Container
+            tags:
+            - SecLists
+    /seclist/{name}:
+        delete:
+            consumes:
+            - application/oracle-compute-v3+json
+            description: 'Deletes the specified security list. No response is returned.<p>Note
+                that when a security list is deleted, all the security associations
+                involving that security list are also deleted.<p><b>Required Role:
+                </b>To complete this task, you must have the <code>Compute_Operations</code>
+                role. If this role isn''t assigned to you or you''re not sure, then
+                ask your system administrator to ensure that the role is assigned
+                to you in Oracle Cloud My Services. See <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6">Modifying
+                User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.'
+            operationId: deleteSecList
+            parameters:
+            -   description: <p>The three-part name of the object (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>).
+                in: path
+                name: name
+                required: true
+                type: string
+            -   description: 'The Cookie: header must be included with every request
+                    to the service. It must be set to the value of the set-cookie
+                    header in the response received to the POST /authenticate/ call.'
+                in: header
+                name: Cookie
+                type: string
+            produces:
+            - application/oracle-compute-v3+json
+            responses:
+                '204':
+                    description: No Content. See <a class="xref" href="Status%20Codes.html">Status
+                        Codes</a> for information about other possible HTTP status
+                        codes.
+                    headers:
+                        set-cookie:
+                            description: The cookie value is returned if the session
+                                is extended
+                            type: string
+            summary: Delete a Security List
+            tags:
+            - SecLists
+        get:
+            consumes:
+            - application/oracle-compute-v3+json
+            description: 'Retrieves information about the specified security list.<p><b>Required
+                Role: </b>To complete this task, you must have the <code>Compute_Monitor</code>
+                or <code>Compute_Operations</code> role. If this role isn''t assigned
+                to you or you''re not sure, then ask your system administrator to
+                ensure that the role is assigned to you in Oracle Cloud My Services.
+                See <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6">Modifying
+                User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.'
+            operationId: getSecList
+            parameters:
+            -   description: <p>The three-part name of the object (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>).
+                in: path
+                name: name
+                required: true
+                type: string
+            -   description: 'The Cookie: header must be included with every request
+                    to the service. It must be set to the value of the set-cookie
+                    header in the response received to the POST /authenticate/ call.'
+                in: header
+                name: Cookie
+                type: string
+            produces:
+            - application/oracle-compute-v3+json
+            responses:
+                '200':
+                    description: OK. See <a class="xref" href="Status%20Codes.html">Status
+                        Codes</a> for information about other possible HTTP status
+                        codes.
+                    headers:
+                        set-cookie:
+                            description: The cookie value is returned if the session
+                                is extended
+                            type: string
+                    schema:
+                        $ref: '#/definitions/SecList-response'
+            summary: Retrieve Details of a Security List
+            tags:
+            - SecLists
+        put:
+            consumes:
+            - application/oracle-compute-v3+json
+            description: 'Updates inbound policy, outbound policy, and description
+                for the specified security list.<p><b>Required Role: </b>To complete
+                this task, you must have the <code>Compute_Operations</code> role.
+                If this role isn''t assigned to you or you''re not sure, then ask
+                your system administrator to ensure that the role is assigned to you
+                in Oracle Cloud My Services. See <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6">Modifying
+                User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.'
+            operationId: updateSecList
+            parameters:
+            -   description: <p>The three-part name of the object (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>).
+                in: path
+                name: name
+                required: true
+                type: string
+            -   in: body
+                name: body
+                required: true
+                schema:
+                    $ref: '#/definitions/SecList-put-request'
+            -   description: 'The Cookie: header must be included with every request
+                    to the service. It must be set to the value of the set-cookie
+                    header in the response received to the POST /authenticate/ call.'
+                in: header
+                name: Cookie
+                type: string
+            produces:
+            - application/oracle-compute-v3+json
+            responses:
+                '200':
+                    description: OK. See <a class="xref" href="Status%20Codes.html">Status
+                        Codes</a> for information about other possible HTTP status
+                        codes.
+                    headers:
+                        set-cookie:
+                            description: The cookie value is returned if the session
+                                is extended
+                            type: string
+                    schema:
+                        $ref: '#/definitions/SecList-response'
+            summary: Update a Security List
+            tags:
+            - SecLists
+produces:
+- application/oracle-compute-v3+json
+- application/oracle-compute-v3+directory+json
+schemes:
+- https
+swagger: '2.0'
+tags:
+-   description: A security list is a group of one or more instances that you can
+        specify as the destination or source in a security rule. Instances within
+        a security list can communicate fully with one another on all ports. When
+        you attach an instance to a security list, the inbound and outbound policies
+        defined in the security list are applicable to that instance. All instances
+        within a security list can communicate fully with one another on all protocols
+        and ports.<p>While creating an instance, if you do not attach it to any security
+        list, the instance gets attached automatically to the predefined <code>/Compute-<em>identity_domain</em>/default/default</code>
+        security list, which has the inbound policy set to <code>DENY</code> and the
+        outbound policy set to <code>PERMIT</code>.<p>You can create, delete, update,
+        and view security lists using the HTTP requests listed below. For more information
+        about security lists, see <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=STCSG-GUID-FF5C676A-12B3-4521-90D2-CA0F26CAD101">About
+        Security Lists</a> in <em>Using Oracle Cloud Infrastructure Compute Classic</em>.
+    name: SecLists

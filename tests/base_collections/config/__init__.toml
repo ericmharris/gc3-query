@@ -1,0 +1,4 @@
+[__init__]
+__decription__ = 'GC3 Configuration Data'
+__name__ = 'GC3 Configuration Data'
+__doc__ = """GC3 Configuration Data for gc3scan project"""

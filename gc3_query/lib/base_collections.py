@@ -24,6 +24,7 @@ from collections.abc import KeysView, MappingView, Set, ItemsView, ValuesView
 from pathlib import Path
 from copy import deepcopy
 from typing import Any, MutableSequence, MutableMapping
+from collections import ChainMap
 
 
 import toml
@@ -255,7 +256,7 @@ class OrderedDictBase(MutableMapping):
         self.__dict__[key] = value
 
     def __getitem__(self, key):
-        return self._d[key]
+        return self._d.__getitem__(key)
 
     def __delitem__(self, key):
         del self._d[key]
@@ -371,16 +372,19 @@ class NestedOrderedDictAttrListBase(OrderedDictAttrBase):
         self._serializable = dict()
 
         if mapping:
-            for key, value in mapping.items():
-                if isinstance(value, MutableSequence):
-                    self[key] = NestedConfigListBase(value)
-                    self._serializable[key] = list(value)
-                if isinstance(value, MutableMapping):
-                    self[key] = NestedOrderedDictAttrListBase(value)
-                    self._serializable[key] = dict(value)
-                else:
-                    self[key] = value
-                    self._serializable[key] = value
+            try:
+                for key, value in mapping.items():
+                    if isinstance(value, MutableSequence):
+                        self[key] = NestedConfigListBase(value)
+                        self._serializable[key] = list(value)
+                    if isinstance(value, MutableMapping):
+                        self[key] = NestedOrderedDictAttrListBase(value)
+                        self._serializable[key] = dict(value)
+                    else:
+                        self[key] = value
+                        self._serializable[key] = value
+            except TypeError as e:
+                _error(f'fuck: {e}')
 
     def __setitem__(self, key, value):
         # make sure we're storing the fqdn
@@ -400,7 +404,7 @@ class NestedOrderedDictAttrListBase(OrderedDictAttrBase):
         return iter(self._d)
 
     def __getattr__(self, key):
-        return self._d[key]
+        return self._d.get(key, None)
 
 
     # The next five methods are requirements of the ABC.
@@ -438,11 +442,38 @@ class NestedOrderedDictAttrListBase(OrderedDictAttrBase):
     def as_dict(self) -> DictStrAny:
         return deepcopy(self._serializable)
 
-    def as_dict_melded_with(self, other) -> DictStrAny:
+    def as_dict_melded_with(self, other, as_melddict:bool = False) -> DictStrAny:
         melded = MeldDict(self.as_dict())
         if hasattr(other, 'as_dict'):
             other = other.as_dict()
         melded.add(other)
-        melded_dict = melded.copy()
+        melded_dict = melded.copy() if as_melddict else dict(melded)
         return melded_dict
 
+    def as_added(self, other: MutableMapping, as_dict: bool=False) -> Union[dict, 'NestedOrderedDictAttrListBase']:
+        if hasattr(other, 'as_dict'):
+            other = other.as_dict()
+        cm = ChainMap(self, other).new_child()
+        copy_added = dict(cm) if as_dict else NestedOrderedDictAttrListBase(mapping=cm)
+        return copy_added
+
+
+    def as_updated(self, other: MutableMapping, as_dict: bool=False) -> Union[dict, 'NestedOrderedDictAttrListBase']:
+        if hasattr(other, 'as_dict'):
+            other = other.as_dict()
+        # cm = dict(ChainMap(other, self))
+        # updated_cm = dict(cm) if as_dict else NestedOrderedDictAttrListBase(mapping=cm)
+        updated = {**self.as_dict(), **other}
+        if as_dict:
+            return updated
+        return NestedOrderedDictAttrListBase(updated)
+
+    def as_subtract(self, other: MutableMapping, as_dict: bool=False) -> Union[dict, 'NestedOrderedDictAttrListBase']:
+        if hasattr(other, 'as_dict'):
+            other = other.as_dict()
+        # cm = ChainMap(self, other)
+        mds = MeldDict(self)
+        mdo = MeldDict(other)
+        cm = mds.subtract(mdo)
+        copy_added = dict(cm) if as_dict else NestedOrderedDictAttrListBase(mapping=cm)
+        return copy_added

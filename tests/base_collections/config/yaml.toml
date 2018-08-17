@@ -1,0 +1,5 @@
+[yaml]
+[yaml.export]
+[yaml.export.formatting]
+indent = 4
+default_flow_style = false

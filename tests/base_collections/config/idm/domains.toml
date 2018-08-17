@@ -1,0 +1,90 @@
+[idm.domains]
+__descr__ = 'Oracle Cloud IDM Domains'
+
+
+[idm.domains.gc3pilot]
+key_in_gc3pilot_only = true
+key_in_both_gc3pilot_and_gc35001 = 'gc3pilot'
+name = 'gc3pilot'
+id = 'gc3pilot'
+service_instance_id = 575988287
+subscription_id = 1480019
+csi_number = 21204068
+region = 'us'
+data_center = 'usdc2'
+'login_url:url' = 'https://myservices.us.oraclecloud.com/mycloud/gc3pilot/faces/dashboard.jspx'
+'rest_endpoint:url' = 'https://compute.uscom-central-1.oraclecloud.com'
+'sftp_url:url' = 'sftp://sftp.us2.cloud.oracle.com:22'
+multiple_sites = true
+is_ucm = false
+is_classic = true
+[idm.domains.gc3pilot.sites.uscom-central-1]
+name = 'uscom-central-1'
+data_center ='usdc2'
+rest_endpoint = 'https://compute.uscom-central-1.oraclecloud.com'
+[idm.domains.gc3pilot.sites.us006_z70]
+name = 'us006_z70'
+data_center = 'usdc6'
+rest_endpoint = 'https://api-z70.compute.us6.oraclecloud.com'
+
+
+[idm.domains.gc3test]
+name = 'gc3test'
+id = 'gc3test'
+service_instance_id = 587626604
+subscription_id = 1586698
+csi_number = 21361344
+region = 'us'
+data_center = 'usdc2'
+multiple_sites = false
+'login_url:url' = 'https://myservices.us.oraclecloud.com/mycloud/gc3test/faces/dashboard.jspx'
+'rest_endpoint:url' = 'https://compute.uscom-central-1.oraclecloud.com'
+'sftp_url:url' = 'sftp://sftp.us2.cloud.oracle.com:22'
+is_ucm = false
+is_classic = true
+[idm.domains.gc3test.sites.uscom-central-1]
+name = 'uscom-central-1'
+data_center ='usdc2'
+rest_endpoint = 'https://compute.uscom-central-1.oraclecloud.com'
+
+
+[idm.domains.gc30003]
+name = 'gc30003'
+id = 'gc30003'
+service_instance_id = 587626604
+subscription_id = 1586698
+csi_number = 21361344
+region = 'us'
+data_center = 'usdc2'
+multiple_sites = false
+'login_url:url' = 'https://myservices.us.oraclecloud.com/mycloud/gc30003/faces/dashboard.jspx'
+'rest_endpoint:url' = 'https://compute.uscom-central-1.oraclecloud.com'
+'sftp_url:url' = 'sftp://sftp.us2.cloud.oracle.com:22'
+is_ucm = false
+is_classic = true
+[idm.domains.gc30003.sites.uscom-central-1]
+name = 'uscom-central-1'
+data_center ='usdc2'
+rest_endpoint = 'https://compute.uscom-central-1.oraclecloud.com'
+
+
+[idm.domains.gc35001]
+key_in_both_gc3pilot_and_gc35001 = 'gc35001'
+key_in_gc35001_only = true
+name = 'gc35001'
+id = 'gc35001'
+service_instance_id = 587626604
+subscription_id = 1586698
+csi_number = 21361344
+region = 'us'
+data_center = 'usdc2'
+multiple_sites = false
+'login_url:url' = 'https://myservices-gc35001.console.oraclecloud.com/mycloud/cloudportal/dashboard'
+'rest_endpoint:url' = 'https://compute.uscom-central-1.oraclecloud.com'
+'sftp_url:url' = 'sftp://sftp.us2.cloud.oracle.com:22'
+is_ucm = true
+is_classic = false
+[idm.domains.gc35001.sites.uscom-central-1]
+name = 'uscom-central-1'
+data_center ='usdc2'
+rest_endpoint = 'https://compute.uscom-central-1.oraclecloud.com'

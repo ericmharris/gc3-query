@@ -1,0 +1,397 @@
+consumes:
+- application/oracle-compute-v3+json
+- application/oracle-compute-v3+directory+json
+definitions:
+    DailyWeeklyInterval:
+        allOf:
+        -   $ref: '#/definitions/Interval'
+        -   description: Backup Interval running once a day on certain days of the
+                week
+            properties:
+                daysOfWeek:
+                    description: Days of the week to run a backup
+                    items:
+                        enum:
+                        - MONDAY
+                        - TUESDAY
+                        - WEDNESDAY
+                        - THURSDAY
+                        - FRIDAY
+                        - SATURDAY
+                        - SUNDAY
+                        type: string
+                    type: array
+                timeOfDay:
+                    description: Time of the day to run a backup
+                    pattern: ([01]?[0-9]|2[0-3]):[0-5][0-9]
+                    type: string
+                userTimeZone:
+                    description: 'Any IANA time zone. e.g: America/Los_Angeles'
+                    type: string
+            type: object
+    HourlyInterval:
+        allOf:
+        -   $ref: '#/definitions/Interval'
+        -   description: Backup Interval running every X hours
+            properties:
+                hourlyInterval:
+                    description: Hours to wait before starting the next backup
+                    format: int32
+                    type: integer
+            type: object
+    Interval:
+        description: There are two kinds of Intervals. Each Interval has its own JSON
+            format. Your Interval field should look like one of the following:<p><ul><li><code>"interval":{"Hourly":{"hourlyInterval":2}}</code></li><li><code>{"DailyWeekly":{"daysOfWeek":["MONDAY"],"timeOfDay":"03:15","userTimeZone":"America/Los_Angeles"}}</code></li></ul><p>Days
+            of the week is any day of the week fully capitalized (MONDAY, TUESDAY,
+            etc). The user time zone is any IANA user timezone.  For example user
+            time zones see <a href="https://en.wikipedia.org/wiki/IANA_time_zone_database">List
+            of IANA time zones</a>.
+        type: object
+        x-oneOf:
+            oneOf:
+            -   properties:
+                    DailyWeekly:
+                        allOf:
+                        -   $ref: '#/definitions/DailyWeeklyInterval'
+                        -   properties: {}
+                            type: object
+                type: object
+            -   properties:
+                    Hourly:
+                        allOf:
+                        -   $ref: '#/definitions/HourlyInterval'
+                        -   properties: {}
+                            type: object
+                type: object
+        x-oneOf-instructions: Provide one of the valid object representations documented
+            here.  For more information about oneOf see http://json-schema.org/latest/json-schema-validation.html#anchor88
+    IpAddressReservation-list-response:
+        properties:
+            result:
+                items:
+                    $ref: '#/definitions/IpAddressReservation-response'
+                type: array
+    IpAddressReservation-post-request:
+        description: 'The request body contains details of the IP address reservation
+            that you want to create. '
+        properties:
+            description:
+                description: Description of the IP address reservation.
+                type: string
+            ipAddressPool:
+                description: 'The IP address pool from which you want to reserve an
+                    IP address. Specify one of the following values:<p>* <code>/oracle/public/public-ippool</code>:
+                    A pool of public IP addresses. An IP address from this pool is
+                    accessible over the public Internet.<p>* <code>/oracle/public/cloud-ippool</code>:
+                    A pool of cloud IP addresses. An IP address from this pool is
+                    accessible to other IP networks in the Oracle cloud. You can use
+                    these IP addresses to communicate with other Oracle services.'
+                type: string
+            name:
+                description: The three-part name of the IP address reservation(/Compute-identity_domain/user/object).<p>Object
+                    names can contain only alphanumeric characters, hyphens, underscores,
+                    and periods. Object names are case-sensitive. When you specify
+                    the object name, ensure that an object of the same type and with
+                    the same name doesn't already exist. If such an object already
+                    exists, another object of the same type and with the same name
+                    won't be created and the existing object won't be updated.
+                type: string
+            tags:
+                description: Strings that you can use to tag the IP address reservation.
+                items:
+                    type: string
+                type: array
+        required:
+        - name
+    IpAddressReservation-put-request:
+        description: 'The request body contains details of the IP address reservation
+            that you want to update. '
+        properties:
+            description:
+                description: Description of the IP address reservation.
+                type: string
+            ipAddressPool:
+                description: 'The IP address pool from which you want to reserve an
+                    IP address. Specify one of the following values:<p>* <code>/oracle/public/public-ippool</code>:
+                    A pool of public IP addresses. An IP address from this pool is
+                    accessible over the public Internet.<p>* <code>/oracle/public/cloud-ippool</code>:
+                    A pool of cloud IP addresses. An IP address from this pool is
+                    accessible to other IP networks in the Oracle cloud. You can use
+                    these IP addresses to communicate with other Oracle services.'
+                type: string
+            name:
+                description: The three-part name of the IP address reservation(/Compute-identity_domain/user/object).<p>Object
+                    names can contain only alphanumeric characters, hyphens, underscores,
+                    and periods. Object names are case-sensitive. When you specify
+                    the object name, ensure that an object of the same type and with
+                    the same name doesn't already exist. If such an object already
+                    exists, another object of the same type and with the same name
+                    won't be created and the existing object won't be updated.
+                type: string
+            tags:
+                description: Strings that you can use to tag the IP address reservation.
+                items:
+                    type: string
+                type: array
+        required:
+        - name
+    IpAddressReservation-response:
+        properties:
+            description:
+                description: Description of the object.
+                type: string
+            ipAddress:
+                description: Reserved NAT IPv4 address from the IP address pool.
+                type: string
+            ipAddressPool:
+                description: Name of the IP address pool to reserve the NAT IP from.
+                type: string
+            name:
+                description: Name of the IP address reservation.
+                type: string
+            tags:
+                description: Tags associated with the object.
+                items:
+                    type: string
+                type: array
+            uri:
+                description: Uniform Resource Identifier
+                type: string
+info:
+    description: A reservation of a NAT IPv4 address, which can be associated to one
+        or more virtual NICs for routing outside of an IP network / IP network exchange
+        using NAT.
+    title: IPAddressReservations
+    version: 18.1.2-20180126.052521
+paths:
+    /network/v1/ipreservation/:
+        post:
+            consumes:
+            - application/oracle-compute-v3+json
+            description: 'Reserves a NAT IPv4 address, which you can associate with
+                one or more virtual NICs for routing traffic outside an IP network
+                or an IP network exchange using NAT.<p>To reserve an IP address for
+                an instance that you have created in the flat network, see Create
+                an IP Reservation.<p>Reserve an IP address from one of the following
+                IP pools:<p>* A pool of public IP addresses. An IP address from this
+                pool is accessible over the public Internet.<p>* A pool of cloud IP
+                addresses. An IP address from this pool is accessible to other IP
+                networks in the Oracle cloud. You can use these IP addresses to communicate
+                with other Oracle services.<p>When you reserve an IP address from
+                a specified IP pool, an IPv4 address is allocated for your use.<p>A
+                public IP address or a cloud IP address can be associated with only
+                one vNIC at a time. However, a single vNIC can have a maximum of two
+                NAT IP addresses, one from each IP pool.<p>After reserving an IP address,
+                you can and associate the IP address with a vNIC on your instance.
+                See <a class="xref" href="op-network-v1-ipassociation--post.html">Create
+                an IP Address Association</a>.<p><b>Required Role: </b>To complete
+                this task, you must have the <code>Compute_Operations</code> role.
+                If this role isn''t assigned to you or you''re not sure, then ask
+                your system administrator to ensure that the role is assigned to you
+                in Oracle Cloud My Services. See <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6">Modifying
+                User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.'
+            operationId: addIPAddressReservation
+            parameters:
+            -   in: body
+                name: body
+                required: true
+                schema:
+                    $ref: '#/definitions/IpAddressReservation-post-request'
+            -   description: 'The Cookie: header must be included with every request
+                    to the service. It must be set to the value of the set-cookie
+                    header in the response received to the POST /authenticate/ call.'
+                in: header
+                name: Cookie
+                type: string
+            produces:
+            - application/oracle-compute-v3+json
+            responses:
+                '201':
+                    description: Created. See <a class="xref" href="Status%20Codes.html">Status
+                        Codes</a> for information about other possible HTTP status
+                        codes.
+                    headers:
+                        set-cookie:
+                            description: The cookie value is returned if the session
+                                is extended
+                            type: string
+                    schema:
+                        $ref: '#/definitions/IpAddressReservation-response'
+            summary: Create an IP Address Reservation for IP Networks
+            tags:
+            - IPAddressReservations
+    /network/v1/ipreservation/{container}/:
+        get:
+            consumes:
+            - application/oracle-compute-v3+json
+            description: 'Retrieves details of the IP address reservations that are
+                available in the specified container. This request is for IP address
+                reservations used in IP networks.<p><b>Required Role: </b>To complete
+                this task, you must have the <code>Compute_Operations</code> role.
+                If this role isn''t assigned to you or you''re not sure, then ask
+                your system administrator to ensure that the role is assigned to you
+                in Oracle Cloud My Services. See <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6">Modifying
+                User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.'
+            operationId: listIPAddressReservation
+            parameters:
+            -   description: <code>/Compute-<em>identity_domain</em>/<em>user</em></code>
+                    or <p><code>/Compute-<em>identity_domain</em></code>
+                in: path
+                name: container
+                required: true
+                type: string
+            -   description: 'The Cookie: header must be included with every request
+                    to the service. It must be set to the value of the set-cookie
+                    header in the response received to the POST /authenticate/ call.'
+                in: header
+                name: Cookie
+                type: string
+            produces:
+            - application/oracle-compute-v3+json
+            responses:
+                '200':
+                    description: OK. See <a class="xref" href="Status%20Codes.html">Status
+                        Codes</a> for information about other possible HTTP status
+                        codes.
+                    headers:
+                        set-cookie:
+                            description: The cookie value is returned if the session
+                                is extended
+                            type: string
+                    schema:
+                        $ref: '#/definitions/IpAddressReservation-list-response'
+            summary: Retrieve Details of all IP Address Reservations in a Container
+            tags:
+            - IPAddressReservations
+    /network/v1/ipreservation/{name}:
+        delete:
+            consumes:
+            - application/oracle-compute-v3+json
+            description: 'Deletes the specified IP address reservation.<p><b>Required
+                Role: </b>To complete this task, you must have the <code>Compute_Operations</code>
+                role. If this role isn''t assigned to you or you''re not sure, then
+                ask your system administrator to ensure that the role is assigned
+                to you in Oracle Cloud My Services. See <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6">Modifying
+                User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.'
+            operationId: deleteIPAddressReservation
+            parameters:
+            -   description: The three-part name of the object (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>).
+                in: path
+                name: name
+                required: true
+                type: string
+            -   description: 'The Cookie: header must be included with every request
+                    to the service. It must be set to the value of the set-cookie
+                    header in the response received to the POST /authenticate/ call.'
+                in: header
+                name: Cookie
+                type: string
+            produces:
+            - application/oracle-compute-v3+json
+            responses:
+                '204':
+                    description: No Content. See <a class="xref" href="Status%20Codes.html">Status
+                        Codes</a> for information about other possible HTTP status
+                        codes.
+                    headers:
+                        set-cookie:
+                            description: The cookie value is returned if the session
+                                is extended
+                            type: string
+            summary: Delete an IP Address Reservation Used in IP Networks
+            tags:
+            - IPAddressReservations
+        get:
+            consumes:
+            - application/oracle-compute-v3+json
+            description: 'Retrieves details of the specified IP address reservation.<p><b>Required
+                Role: </b>To complete this task, you must have the <code>Compute_Operations</code>
+                role. If this role isn''t assigned to you or you''re not sure, then
+                ask your system administrator to ensure that the role is assigned
+                to you in Oracle Cloud My Services. See <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6">Modifying
+                User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.'
+            operationId: getIPAddressReservation
+            parameters:
+            -   description: The three-part name of the object (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>).
+                in: path
+                name: name
+                required: true
+                type: string
+            -   description: 'The Cookie: header must be included with every request
+                    to the service. It must be set to the value of the set-cookie
+                    header in the response received to the POST /authenticate/ call.'
+                in: header
+                name: Cookie
+                type: string
+            produces:
+            - application/oracle-compute-v3+json
+            responses:
+                '200':
+                    description: OK. See <a class="xref" href="Status%20Codes.html">Status
+                        Codes</a> for information about other possible HTTP status
+                        codes.
+                    headers:
+                        set-cookie:
+                            description: The cookie value is returned if the session
+                                is extended
+                            type: string
+                    schema:
+                        $ref: '#/definitions/IpAddressReservation-response'
+            summary: Retrieve Details of an IP Address Reservation Used in IP Networks
+            tags:
+            - IPAddressReservations
+        put:
+            consumes:
+            - application/oracle-compute-v3+json
+            description: 'Updates the specified IP address reservation.<p><b>Required
+                Role: </b>To complete this task, you must have the <code>Compute_Operations</code>
+                role. If this role isn''t assigned to you or you''re not sure, then
+                ask your system administrator to ensure that the role is assigned
+                to you in Oracle Cloud My Services. See <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6">Modifying
+                User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.'
+            operationId: updateIPAddressReservation
+            parameters:
+            -   description: The three-part name of the object (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>).
+                in: path
+                name: name
+                required: true
+                type: string
+            -   in: body
+                name: body
+                required: true
+                schema:
+                    $ref: '#/definitions/IpAddressReservation-put-request'
+            -   description: 'The Cookie: header must be included with every request
+                    to the service. It must be set to the value of the set-cookie
+                    header in the response received to the POST /authenticate/ call.'
+                in: header
+                name: Cookie
+                type: string
+            produces:
+            - application/oracle-compute-v3+json
+            responses:
+                '200':
+                    description: OK. See <a class="xref" href="Status%20Codes.html">Status
+                        Codes</a> for information about other possible HTTP status
+                        codes.
+                    headers:
+                        set-cookie:
+                            description: The cookie value is returned if the session
+                                is extended
+                            type: string
+                    schema:
+                        $ref: '#/definitions/IpAddressReservation-response'
+            summary: Update an IP Address Reservation Used in IP Networks
+            tags:
+            - IPAddressReservations
+produces:
+- application/oracle-compute-v3+json
+- application/oracle-compute-v3+directory+json
+schemes:
+- https
+swagger: '2.0'
+tags:
+-   description: A reservation of a NAT IPv4 address, which can be associated to one
+        or more virtual NICs for routing outside of an IP network / IP network exchange
+        using NAT.
+    name: IPAddressReservations
