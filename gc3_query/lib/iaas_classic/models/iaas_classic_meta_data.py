@@ -1,7 +1,5 @@
-import uuid
 import mongoengine
 
-from gc3_query.lib import *
 from gc3_query.lib.atoml import cfg
 from gc3_query.lib.gc3logging import get_logging
 

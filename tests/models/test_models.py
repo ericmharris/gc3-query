@@ -1,6 +1,5 @@
 import pytest
 
-
 from gc3_query.lib.models.gc3_meta_data import GC3MetaData
 
 

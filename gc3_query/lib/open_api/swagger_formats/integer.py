@@ -13,26 +13,23 @@
 <DESCR>
 """
 
+import re
 ################################################################################
 ## Standard Library Imports
-import sys, os
 from decimal import Decimal
-import re
 
 ################################################################################
 ## Third-Party Imports
 import dateutil
 import pytz
-# from bson.int64 import long
-from dataclasses import dataclass, field
-from bravado_core.formatter import SwaggerFormat
 from bravado_core.exception import SwaggerValidationError
+# from bson.int64 import long
+from bravado_core.formatter import SwaggerFormat
+
+from gc3_query.lib.gc3logging import get_logging
 
 ################################################################################
 ## Project Imports
-
-from gc3_query.lib import *
-from gc3_query.lib.gc3logging import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 

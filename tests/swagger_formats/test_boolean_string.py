@@ -15,40 +15,27 @@
 
 ################################################################################
 ## Standard Library Imports
-import sys, os
 
 ################################################################################
 ## Third-Party Imports
-from dataclasses import dataclass, field
-import pytest
-from bravado_core.formatter import SwaggerFormat
-from bravado_core.exception import SwaggerValidationError
 
 
 ################################################################################
 ## Project Imports
-from gc3_query.lib import *
-from gc3_query.lib import gc3_cfg
-from gc3_query.lib.open_api.swagger_formats.boolean_string import boolean_string_format, BooleanString
-from gc3_query.lib.iaas_classic.iaas_swagger_client import BRAVADO_CONFIG, BRAVADO_CORE_CONFIG
-from gc3_query.lib.open_api.swagger_formats.boolean_string import BooleanString, boolean_string_format
+from gc3_query.lib.iaas_classic.iaas_swagger_client import BRAVADO_CORE_CONFIG
+from gc3_query.lib.open_api.swagger_formats.boolean_string import BooleanString
+
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
-
-from gc3_query.lib import *
-from gc3_query.lib import BASE_DIR
-
-from gc3_query.lib.iaas_classic import IaaSServiceBase, API_SPECS_DIR, IaaSRequestsHTTPClient
+from gc3_query import BASE_DIR
 
 TEST_BASE_DIR: Path = Path(__file__).parent
 # config_dir = TEST_BASE_DIR.joinpath("config")
 config_dir = BASE_DIR.joinpath("etc/config")
 output_dir = TEST_BASE_DIR.joinpath('output')
 
-from gc3_query.lib.gc3_config import GC3Config, IDMCredential
-from gc3_query.lib.iaas_classic.iaas_requests_http_client import IaaSRequestsHTTPClient
-from gc3_query.lib.iaas_classic import IaaSServiceBase, API_SPECS_DIR, IaaSRequestsHTTPClient
-from gc3_query.lib.iaas_classic.instances import Instances
+from gc3_query.lib.gc3_config import GC3Config
+from gc3_query.lib.iaas_classic import API_SPECS_DIR
 from gc3_query.lib.iaas_classic.sec_rules import SecRules
 from gc3_query.lib.open_api.open_api_spec import OpenApiSpec
 

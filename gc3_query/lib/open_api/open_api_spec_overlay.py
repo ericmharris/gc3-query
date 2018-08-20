@@ -15,12 +15,9 @@
 
 ################################################################################
 ## Standard Library Imports
-import sys, os
-from copy import deepcopy
 
 ################################################################################
 ## Third-Party Imports
-from dataclasses import dataclass, field
 import toml
 from melddict import MeldDict
 
@@ -28,12 +25,12 @@ from melddict import MeldDict
 ## Project Imports
 from gc3_query.lib import *
 from gc3_query.lib import gc3_cfg
-from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
-from gc3_query.lib.signatures import GC3Type, GC3VersionedType, GC3VersionTypedMixin
+from gc3_query.lib.signatures import GC3VersionTypedMixin
+from . import OPEN_API_CATALOG_DIR
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
-class OpenApiSpecOverlay(GC3VersionTypedMixin):
+class NOT_NEEDEDOpenApiSpecOverlay(GC3VersionTypedMixin):
     """A dict of updates that are applied to correct mistakes in a OpenApiSpec. (eg. spec_dict['schemes'] = ['https'])
 
     """

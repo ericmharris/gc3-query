@@ -1,0 +1,526 @@
+swagger: '2.0'
+info:
+    version: 18.1.2-20180126.052521
+    description: A security application is an IP protocol-to-port mapping that you
+        can use in security rules. In the web UI, security applications are called
+        protocols. Compute Classic provides several predefined security applications.
+        You can also define your own security applications.<p>You can create, delete,
+        and view security applications using the HTTP requests listed below.
+    title: SecApplications
+schemes:
+- https
+consumes:
+- application/oracle-compute-v3+json
+- application/oracle-compute-v3+directory+json
+produces:
+- application/oracle-compute-v3+json
+- application/oracle-compute-v3+directory+json
+paths:
+    /secapplication/:
+        post:
+            tags:
+            - SecApplications
+            summary: Create a Security Application
+            description: 'Creates a security application. After creating security
+                applications, you can use them in security rules by using the HTTP
+                request, POST /secrule/ <a class="xref" href="op-secrule--post.html">(Create
+                a Security Rule)</a>.<p><b>Required Role: </b>To complete this task,
+                you must have the <code>Compute_Operations</code> role. If this role
+                isn''t assigned to you or you''re not sure, then ask your system administrator
+                to ensure that the role is assigned to you in Oracle Cloud My Services.
+                See <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6">Modifying
+                User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.'
+            operationId: addSecApplication
+            responses:
+                '201':
+                    headers:
+                        set-cookie:
+                            type: string
+                            description: The cookie value is returned if the session
+                                is extended
+                    description: Created. See <a class="xref" href="Status%20Codes.html">Status
+                        Codes</a> for information about other possible HTTP status
+                        codes.
+                    schema:
+                        $ref: '#/definitions/SecApplication-response'
+            consumes:
+            - application/oracle-compute-v3+json
+            produces:
+            - application/oracle-compute-v3+json
+            parameters:
+            -   name: body
+                in: body
+                required: true
+                schema:
+                    $ref: '#/definitions/SecApplication-post-request'
+            -   name: Cookie
+                in: header
+                type: string
+                description: 'The Cookie: header must be included with every request
+                    to the service. It must be set to the value of the set-cookie
+                    header in the response received to the POST /authenticate/ call.'
+        get:
+            tags:
+            - SecApplications
+            summary: Retrieve Names of Containers
+            description: 'Retrieves the names of containers that contain objects that
+                you can access. You can use this information to construct the multipart
+                name of an object.<p><b>Required Role: </b>To complete this task,
+                you must have the <code>Compute_Monitor</code> or <code>Compute_Operations</code>
+                role. If this role isn''t assigned to you or you''re not sure, then
+                ask your system administrator to ensure that the role is assigned
+                to you in Oracle Cloud My Services. See <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6">Modifying
+                User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.'
+            operationId: discoverRootSecApplication
+            responses:
+                '200':
+                    headers:
+                        set-cookie:
+                            type: string
+                            description: The cookie value is returned if the session
+                                is extended
+                    description: OK. See <a class="xref" href="Status%20Codes.html">Status
+                        Codes</a> for information about other possible HTTP status
+                        codes.
+                    schema:
+                        $ref: '#/definitions/SecApplication-discover-response'
+            consumes:
+            - application/oracle-compute-v3+json
+            produces:
+            - application/oracle-compute-v3+directory+json
+            parameters:
+            -   name: Cookie
+                in: header
+                type: string
+                description: 'The Cookie: header must be included with every request
+                    to the service. It must be set to the value of the set-cookie
+                    header in the response received to the POST /authenticate/ call.'
+    /secapplication/{container}:
+        get:
+            tags:
+            - SecApplications
+            summary: Retrieve Names of all Security Applications and Subcontainers
+                in a Container
+            description: 'Retrieves the names of objects and subcontainers that you
+                can access in the specified container.<p><b>Required Role: </b>To
+                complete this task, you must have the <code>Compute_Monitor</code>
+                or <code>Compute_Operations</code> role. If this role isn''t assigned
+                to you or you''re not sure, then ask your system administrator to
+                ensure that the role is assigned to you in Oracle Cloud My Services.
+                See <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6">Modifying
+                User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.'
+            operationId: discoverSecApplication
+            responses:
+                '200':
+                    headers:
+                        set-cookie:
+                            type: string
+                            description: The cookie value is returned if the session
+                                is extended
+                    description: OK. See <a class="xref" href="Status%20Codes.html">Status
+                        Codes</a> for information about other possible HTTP status
+                        codes.
+                    schema:
+                        $ref: '#/definitions/SecApplication-discover-response'
+            consumes:
+            - application/oracle-compute-v3+json
+            produces:
+            - application/oracle-compute-v3+directory+json
+            parameters:
+            -   name: container
+                in: path
+                description: Specify <code>/Compute-<i>identityDomain</i>/<i>user</i>/</code>
+                    to retrieve the names of objects that you can access. Specify
+                    <code>/Compute-<i>identityDomain</i>/</code> to retrieve the names
+                    of containers that contain objects that you can access. Specify
+                    <code>/oracle/public</code> to retrieve the names of system-provided
+                    objects.
+                required: true
+                type: string
+            -   name: Cookie
+                in: header
+                type: string
+                description: 'The Cookie: header must be included with every request
+                    to the service. It must be set to the value of the set-cookie
+                    header in the response received to the POST /authenticate/ call.'
+    /secapplication/{container}/:
+        get:
+            tags:
+            - SecApplications
+            summary: Retrieve Details of all Security Applications in a Container
+            description: 'Retrieves details of the security applications that are
+                in the specified container and match the specified query criteria.
+                If you don''t specify any query criteria, then details of all the
+                security applications in the container are displayed. You can use
+                this HTTP request to validate the results of POST and PUT operations.<p>To
+                filter the search results, you can pass one or more of the following
+                query parameters, by appending them to the URI in the following syntax:<p><code>?parameter1=value1&ampparameter2=value2&ampparameterN=valueN</code><p><b>Required
+                Role: </b>To complete this task, you must have the <code>Compute_Monitor</code>
+                or <code>Compute_Operations</code> role. If this role isn''t assigned
+                to you or you''re not sure, then ask your system administrator to
+                ensure that the role is assigned to you in Oracle Cloud My Services.
+                See <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6">Modifying
+                User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.'
+            operationId: listSecApplication
+            responses:
+                '200':
+                    headers:
+                        set-cookie:
+                            type: string
+                            description: The cookie value is returned if the session
+                                is extended
+                    description: OK. See <a class="xref" href="Status%20Codes.html">Status
+                        Codes</a> for information about other possible HTTP status
+                        codes.
+                    schema:
+                        $ref: '#/definitions/SecApplication-list-response'
+            consumes:
+            - application/oracle-compute-v3+json
+            produces:
+            - application/oracle-compute-v3+json
+            parameters:
+            -   name: container
+                in: path
+                description: <code>/Compute-identity_domain/user</code> or <code>/Compute-identity_domain</code>
+                    for user-created security applications and <code>/oracle/public</code>
+                    for system-provided security applications.
+                required: true
+                type: string
+            -   name: protocol
+                in: query
+                description: 'The protocol to use.<p>The value that you specify can
+                    be either a text representation of a protocol or any unsigned
+                    8-bit assigned protocol number in the range 0-254. See <a target="_blank"
+                    href="http://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml">Assigned
+                    Internet Protocol Numbers</a>.<p>For example, you can specify
+                    either tcp or the number 6.<p>The following text representations
+                    are allowed: <code>tcp</code>, <code>udp</code>, <code>icmp</code>,
+                    <code>igmp</code>, <code>ipip</code>, <code>rdp</code>, <code>esp</code>,
+                    <code>ah</code>, <code>gre</code>, <code>icmpv6</code>, <code>ospf</code>,
+                    <code>pim</code>, <code>sctp</code>, <code>mplsip</code>, <code>all</code>.<p>To
+                    specify all protocols, set this to <code>all</code>.'
+                required: false
+                type: string
+            -   name: description
+                in: query
+                description: <p>A description of the security application.
+                required: false
+                type: string
+            -   name: icmptype
+                in: query
+                description: The ICMP type.<p>This parameter is relevant only if you
+                    specify <code>icmp</code> as the protocol. You can specify one
+                    of the following values:<ul><li><code>echo</code></li><li><code>reply</code></li><li><code>ttl</code></li><li><code>traceroute</code></li><li><code>unreachable</code></li></ul><p>If
+                    you specify <code>icmp</code> as the protocol and don't specify
+                    <code>icmptype</code> or <code>icmpcode</code>, then all ICMP
+                    packets are matched.
+                required: false
+                type: string
+            -   name: dport
+                in: query
+                description: <p>The TCP or UDP destination port number.<p>You can
+                    also specify a port range, such as 5900-5999 for TCP.<p>If you
+                    specify <code>tcp</code> or <code>udp</code> as the protocol,
+                    then the <code>dport</code> parameter is required; otherwise,
+                    it is optional.<p>This parameter isn't relevant to the <code>icmp</code>
+                    protocol.<p><b>Note:</b> This request fails if the range-end is
+                    lower than the range-start. For example, if you specify the port
+                    range as 5000-4000.
+                required: false
+                type: string
+            -   name: icmpcode
+                in: query
+                description: The ICMP code.<p>This parameter is relevant only if you
+                    specify <code>icmp</code> as the protocol. You can specify one
+                    of the following values:<ul><li><code>network</code></li><li><code>host</code></li><li><code>protocol</code></li><li><code>port</code></li><li><code>df</code></li><li><code>admin</code></li></ul><p>If
+                    you specify <code>icmp</code> as the protocol and don't specify
+                    <code>icmptype</code> or <code>icmpcode</code>, then all ICMP
+                    packets are matched.
+                required: false
+                type: string
+            -   name: name
+                in: query
+                description: The three-part name of the object (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>).
+                required: false
+                type: string
+            -   name: Cookie
+                in: header
+                type: string
+                description: 'The Cookie: header must be included with every request
+                    to the service. It must be set to the value of the set-cookie
+                    header in the response received to the POST /authenticate/ call.'
+    /secapplication/{name}:
+        delete:
+            tags:
+            - SecApplications
+            summary: Delete a Security Application
+            description: 'Deletes a security application. No response is returned.<p>You
+                can''t delete system-provided security application that are available
+                in the <code>/oracle/public</code> container.<p><b>Required Role:
+                </b>To complete this task, you must have the <code>Compute_Operations</code>
+                role. If this role isn''t assigned to you or you''re not sure, then
+                ask your system administrator to ensure that the role is assigned
+                to you in Oracle Cloud My Services. See <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6">Modifying
+                User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.'
+            operationId: deleteSecApplication
+            responses:
+                '204':
+                    headers:
+                        set-cookie:
+                            type: string
+                            description: The cookie value is returned if the session
+                                is extended
+                    description: No Content. See <a class="xref" href="Status%20Codes.html">Status
+                        Codes</a> for information about other possible HTTP status
+                        codes.
+            consumes:
+            - application/oracle-compute-v3+json
+            produces:
+            - application/oracle-compute-v3+json
+            parameters:
+            -   name: name
+                in: path
+                description: The three-part name of the object (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>).
+                required: true
+                type: string
+            -   name: Cookie
+                in: header
+                type: string
+                description: 'The Cookie: header must be included with every request
+                    to the service. It must be set to the value of the set-cookie
+                    header in the response received to the POST /authenticate/ call.'
+        get:
+            tags:
+            - SecApplications
+            summary: Retrieve Details of a Security Application
+            description: '<b>Required Role: </b>To complete this task, you must have
+                the <code>Compute_Monitor</code> or <code>Compute_Operations</code>
+                role. If this role isn''t assigned to you or you''re not sure, then
+                ask your system administrator to ensure that the role is assigned
+                to you in Oracle Cloud My Services. See <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6">Modifying
+                User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.'
+            operationId: getSecApplication
+            responses:
+                '200':
+                    headers:
+                        set-cookie:
+                            type: string
+                            description: The cookie value is returned if the session
+                                is extended
+                    description: OK. See <a class="xref" href="Status%20Codes.html">Status
+                        Codes</a> for information about other possible HTTP status
+                        codes.
+                    schema:
+                        $ref: '#/definitions/SecApplication-response'
+            consumes:
+            - application/oracle-compute-v3+json
+            produces:
+            - application/oracle-compute-v3+json
+            parameters:
+            -   name: name
+                in: path
+                description: The three-part name of the object (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>).
+                required: true
+                type: string
+            -   name: Cookie
+                in: header
+                type: string
+                description: 'The Cookie: header must be included with every request
+                    to the service. It must be set to the value of the set-cookie
+                    header in the response received to the POST /authenticate/ call.'
+definitions:
+    DailyWeeklyInterval:
+        allOf:
+        -   $ref: '#/definitions/Interval'
+        -   type: object
+            properties:
+                userTimeZone:
+                    type: string
+                    description: 'Any IANA time zone. e.g: America/Los_Angeles'
+                timeOfDay:
+                    pattern: ([01]?[0-9]|2[0-3]):[0-5][0-9]
+                    type: string
+                    description: Time of the day to run a backup
+                daysOfWeek:
+                    items:
+                        enum:
+                        - MONDAY
+                        - TUESDAY
+                        - WEDNESDAY
+                        - THURSDAY
+                        - FRIDAY
+                        - SATURDAY
+                        - SUNDAY
+                        type: string
+                    type: array
+                    description: Days of the week to run a backup
+            description: Backup Interval running once a day on certain days of the
+                week
+    HourlyInterval:
+        allOf:
+        -   $ref: '#/definitions/Interval'
+        -   type: object
+            properties:
+                hourlyInterval:
+                    type: integer
+                    description: Hours to wait before starting the next backup
+                    format: int32
+            description: Backup Interval running every X hours
+    Interval:
+        x-oneOf-instructions: Provide one of the valid object representations documented
+            here.  For more information about oneOf see http://json-schema.org/latest/json-schema-validation.html#anchor88
+        type: object
+        description: There are two kinds of Intervals. Each Interval has its own JSON
+            format. Your Interval field should look like one of the following:<p><ul><li><code>"interval":{"Hourly":{"hourlyInterval":2}}</code></li><li><code>{"DailyWeekly":{"daysOfWeek":["MONDAY"],"timeOfDay":"03:15","userTimeZone":"America/Los_Angeles"}}</code></li></ul><p>Days
+            of the week is any day of the week fully capitalized (MONDAY, TUESDAY,
+            etc). The user time zone is any IANA user timezone.  For example user
+            time zones see <a href="https://en.wikipedia.org/wiki/IANA_time_zone_database">List
+            of IANA time zones</a>.
+        x-oneOf:
+            oneOf:
+            -   type: object
+                properties:
+                    DailyWeekly:
+                        allOf:
+                        -   $ref: '#/definitions/DailyWeeklyInterval'
+                        -   type: object
+                            properties: {}
+            -   type: object
+                properties:
+                    Hourly:
+                        allOf:
+                        -   $ref: '#/definitions/HourlyInterval'
+                        -   type: object
+                            properties: {}
+    SecApplication-discover-response:
+        title: SecApplication Discover Response
+        type: object
+        properties:
+            result:
+                items:
+                    type: string
+                type: array
+    SecApplication-list-response:
+        title: SecApplication List Response
+        type: object
+        properties:
+            result:
+                items:
+                    $ref: '#/definitions/SecApplication-response'
+                type: array
+    SecApplication-post-request:
+        title: SecApplication Post Request
+        type: object
+        required:
+        - name
+        - protocol
+        description: 'The request body contains details of the security application
+            that you want to create. '
+        properties:
+            description:
+                type: string
+                description: <p>A description of the security application.
+            dport:
+                type: string
+                description: <p>The TCP or UDP destination port number.<p>You can
+                    also specify a port range, such as 5900-5999 for TCP.<p>If you
+                    specify <code>tcp</code> or <code>udp</code> as the protocol,
+                    then the <code>dport</code> parameter is required; otherwise,
+                    it is optional.<p>This parameter isn't relevant to the <code>icmp</code>
+                    protocol.<p><b>Note:</b> This request fails if the range-end is
+                    lower than the range-start. For example, if you specify the port
+                    range as 5000-4000.
+            icmpcode:
+                type: string
+                description: The ICMP code.<p>This parameter is relevant only if you
+                    specify <code>icmp</code> as the protocol. You can specify one
+                    of the following values:<ul><li><code>network</code></li><li><code>host</code></li><li><code>protocol</code></li><li><code>port</code></li><li><code>df</code></li><li><code>admin</code></li></ul><p>If
+                    you specify <code>icmp</code> as the protocol and don't specify
+                    <code>icmptype</code> or <code>icmpcode</code>, then all ICMP
+                    packets are matched.
+            icmptype:
+                type: string
+                description: The ICMP type.<p>This parameter is relevant only if you
+                    specify <code>icmp</code> as the protocol. You can specify one
+                    of the following values:<ul><li><code>echo</code></li><li><code>reply</code></li><li><code>ttl</code></li><li><code>traceroute</code></li><li><code>unreachable</code></li></ul><p>If
+                    you specify <code>icmp</code> as the protocol and don't specify
+                    <code>icmptype</code> or <code>icmpcode</code>, then all ICMP
+                    packets are matched.
+            name:
+                type: string
+                description: <p>The three-part name of the object (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>).<p>Object
+                    names can contain only alphanumeric characters, hyphens, underscores,
+                    and periods. Object names are case-sensitive.
+            protocol:
+                type: string
+                description: 'The protocol to use.<p>The value that you specify can
+                    be either a text representation of a protocol or any unsigned
+                    8-bit assigned protocol number in the range 0-254. See <a target="_blank"
+                    href="http://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml">Assigned
+                    Internet Protocol Numbers</a>.<p>For example, you can specify
+                    either tcp or the number 6.<p>The following text representations
+                    are allowed: <code>tcp</code>, <code>udp</code>, <code>icmp</code>,
+                    <code>igmp</code>, <code>ipip</code>, <code>rdp</code>, <code>esp</code>,
+                    <code>ah</code>, <code>gre</code>, <code>icmpv6</code>, <code>ospf</code>,
+                    <code>pim</code>, <code>sctp</code>, <code>mplsip</code>, <code>all</code>.<p>To
+                    specify all protocols, set this to <code>all</code>.'
+    SecApplication-response:
+        title: SecApplication Response
+        type: object
+        properties:
+            description:
+                type: string
+                description: <p>A description of the security application.
+            dport:
+                type: string
+                description: <p>The TCP or UDP destination port number.<p>You can
+                    also specify a port range, such as 5900-5999 for TCP.<p>If you
+                    specify <code>tcp</code> or <code>udp</code> as the protocol,
+                    then the <code>dport</code> parameter is required; otherwise,
+                    it is optional.<p>This parameter isn't relevant to the <code>icmp</code>
+                    protocol.<p><b>Note:</b> This request fails if the range-end is
+                    lower than the range-start. For example, if you specify the port
+                    range as 5000-4000.
+            icmpcode:
+                type: string
+                description: The ICMP code.<p>This parameter is relevant only if you
+                    specify <code>icmp</code> as the protocol. You can specify one
+                    of the following values:<ul><li><code>network</code></li><li><code>host</code></li><li><code>protocol</code></li><li><code>port</code></li><li><code>df</code></li><li><code>admin</code></li></ul><p>If
+                    you specify <code>icmp</code> as the protocol and don't specify
+                    <code>icmptype</code> or <code>icmpcode</code>, then all ICMP
+                    packets are matched.
+            icmptype:
+                type: string
+                description: The ICMP type.<p>This parameter is relevant only if you
+                    specify <code>icmp</code> as the protocol. You can specify one
+                    of the following values:<ul><li><code>echo</code></li><li><code>reply</code></li><li><code>ttl</code></li><li><code>traceroute</code></li><li><code>unreachable</code></li></ul><p>If
+                    you specify <code>icmp</code> as the protocol and don't specify
+                    <code>icmptype</code> or <code>icmpcode</code>, then all ICMP
+                    packets are matched.
+            name:
+                type: string
+                description: The three-part name of the object (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>).
+            protocol:
+                type: string
+                description: 'The protocol to use.<p>The value that you specify can
+                    be either a text representation of a protocol or any unsigned
+                    8-bit assigned protocol number in the range 0-254. See <a target="_blank"
+                    href="http://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml">Assigned
+                    Internet Protocol Numbers</a>.<p>For example, you can specify
+                    either tcp or the number 6.<p>The following text representations
+                    are allowed: <code>tcp</code>, <code>udp</code>, <code>icmp</code>,
+                    <code>igmp</code>, <code>ipip</code>, <code>rdp</code>, <code>esp</code>,
+                    <code>ah</code>, <code>gre</code>, <code>icmpv6</code>, <code>ospf</code>,
+                    <code>pim</code>, <code>sctp</code>, <code>mplsip</code>, <code>all</code>.<p>To
+                    specify all protocols, set this to <code>all</code>.'
+            uri:
+                type: string
+                description: Uniform Resource Identifier
+tags:
+-   name: SecApplications
+    description: A security application is an IP protocol-to-port mapping that you
+        can use in security rules. In the web UI, security applications are called
+        protocols. Compute Classic provides several predefined security applications.
+        You can also define your own security applications.<p>You can create, delete,
+        and view security applications using the HTTP requests listed below.
+

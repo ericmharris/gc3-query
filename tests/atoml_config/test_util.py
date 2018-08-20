@@ -1,12 +1,8 @@
-import pytest
-import toml
 from pathlib import Path
 
-from gc3_query.lib import *
-from gc3_query.lib.atoml import cfg
-from gc3_query.lib.atoml.util import quote_key
+import pytest
 
-from gc3_query.lib.models.gc3_meta_data import GC3MetaData
+from gc3_query.lib.atoml.util import quote_key
 
 TEST_BASE_DIR: Path = Path(__file__).parent
 CONFIG_DIR: Path = Path(__file__).parent.joinpath("config")

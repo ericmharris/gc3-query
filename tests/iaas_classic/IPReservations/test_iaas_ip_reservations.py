@@ -1,22 +1,11 @@
-import pytest
-import toml
 from pathlib import Path
-import json
-# from pprint import pprint, pformat
-from prettyprinter import pprint, pformat
 
-from gc3_query.lib import *
-from gc3_query.lib import BASE_DIR
-
-from gc3_query.lib.gc3_config import GC3Config, IDMCredential
-from gc3_query.lib.iaas_classic.iaas_requests_http_client import IaaSRequestsHTTPClient
-from gc3_query.lib.iaas_classic import IaaSServiceBase, API_SPECS_DIR, IaaSRequestsHTTPClient
-from gc3_query.lib.iaas_classic import BRAVADO_CONFIG
+from gc3_query import BASE_DIR
+from gc3_query.lib.gc3_config import GC3Config
 from gc3_query.lib.iaas_classic.ip_reservations import IPReservations
+from gc3_query.lib.open_api import API_SPECS_DIR
 
-from bravado_core.spec import Spec
-from bravado_core.response import unmarshal_response
-from bravado_core.param import marshal_param
+# from pprint import pprint, pformat
 
 TEST_BASE_DIR: Path = Path(__file__).parent
 # config_dir = TEST_BASE_DIR.joinpath("config")

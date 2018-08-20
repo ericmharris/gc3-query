@@ -23,12 +23,9 @@ import click
 
 ################################################################################
 ## Project Imports
-from gc3_query import __version__
-from gc3_query.lib import *
 from gc3_query.lib import gc3_cfg
-from gc3_query.lib.cookie_cutter.setup_mongodb import SetupMongoDB
 from gc3_query.lib.base_collections import OrderedDictAttrBase
-
+from gc3_query.lib.cookie_cutter.setup_mongodb import SetupMongoDB
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 

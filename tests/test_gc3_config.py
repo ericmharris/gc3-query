@@ -1,8 +1,6 @@
-import pytest
-import toml
 from pathlib import Path
 
-from gc3_query.lib import *
+import pytest
 
 from gc3_query.lib.gc3_config import GC3Config, IDMCredential
 

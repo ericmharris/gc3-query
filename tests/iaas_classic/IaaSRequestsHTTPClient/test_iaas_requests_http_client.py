@@ -1,10 +1,9 @@
-import pytest
-import toml
 from pathlib import Path
 
-from gc3_query.lib import *
+import pytest
 
-from gc3_query.lib.gc3_config import GC3Config, IDMCredential
+from gc3_query.lib import *
+from gc3_query.lib.gc3_config import GC3Config
 from gc3_query.lib.iaas_classic.iaas_requests_http_client import IaaSRequestsHTTPClient
 
 TEST_BASE_DIR: Path = Path(__file__).parent

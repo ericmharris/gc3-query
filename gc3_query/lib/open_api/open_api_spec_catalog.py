@@ -15,16 +15,15 @@
 
 ################################################################################
 ## Standard Library Imports
-import sys, os
 
 ################################################################################
 ## Third-Party Imports
-from dataclasses import dataclass
 
 ################################################################################
 ## Project Imports
 from gc3_query.lib import *
 from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
+from . import OPEN_API_CATALOG_DIR
 
 from .open_api_spec import OpenApiSpec
 

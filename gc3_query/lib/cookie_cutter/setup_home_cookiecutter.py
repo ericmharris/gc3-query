@@ -5,10 +5,10 @@ from typing import Dict, Any
 
 import click
 import cookiecutter
-import cookiecutter.main
 import cookiecutter.config
+import cookiecutter.main
 
-from gc3_query.lib import BASE_DIR
+from gc3_query import BASE_DIR
 from gc3_query.lib.gc3admin.gc3admin import _debug
 
 CONTEXT_SETTINGS = dict(

@@ -1,18 +1,6 @@
-import pytest
-
-from collections import namedtuple
-
-from click.testing import CliRunner
 from change_cloud_pass.lib import *
-from change_cloud_pass.lib.chpasscli import cli
-from change_cloud_pass.lib import BASE_DIR
-
-from change_cloud_pass.lib.chpasslib import CloudSession
-
-from requestium import Session
 
 from change_cloud_pass.lib.logging import Logging
-from change_cloud_pass.lib.logging import get_logging
 
 
 # @pytest.fixture(scope='module')

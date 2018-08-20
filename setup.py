@@ -34,7 +34,7 @@ with open('HISTORY.rst') as history_file:
 requirements = [
     'Click>=6.0',
     'colorama',
-    'pendulum',
+    # 'pendulum',
     'voluptuous',
     'dataclasses',
     'requests>=2.18.0',
@@ -58,7 +58,7 @@ requirements = [
     # 'ASDF',
     # 'ASDF',
     # 'ASDF',
-    'sortedcontainers',
+    # 'sortedcontainers',
     # 'openpyxl',
     # 'psutil',
     # 'pycrypto',

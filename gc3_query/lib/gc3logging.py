@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import sys
+
 from logbook import Logger, StreamHandler
 
-from gc3_query.lib import *
 from gc3_query.lib import Tuple, Callable, Union
 
 LOG_LEVEL='WARNING'

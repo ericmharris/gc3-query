@@ -21,11 +21,10 @@
 
 from bravado.response import BravadoResponseMetadata
 
-
 ################################################################################
 ## Project Imports
 from gc3_query.lib import *
-from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase, ListBase
+from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 

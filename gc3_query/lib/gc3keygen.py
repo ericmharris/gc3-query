@@ -15,21 +15,18 @@
 
 ################################################################################
 ## Standard Library Imports
-import sys, os
+import sys
 
 ################################################################################
 ## Third-Party Imports
 import click
-from dataclasses import dataclass
-
 from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import rsa
 
 ################################################################################
 ## Project Imports
 from gc3_query import __version__
-from gc3_query.lib import *
 from gc3_query.lib.gc3logging import get_logging
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)

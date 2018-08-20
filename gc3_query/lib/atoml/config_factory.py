@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from typing import List, Optional, Any, Callable, Dict, Tuple, Union, Set, Generator
 from dataclasses import dataclass
-
-from gc3_query.lib import *
-
-from gc3_query import GC3_QUERY_HOME
-from .atoml_config import ATomlConfig
 
 from gc3_query.lib.gc3logging import get_logging
 

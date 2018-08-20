@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from gc3_query import GC3_QUERY_HOME
 from gc3_query.lib.gc3logging import get_logging
+
 
 from .atoml_config import ATomlConfig
 from .config_factory import ConfigFactory

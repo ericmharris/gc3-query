@@ -15,35 +15,29 @@
 
 ################################################################################
 ## Standard Library Imports
-from functools import partialmethod, partial, total_ordering
-
-################################################################################
-## Third-Party Imports
+from functools import partial
 
 from bravado.client import ResourceDecorator
-from bravado.client import SwaggerClient
-from bravado.swagger_model import load_file
+from bravado_core.spec import Spec
 
 ################################################################################
 ## Project Imports
 from gc3_query.lib import *
 from gc3_query.lib import gc3_cfg
+from gc3_query.lib.base_collections import OrderedDictAttrBase
 ## TODO: either change or add a snake_case function for camelCase
 from gc3_query.lib.iaas_classic.iaas_requests_http_client import IaaSRequestsHTTPClient
 from gc3_query.lib.iaas_classic.iaas_swagger_client import IaaSSwaggerClient, BRAVADO_CONFIG
-from gc3_query.lib.open_api.open_api_spec_catalog import OpenApiSpecCatalog
 from gc3_query.lib.open_api.open_api_spec import OpenApiSpec
-from gc3_query.lib.utils import camelcase_to_snake
-from gc3_query.lib.base_collections import OrderedDictAttrBase
+from gc3_query.lib.open_api.open_api_spec_catalog import OpenApiSpecCatalog
 from gc3_query.lib.signatures import GC3VersionTypedMixin
-from gc3_query.lib.open_api.swagger_formats import BooleanString, boolean_string_format
-from bravado_core.spec import Spec
+from gc3_query.lib.utils import camelcase_to_snake
+
+################################################################################
+## Third-Party Imports
 
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
-
-API_SPECS_DIR = BASE_DIR.joinpath('lib/iaas_classic/api_specs')
-MONGODB_MODELS_DIR = BASE_DIR.joinpath('lib/iaas_classic/models')
 
 
 class IaaSServiceBase(GC3VersionTypedMixin):

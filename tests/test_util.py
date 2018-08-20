@@ -1,5 +1,3 @@
-import pytest
-
 from gc3_query.lib.utils import camelcase_to_snake
 
 
