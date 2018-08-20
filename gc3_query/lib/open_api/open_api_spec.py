@@ -15,15 +15,12 @@
 
 ################################################################################
 ## Standard Library Imports
-import sys, os
-from copy import deepcopy
-from functools import total_ordering
 import json
+import yaml
 
 ################################################################################
 ## Third-Party Imports
 from dataclasses import dataclass
-from bravado_core.spec import Spec
 from bravado.swagger_model import load_file, load_url
 from melddict import MeldDict
 from bravado_core.spec import Spec
@@ -34,8 +31,9 @@ from toml import TomlDecodeError
 ## Project Imports
 from gc3_query.lib import *
 from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
-from gc3_query.lib.signatures import GC3Type, GC3VersionedType, GC3VersionTypedMixin
+from gc3_query.lib.signatures import GC3VersionTypedMixin
 from gc3_query.lib.iaas_classic.iaas_swagger_client import  BRAVADO_CONFIG
+from . import OPEN_API_CATALOG_DIR
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 

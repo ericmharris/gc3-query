@@ -39,8 +39,6 @@ from bravado_core.spec import Spec
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
-MONGODB_MODELS_DIR = BASE_DIR.joinpath('lib/iaas_classic/models')
-
 
 class IaaSServiceBase(GC3VersionTypedMixin):
     idm_cfg: Dict[str, Any]

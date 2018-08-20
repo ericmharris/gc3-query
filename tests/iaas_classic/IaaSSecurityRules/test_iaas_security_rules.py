@@ -10,7 +10,7 @@ from gc3_query.lib import BASE_DIR
 from gc3_query.lib.gc3_config import GC3Config, IDMCredential
 from gc3_query.lib.iaas_classic.iaas_requests_http_client import IaaSRequestsHTTPClient
 from gc3_query.lib.iaas_classic import IaaSServiceBase, IaaSRequestsHTTPClient
-from open_api import API_SPECS_DIR
+from gc3_query.lib.open_api import API_SPECS_DIR
 from gc3_query.lib.iaas_classic.security_rules import SecurityRules
 
 TEST_BASE_DIR: Path = Path(__file__).parent

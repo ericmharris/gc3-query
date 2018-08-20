@@ -5,12 +5,12 @@ from pathlib import Path
 from prettyprinter import pprint, pformat
 
 from gc3_query.lib import *
-from gc3_query.lib import BASE_DIR, OPEN_API_CATALOG_DIR
+from gc3_query.lib import BASE_DIR
 
 from gc3_query.lib.gc3_config import GC3Config, IDMCredential
 from gc3_query.lib.iaas_classic.iaas_requests_http_client import IaaSRequestsHTTPClient
 from gc3_query.lib.iaas_classic import IaaSServiceBase, IaaSRequestsHTTPClient
-from open_api import API_SPECS_DIR
+from gc3_query.lib.open_api import API_SPECS_DIR, OPEN_API_CATALOG_DIR
 from gc3_query.lib.iaas_classic.instances import Instances
 from gc3_query.lib.open_api.open_api_spec import OpenApiSpec
 from gc3_query.lib.signatures import GC3Type, GC3VersionedType
