@@ -32,7 +32,7 @@ from gc3_query.lib import *
 from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
 from gc3_query.lib.iaas_classic.iaas_swagger_client import BRAVADO_CONFIG
 from gc3_query.lib.signatures import GC3VersionTypedMixin
-from . import OPEN_API_CATALOG_DIR
+# from . import OPEN_API_CATALOG_DIR
 
 from gc3_query.lib import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
@@ -77,7 +77,7 @@ class OpenApiSpec(GC3VersionTypedMixin):
         if not self.rest_endpoint:
             self.rest_endpoint = idm_cfg['rest_endpoint'] if idm_cfg else self.rest_endpoint
 
-        self.spec_dir: Path = OPEN_API_CATALOG_DIR.joinpath(api_catalog_config.api_catalog_name).joinpath(service_cfg.service_name)
+        self.spec_dir: Path = gc3_cfg.OPEN_API_CATALOG_DIR.joinpath(api_catalog_config.api_catalog_name).joinpath(service_cfg.service_name)
         self.spec_file: Path = self.spec_dir.joinpath(f"{service_cfg.service_name}.json")
 
         self.spec_overlay_format = gc3_cfg.open_api.open_api_spec_overlay.spec_overlay_format

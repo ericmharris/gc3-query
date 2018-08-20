@@ -1,6 +1,6 @@
 import mongoengine
 
-from gc3_query.lib.gc3logging import get_logging
+#from gc3_query.lib.gc3logging import get_logging
 from gc3_query.lib.models.gc3_meta_data import GC3MetaData
 
 from gc3_query.lib import get_logging

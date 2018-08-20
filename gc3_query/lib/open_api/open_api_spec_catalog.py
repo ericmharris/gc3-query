@@ -23,7 +23,7 @@
 ## Project Imports
 from gc3_query.lib import *
 from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
-from . import OPEN_API_CATALOG_DIR
+# from . import OPEN_API_CATALOG_DIR
 
 from .open_api_spec import OpenApiSpec
 
@@ -39,7 +39,7 @@ class OpenApiSpecCatalog(NestedOrderedDictAttrListBase):
                  from_url: bool = False):
         super().__init__()
         self.api_catalog_name = api_catalog_config.api_catalog_name
-        spec_catalog_path = OPEN_API_CATALOG_DIR.joinpath(api_catalog_config.api_catalog_name)
+        spec_catalog_path = gc3_cfg.OPEN_API_CATALOG_DIR.joinpath(api_catalog_config.api_catalog_name)
 
         for service_cfg in services_config.values():
             open_api_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg, from_url=from_url)

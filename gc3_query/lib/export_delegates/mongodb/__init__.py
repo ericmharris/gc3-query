@@ -25,7 +25,7 @@ import mongoengine
 ## Project Imports
 from gc3_query.lib import *
 from gc3_query.lib import gc3_cfg
-from gc3_query.lib.gc3logging import get_logging
+#from gc3_query.lib.gc3logging import get_logging
 from lib import BASE_DIR
 
 from gc3_query.lib import get_logging

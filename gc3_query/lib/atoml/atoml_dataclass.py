@@ -17,9 +17,7 @@ gc3-query.toml_dataclass    [6/1/2018 4:23 PM]
 
 ################################################################################
 ## Project Imports
-from gc3_query.lib import *
-
-from gc3_query.lib import get_logging
+from . import *
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 

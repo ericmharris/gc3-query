@@ -2,9 +2,11 @@
 
 import sys
 
+from pathlib import Path
+from typing import List, Optional, Any, Callable, Dict, Tuple, Union, Set, Generator, Iterable
+
 from logbook import Logger, StreamHandler
 
-from gc3_query.lib import Tuple, Callable, Union
 
 LOG_LEVEL='WARNING'
 # LOG_LEVEL = "DEBUG"

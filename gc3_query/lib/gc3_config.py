@@ -31,7 +31,6 @@ from gc3_query.lib.open_api.swagger_formats import formats
 
 ################################################################################
 ## Project Imports
-from gc3_query.lib import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
@@ -78,6 +77,11 @@ class GC3Config(NestedOrderedDictAttrListBase):
     @property
     def CONFIG_DIR(self) -> Path:
         return self.atoml_config_dir
+
+    @property
+    def OPEN_API_CATALOG_DIR(self) -> Path:
+        open_api_catalog_dir = self.BASE_DIR.joinpath(self.open_apia.open_api_catalog_dir)
+        return open_api_catalog_dir
 
     def get_credential(self, idm_domain_name: str) -> IDMCredential:
         if idm_domain_name not in self['idm']['domains']:

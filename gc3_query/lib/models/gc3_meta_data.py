@@ -1,17 +1,17 @@
 import mongoengine
 
-from gc3_query.lib.atoml import cfg
-from gc3_query.lib.gc3logging import get_logging
+from gc3_query.lib import *
+#from gc3_query.lib.gc3logging import get_logging
 
 from gc3_query.lib import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
 class GC3MetaData(mongoengine.DynamicEmbeddedDocument):
-    username = mongoengine.StringField(default=cfg.username)
-    identity_domain = mongoengine.StringField(default=cfg.identity_domain)
-    region = mongoengine.StringField(default=cfg.region)
-    rest_endpoint = mongoengine.StringField(default=cfg.rest_endpoint)
+    username = mongoengine.StringField(default=gc3_cfg.username)
+    identity_domain = mongoengine.StringField(default=gc3_cfg.identity_domain)
+    region = mongoengine.StringField(default=gc3_cfg.region)
+    rest_endpoint = mongoengine.StringField(default=gc3_cfg.rest_endpoint)
 
     def __init__(self, *args, **values):
         super().__init__(*args, **values)

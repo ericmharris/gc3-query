@@ -17,10 +17,9 @@ from toml import TomlDecodeError
 
 ################################################################################
 ## Project Imports
-from gc3_query.lib import *
-from gc3_query.lib.gc3logging import get_logging
+from . import *
+from . import get_logging
 
-from gc3_query.lib import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
@@ -34,7 +33,6 @@ from pathlib import Path
 
 import toml
 
-from gc3_query.lib import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 

@@ -1,8 +1,8 @@
 from pathlib import Path
 
 from gc3_query import BASE_DIR
+from gc3_query.lib import *
 from gc3_query.lib.gc3_config import GC3Config
-from gc3_query.lib.open_api import API_SPECS_DIR
 from gc3_query.lib.open_api.open_api_spec_catalog import OpenApiSpecCatalog
 
 # from pprint import pprint, pformat
@@ -18,7 +18,7 @@ output_dir = TEST_BASE_DIR.joinpath('output')
 def test_setup():
     assert TEST_BASE_DIR.exists()
     assert config_dir.exists()
-    assert API_SPECS_DIR.exists()
+    assert gc3_cfg.OPEN_API_CATALOG_DIR.exists()
     assert output_dir.exists()
 
 

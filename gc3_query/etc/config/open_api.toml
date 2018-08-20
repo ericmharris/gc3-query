@@ -1,5 +1,6 @@
 [open_api]
 __doc__ = "API catalog"
+open_api_catalog_dir: Path = 'etc/open_api'
 
 [open_api.open_api_spec_catalog]
 name  = 'open_api_spec_catalog'

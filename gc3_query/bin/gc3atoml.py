@@ -29,7 +29,7 @@ import click
 from gc3_query import BASE_DIR
 from gc3_query.lib import gc3_cfg
 from gc3_query.lib.base_collections import OrderedDictAttrBase
-from gc3_query.lib.gc3logging import get_logging
+#from gc3_query.lib.gc3logging import get_logging
 
 # from prettyprinter import prettyprinter, pprint
 
