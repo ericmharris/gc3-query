@@ -12,6 +12,10 @@ mongodb-for-python-for-developers
 
 # Pycharm
 .idea
+# eclipse
+.metadata
+.project
+.settings
 
 /**/*.tdb.json
 
@@ -104,5 +108,5 @@ target/
 /tests/iaas_classic/**/output
 !/gc3_query/var/open_api_catalog/**
 !/gc3_query/**/open_api_catalog
-!/gc3_query/var/beta_01/**
+!beta_01/**
 /gc3_query/tmp
