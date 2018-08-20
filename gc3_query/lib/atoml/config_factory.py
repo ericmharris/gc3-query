@@ -5,7 +5,8 @@ from dataclasses import dataclass
 
 from gc3_query.lib import *
 
-from gc3_query.lib import gc3_cfg, BASE_DIR_FIX_ME
+from gc3_query.lib import gc3_cfg
+from gc3_query import BASE_DIR
 from .atoml_config import ATomlConfig
 
 from gc3_query.lib.gc3logging import get_logging

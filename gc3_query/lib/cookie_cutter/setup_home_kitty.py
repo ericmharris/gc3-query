@@ -8,7 +8,8 @@ import cookiecutter
 import cookiecutter.main
 import cookiecutter.config
 
-from gc3_query.lib import gc3_cfg, BASE_DIR_FIX_ME
+from gc3_query.lib import gc3_cfg
+from gc3_query import BASE_DIR
 from gc3_query.lib.gc3admin.gc3admin import _debug
 
 CONTEXT_SETTINGS = dict(
