@@ -28,7 +28,6 @@ from functools import lru_cache
 ## Project Imports
 
 from gc3_query.lib import *
-from gc3_query import GC3_QUERY_HOME
 from gc3_query.lib.atoml.atoml_config import ATomlConfig
 from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
 from gc3_query.lib.open_api.swagger_formats import formats
@@ -38,7 +37,7 @@ from gc3_query.lib.gc3logging import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
-# atoml_config_dir = GC3_QUERY_HOME.joinpath('etc/config')
+# atoml_config_dir = BASE_DIR.joinpath('etc/config')
 # _debug(f"atoml_config_dir={atoml_config_dir}")
 # at_config = ATomlConfig(directory_paths=atoml_config_dir)
 # gc3_cfg = at_config.toml
@@ -56,9 +55,10 @@ class IDMCredential:
 class GC3Config(NestedOrderedDictAttrListBase):
 
     def __init__(self, atoml_config_dir: Path = None):
+        self.atoml_config_dir = atoml_config_dir
         self._name = self.__class__.__name__
         if not atoml_config_dir:
-            atoml_config_dir = GC3_QUERY_HOME.joinpath('etc/config')
+            self.atoml_config_dir = self.BASE_DIR.joinpath('etc/config')
         _debug(f"atoml_config_dir={atoml_config_dir}")
         self._at_config = ATomlConfig(directory_paths=atoml_config_dir)
         gc3_cfg = self._at_config.toml
@@ -73,6 +73,15 @@ class GC3Config(NestedOrderedDictAttrListBase):
     # def __getitem__(self, key):
     #     value = self._d[key]
     #     return value
+
+    @property
+    def BASE_DIR(self) -> Path:
+        base_dir = Path(__file__).parent.parent
+        return base_dir
+
+    @property
+    def CONFIG_DIR(self) -> Path:
+        return self.atoml_config_dir
 
     def get_credential(self, idm_domain_name: str) -> IDMCredential:
         if idm_domain_name not in self['idm']['domains']:
@@ -156,3 +165,5 @@ class GC3Config(NestedOrderedDictAttrListBase):
     @property
     def bravado_client_config(self):
         return self.get_bravado_config(config_type='bravado_client')
+
+

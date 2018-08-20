@@ -38,7 +38,7 @@ from pathlib import Path
 
 import toml
 
-from gc3_query import GC3_QUERY_HOME
+from gc3_query.lib import gc3_cfg, BASE_DIR_FIX_ME
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 

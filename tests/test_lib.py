@@ -5,7 +5,7 @@
 
 import pytest
 from gc3_query.lib.libcli import cli
-from gc3_query.lib import BASE_DIR
+from gc3_query.lib import gc3_cfg, BASE_DIR_FIX_ME
 
 
 def test_base_dir():

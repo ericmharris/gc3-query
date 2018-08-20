@@ -2,9 +2,9 @@ from prettyprinter import pprint as pp
 from json import loads
 from pathlib import Path
 
-$GC3_QUERY_HOME = Path(__file__).parent
-print('Configuring xonsh for gc3-query: {}'.format($GC3_QUERY_HOME))
-# $GC3_QUERY_HOME = GC3_QUERY_HOME
+$BASE_DIR = Path(__file__).parent
+print('Configuring xonsh for gc3-query: {}'.format($BASE_DIR))
+# $BASE_DIR = BASE_DIR
 
 
 def _pretty_print_json(args=None, stdin=None):

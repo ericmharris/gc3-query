@@ -3,7 +3,7 @@ import toml
 from pathlib import Path
 
 from gc3_query.lib import *
-from gc3_query.lib import BASE_DIR, gc3_cfg
+from gc3_query.lib import gc3_cfg
 
 from gc3_query.lib.gc3_config import GC3Config, IDMCredential
 from gc3_query.lib.iaas_classic.iaas_requests_http_client import IaaSRequestsHTTPClient
