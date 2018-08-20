@@ -25,6 +25,7 @@ from gc3_query.lib import *
 from . import IaaSServiceBase
 from .iaas_requests_http_client import IaaSRequestsHTTPClient
 
+from gc3_query.lib import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
@@ -42,4 +43,5 @@ class SecLists(IaaSServiceBase):
 
 
 
+from gc3_query.lib import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)

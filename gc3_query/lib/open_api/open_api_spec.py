@@ -34,6 +34,7 @@ from gc3_query.lib.iaas_classic.iaas_swagger_client import BRAVADO_CONFIG
 from gc3_query.lib.signatures import GC3VersionTypedMixin
 from . import OPEN_API_CATALOG_DIR
 
+from gc3_query.lib import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 

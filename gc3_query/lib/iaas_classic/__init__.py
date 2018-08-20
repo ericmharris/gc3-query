@@ -37,6 +37,7 @@ from gc3_query.lib.utils import camelcase_to_snake
 ## Third-Party Imports
 
 
+from gc3_query.lib import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 

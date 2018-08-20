@@ -25,6 +25,7 @@
 from gc3_query import __version__
 from gc3_query.lib.gc3keygen import *
 
+from gc3_query.lib import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 CONTEXT_SETTINGS = dict(

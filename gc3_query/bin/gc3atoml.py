@@ -33,6 +33,7 @@ from gc3_query.lib.gc3logging import get_logging
 
 # from prettyprinter import prettyprinter, pprint
 
+from gc3_query.lib import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 CONTEXT_SETTINGS = dict(

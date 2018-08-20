@@ -28,6 +28,7 @@ from gc3_query.lib import gc3_cfg
 from gc3_query.lib.signatures import GC3VersionTypedMixin
 from . import OPEN_API_CATALOG_DIR
 
+from gc3_query.lib import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 class NOT_NEEDEDOpenApiSpecOverlay(GC3VersionTypedMixin):

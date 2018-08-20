@@ -51,5 +51,6 @@ def test_get_default_logging():
     level = Logging.set_default_logging_level(l)
     assert level == l
     assert Logging.default_logging_level == l
-    _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
+    from gc3_query.lib import get_logging
+_debug, _info, _warning, _error, _critical = get_logging(name=__name__)
     assert Logging.default_logging_level == l

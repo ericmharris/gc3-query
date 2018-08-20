@@ -25,6 +25,7 @@
 from gc3_query.lib.iaas_classic.iaas_swagger_client import BRAVADO_CORE_CONFIG
 from gc3_query.lib.open_api.swagger_formats.boolean_string import BooleanString
 
+from gc3_query.lib import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 from gc3_query import BASE_DIR

@@ -27,6 +27,7 @@ from . import OPEN_API_CATALOG_DIR
 
 from .open_api_spec import OpenApiSpec
 
+from gc3_query.lib import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
