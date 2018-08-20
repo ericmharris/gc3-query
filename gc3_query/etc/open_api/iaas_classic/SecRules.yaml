@@ -11,7 +11,7 @@ info:
         Security Rules</a> in <em>Using Oracle Cloud Infrastructure Compute Classic</em>.
     title: SecRules
 schemes:
-- http
+- https
 consumes:
 - application/oracle-compute-v3+json
 - application/oracle-compute-v3+directory+json
@@ -422,18 +422,24 @@ definitions:
                         -   type: object
                             properties: {}
     SecRule-discover-response:
+        title: SecRule Discover Response
+        type: object
         properties:
             result:
                 items:
                     type: string
                 type: array
     SecRule-list-response:
+        title: SecRule List Response
+        type: object
         properties:
             result:
                 items:
                     $ref: '#/definitions/SecRule-response'
                 type: array
     SecRule-post-request:
+        title: SecRule Post Request
+        type: object
         required:
         - action
         - application
@@ -482,6 +488,8 @@ definitions:
                     the prefix <code>seclist</code>: or <code>seciplist</code>: to
                     identify the list type.'
     SecRule-put-request:
+        title: SecRule Put Request
+        type: object
         required:
         - action
         - application
@@ -528,6 +536,8 @@ definitions:
                     the prefix <code>seclist</code>: or <code>seciplist</code>: to
                     identify the list type.'
     SecRule-response:
+        title: SecRule Response
+        type: object
         properties:
             action:
                 type: string
@@ -578,3 +588,4 @@ tags:
         listed below. For more information about security rules, see <a target="_blank"
         href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=STCSG-GUID-1AEDDA2C-3561-4759-B5AD-FB4CD9C2FBD8">About
         Security Rules</a> in <em>Using Oracle Cloud Infrastructure Compute Classic</em>.
+

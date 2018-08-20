@@ -8,7 +8,7 @@ info:
         can view and delete instances using the HTTP requests listed below.
     title: Instances
 schemes:
-- http
+- https
 consumes:
 - application/oracle-compute-v3+json
 - application/oracle-compute-v3+directory+json
@@ -361,18 +361,24 @@ definitions:
                     format: int32
             description: Backup Interval running every X hours
     Instance-discover-response:
+        title: Instance Discover Response
+        type: object
         properties:
             result:
                 items:
                     type: string
                 type: array
     Instance-list-response:
+        title: Instance List Response
+        type: object
         properties:
             result:
                 items:
                     $ref: '#/definitions/Instance-response'
                 type: array
     Instance-put-request:
+        title: Instance Put Response
+        type: object
         description: 'The request body contains details of the instance that you want
             to update. '
         properties:
@@ -398,6 +404,8 @@ definitions:
                     the instance. Later on you can use these tags to retrieve the
                     instance.
     Instance-response:
+        title: Instance Response
+        type: object
         properties:
             account:
                 type: string
@@ -569,3 +577,4 @@ tags:
         target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=STCSG-GUID-F928F362-2DB6-4E45-843F-C269E0740A36">About
         Instances</a> in <em>Using Oracle Cloud Infrastructure Compute Classic</em>.<p>You
         can view and delete instances using the HTTP requests listed below.
+
