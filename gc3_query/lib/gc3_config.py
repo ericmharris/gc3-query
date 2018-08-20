@@ -80,7 +80,7 @@ class GC3Config(NestedOrderedDictAttrListBase):
 
     @property
     def OPEN_API_CATALOG_DIR(self) -> Path:
-        open_api_catalog_dir = self.BASE_DIR.joinpath(self.open_apia.open_api_catalog_dir)
+        open_api_catalog_dir = self.BASE_DIR.joinpath(self.open_api.open_api_catalog_dir)
         return open_api_catalog_dir
 
     def get_credential(self, idm_domain_name: str) -> IDMCredential:

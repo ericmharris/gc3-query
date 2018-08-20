@@ -103,3 +103,14 @@ def test_bravado_config(get_bravado_config_setup):
     assert isinstance(bravado_config, dict)
     assert isinstance(bravado_config['formats'], list)
 
+
+@pytest.fixture()
+def get_constants_setup():
+    gc3_config = GC3Config()
+    assert 'iaas_classic' in gc3_config
+    yield (gc3_config)
+
+def test_open_api_catalog_dir(get_constants_setup):
+    gc3_config = get_constants_setup
+    open_api_catalog_dir = gc3_config.OPEN_API_CATALOG_DIR
+    assert open_api_catalog_dir
