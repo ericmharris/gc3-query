@@ -38,7 +38,8 @@ _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 from gc3_query.lib import *
 from gc3_query.lib import BASE_DIR
 
-from gc3_query.lib.iaas_classic import IaaSServiceBase, API_SPECS_DIR, IaaSRequestsHTTPClient
+from gc3_query.lib.iaas_classic import IaaSServiceBase, IaaSRequestsHTTPClient
+from open_api import API_SPECS_DIR
 
 TEST_BASE_DIR: Path = Path(__file__).parent
 # config_dir = TEST_BASE_DIR.joinpath("config")

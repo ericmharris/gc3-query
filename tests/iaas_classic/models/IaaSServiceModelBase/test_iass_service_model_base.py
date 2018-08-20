@@ -7,7 +7,8 @@ from gc3_query.lib import BASE_DIR, gc3_cfg
 
 from gc3_query.lib.gc3_config import GC3Config, IDMCredential
 from gc3_query.lib.iaas_classic.iaas_requests_http_client import IaaSRequestsHTTPClient
-from gc3_query.lib.iaas_classic import IaaSServiceBase, API_SPECS_DIR, IaaSRequestsHTTPClient
+from gc3_query.lib.iaas_classic import IaaSServiceBase, IaaSRequestsHTTPClient
+from open_api import API_SPECS_DIR
 from gc3_query.lib.iaas_classic.instances import Instances
 from gc3_query.lib.export_delegates.mongodb import storage_adapter_init
 from gc3_query.lib.iaas_classic.models import IaaSServiceModelDynamicDocument

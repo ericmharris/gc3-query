@@ -11,7 +11,8 @@ from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
 
 from gc3_query.lib.gc3_config import GC3Config, IDMCredential
 from gc3_query.lib.iaas_classic.iaas_requests_http_client import IaaSRequestsHTTPClient
-from gc3_query.lib.iaas_classic import IaaSServiceBase, API_SPECS_DIR, IaaSRequestsHTTPClient
+from gc3_query.lib.iaas_classic import IaaSServiceBase, IaaSRequestsHTTPClient
+from open_api import API_SPECS_DIR
 from gc3_query.lib.iaas_classic import BRAVADO_CONFIG
 from gc3_query.lib.iaas_classic.ssh_keys import SSHKeys
 

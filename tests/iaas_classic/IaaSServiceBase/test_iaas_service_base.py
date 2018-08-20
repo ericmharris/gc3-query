@@ -9,7 +9,8 @@ from gc3_query.lib import BASE_DIR
 
 from gc3_query.lib.gc3_config import GC3Config, IDMCredential
 from gc3_query.lib.iaas_classic.iaas_requests_http_client import IaaSRequestsHTTPClient
-from gc3_query.lib.iaas_classic import IaaSServiceBase, API_SPECS_DIR
+from gc3_query.lib.iaas_classic import IaaSServiceBase
+from open_api import API_SPECS_DIR
 from gc3_query.lib.iaas_classic import BRAVADO_CONFIG
 from gc3_query.lib.iaas_classic.sec_rules import SecRules
 from bravado_core.spec import Spec

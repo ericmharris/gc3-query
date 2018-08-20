@@ -29,9 +29,8 @@ from dataclasses import dataclass
 ## Project Imports
 from gc3_query.lib import *
 from gc3_query.lib.gc3logging import get_logging
-
+from lib import BASE_DIR
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
-
-
+API_SPECS_DIR = BASE_DIR.joinpath('lib/iaas_classic/api_specs')

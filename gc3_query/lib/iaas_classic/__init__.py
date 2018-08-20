@@ -15,14 +15,12 @@
 
 ################################################################################
 ## Standard Library Imports
-from functools import partialmethod, partial, total_ordering
+from functools import partial
 
 ################################################################################
 ## Third-Party Imports
 
 from bravado.client import ResourceDecorator
-from bravado.client import SwaggerClient
-from bravado.swagger_model import load_file
 
 ################################################################################
 ## Project Imports
@@ -36,13 +34,11 @@ from gc3_query.lib.open_api.open_api_spec import OpenApiSpec
 from gc3_query.lib.utils import camelcase_to_snake
 from gc3_query.lib.base_collections import OrderedDictAttrBase
 from gc3_query.lib.signatures import GC3VersionTypedMixin
-from gc3_query.lib.open_api.swagger_formats import BooleanString, boolean_string_format
 from bravado_core.spec import Spec
 
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
-API_SPECS_DIR = BASE_DIR.joinpath('lib/iaas_classic/api_specs')
 MONGODB_MODELS_DIR = BASE_DIR.joinpath('lib/iaas_classic/models')
 
 

@@ -647,3 +647,4 @@ definitions:
             message:
                 type: string
                 description: Details of the activity.
+
