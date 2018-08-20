@@ -3,9 +3,6 @@
 
 """Tests for `gc3_query` package."""
 
-import pytest
-from gc3_query.lib.libcli import cli
-from gc3_query.lib import gc3_cfg
 from gc3_query import BASE_DIR
 
 

@@ -1,12 +1,9 @@
 
-import pytest
-import toml
 from pathlib import Path
 
-from gc3_query.lib import *
-from gc3_query.lib.atoml.atoml_file import ATomlFile
+import pytest
 
-from gc3_query.lib.models.gc3_meta_data import GC3MetaData
+from gc3_query.lib.atoml.atoml_file import ATomlFile
 
 TEST_BASE_DIR: Path = Path(__file__).parent
 CONFIG_DIR: Path = Path(__file__).parent.joinpath("test_load_file")

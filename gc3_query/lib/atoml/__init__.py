@@ -2,6 +2,7 @@
 
 from gc3_query.lib.gc3logging import get_logging
 
+
 from .atoml_config import ATomlConfig
 from .config_factory import ConfigFactory
 

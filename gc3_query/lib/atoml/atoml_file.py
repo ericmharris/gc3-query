@@ -10,11 +10,9 @@ Single file containing TOML or ATOML
 
 ################################################################################
 ## Standard Library Imports
-import sys, os
 
 ################################################################################
 ## Third-Party Imports
-from dataclasses import dataclass
 from toml import TomlDecodeError
 
 ################################################################################
@@ -30,16 +28,10 @@ _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
 from dataclasses import dataclass
-import inspect
-import types, typing
 
-from gc3_query.lib import *
 from pathlib import Path
 
 import toml
-
-from gc3_query.lib import gc3_cfg
-from gc3_query import BASE_DIR
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 

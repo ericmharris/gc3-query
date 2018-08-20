@@ -37,30 +37,17 @@
 
 
 import json
+from pathlib import Path
+from typing import List, Any, Dict
+
 import yaml
-
-
-# In[2]:
-
-
-from bravado_core.formatter import SwaggerFormat  # noqa
-from bravado_core.param import marshal_param
+from bravado.client import SwaggerClient
+from bravado.requests_client import RequestsClient
 from bravado_core.spec import Spec
 
-
+# In[2]:
 # In[3]:
-
-
-from bravado.requests_client import RequestsClient
-from bravado.client import SwaggerClient
-from bravado.swagger_model import load_file
-
-
-from pathlib import Path
-from typing import List, Optional, Any, Callable, Dict, Tuple, Union, Set, Generator, Iterable
 DictStrAny = Dict[str, Any]
-from dataclasses import dataclass
-
 
 # In[4]:
 
@@ -79,16 +66,13 @@ rest_endpoint = "https://dbaas.oraclecloud.com/"
 
 ################################################################################
 ## Standard Library Imports
-import sys, os
-from decimal import Decimal
-import re
 
 ################################################################################
 ## Third-Party Imports
 import dateutil
 import pytz
 # from bson.int64 import long
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from bravado_core.formatter import SwaggerFormat
 from bravado_core.exception import SwaggerValidationError
 
@@ -319,7 +303,6 @@ formats.append(boolean_string_format)
 # In[10]:
 
 
-import pendulum
 import maya
 from dateutil.parser import parse
 s = '2018-02-13T18:52:10.094+0000'
@@ -412,9 +395,6 @@ print(dbcs_spec_dict.keys())
 
 
 # In[18]:
-
-
-from melddict import MeldDict
 
 
 # In[19]:

@@ -15,18 +15,12 @@
 
 ################################################################################
 ## Standard Library Imports
-import sys, os
 
 ################################################################################
 ## Third-Party Imports
-from dataclasses import dataclass
-from urllib.parse import urlparse as urlparse3
-from urllib.parse import ParseResult, urlunparse, unquote_plus, quote, urljoin, _coerce_args
+from urllib.parse import unquote_plus
 
-from bravado.http_client import HttpClient
-from bravado.http_future import FutureAdapter
-from bravado.http_future import HttpFuture
-from bravado.requests_client import RequestsClient, RequestsFutureAdapter, RequestsResponseAdapter, BasicAuthenticator
+from bravado.requests_client import RequestsClient, BasicAuthenticator
 from requests.auth import HTTPBasicAuth
 
 ################################################################################

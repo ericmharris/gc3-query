@@ -38,29 +38,16 @@
 
 
 import json
+from pathlib import Path
+from typing import List, Any, Dict
 
-
-# In[3]:
-
-
-from bravado_core.formatter import SwaggerFormat  # noqa
-from bravado_core.param import marshal_param
+from bravado.client import SwaggerClient
+from bravado.requests_client import RequestsClient
 from bravado_core.spec import Spec
 
-
 # In[3]:
-
-
-from bravado.requests_client import RequestsClient
-from bravado.client import SwaggerClient
-from bravado.swagger_model import load_file
-
-
-from pathlib import Path
-from typing import List, Optional, Any, Callable, Dict, Tuple, Union, Set, Generator, Iterable
+# In[3]:
 DictStrAny = Dict[str, Any]
-from dataclasses import dataclass
-
 
 # In[4]:
 
@@ -79,16 +66,13 @@ rest_endpoint = "https://dbaas.oraclecloud.com/"
 
 ################################################################################
 ## Standard Library Imports
-import sys, os
-from decimal import Decimal
-import re
 
 ################################################################################
 ## Third-Party Imports
 import dateutil
 import pytz
 # from bson.int64 import long
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from bravado_core.formatter import SwaggerFormat
 from bravado_core.exception import SwaggerValidationError
 
@@ -394,7 +378,6 @@ config = {'validate_responses': True,
 # In[17]:
 
 
-from melddict import MeldDict
 dbcs_spec_dict = json.loads(open(swagger_file, 'r').read())
 dbcs_spec_dict.keys()
 

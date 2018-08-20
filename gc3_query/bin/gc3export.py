@@ -15,17 +15,15 @@
 
 ################################################################################
 ## Standard Library Imports
-import sys, os
-from pprint import pprint, pformat
+import sys
+from pprint import pprint
 
 ################################################################################
 ## Third-Party Imports
-from dataclasses import dataclass, field
 import click
 
 ################################################################################
 ## Project Imports
-from gc3_query.lib import *
 from gc3_query.lib import gc3_cfg
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)

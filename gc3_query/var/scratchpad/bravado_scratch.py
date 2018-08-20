@@ -1,28 +1,21 @@
 # coding: utf-8
 
-import os
 import json
 from pathlib import Path
-from typing import Dict
-import keyring
 
 import bravado
+import keyring
 from bravado.client import SwaggerClient
-# from gc3_bravado.requests_client import RequestsClient
-from gc3_query.lib.gc3_bravado.requests_client import OCRequestsClient
-from bravado.swagger_model import load_file
-from bravado_core.exception import MatchingResponseNotFound
 from bravado.exception import HTTPBadRequest
 from bravado.http_future import HttpFuture
+from bravado.swagger_model import load_file
+from prettyprinter import pformat
 
-
-from tinydb import TinyDB
-
-from prettyprinter import pprint, pformat
+# from gc3_bravado.requests_client import RequestsClient
+from gc3_query.lib.gc3_bravado.requests_client import OCRequestsClient
 
 ## https://medium.com/@betz.mark/validate-json-models-with-swagger-and-bravado-5fad6b21a825
 # Validate json models with swagger and gc3_bravado
-from bravado_core.spec import Spec
 
 opc_username = "eric.harris@oracle.com"
 opc_password = keyring.get_password("OPC", "gc30003")

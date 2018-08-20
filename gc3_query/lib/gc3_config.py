@@ -16,24 +16,21 @@
 ################################################################################
 ## Standard Library Imports
 
+from copy import deepcopy
+
+import keyring
 ################################################################################
 ## Third-Party Imports
 from dataclasses import dataclass
-import keyring
-from copy import deepcopy
-from functools import lru_cache
-
-
-################################################################################
-## Project Imports
 
 from gc3_query.lib import *
 from gc3_query.lib.atoml.atoml_config import ATomlConfig
 from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
+from gc3_query.lib.gc3logging import get_logging
 from gc3_query.lib.open_api.swagger_formats import formats
 
-
-from gc3_query.lib.gc3logging import get_logging
+################################################################################
+## Project Imports
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
@@ -55,12 +52,10 @@ class IDMCredential:
 class GC3Config(NestedOrderedDictAttrListBase):
 
     def __init__(self, atoml_config_dir: Path = None):
-        self.atoml_config_dir = atoml_config_dir
         self._name = self.__class__.__name__
-        if not atoml_config_dir:
-            self.atoml_config_dir = self.BASE_DIR.joinpath('etc/config')
-        _debug(f"atoml_config_dir={atoml_config_dir}")
-        self._at_config = ATomlConfig(directory_paths=atoml_config_dir)
+        self.atoml_config_dir = atoml_config_dir if atoml_config_dir else self.BASE_DIR.joinpath('etc/config')
+        _debug(f"atoml_config_dir={self.atoml_config_dir}")
+        self._at_config = ATomlConfig(directory_paths=self.atoml_config_dir)
         gc3_cfg = self._at_config.toml
         super().__init__(mapping=gc3_cfg)
         _debug(f"{self._name} created: {self}")

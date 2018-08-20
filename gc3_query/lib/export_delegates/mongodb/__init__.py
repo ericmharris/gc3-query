@@ -15,19 +15,17 @@
 
 ################################################################################
 ## Standard Library Imports
-import sys, os
 import ssl
 
 ################################################################################
 ## Third-Party Imports
-from dataclasses import dataclass
 import mongoengine
 
 ################################################################################
 ## Project Imports
 from gc3_query.lib import *
+from gc3_query.lib import gc3_cfg
 from gc3_query.lib.gc3logging import get_logging
-from gc3_query.lib import gc3_cfg, BASE_DIR
 from lib import BASE_DIR
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)

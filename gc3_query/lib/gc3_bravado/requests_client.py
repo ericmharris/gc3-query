@@ -1,22 +1,9 @@
 # -*- coding: utf-8 -*-
-import logging
 
-import requests
-import requests.auth
-import requests.exceptions
-import six
-from bravado_core.response import IncomingResponse
-from six import iteritems
-from six.moves.urllib import parse as urlparse
-
+from urllib.parse import ParseResult, urlunparse, unquote_plus, quote
 from urllib.parse import urlparse as urlparse3
-from urllib.parse import ParseResult, urlunparse, unquote_plus, quote, urljoin
 
-from bravado.http_client import HttpClient
-from bravado.http_future import FutureAdapter
-from bravado.http_future import HttpFuture
-from bravado.requests_client import RequestsClient, RequestsFutureAdapter, RequestsResponseAdapter
-
+from bravado.requests_client import RequestsClient
 
 from gc3_query.lib import *
 from gc3_query.lib import get_logging

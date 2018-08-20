@@ -15,34 +15,16 @@
 
 ################################################################################
 ## Standard Library Imports
-import sys, os
-from copy import deepcopy
 
+from bravado.client import SwaggerClient
 ################################################################################
 ## Third-Party Imports
-from dataclasses import dataclass
-from melddict import MeldDict
-from bravado.requests_client import RequestsClient
-from bravado.client import SwaggerClient
-from bravado.client import SwaggerClient, ResourceDecorator, inject_headers_for_remote_refs
-from bravado.client import SwaggerClient, CallableOperation
-from bravado.requests_client import RequestsResponseAdapter
-from bravado.swagger_model import load_file
-from bravado_core.exception import MatchingResponseNotFound
-from bravado.exception import HTTPBadRequest
-from bravado.http_future import HttpFuture
-from bravado.swagger_model import Loader
-from bravado.config import BravadoConfig
-from bravado_core.spec import Spec
-
+from bravado.client import inject_headers_for_remote_refs
 
 ################################################################################
 ## Project Imports
 from gc3_query.lib import *
 from gc3_query.lib.open_api.swagger_formats import formats
-
-
-
 
 BRAVADO_CORE_CONFIG: DictStrAny = gc3_cfg.bravado.core_config.as_dict()
 BRAVADO_CORE_CONFIG['formats'] = formats

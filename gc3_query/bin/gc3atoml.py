@@ -13,30 +13,25 @@
 <DESCR>
 """
 
+import subprocess
 ################################################################################
 ## Standard Library Imports
-import sys, os
-import json
-import subprocess
-from pprint import pprint, pformat
+import sys
 from distutils.spawn import find_executable
-
+from pprint import pprint, pformat
 
 ################################################################################
 ## Third-Party Imports
-from dataclasses import dataclass
 import click
-# from prettyprinter import prettyprinter, pprint
 
 ################################################################################
 ## Project Imports
-from gc3_query.lib import gc3_cfg
 from gc3_query import BASE_DIR
-from gc3_query.lib import *
-from gc3_query.lib.gc3logging import get_logging
-from gc3_query.lib.atoml.atoml_config import ATomlConfig
 from gc3_query.lib import gc3_cfg
 from gc3_query.lib.base_collections import OrderedDictAttrBase
+from gc3_query.lib.gc3logging import get_logging
+
+# from prettyprinter import prettyprinter, pprint
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 

@@ -15,7 +15,6 @@
 
 ################################################################################
 ## Standard Library Imports
-import sys, os
 import re
 from functools import total_ordering
 
@@ -25,8 +24,6 @@ from dataclasses import dataclass, field
 
 ################################################################################
 ## Project Imports
-from gc3_query.lib import *
-from gc3_query.lib import gc3_cfg
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
