@@ -1,6 +1,6 @@
 [open_api]
 __doc__ = "API catalog"
-open_api_catalog_dir: Path = 'etc/open_api'
+open_api_spec_base: Path = 'etc/open_api'
 
 [open_api.open_api_spec_catalog]
 name  = 'open_api_spec_catalog'
@@ -15,3 +15,4 @@ export_dir: Path =  'var/open_api_catalog'
 [open_api.open_api_spec_overlay]
 spec_overlay_format = 'toml'
 
+[open_api.iaas_classic]

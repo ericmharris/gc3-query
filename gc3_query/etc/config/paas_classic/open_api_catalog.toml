@@ -1,0 +1,15 @@
+[paas_classic.open_api_catalog]
+api_catalog_name = 'paas_classic'
+name = "Oracle Cloud Platform as a Service REST API."
+descr = "Oracle Cloud Platform as a Service REST API."
+spec_url = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/{{api_collection_name}}/{{api_version}}/apis/{{service_name}}/canonical'
+spec_files_dir = 'paas_classic'
+spec_file_name = '{{service_name | lower}}.json'
+pretty_spec_file_name = '{{service_name | lower}}_{{api_version}}_pretty.json'
+yaml_spec_file_name = '{{service_name | lower}}_{{api_version}}.yaml'
+toml_spec_file_name = '{{service_name | lower}}_{{api_version}}.toml'
+api_doc_url = 'https://docs.oracle.com/en/cloud/iaas/{{api_collection_name}}-iaas-cloud/stcsa/api-instances.html'
+swagger_ui2_url = 'https://apicatalog.oraclecloud.com/ui/views/apicollection/oracle-public/{{api_collection_name}}/{{api_version}}/{{service_name}}'
+swagger_ui3_url = 'https://apicatalog.oraclecloud.com/ui/views/swaggerui3/oracle-public/{{api_collection_name}}/{{api_version}}?urls.primaryName={{service_name}}'
+swagger_ui2_furl: fstr = 'https://apicatalog.oraclecloud.com/ui/views/apicollection/oracle-public/{{api_collection_name}}/{api_version}/{service_name}'
+swagger_ui3_furl: fstr = 'https://apicatalog.oraclecloud.com/ui/views/swaggerui3/oracle-public/{{api_collection_name}}/{api_version}?urls.primaryName={service_name}'

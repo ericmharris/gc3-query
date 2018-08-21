@@ -84,7 +84,7 @@ def test_from_url():
     idm_cfg = gc3_config.idm.domains[idm_domain]
     service_cfg = gc3_config.iaas_classic.services[service]
     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
-    oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg, from_url=True)
+    oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg)
     assert oapi_spec.name == service
     assert oapi_spec.spec_data['schemes'] == ['https']
     assert oapi_spec.from_url == True
@@ -193,7 +193,7 @@ def test_save_spec_to_catalog():
     idm_cfg = gc3_config.idm.domains[idm_domain]
     service_cfg = gc3_config.iaas_classic.services[service]
     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
-    oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg, from_url=True)
+    oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg)
     assert oapi_spec.name == service
     assert oapi_spec.spec_data['schemes'] == ['https']
     assert oapi_spec.from_url == True
@@ -246,7 +246,7 @@ def test_archive_spec_to_catalog():
     idm_cfg = gc3_config.idm.domains[idm_domain]
     service_cfg = gc3_config.iaas_classic.services[service]
     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
-    oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg, from_url=True)
+    oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg)
     assert oapi_spec.name == service
     assert oapi_spec.spec_data['schemes'] == ['https']
     assert oapi_spec.from_url == True

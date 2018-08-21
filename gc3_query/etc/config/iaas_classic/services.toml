@@ -1,115 +1,22 @@
 [iaas_classic.services]
 
+
 [iaas_classic.services.Instances]
-service_name = 'Instances'
-api_version = '18.1.2'
 name = 'Instances'
-spec_url = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/18.1.2/apis/Instances/canonical'
-spec_furl: fstr = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/{api_version}/apis/{service_name}/canonical'
-spec_file = 'Instances.json'
-api_doc_url = 'https://docs.oracle.com/en/cloud/iaas/compute-iaas-cloud/stcsa/api-instances.html'
-swagger_ui2_url = 'https://apicatalog.oraclecloud.com/ui/views/apicollection/oracle-public/compute/18.1.2/Instances'
-swagger_ui3_url = 'https://apicatalog.oraclecloud.com/ui/views/swaggerui3/oracle-public/compute/18.1.2?urls.primaryName=Instances'
-swagger_ui2_furl: fstr = 'https://apicatalog.oraclecloud.com/ui/views/apicollection/oracle-public/compute/{api_version}/{service_name}'
-swagger_ui3_furl: fstr = 'https://apicatalog.oraclecloud.com/ui/views/swaggerui3/oracle-public/compute/{api_version}?urls.primaryName={service_name}'
-
-
-[iaas_classic.services.SecurityRules]
-service_name = 'SecurityRules'
-name = 'SecurityRules'
+title = 'Instances'
+api_collection_name = 'compute'
 api_version = '18.1.2'
-spec_url = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/18.1.2/apis/SecurityRules/canonical'
-spec_furl: fstr = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/{api_version}/apis/{service_name}/canonical'
-spec_file = 'SecurityRules.json'
-api_doc_url = 'https://docs.oracle.com/en/cloud/iaas/compute-iaas-cloud/stcsa/api-security-rules.html'
-swagger_ui2_url = 'https://apicatalog.oraclecloud.com/ui/views/apicollection/oracle-public/compute/18.1.2/SecurityRules'
-swagger_ui3_url = 'https://apicatalog.oraclecloud.com/ui/views/swaggerui3/oracle-public/compute/18.1.2?urls.primaryName=SecurityRules'
-swagger_ui2_furl: fstr = 'https://apicatalog.oraclecloud.com/ui/views/apicollection/oracle-public/compute/{api_version}/{service_name}'
-swagger_ui3_furl: fstr = 'https://apicatalog.oraclecloud.com/ui/views/swaggerui3/oracle-public/compute/{api_version}?urls.primaryName={service_name}'
-
 
 
 [iaas_classic.services.SecRules]
-service_name = 'SecRules'
 name = 'SecRules'
+title = "SecRules"
+api_collection_name = 'compute'
 api_version = '18.1.2'
-spec_url = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/18.1.2/apis/SecRules/canonical'
-spec_furl: fstr = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/{api_version}/apis/{service_name}/canonical'
-spec_file = 'SecRules.json'
-api_doc_url = 'https://docs.oracle.com/en/cloud/iaas/compute-iaas-cloud/stcsa/api-secrules.html'
-swagger_ui2_url = 'https://apicatalog.oraclecloud.com/ui/views/apicollection/oracle-public/compute/18.1.2/SecRules'
-swagger_ui3_url = 'https://apicatalog.oraclecloud.com/ui/views/swaggerui3/oracle-public/compute/18.1.2?urls.primaryName=SecRules'
-swagger_ui2_furl: fstr = 'https://apicatalog.oraclecloud.com/ui/views/apicollection/oracle-public/compute/{api_version}/{service_name}'
-swagger_ui3_furl: fstr = 'https://apicatalog.oraclecloud.com/ui/views/swaggerui3/oracle-public/compute/{api_version}?urls.primaryName={service_name}'
 
-
-[iaas_classic.services.SecLists]
-service_name = 'SecLists'
-name = 'SecLists'
+[iaas_classic.services.SecApplications]
+name = 'SecApplications'
+title = "SecApplications"
+api_collection_name = 'compute'
 api_version = '18.1.2'
-spec_url = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/18.1.2/apis/SecLists/canonical'
-spec_furl: fstr = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/{api_version}/apis/{service_name}/canonical'
-spec_file = 'SecLists.json'
-api_doc_url = 'https://docs.oracle.com/en/cloud/iaas/compute-iaas-cloud/stcsa/api-secrules.html'
-swagger_ui2_url = 'https://apicatalog.oraclecloud.com/ui/views/apicollection/oracle-public/compute/18.1.2/SecLists'
-swagger_ui3_url = 'https://apicatalog.oraclecloud.com/ui/views/swaggerui3/oracle-public/compute/18.1.2?urls.primaryName=SecLists'
-swagger_ui2_furl: fstr = 'https://apicatalog.oraclecloud.com/ui/views/apicollection/oracle-public/compute/{api_version}/{service_name}'
-swagger_ui3_furl: fstr = 'https://apicatalog.oraclecloud.com/ui/views/swaggerui3/oracle-public/compute/{api_version}?urls.primaryName={service_name}'
-
-
-[iaas_classic.services.IPReservations]
-service_name = 'IPReservations'
-name = 'IPReservations'
-api_version = '18.1.2'
-spec_url = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/18.1.2/apis/IPReservations/canonical'
-spec_furl: fstr = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/{api_version}/apis/{service_name}/canonical'
-spec_file = 'IPReservations.json'
-api_doc_url = 'https://docs.oracle.com/en/cloud/iaas/compute-iaas-cloud/stcsa/api-secrules.html'
-swagger_ui2_url = 'https://apicatalog.oraclecloud.com/ui/views/apicollection/oracle-public/compute/18.1.2/IPReservations'
-swagger_ui3_url = 'https://apicatalog.oraclecloud.com/ui/views/swaggerui3/oracle-public/compute/18.1.2?urls.primaryName=IPReservations'
-swagger_ui2_furl: fstr = 'https://apicatalog.oraclecloud.com/ui/views/apicollection/oracle-public/compute/{api_version}/{service_name}'
-swagger_ui3_furl: fstr = 'https://apicatalog.oraclecloud.com/ui/views/swaggerui3/oracle-public/compute/{api_version}?urls.primaryName={service_name}'
-
-
-[iaas_classic.services.SSHKeys]
-service_name = 'SSHKeys'
-name = 'SSHKeys'
-api_version = '18.1.2'
-spec_url = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/18.1.2/apis/SSHKeys/canonical'
-spec_furl: fstr = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/{api_version}/apis/{service_name}/canonical'
-spec_file = 'SSHKeys.json'
-api_doc_url = 'https://docs.oracle.com/en/cloud/iaas/compute-iaas-cloud/stcsa/api-secrules.html'
-swagger_ui2_url = 'https://apicatalog.oraclecloud.com/ui/views/apicollection/oracle-public/compute/18.1.2/SSHKeys'
-swagger_ui3_url = 'https://apicatalog.oraclecloud.com/ui/views/swaggerui3/oracle-public/compute/18.1.2?urls.primaryName=SSHKeys'
-swagger_ui2_furl: fstr = 'https://apicatalog.oraclecloud.com/ui/views/apicollection/oracle-public/compute/{api_version}/{service_name}'
-swagger_ui3_furl: fstr = 'https://apicatalog.oraclecloud.com/ui/views/swaggerui3/oracle-public/compute/{api_version}?urls.primaryName={service_name}'
-
-
-[iaas_classic.services.IPAddressReservations]
-service_name = 'IPAddressReservations'
-name = 'IPAddressReservations'
-api_version = '18.1.2'
-spec_url = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/18.1.2/apis/IPAddressReservations/canonical'
-spec_furl: fstr = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/{api_version}/apis/{service_name}/canonical'
-spec_file = 'IPAddressReservations.json'
-api_doc_url = 'https://docs.oracle.com/en/cloud/iaas/compute-iaas-cloud/stcsa/api-secrules.html'
-swagger_ui2_url = 'https://apicatalog.oraclecloud.com/ui/views/apicollection/oracle-public/compute/18.1.2/IPAddressReservations'
-swagger_ui3_url = 'https://apicatalog.oraclecloud.com/ui/views/swaggerui3/oracle-public/compute/18.1.2?urls.primaryName=IPAddressReservations'
-swagger_ui2_furl: fstr = 'https://apicatalog.oraclecloud.com/ui/views/apicollection/oracle-public/compute/{api_version}/{service_name}'
-swagger_ui3_furl: fstr = 'https://apicatalog.oraclecloud.com/ui/views/swaggerui3/oracle-public/compute/{api_version}?urls.primaryName={service_name}'
-
-
-[iaas_classic.services.Accounts]
-service_name = 'Accounts'
-name = 'Accounts'
-api_version = '18.1.2'
-spec_url = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/18.1.2/apis/Accounts/canonical'
-spec_furl: fstr = 'https://apicatalog.oraclecloud.com/public/v1/orgs/oracle-public/apicollections/compute/{api_version}/apis/{service_name}/canonical'
-spec_file = 'Accounts.json'
-api_doc_url = 'https://docs.oracle.com/en/cloud/iaas/compute-iaas-cloud/stcsa/api-secrules.html'
-swagger_ui2_url = 'https://apicatalog.oraclecloud.com/ui/views/apicollection/oracle-public/compute/18.1.2/Accounts'
-swagger_ui3_url = 'https://apicatalog.oraclecloud.com/ui/views/swaggerui3/oracle-public/compute/18.1.2?urls.primaryName=Accounts'
-swagger_ui2_furl: fstr = 'https://apicatalog.oraclecloud.com/ui/views/apicollection/oracle-public/compute/{api_version}/{service_name}'
-swagger_ui3_furl: fstr = 'https://apicatalog.oraclecloud.com/ui/views/swaggerui3/oracle-public/compute/{api_version}?urls.primaryName={service_name}'
-
 

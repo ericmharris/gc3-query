@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pytest
 
+from gc3_query.lib import *
 from gc3_query.lib.atoml.atoml_file import ATomlFile
 
 TEST_BASE_DIR: Path = Path(__file__).parent

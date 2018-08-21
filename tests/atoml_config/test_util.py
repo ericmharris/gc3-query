@@ -2,6 +2,7 @@ from pathlib import Path
 
 import pytest
 
+from gc3_query.lib import *
 from gc3_query.lib.atoml.util import quote_key
 
 TEST_BASE_DIR: Path = Path(__file__).parent
