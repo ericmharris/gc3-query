@@ -434,9 +434,9 @@ definitions:
         type: object
         properties:
             result:
+                type: object
                 items:
                     $ref: '#/definitions/SecRule-response'
-                type: array
     SecRule-post-request:
         title: SecRule Post Request
         type: object
