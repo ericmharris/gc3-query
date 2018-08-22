@@ -3,12 +3,14 @@
 
 [paas_classic.services.ServiceInstances]
 name = 'ServiceInstances'
+service_name = 'ServiceInstances'
 title = 'Service Instances'
 api_collection_name = 'database'
 api_version = '1.1'
 
 [paas_classic.services.SSHKeys]
 name = 'SSHKeys'
+service_name = 'ServiceInstances'
 title = 'SSH Keys'
 api_collection_name = 'database'
 api_version = '1.1'

@@ -24,6 +24,7 @@ from bravado_core.spec import Spec
 ## Project Imports
 from gc3_query.lib import *
 from gc3_query.lib import gc3_cfg
+from gc3_query.lib.gc3_config import GC3Config
 from gc3_query.lib.base_collections import OrderedDictAttrBase
 ## TODO: either change or add a snake_case function for camelCase
 from gc3_query.lib.iaas_classic.iaas_requests_http_client import IaaSRequestsHTTPClient
@@ -42,17 +43,19 @@ _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
 class IaaSServiceBase(GC3VersionTypedMixin):
-    idm_cfg: Dict[str, Any]
-    service_cfg: Dict[str, Any]
+    idm_cfg: DictStrAny
+    service_cfg: DictStrAny
     from_url: bool
+    gc3_cfg: GC3Config
+    open_api_specs_cfg: GC3Config = gc3_cfg.iaas_classic.open_api_specs
 
     def __init__(self,
-                 service_cfg: Dict[str, Any],
-                 idm_cfg: Dict[str, Any],
+                 service_cfg: DictStrAny,
+                 idm_cfg: DictStrAny,
                  http_client: Union[IaaSRequestsHTTPClient, None] = None,
                  from_url: Optional[bool] = False,
                  storage_delegates: Optional[List[str]]= None,
-                 **kwargs: Dict[str, Any]):
+                 **kwargs: DictStrAny):
         """
 
         :param service_cfg:
@@ -67,7 +70,7 @@ class IaaSServiceBase(GC3VersionTypedMixin):
         self.service_name = service_cfg['service_name']
         self.storage_delegates = storage_delegates
 
-        self.bravado_config: DictStrAny = BRAVADO_CONFIG
+        self.bravado_config: DictStrAny = gc3_cfg.bravado.client_config.as_dict()
 
         if kwargs.get('spec_dict', False) and kwargs.get('swagger_spec', False):
             raise RuntimeError(f"Supplying both a spec_dict and swagger_spec not allowed")
@@ -151,7 +154,7 @@ class IaaSServiceBase(GC3VersionTypedMixin):
         return self.service_name
 
     @property
-    def version(self) -> Union[Dict[str, Any], None, str]:
+    def version(self) -> Union[DictStrAny, None, str]:
         if self.kwargs.get('mock_version', False):
             return self.kwargs.get('mock_version')
         return self.spec_dict['info']['version']
