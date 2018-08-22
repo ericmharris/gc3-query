@@ -79,7 +79,7 @@ class OpenApiSpec(GC3VersionTypedMixin):
 
         self.spec_dir: Path = gc3_cfg.OPEN_API_SPEC_BASE.joinpath(open_api_specs_cfg.cloud_service_name, service_cfg.api_collection_name)
         self.spec_file: Path = self.spec_dir.joinpath(f"{service_cfg.name}.{open_api_specs_cfg.file_format}")
-        self.spec_export_dir: Path = gc3_cfg.BASE_DIR.joinpath(gc3_cfg.open_api.export.export_dir, service_cfg.api_collection_name)
+        self.spec_export_dir: Path = gc3_cfg.BASE_DIR.joinpath(gc3_cfg.open_api.export.export_dir,  self.open_api_specs_cfg.cloud_service_name, service_cfg.api_collection_name)
         self._spec_dict = yaml.load(self.spec_file.open())
         self._spec_data = NestedOrderedDictAttrListBase(mapping=self._spec_dict)
 

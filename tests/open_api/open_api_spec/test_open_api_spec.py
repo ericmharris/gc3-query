@@ -7,6 +7,8 @@ from gc3_query.lib.gc3_config import GC3Config
 from gc3_query.lib.iaas_classic.instances import Instances
 from gc3_query.lib.iaas_classic.sec_rules import SecRules
 from gc3_query.lib.open_api.open_api_spec import OpenApiSpec
+from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
+
 BASE_DIR = gc3_cfg.BASE_DIR
 
 TEST_BASE_DIR: Path = Path(__file__).parent
@@ -39,7 +41,7 @@ def test_init():
     assert oapi_spec.name == service
 
 
-def test_schemes_updated():
+def test_init_properties():
     idm_domain = 'gc30003'
     service = 'Instances'
     gc3_config = GC3Config(atoml_config_dir=config_dir)
@@ -50,6 +52,12 @@ def test_schemes_updated():
     oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=open_api_specs_cfg, idm_cfg=idm_cfg)
     assert oapi_spec.name == service
     assert oapi_spec._spec_data['schemes'] == ['https']
+    assert oapi_spec.spec_file.exists()
+    assert oapi_spec.spec_file.suffix=='.yaml'
+    assert oapi_spec.spec_export_dir.exists()
+    assert isinstance(oapi_spec._spec_dict, dict)
+    assert isinstance(oapi_spec._spec_data, NestedOrderedDictAttrListBase)
+
 
 
 def test_get_spec():
@@ -63,9 +71,9 @@ def test_get_spec():
     oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=open_api_specs_cfg, idm_cfg=idm_cfg)
     assert oapi_spec.name == service
     assert oapi_spec._spec_data['schemes'] == ['https']
-    core_spec = oapi_spec.get_swagger_spec(rest_endpoint=idm_cfg.rest_endpoint)
-    assert core_spec.origin_url == idm_cfg.rest_endpoint
-    assert core_spec.spec_dict['info']['title'] == service
+    bravado_core_spec = oapi_spec.get_swagger_spec(rest_endpoint=idm_cfg.rest_endpoint)
+    assert bravado_core_spec.origin_url == idm_cfg.rest_endpoint
+    assert bravado_core_spec.spec_dict['info']['title'] == service
 
 
 def test_get_spec_from_kwargs():
@@ -80,8 +88,8 @@ def test_get_spec_from_kwargs():
     oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=open_api_specs_cfg, idm_cfg=idm_cfg, rest_endpoint=idm_cfg.rest_endpoint)
     assert oapi_spec.name == service
     assert oapi_spec._spec_data['schemes'] == ['https']
-    core_spec = oapi_spec.get_swagger_spec()
-    assert core_spec.origin_url == idm_cfg.rest_endpoint
+    bravado_core_spec = oapi_spec.get_swagger_spec()
+    assert bravado_core_spec.origin_url == idm_cfg.rest_endpoint
     assert oapi_spec.rest_endpoint == idm_cfg.rest_endpoint
 
 #
@@ -98,9 +106,9 @@ def test_get_spec_from_kwargs():
 #     assert oapi_spec._spec_data['schemes'] == ['https']
 #     assert oapi_spec.from_url == True
 #
-#     core_spec = oapi_spec.get_swagger_spec(rest_endpoint=idm_cfg.rest_endpoint)
-#     assert core_spec.origin_url == idm_cfg.rest_endpoint
-#     assert core_spec.spec_dict['info']['title'] == service
+#     bravado_core_spec = oapi_spec.get_swagger_spec(rest_endpoint=idm_cfg.rest_endpoint)
+#     assert bravado_core_spec.origin_url == idm_cfg.rest_endpoint
+#     assert bravado_core_spec.spec_dict['info']['title'] == service
 
 
 def test_check_spec_properties():
@@ -190,7 +198,7 @@ def test_check_spec_properties():
 #     oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=open_api_specs_cfg, idm_cfg=idm_cfg)
 #     assert oapi_spec.name == service
 #     assert oapi_spec._spec_data['schemes'] == ['https']
-#     core_spec = oapi_spec.get_swagger_spec(rest_endpoint=idm_cfg.rest_endpoint)
+#     bravado_core_spec = oapi_spec.get_swagger_spec(rest_endpoint=idm_cfg.rest_endpoint)
 #     exported_file_paths = oapi_spec.export()
 #     for exported_file_path in exported_file_paths:
 #         assert exported_file_path.exists()

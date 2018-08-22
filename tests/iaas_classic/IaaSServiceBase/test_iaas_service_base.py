@@ -12,7 +12,7 @@ from gc3_query.lib.iaas_classic import BRAVADO_CONFIG
 from gc3_query.lib.iaas_classic import IaaSServiceBase
 from gc3_query.lib.iaas_classic.iaas_requests_http_client import IaaSRequestsHTTPClient
 from gc3_query.lib.iaas_classic.sec_rules import SecRules
-from gc3_query.lib.open_api import API_SPECS_DIR
+# from gc3_query.lib.open_api import API_SPECS_DIR
 
 TEST_BASE_DIR: Path = Path(__file__).parent
 # config_dir = TEST_BASE_DIR.joinpath("config")
@@ -23,7 +23,6 @@ spec_files_dir = TEST_BASE_DIR.joinpath('spec_files')
 
 def test_setup():
     assert TEST_BASE_DIR.exists()
-    assert API_SPECS_DIR.exists()
     if not config_dir.exists():
         config_dir.mkdir()
     if not output_dir.exists():
