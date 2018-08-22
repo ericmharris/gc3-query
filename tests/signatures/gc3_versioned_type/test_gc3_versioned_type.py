@@ -35,7 +35,7 @@ def test_init():
     gc3_config = GC3Config(atoml_config_dir=config_dir)
     service_cfg = gc3_config.iaas_classic.services[service]
     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
-    oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg)
+    oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=api_catalog_config)
     assert oapi_spec.name == service
     gc3type = GC3Type(name='OpenApiSpec', descr="Some text", class_type=oapi_spec.__class__)
     gc3_ver_type = GC3VersionedType(name='OpenApiSpec', descr="Some text", class_type=oapi_spec.__class__, version="18.1.2-20180126.052521")
@@ -52,7 +52,7 @@ def test_equality_setup():
 
     instances_service: str = 'Instances'
     instances_service_cfg = gc3_config.iaas_classic.services[instances_service]
-    instances_oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=instances_service_cfg, idm_cfg=idm_cfg)
+    instances_oapi_spec = OpenApiSpec(service_cfg=instances_service_cfg, open_api_specs_cfg=api_catalog_config, idm_cfg=idm_cfg)
     assert instances_oapi_spec.name == instances_service
 
     secrules_service: str = 'SecRules'
@@ -71,7 +71,7 @@ def test_eqality(test_equality_setup):
 
     instances_service: str = 'Instances'
     instances_service_cfg = gc3_config.iaas_classic.services[instances_service]
-    instances_oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=instances_service_cfg, idm_cfg=idm_cfg)
+    instances_oapi_spec = OpenApiSpec(service_cfg=instances_service_cfg, open_api_specs_cfg=api_catalog_config, idm_cfg=idm_cfg)
     assert instances_oapi_spec.name == instances_service
     instances_oapi_spec_type = GC3Type(name='OpenApiSpec', descr="Some text", class_type=instances_oapi_spec.__class__)
     instances_oapi_spec_ver_type = GC3VersionedType(name='OpenApiSpec', descr="Some text", class_type=instances_oapi_spec.__class__,
@@ -86,8 +86,8 @@ def test_eqality(test_equality_setup):
 
     secrules_service: str = 'SecRules'
     secrules_service_cfg = gc3_config.iaas_classic.services[secrules_service]
-    secrules_oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=secrules_service_cfg, idm_cfg=idm_cfg)
-    secrules_oapi_spec_2 = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=secrules_service_cfg, idm_cfg=idm_cfg)
+    secrules_oapi_spec = OpenApiSpec(service_cfg=secrules_service_cfg, open_api_specs_cfg=api_catalog_config, idm_cfg=idm_cfg)
+    secrules_oapi_spec_2 = OpenApiSpec(service_cfg=secrules_service_cfg, open_api_specs_cfg=api_catalog_config, idm_cfg=idm_cfg)
     assert secrules_oapi_spec.name == secrules_service
     secrules_oapi_spec_type = GC3Type(name='OpenApiSpec', descr="Some text", class_type=secrules_oapi_spec.__class__)
     secrules_oapi_spec_ver_type = GC3VersionedType(name='OpenApiSpec', descr="Some text", class_type=secrules_oapi_spec.__class__,
@@ -137,7 +137,7 @@ def test_gt_lt(test_equality_setup):
 
     instances_service: str = 'Instances'
     instances_service_cfg = gc3_config.iaas_classic.services[instances_service]
-    instances_oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=instances_service_cfg, idm_cfg=idm_cfg)
+    instances_oapi_spec = OpenApiSpec(service_cfg=instances_service_cfg, open_api_specs_cfg=api_catalog_config, idm_cfg=idm_cfg)
     assert instances_oapi_spec.name == instances_service
     i_ver_type = GC3VersionedType(name='OpenApiSpec', descr="Some text", class_type=instances_oapi_spec.__class__, version=version)
     i_ver_type_eq    = GC3VersionedType(name='OpenApiSpec', descr="Some text", class_type=instances_oapi_spec.__class__, version=i_version_eq)
@@ -168,7 +168,7 @@ def test_equality_with_mixin_setup():
 
     instances_service: str = 'Instances'
     instances_service_cfg = gc3_config.iaas_classic.services[instances_service]
-    instances_oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=instances_service_cfg, idm_cfg=idm_cfg)
+    instances_oapi_spec = OpenApiSpec(service_cfg=instances_service_cfg, open_api_specs_cfg=api_catalog_config, idm_cfg=idm_cfg)
     assert instances_oapi_spec.name == instances_service
 
     secrules_service: str = 'SecRules'
@@ -188,10 +188,10 @@ def test_equality_with_mixin(test_equality_with_mixin_setup):
     idm_cfg = gc3_config.idm.domains[idm_domain]
     instances_service_cfg = gc3_config.iaas_classic.services[instances_service]
     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
-    instances_oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=instances_service_cfg, idm_cfg=idm_cfg)
-    instances_oapi_spec_2 = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=instances_service_cfg, idm_cfg=idm_cfg)
+    instances_oapi_spec = OpenApiSpec(service_cfg=instances_service_cfg, open_api_specs_cfg=api_catalog_config, idm_cfg=idm_cfg)
+    instances_oapi_spec_2 = OpenApiSpec(service_cfg=instances_service_cfg, open_api_specs_cfg=api_catalog_config, idm_cfg=idm_cfg)
     assert instances_oapi_spec.name == instances_service
-    assert instances_oapi_spec.spec_data['schemes'] == ['https']
+    assert instances_oapi_spec._spec_data['schemes'] == ['https']
     assert instances_oapi_spec.title==instances_service
 
     secrules_service: str = 'SecRules'
@@ -199,9 +199,9 @@ def test_equality_with_mixin(test_equality_with_mixin_setup):
     idm_cfg = gc3_config.idm.domains[idm_domain]
     sec_rules_service_cfg = gc3_config.iaas_classic.services[secrules_service]
     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
-    sec_rules_oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=sec_rules_service_cfg, idm_cfg=idm_cfg)
+    sec_rules_oapi_spec = OpenApiSpec(service_cfg=sec_rules_service_cfg, open_api_specs_cfg=api_catalog_config, idm_cfg=idm_cfg)
     assert sec_rules_oapi_spec.name == secrules_service
-    assert sec_rules_oapi_spec.spec_data['schemes'] == ['https']
+    assert sec_rules_oapi_spec._spec_data['schemes'] == ['https']
     assert sec_rules_oapi_spec.title==secrules_service
 
     assert instances_oapi_spec==instances_oapi_spec_2
@@ -218,16 +218,16 @@ def test_equality_with_mixin(test_equality_with_mixin_setup):
     i_version_gt_04 = "18.1.2-22180126.052521"
     i_version_gt_05 = "18.1.2-20180126.052529"
 
-    instances_oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=instances_service_cfg, idm_cfg=idm_cfg)
+    instances_oapi_spec = OpenApiSpec(service_cfg=instances_service_cfg, open_api_specs_cfg=api_catalog_config, idm_cfg=idm_cfg)
 
-    oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=instances_service_cfg, idm_cfg=idm_cfg, mock_version=version)
-    oapi_spec_eq = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=instances_service_cfg, idm_cfg=idm_cfg, mock_version=i_version_eq)
-    oapi_spec_gt_00 = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=instances_service_cfg, idm_cfg=idm_cfg, mock_version=i_version_gt_00)
-    oapi_spec_gt_01 = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=instances_service_cfg, idm_cfg=idm_cfg, mock_version=i_version_gt_01)
-    oapi_spec_gt_02 = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=instances_service_cfg, idm_cfg=idm_cfg, mock_version=i_version_gt_02)
-    oapi_spec_gt_03 = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=instances_service_cfg, idm_cfg=idm_cfg, mock_version=i_version_gt_03)
-    oapi_spec_gt_04 = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=instances_service_cfg, idm_cfg=idm_cfg, mock_version=i_version_gt_04)
-    oapi_spec_gt_05 = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=instances_service_cfg, idm_cfg=idm_cfg, mock_version=i_version_gt_05)
+    oapi_spec = OpenApiSpec(service_cfg=instances_service_cfg, open_api_specs_cfg=api_catalog_config, idm_cfg=idm_cfg, mock_version=version)
+    oapi_spec_eq = OpenApiSpec(service_cfg=instances_service_cfg, open_api_specs_cfg=api_catalog_config, idm_cfg=idm_cfg, mock_version=i_version_eq)
+    oapi_spec_gt_00 = OpenApiSpec(service_cfg=instances_service_cfg, open_api_specs_cfg=api_catalog_config, idm_cfg=idm_cfg, mock_version=i_version_gt_00)
+    oapi_spec_gt_01 = OpenApiSpec(service_cfg=instances_service_cfg, open_api_specs_cfg=api_catalog_config, idm_cfg=idm_cfg, mock_version=i_version_gt_01)
+    oapi_spec_gt_02 = OpenApiSpec(service_cfg=instances_service_cfg, open_api_specs_cfg=api_catalog_config, idm_cfg=idm_cfg, mock_version=i_version_gt_02)
+    oapi_spec_gt_03 = OpenApiSpec(service_cfg=instances_service_cfg, open_api_specs_cfg=api_catalog_config, idm_cfg=idm_cfg, mock_version=i_version_gt_03)
+    oapi_spec_gt_04 = OpenApiSpec(service_cfg=instances_service_cfg, open_api_specs_cfg=api_catalog_config, idm_cfg=idm_cfg, mock_version=i_version_gt_04)
+    oapi_spec_gt_05 = OpenApiSpec(service_cfg=instances_service_cfg, open_api_specs_cfg=api_catalog_config, idm_cfg=idm_cfg, mock_version=i_version_gt_05)
 
     assert oapi_spec == oapi_spec_eq
     assert oapi_spec == oapi_spec_gt_00

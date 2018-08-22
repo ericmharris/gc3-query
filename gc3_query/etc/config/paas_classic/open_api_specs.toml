@@ -2,6 +2,7 @@
 __doc__ = "API Specs"
 open_api_spec_base: Path = 'etc/open_api'
 name  = 'paas_classic'
+cloud_service_name  = 'paas_classic'
 descr = "Oracle Cloud Platform as a Service REST API."
 file_format = 'yaml'
 

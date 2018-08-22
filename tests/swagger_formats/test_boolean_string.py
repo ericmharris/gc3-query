@@ -84,9 +84,9 @@ def test_swagger_format():
     sec_rules = SecRules(service_cfg=secrules_service_cfg, idm_cfg=idm_cfg, from_url=True)
     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
     sec_rules_service_cfg = gc3_config.iaas_classic.services[secrules_service]
-    sec_rules_oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=sec_rules_service_cfg, idm_cfg=idm_cfg)
+    sec_rules_oapi_spec = OpenApiSpec(service_cfg=sec_rules_service_cfg, open_api_specs_cfg=api_catalog_config, idm_cfg=idm_cfg)
     assert sec_rules_oapi_spec.name == secrules_service
-    assert sec_rules_oapi_spec.spec_data['schemes'] == ['https']
+    assert sec_rules_oapi_spec._spec_data['schemes'] == ['https']
     assert sec_rules_oapi_spec.title==secrules_service
 
     # Retrieve the swagger spec from the server and json.load() it

@@ -35,7 +35,7 @@ def test_init():
     gc3_config = GC3Config(atoml_config_dir=config_dir)
     service_cfg = gc3_config.iaas_classic.services[service]
     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
-    oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg)
+    oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=api_catalog_config)
     assert oapi_spec.name == service
     gc3type = GC3Type(name='OpenApiSpec', descr="Some text", class_type=oapi_spec.__class__)
     assert gc3type
@@ -50,7 +50,7 @@ def test_equality_setup():
 
     instances_service: str = 'Instances'
     instances_service_cfg = gc3_config.iaas_classic.services[instances_service]
-    instances_oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=instances_service_cfg, idm_cfg=idm_cfg)
+    instances_oapi_spec = OpenApiSpec(service_cfg=instances_service_cfg, open_api_specs_cfg=api_catalog_config, idm_cfg=idm_cfg)
     assert instances_oapi_spec.name == instances_service
 
     secrules_service: str = 'SecRules'
@@ -67,7 +67,7 @@ def test_eqality(test_equality_setup):
 
     instances_service: str = 'Instances'
     instances_service_cfg = gc3_config.iaas_classic.services[instances_service]
-    instances_oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=instances_service_cfg, idm_cfg=idm_cfg)
+    instances_oapi_spec = OpenApiSpec(service_cfg=instances_service_cfg, open_api_specs_cfg=api_catalog_config, idm_cfg=idm_cfg)
     assert instances_oapi_spec.name == instances_service
     instances_oapi_spec_type = GC3Type(name='OpenApiSpec', descr="Some text", class_type=instances_oapi_spec.__class__)
     instances_oapi_spec_type_2 = GC3Type(name='OpenApiSpec', descr="Some text", class_type=instances_oapi_spec.__class__)
@@ -76,8 +76,8 @@ def test_eqality(test_equality_setup):
 
     secrules_service: str = 'SecRules'
     secrules_service_cfg = gc3_config.iaas_classic.services[secrules_service]
-    secrules_oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=secrules_service_cfg, idm_cfg=idm_cfg)
-    secrules_oapi_spec_2 = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=secrules_service_cfg, idm_cfg=idm_cfg)
+    secrules_oapi_spec = OpenApiSpec(service_cfg=secrules_service_cfg, open_api_specs_cfg=api_catalog_config, idm_cfg=idm_cfg)
+    secrules_oapi_spec_2 = OpenApiSpec(service_cfg=secrules_service_cfg, open_api_specs_cfg=api_catalog_config, idm_cfg=idm_cfg)
     assert secrules_oapi_spec.name == secrules_service
     secrules_oapi_spec_type = GC3Type(name='OpenApiSpec', descr="Some text", class_type=secrules_oapi_spec.__class__)
     secrules_oapi_spec_type_2 = GC3Type(name='OpenApiSpec', descr="Some text", class_type=secrules_oapi_spec_2.__class__)

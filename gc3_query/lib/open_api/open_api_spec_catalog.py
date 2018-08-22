@@ -42,7 +42,7 @@ class OpenApiSpecCatalog(NestedOrderedDictAttrListBase):
         spec_catalog_path = gc3_cfg.OPEN_API_CATALOG_DIR.joinpath(api_catalog_config.api_catalog_name)
 
         for service_cfg in services_config.values():
-            open_api_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg)
+            open_api_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=api_catalog_config)
             _debug(f"Loaded service={open_api_spec.name}")
             self[open_api_spec.name] = open_api_spec
 

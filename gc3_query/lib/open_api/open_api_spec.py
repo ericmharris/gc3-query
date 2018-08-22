@@ -15,8 +15,8 @@
 
 ################################################################################
 ## Standard Library Imports
+import yaml
 import json
-
 import toml
 from bravado.swagger_model import load_file, load_url
 from bravado_core.spec import Spec
@@ -56,27 +56,33 @@ class OperationIdDescr():
 #     path: str
 
 
+# class OpenApiSpec():
 class OpenApiSpec(GC3VersionTypedMixin):
-
-    def __init__(self, api_catalog_config: DictStrAny, service_cfg: Dict[str, Any], idm_cfg: Optional[DictStrAny] = None, **kwargs):
-        self.api_catalog_config = api_catalog_config
+    def __init__(self, service_cfg: Dict[str, Any], open_api_specs_cfg: DictStrAny, idm_cfg: Optional[DictStrAny] = None, **kwargs):
         self.service_cfg = service_cfg
+        self.open_api_specs_cfg = open_api_specs_cfg
         self.idm_cfg = idm_cfg
         self.name = service_cfg.name
+        self._title = service_cfg.title
+        self.api_collection_name = service_cfg.api_collection_name
+        self.api_version = service_cfg.api_version
 
         self.kwargs = {'rest_endpoint': None,   #
                        'mock_version': None,    # Used for unit tests,
                        }
         self.kwargs.update(kwargs)
+
         #  The ultimate form of the Spec depends on the specific REST Endpoint of a given IDM domain which differs from the API Catalog.
         self.rest_endpoint = kwargs.get('rest_endpoint', None)
         if not self.rest_endpoint:
             self.rest_endpoint = idm_cfg['rest_endpoint'] if idm_cfg else self.rest_endpoint
 
-        self.spec_dir: Path = gc3_cfg.OPEN_API_CATALOG_DIR.joinpath(api_catalog_config.api_catalog_name).joinpath(service_cfg.service_name)
-        self.spec_file: Path = self.spec_dir.joinpath(f"{service_cfg.service_name}.json")
-        self._specdict = NestedOrderedDictAttrListBase(mapping=self._overlaid_spec_dict)
-        self.spec_data = NestedOrderedDictAttrListBase(mapping=self._overlaid_spec_dict)
+        self.spec_dir: Path = gc3_cfg.OPEN_API_SPEC_BASE.joinpath(open_api_specs_cfg.cloud_service_name, service_cfg.api_collection_name)
+        self.spec_file: Path = self.spec_dir.joinpath(f"{service_cfg.name}.{open_api_specs_cfg.file_format}")
+        self._spec_data = yaml.load(self.spec_file.open())
+
+        # self._specdict = NestedOrderedDictAttrListBase(mapping=self._overlaid_spec_dict)
+        # self.spec_data = NestedOrderedDictAttrListBase(mapping=self._overlaid_spec_dict)
 
         # self.spec_overlay_format = gc3_cfg.open_api.open_api_spec_overlay.spec_overlay_format
         # self.spec_overlay_export_formatting = gc3_cfg[self.spec_overlay_format]['export']['formatting']
@@ -216,7 +222,7 @@ class OpenApiSpec(GC3VersionTypedMixin):
 
     @property
     def spec_dict(self):
-        return self._overlaid_spec_dict
+        return self._spec_data
 
 
     def get_swagger_spec(self, rest_endpoint: Union[str, None] = None) -> Spec:
@@ -228,12 +234,12 @@ class OpenApiSpec(GC3VersionTypedMixin):
         rest_endpoint = rest_endpoint if rest_endpoint else self.rest_endpoint
         if not rest_endpoint:
             raise RuntimeError("rest_endpoint not provided in either method call or in **wkargs={self.kwargs}")
-        core_spec: Spec = Spec(spec_dict=self.spec_dict, origin_url=rest_endpoint, http_client=None, config=BRAVADO_CONFIG)
+        spec: Spec = Spec(spec_dict=self.spec_dict, origin_url=rest_endpoint, http_client=None, config=BRAVADO_CONFIG)
         #### bravado_core.spec.Spec#client_spec_dict
         # Return a copy of spec_dict with x-scope metadata removed so that it
         #         is suitable for consumption by Swagger clients.
-        client_spec_dict = core_spec.client_spec_dict
-        return client_spec_dict
+        # client_spec_dict = spec.client_spec_dict
+        return spec
 
     @property
     def swagger_spec(self) -> Spec:
@@ -241,41 +247,41 @@ class OpenApiSpec(GC3VersionTypedMixin):
 
     @property
     def title(self) -> str:
-        return self.spec_data.info.title
+        return self._spec_data.info.title
 
     @property
     def version(self) -> str:
         if self.kwargs.get('mock_version', False):
             return self.kwargs.get('mock_version')
-        return self.spec_data.info.version
+        return self._spec_data.info.version
 
     @property
     def description(self) -> str:
-        return self.spec_data.info.description
+        return self._spec_data.info.description
 
     @property
     def descr(self) -> str:
-        return self.spec_data.info.description
+        return self._spec_data.info.description
 
     @property
     def paths(self) -> List[str]:
-        paths = self.spec_data.paths.keys()
+        paths = self._spec_data.paths.keys()
         return list(paths)
 
     @property
     def operation_ids(self) -> List[str]:
         ids = []
         for path in self.paths:
-            for http_method in self.spec_data.paths[path].keys():
-                ids.append(self.spec_data.paths[path][http_method]['operationId'])
+            for http_method in self._spec_data.paths[path].keys():
+                ids.append(self._spec_data.paths[path][http_method]['operationId'])
         return ids
 
     @property
     def operation_id_descrs(self) -> DictStrAny:
         operation_ids_d = {id: None for id in self.operation_ids}
         for path in self.paths:
-            for http_method in self.spec_data.paths[path].keys():
-                operation_spec = self.spec_data.paths[path][http_method]
+            for http_method in self._spec_data.paths[path].keys():
+                operation_spec = self._spec_data.paths[path][http_method]
                 operation_id = operation_spec.operationId
                 id_descr = OperationIdDescr(operation_id=operation_id,
                                             path=path,
@@ -301,6 +307,6 @@ class OpenApiSpec(GC3VersionTypedMixin):
             _warning(f"spec_export_dir={self.spec_export_dir} did not exist, attempting to create.")
             self.spec_export_dir.mkdir()
         for f, p in self.export_paths.items():
-            exported_file_path = self.spec_data.export(file_path=p, format=f, overwrite=True)
+            exported_file_path = self._spec_data.export(file_path=p, format=f, overwrite=True)
             exported_file_paths.append(exported_file_path)
         return exported_file_paths

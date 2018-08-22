@@ -47,3 +47,77 @@ def test_init():
 
 
 
+#
+# def test_save_spec_to_catalog():
+#     idm_domain = 'gc30003'
+#     service = 'Instances'
+#     gc3_config = GC3Config(atoml_config_dir=config_dir)
+#     idm_cfg = gc3_config.idm.domains[idm_domain]
+#     service_cfg = gc3_config.iaas_classic.services[service]
+#     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
+#     oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=open_api_specs_cfg, idm_cfg=idm_cfg)
+#     assert oapi_spec.name == service
+#     assert oapi_spec._spec_data['schemes'] == ['https']
+#     assert oapi_spec.from_url == True
+#     spec_file_path = oapi_spec.spec_file
+#     if spec_file_path.exists():
+#         spec_file_path.unlink()
+#     assert not spec_file_path.exists()
+#     saved_path = oapi_spec.save_spec(overwrite=False)
+#     assert saved_path == spec_file_path
+#
+#     fd = spec_file_path.open('w')
+#     fd.close()
+#     saved_path_stat = saved_path.stat()
+#
+#     saved_path = oapi_spec.save_spec(overwrite=True)
+#     assert saved_path_stat != saved_path.stat()
+#
+#
+#
+#
+#
+# def test_spec_file_not_found():
+#     idm_domain = 'gc30003'
+#     service = 'Instances'
+#     gc3_config = GC3Config(atoml_config_dir=config_dir)
+#     idm_cfg = gc3_config.idm.domains[idm_domain]
+#     service_cfg = gc3_config.iaas_classic.services[service]
+#     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
+#     oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=open_api_specs_cfg, idm_cfg=idm_cfg)
+#     spec_file_path = oapi_spec.spec_file
+#     if spec_file_path.exists():
+#         spec_file_path.unlink()
+#     assert not spec_file_path.exists()
+#     del (oapi_spec)
+#     oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=open_api_specs_cfg, idm_cfg=idm_cfg)
+#     assert spec_file_path.exists()
+#
+#     assert oapi_spec.name == service
+#     assert oapi_spec._spec_data['schemes'] == ['https']
+#     core_spec = oapi_spec.get_swagger_spec(rest_endpoint=idm_cfg.rest_endpoint)
+#     exported_file_paths = oapi_spec.export()
+#     for exported_file_path in exported_file_paths:
+#         assert exported_file_path.exists()
+#
+#
+# def test_archive_spec_to_catalog():
+#     idm_domain = 'gc30003'
+#     service = 'Instances'
+#     gc3_config = GC3Config(atoml_config_dir=config_dir)
+#     idm_cfg = gc3_config.idm.domains[idm_domain]
+#     service_cfg = gc3_config.iaas_classic.services[service]
+#     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
+#     oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=open_api_specs_cfg, idm_cfg=idm_cfg)
+#     assert oapi_spec.name == service
+#     assert oapi_spec._spec_data['schemes'] == ['https']
+#     assert oapi_spec.from_url == True
+#     spec_archive_file_path = oapi_spec.spec_archive_file
+#     if spec_archive_file_path.exists():
+#         spec_archive_file_path.unlink()
+#     assert not spec_archive_file_path.exists()
+#     archive_path = oapi_spec.archive_spec_to_catalog()
+#     assert archive_path == spec_archive_file_path
+#     archive_path_stat = archive_path.stat()
+#     archive_path = oapi_spec.save_spec(overwrite=True)
+#     assert archive_path_stat != archive_path.stat()
