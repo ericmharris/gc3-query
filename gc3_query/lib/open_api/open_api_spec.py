@@ -79,7 +79,9 @@ class OpenApiSpec(GC3VersionTypedMixin):
 
         self.spec_dir: Path = gc3_cfg.OPEN_API_SPEC_BASE.joinpath(open_api_specs_cfg.cloud_service_name, service_cfg.api_collection_name)
         self.spec_file: Path = self.spec_dir.joinpath(f"{service_cfg.name}.{open_api_specs_cfg.file_format}")
-        self._spec_data = yaml.load(self.spec_file.open())
+        self.spec_export_dir: Path = gc3_cfg.BASE_DIR.joinpath(gc3_cfg.open_api.export.export_dir, service_cfg.api_collection_name)
+        self._spec_dict = yaml.load(self.spec_file.open())
+        self._spec_data = NestedOrderedDictAttrListBase(mapping=self._spec_dict)
 
         # self._specdict = NestedOrderedDictAttrListBase(mapping=self._overlaid_spec_dict)
         # self.spec_data = NestedOrderedDictAttrListBase(mapping=self._overlaid_spec_dict)
@@ -90,7 +92,6 @@ class OpenApiSpec(GC3VersionTypedMixin):
         #
         # self._vanilla_spec_dict = self.load_spec(from_url=from_url)
         # self._overlaid_spec_dict = MeldDict(self._vanilla_spec_dict)
-
 
         # self.spec_dict = self.create_api_spec(spec_dict=self._spec_dict)
         # # self.api_spec_overlay = OpenApiSpecOverlay(open_api_spec=self, idm_cfg=self.idm_cfg)
@@ -103,7 +104,6 @@ class OpenApiSpec(GC3VersionTypedMixin):
         # self._overlaid_spec_dict.subtract(self.spec_deletions)
         # self._overlaid_spec_dict.add(self.spec_overlays)
         # self.spec_data = NestedOrderedDictAttrListBase(mapping=self._overlaid_spec_dict)
-
 
         # self.spec_archive_dir = self.spec_dir.joinpath(gc3_cfg.open_api.open_api_spec_catalog.archive_dir)
         # self.spec_archive_file_name = gc3_cfg.open_api.open_api_spec_catalog.archive_file_format.format(name=self.name, version=self.version)
@@ -133,41 +133,41 @@ class OpenApiSpec(GC3VersionTypedMixin):
 
         _debug(f"{self.name} created")
 
-    def load_spec(self, from_url: bool) -> DictStrAny:
-        if from_url:
-            spec_url = f"{self.service_cfg.spec_furl}".format_map(self.service_cfg)
-            _debug(f"spec_url={spec_url}")
-            spec_dict: dict = load_url(spec_url=spec_url)
-            self.from_url = True
-        else:
-            if not self.spec_file.exists():
-                _warning(f"Spec file not found: {self.spec_file}!\nAttempting to load it from the API Catalog")
-                return self.load_spec(from_url=True)
-            spec_file_path = str(self.spec_file)
-            spec_dict: dict = load_file(spec_file=spec_file_path)
-            self.from_url = False
-        return spec_dict
+    # def load_spec(self, from_url: bool) -> DictStrAny:
+    #     if from_url:
+    #         spec_url = f"{self.service_cfg.spec_furl}".format_map(self.service_cfg)
+    #         _debug(f"spec_url={spec_url}")
+    #         spec_dict: dict = load_url(spec_url=spec_url)
+    #         self.from_url = True
+    #     else:
+    #         if not self.spec_file.exists():
+    #             _warning(f"Spec file not found: {self.spec_file}!\nAttempting to load it from the API Catalog")
+    #             return self.load_spec(from_url=True)
+    #         spec_file_path = str(self.spec_file)
+    #         spec_dict: dict = load_file(spec_file=spec_file_path)
+    #         self.from_url = False
+    #     return spec_dict
+    #
+    # def save_spec(self, file_path=None, overwrite: bool = False) -> Path:
+    #     spec_file = file_path if file_path else self.spec_file
+    #     if not spec_file.parent.exists():
+    #         spec_file.parent.mkdir()
+    #     _debug(f"Saving spec to spec_file={spec_file}")
+    #     if spec_file.exists() and not overwrite:
+    #         _warning(f"spec_file={spec_file} already exists and overwrite={overwrite}, leaving unchanged")
+    #     if not self.spec_dir.exists():
+    #         _warning(f"spec_dir={self.spec_dir} did not already exist, attempting to create.")
+    #         self.spec_dir.mkdir()
+    #     try:
+    #         json.dump(obj=self._vanilla_spec_dict, fp=spec_file.open('w'), indent=gc3_cfg.open_api.open_api_spec_catalog.json_export_indent_spaces)
+    #     except Exception as e:
+    #         _error(e)
+    #     return spec_file
 
-    def save_spec(self, file_path=None, overwrite: bool = False) -> Path:
-        spec_file = file_path if file_path else self.spec_file
-        if not spec_file.parent.exists():
-            spec_file.parent.mkdir()
-        _debug(f"Saving spec to spec_file={spec_file}")
-        if spec_file.exists() and not overwrite:
-            _warning(f"spec_file={spec_file} already exists and overwrite={overwrite}, leaving unchanged")
-        if not self.spec_dir.exists():
-            _warning(f"spec_dir={self.spec_dir} did not already exist, attempting to create.")
-            self.spec_dir.mkdir()
-        try:
-            json.dump(obj=self._vanilla_spec_dict, fp=spec_file.open('w'), indent=gc3_cfg.open_api.open_api_spec_catalog.json_export_indent_spaces)
-        except Exception as e:
-            _error(e)
-        return spec_file
-
-    def archive_spec_to_catalog(self) -> Path:
-        _debug(f"Archiving spec to self.spec_archive_file={self.spec_archive_file}")
-        spec_archive_file_path = self.save_spec(file_path=self.spec_archive_file)
-        return spec_archive_file_path
+    # def archive_spec_to_catalog(self) -> Path:
+    #     _debug(f"Archiving spec to self.spec_archive_file={self.spec_archive_file}")
+    #     spec_archive_file_path = self.save_spec(file_path=self.spec_archive_file)
+    #     return spec_archive_file_path
 
 
     # def create_spec_overlay_file(self, file_path: Path = None, overwrite: bool = False) -> Path:
@@ -222,7 +222,7 @@ class OpenApiSpec(GC3VersionTypedMixin):
 
     @property
     def spec_dict(self):
-        return self._spec_data
+        return self._spec_dict
 
 
     def get_swagger_spec(self, rest_endpoint: Union[str, None] = None) -> Spec:
@@ -242,7 +242,7 @@ class OpenApiSpec(GC3VersionTypedMixin):
         return spec
 
     @property
-    def swagger_spec(self) -> Spec:
+    def spec(self) -> Spec:
         return self.get_swagger_spec(rest_endpoint=self.rest_endpoint)
 
     @property

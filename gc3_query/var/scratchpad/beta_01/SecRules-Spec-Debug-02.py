@@ -509,11 +509,11 @@ client = SwaggerClient.from_spec(spec_dict=dbcs_spec_dict, origin_url=rest_endpo
 # In[29]:
 
 
-print(f"user_defined_formats=[{client.swagger_spec.user_defined_formats}]")
+print(f"user_defined_formats=[{client.spec.user_defined_formats}]")
 print(client.swagger_spec.origin_url)
 print(client.swagger_spec.api_url)
-print(f"bravado_config=[{client.swagger_spec.config['bravado']}]")
-print(f"schemes=[{client.swagger_spec.client_spec_dict['schemes']}]")
+print(f"bravado_config=[{client.spec.config['bravado']}]")
+print(f"schemes=[{client.spec.client_spec_dict['schemes']}]")
 
 
 # In[30]:

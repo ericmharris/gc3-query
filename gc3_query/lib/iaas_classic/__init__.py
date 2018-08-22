@@ -139,7 +139,7 @@ class IaaSServiceBase(GC3VersionTypedMixin):
 
     @property
     def swagger_spec(self) -> Spec:
-        swagger_spec: Spec = self._swagger_spec if self._swagger_spec else self.open_api_spec.swagger_spec
+        swagger_spec: Spec = self._swagger_spec if self._swagger_spec else self.open_api_spec.spec
         #### bravado_core.spec.Spec#client_spec_dict
         # Return a copy of spec_dict with x-scope metadata removed so that it
         #         is suitable for consumption by Swagger clients.

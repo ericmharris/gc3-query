@@ -76,30 +76,31 @@ def test_get_spec_from_kwargs():
     service_cfg = gc3_config.iaas_classic.services[service]
     open_api_specs_cfg = gc3_config.iaas_classic.open_api_specs
     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
-    oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=api_catalog_config, rest_endpoint=idm_cfg.rest_endpoint)
+    # oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=api_catalog_config, rest_endpoint=idm_cfg.rest_endpoint)
+    oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=open_api_specs_cfg, idm_cfg=idm_cfg, rest_endpoint=idm_cfg.rest_endpoint)
     assert oapi_spec.name == service
     assert oapi_spec._spec_data['schemes'] == ['https']
     core_spec = oapi_spec.get_swagger_spec()
     assert core_spec.origin_url == idm_cfg.rest_endpoint
     assert oapi_spec.rest_endpoint == idm_cfg.rest_endpoint
 
-
-def test_from_url():
-    idm_domain = 'gc30003'
-    service = 'Instances'
-    gc3_config = GC3Config(atoml_config_dir=config_dir)
-    idm_cfg = gc3_config.idm.domains[idm_domain]
-    service_cfg = gc3_config.iaas_classic.services[service]
-    open_api_specs_cfg = gc3_config.iaas_classic.open_api_specs
-    api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
-    oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=open_api_specs_cfg, idm_cfg=idm_cfg)
-    assert oapi_spec.name == service
-    assert oapi_spec._spec_data['schemes'] == ['https']
-    assert oapi_spec.from_url == True
-
-    core_spec = oapi_spec.get_swagger_spec(rest_endpoint=idm_cfg.rest_endpoint)
-    assert core_spec.origin_url == idm_cfg.rest_endpoint
-    assert core_spec.spec_dict['info']['title'] == service
+#
+# def test_from_url():
+#     idm_domain = 'gc30003'
+#     service = 'Instances'
+#     gc3_config = GC3Config(atoml_config_dir=config_dir)
+#     idm_cfg = gc3_config.idm.domains[idm_domain]
+#     service_cfg = gc3_config.iaas_classic.services[service]
+#     open_api_specs_cfg = gc3_config.iaas_classic.open_api_specs
+#     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
+#     oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=open_api_specs_cfg, idm_cfg=idm_cfg)
+#     assert oapi_spec.name == service
+#     assert oapi_spec._spec_data['schemes'] == ['https']
+#     assert oapi_spec.from_url == True
+#
+#     core_spec = oapi_spec.get_swagger_spec(rest_endpoint=idm_cfg.rest_endpoint)
+#     assert core_spec.origin_url == idm_cfg.rest_endpoint
+#     assert core_spec.spec_dict['info']['title'] == service
 
 
 def test_check_spec_properties():
@@ -109,8 +110,7 @@ def test_check_spec_properties():
     idm_cfg = gc3_config.idm.domains[idm_domain]
     service_cfg = gc3_config.iaas_classic.services[service]
     open_api_specs_cfg = gc3_config.iaas_classic.open_api_specs
-    api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
-    oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=api_catalog_config, idm_cfg=idm_cfg)
+    oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=open_api_specs_cfg, idm_cfg=idm_cfg)
     assert oapi_spec.name == service
     assert oapi_spec._spec_data['schemes'] == ['https']
     assert oapi_spec.title == service
