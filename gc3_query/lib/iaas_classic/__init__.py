@@ -77,7 +77,7 @@ class IaaSServiceBase(GC3VersionTypedMixin):
         self.kwargs = {'swagger_spec': None,            #  bravado_core.spec.Spec
                        'mock_version': None,            # Used for unit tests,
                        'skip_authentication': None,    #  self.http_client won't authenticate against the IDM
-                       'spec_dict': None,               #  Di
+                       'spec_dict': None,               #  Spec values
                        }
         self.kwargs.update(kwargs)
 

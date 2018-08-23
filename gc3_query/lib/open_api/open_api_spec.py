@@ -58,7 +58,9 @@ class OperationIdDescr():
 
 # class OpenApiSpec():
 class OpenApiSpec(GC3VersionTypedMixin):
-    def __init__(self, service_cfg: Dict[str, Any], open_api_specs_cfg: DictStrAny, idm_cfg: Optional[DictStrAny] = None, **kwargs):
+    def __init__(self, service_cfg: Union[NestedOrderedDictAttrListBase, DictStrAny],
+                 open_api_specs_cfg: Union[NestedOrderedDictAttrListBase, DictStrAny],
+                 idm_cfg: Optional[Union[NestedOrderedDictAttrListBase, DictStrAny]] = None, **kwargs):
         self.service_cfg = service_cfg
         self.open_api_specs_cfg = open_api_specs_cfg
         self.idm_cfg = idm_cfg
