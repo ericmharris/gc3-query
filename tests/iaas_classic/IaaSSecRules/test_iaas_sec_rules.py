@@ -3,7 +3,7 @@ from pathlib import Path
 
 from bravado_core.spec import Spec
 
-from gc3_query import BASE_DIR
+from gc3_query.lib import gc3_cfg
 from gc3_query.lib import *
 from gc3_query.lib.gc3_config import GC3Config
 from gc3_query.lib.iaas_classic import BRAVADO_CONFIG
@@ -15,7 +15,7 @@ from gc3_query.lib.iaas_classic.sec_rules import SecRules
 
 TEST_BASE_DIR: Path = Path(__file__).parent
 # config_dir = TEST_BASE_DIR.joinpath("config")
-config_dir = BASE_DIR.joinpath("etc/config")
+config_dir = gc3_cfg.BASE_DIR.joinpath("etc/config")
 output_dir = TEST_BASE_DIR.joinpath('output')
 spec_files_dir = TEST_BASE_DIR.joinpath('spec_files')
 
@@ -110,7 +110,7 @@ def test_get_all_sec_rules():
     idm_domain = 'gc30003'
     # spec_file_name = 'SecRules_string_type.json'
     # spec_file = spec_files_dir.joinpath(spec_file_name)
-    spec_file = BASE_DIR.joinpath('etc/open_api/iaas_classic/SecRules/SecRules.json')
+    spec_file = gc3_cfg.BASE_DIR.joinpath('etc/open_api/iaas_classic/SecRules/SecRules.json')
     assert spec_file.exists()
     gc3_config = GC3Config(atoml_config_dir=config_dir)
     service_cfg = gc3_config.iaas_classic.services[service]
@@ -120,7 +120,7 @@ def test_get_all_sec_rules():
     assert spec_dict
     http_client: IaaSRequestsHTTPClient =  IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     bravado_config = BRAVADO_CONFIG
-    assert 'boolean_string' in [f.format for f in bravado_config['formats']]
+    assert 'json_bool' in [f.format for f in bravado_config['formats']]
     swagger_spec = Spec.from_dict(spec_dict=spec_dict, origin_url=idm_cfg.rest_endpoint, http_client=http_client, config=bravado_config)
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     assert service==service_cfg.name
@@ -130,7 +130,7 @@ def test_get_all_sec_rules():
     # sec_rules = SecRules(service_cfg=service_cfg, idm_cfg=idm_cfg, spec_dict=spec_dict, swagger_spec=swagger_spec)
     sec_rules = SecRules(service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client, spec_dict=None, swagger_spec=swagger_spec)
 
-    assert 'boolean_string' in [f.format for f in sec_rules.bravado_config['formats']]
+    assert 'json_bool' in [f.format for f in sec_rules.bravado_config['formats']]
     result_json = sec_rules.get_all_sec_rules()
     assert isinstance(result_json['result'][0]['dst_is_ip'], bool)
     assert len(result_json['result']) > 0

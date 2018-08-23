@@ -122,8 +122,6 @@ def test_BRAVADO_CONFIG(get_constants_setup):
     assert 'formats' in bravado_config
     assert 'include_missing_properties' in bravado_config
     assert 'also_return_response' in bravado_config
-    bravado_config_2 = gc3_config.bravado_config
-    assert bravado_config==bravado_config_2
-    assert bravado_config is not bravado_config_2
     assert isinstance(bravado_config, dict)
     assert isinstance(bravado_config['formats'], list)
+    assert isinstance(bravado_config['gc3_format_names'], list)

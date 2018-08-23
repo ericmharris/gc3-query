@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-#@Filename : boolean_string
+#@Filename : json_bool
 #@Date : [8/13/2018 4:05 PM]
 #@Poject: gc3-query
 #@AUTHOR : emharris
@@ -16,10 +16,10 @@
 ################################################################################
 ## Standard Library Imports
 
-from bravado_core.exception import SwaggerValidationError
 ################################################################################
 ## Third-Party Imports
 from bravado_core.formatter import SwaggerFormat
+from bravado_core.exception import SwaggerValidationError
 
 ################################################################################
 ## Project Imports
@@ -29,7 +29,7 @@ from gc3_query.lib.gc3logging import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
-class BooleanString:
+class JsonBool:
     str_to_bool: Dict[str, bool] = dict(true=True, false=False)
 
     def __init__(self, from_wire: str):
@@ -37,7 +37,7 @@ class BooleanString:
         self._as_boolean = self.str_to_bool[from_wire.lower()]
         _debug(f'created')
         # if self.validate(boolish):
-        #     self.as_boolean = self.boolean_string_values[boolish]
+        #     self.as_boolean = self.json_bool_values[boolish]
         # if self.boolish_literal != self.boolish:
         #     _warning(f"case sensitive data passed, self.boolish_literal={self.boolish_literal}")
 
@@ -47,7 +47,7 @@ class BooleanString:
         try:
             as_boolean = cls.str_to_bool[from_wire.lower()]
         except KeyError:
-            raise SwaggerValidationError(f"Value={from_wire} not recognized as BooleanString")
+            raise SwaggerValidationError(f"Value={from_wire} not recognized as JsonBool")
         return isinstance(as_boolean, bool)
 
     def __bool__(self):
@@ -73,17 +73,17 @@ class BooleanString:
         return _str_to_python
 
 
-boolean_string_format = SwaggerFormat(
+json_bool_format = SwaggerFormat(
     # name of the format as used in the Swagger spec
-    format='boolean_string',
+    format='json_bool',
 
     # Callable to convert a python object to_wire representations
-    to_wire=lambda boolean_string_instance: boolean_string_instance.as_wire,
+    to_wire=lambda json_bool_instance: json_bool_instance.as_wire,
 
     # Callable to convert a from_wire to a python object
-    to_python=lambda s: BooleanString(s),
+    to_python=lambda s: JsonBool(s),
 
     # Callable to validate the cidr in string form
-    validate=BooleanString.validate,
+    validate=JsonBool.validate,
     description='Converts "true" and "false" to/from equivalent booleans.'
 )

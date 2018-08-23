@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 from bravado_core.spec import Spec
 
-from gc3_query import BASE_DIR
+from gc3_query.lib import gc3_cfg
 from gc3_query.lib import *
 from gc3_query.lib import gc3_cfg
 from gc3_query.lib.gc3_config import GC3Config
@@ -12,11 +12,11 @@ from gc3_query.lib.iaas_classic import BRAVADO_CONFIG
 from gc3_query.lib.iaas_classic import IaaSServiceBase
 from gc3_query.lib.iaas_classic.iaas_requests_http_client import IaaSRequestsHTTPClient
 from gc3_query.lib.iaas_classic.sec_rules import SecRules
-# from gc3_query.lib.open_api import API_SPECS_DIR
+# # fixme? from gc3_query.lib.open_api import API_SPECS_DIR
 
 TEST_BASE_DIR: Path = Path(__file__).parent
 # config_dir = TEST_BASE_DIR.joinpath("config")
-config_dir = BASE_DIR.joinpath("etc/config")
+config_dir = gc3_cfg.BASE_DIR.joinpath("etc/config")
 output_dir = TEST_BASE_DIR.joinpath('output')
 spec_files_dir = TEST_BASE_DIR.joinpath('spec_files')
 
@@ -194,7 +194,7 @@ def test_swagger_spec_and_spec_dict_throws():
     assert spec_dict
     http_client: IaaSRequestsHTTPClient =  IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     bravado_config = BRAVADO_CONFIG
-    assert 'boolean_string' in [f.format for f in bravado_config['formats']]
+    assert 'json_bool' in [f.format for f in bravado_config['formats']]
     swagger_spec = Spec.from_dict(spec_dict=spec_dict, origin_url=idm_cfg.rest_endpoint, http_client=http_client, config=bravado_config)
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     assert service==service_cfg.name

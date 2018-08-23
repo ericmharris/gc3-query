@@ -13,7 +13,7 @@ BASE_DIR = gc3_cfg.BASE_DIR
 
 TEST_BASE_DIR: Path = Path(__file__).parent
 # config_dir = TEST_BASE_DIR.joinpath("config")
-config_dir = BASE_DIR.joinpath("etc/config")
+config_dir = gc3_cfg.BASE_DIR.joinpath("etc/config")
 output_dir = TEST_BASE_DIR.joinpath('output')
 spec_files_dir = TEST_BASE_DIR.joinpath('spec_files')
 

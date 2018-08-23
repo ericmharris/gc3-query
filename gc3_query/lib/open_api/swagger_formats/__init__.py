@@ -21,14 +21,17 @@
 from gc3_query.lib import *
 from bravado_core.formatter import SwaggerFormat
 
-from .boolean_string import BooleanString
-from .boolean_string import boolean_string_format
+from .json_bool import JsonBool
+from .json_bool import json_bool_format
 from .integer import integer_format, mydouble, int64_format
+from .oc_datetime import oc_datetime_format
 
 ################################################################################
 ## Project Imports
 
-formats: List[SwaggerFormat] = [boolean_string_format, integer_format, mydouble, int64_format]
+
+
+formats: List[SwaggerFormat] = [json_bool_format, oc_datetime_format,integer_format, mydouble, int64_format]
 
 
 

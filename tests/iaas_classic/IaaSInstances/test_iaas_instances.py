@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from gc3_query import BASE_DIR
+from gc3_query.lib import gc3_cfg
 from gc3_query.lib.gc3_config import GC3Config
 from gc3_query.lib.iaas_classic import IaaSRequestsHTTPClient
 from gc3_query.lib.iaas_classic.instances import Instances
@@ -11,7 +11,7 @@ from gc3_query.lib.iaas_classic.instances import Instances
 
 TEST_BASE_DIR: Path = Path(__file__).parent
 # config_dir = TEST_BASE_DIR.joinpath("config")
-config_dir = BASE_DIR.joinpath("etc/config")
+config_dir = gc3_cfg.BASE_DIR.joinpath("etc/config")
 output_dir = TEST_BASE_DIR.joinpath('output')
 
 

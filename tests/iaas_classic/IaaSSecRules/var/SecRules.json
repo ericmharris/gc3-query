@@ -234,7 +234,7 @@
                         "description": "<p>Indicates whether the security rule destination is an IP (set to <code>false</code>) or disabled (<code>true</code>).",
                         "required": false,
                         "type": "string",
-                        "format": "boolean_string"
+                        "format": "json_bool"
                     },
                     {
                         "name": "src_is_ip",
@@ -242,7 +242,7 @@
                         "description": "<p>Indicates whether the security rule source is an IP (set to <code>false</code>) or disabled (<code>true</code>).",
                         "required": false,
                         "type": "string",
-                        "format": "boolean_string"
+                        "format": "json_bool"
                     }
                 ]
             }
@@ -619,12 +619,12 @@
                 "dst_is_ip": {
                     "description": "<p>Indicates whether the security rule destination is an IP (set to <code>false</code>) or disabled (<code>true</code>).",
                     "type": "string",
-                    "format": "boolean_string"
+                    "format": "json_bool"
                 },
                 "src_is_ip": {
                     "description": "<p>Indicates whether the security rule source is an IP (set to <code>false</code>) or disabled (<code>true</code>).",
                     "type": "string",
-                    "format": "boolean_string"
+                    "format": "json_bool"
                 }
             }
         }

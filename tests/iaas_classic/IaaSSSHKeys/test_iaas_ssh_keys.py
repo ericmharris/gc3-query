@@ -1,22 +1,22 @@
 from pathlib import Path
 
-from gc3_query import BASE_DIR
+from gc3_query.lib import gc3_cfg
 from gc3_query.lib.gc3_config import GC3Config
 from gc3_query.lib.iaas_classic.ssh_keys import SSHKeys
-from gc3_query.lib.open_api import API_SPECS_DIR
+# fixme? from gc3_query.lib.open_api import API_SPECS_DIR
 
 # from pprint import pprint, pformat
 
 TEST_BASE_DIR: Path = Path(__file__).parent
 # config_dir = TEST_BASE_DIR.joinpath("config")
-config_dir = BASE_DIR.joinpath("etc/config")
+config_dir = gc3_cfg.BASE_DIR.joinpath("etc/config")
 output_dir = TEST_BASE_DIR.joinpath('output')
 spec_files_dir = TEST_BASE_DIR.joinpath('spec_files')
 
 
 def test_setup():
     assert TEST_BASE_DIR.exists()
-    assert API_SPECS_DIR.exists()
+    # assert API_SPECS_DIR.exists()
     if not config_dir.exists():
         config_dir.mkdir()
     if not output_dir.exists():
@@ -98,14 +98,14 @@ def test_init():
 #         spec_dict = json.load(fp=fd)
 #     assert spec_dict
 #     bravado_config = BRAVADO_CONFIG
-#     assert 'boolean_string' in [f.format for f in bravado_config['formats']]
+#     assert 'json_bool' in [f.format for f in bravado_config['formats']]
 #     swagger_spec = Spec.from_dict(spec_dict=spec_dict, origin_url=idm_cfg.rest_endpoint, config=bravado_config)
 #     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
 #     assert service==service_cfg.name
 #     assert idm_domain==idm_cfg.name
 #     assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
 #     ssh_keys = SSHKeys(service_cfg=service_cfg, idm_cfg=idm_cfg, spec_dict=spec_dict, swagger_spec=swagger_spec)
-#     assert 'boolean_string' in [f.format for f in ssh_keys.bravado_config['formats']]
+#     assert 'json_bool' in [f.format for f in ssh_keys.bravado_config['formats']]
 #     result_json = ssh_keys.get_all_ssh_keys()
 #     assert len(result_json['result']) > 0
 #     assert 'src_list' in result_json['result'][0]

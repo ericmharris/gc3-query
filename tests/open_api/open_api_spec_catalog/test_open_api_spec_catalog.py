@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from gc3_query import BASE_DIR
+from gc3_query.lib import gc3_cfg
 from gc3_query.lib import *
 from gc3_query.lib.gc3_config import GC3Config
 from gc3_query.lib.open_api.open_api_spec_catalog import OpenApiSpecCatalog
@@ -9,7 +9,7 @@ from gc3_query.lib.open_api.open_api_spec_catalog import OpenApiSpecCatalog
 
 TEST_BASE_DIR: Path = Path(__file__).parent
 # config_dir = TEST_BASE_DIR.joinpath("config")
-config_dir = BASE_DIR.joinpath("etc/config")
+config_dir = gc3_cfg.BASE_DIR.joinpath("etc/config")
 output_dir = TEST_BASE_DIR.joinpath('output')
 
 

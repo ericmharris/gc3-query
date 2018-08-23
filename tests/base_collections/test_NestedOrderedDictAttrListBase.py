@@ -4,20 +4,20 @@ import pytest
 
 from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
 from gc3_query.lib.gc3_config import GC3Config
-from gc3_query.lib.open_api import API_SPECS_DIR
+# fixme? from gc3_query.lib.open_api import API_SPECS_DIR
 
 # from pprint import pprint, pformat
 
 TEST_BASE_DIR: Path = Path(__file__).parent
 config_dir = TEST_BASE_DIR.joinpath("config")
-# config_dir = BASE_DIR.joinpath("etc/config")
+# config_dir = gc3_cfg.BASE_DIR.joinpath("etc/config")
 output_dir = TEST_BASE_DIR.joinpath('output')
 spec_files_dir = TEST_BASE_DIR.joinpath('spec_files')
 
 
 def test_setup():
     assert TEST_BASE_DIR.exists()
-    assert API_SPECS_DIR.exists()
+    # assert API_SPECS_DIR.exists()
     if not config_dir.exists():
         config_dir.mkdir()
     if not output_dir.exists():
