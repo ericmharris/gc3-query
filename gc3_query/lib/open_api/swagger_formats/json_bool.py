@@ -75,7 +75,7 @@ class JsonBool:
 
 json_bool_format = SwaggerFormat(
     # name of the format as used in the Swagger spec
-    format='json_bool',
+    format='json-bool',
 
     # Callable to convert a python object to_wire representations
     to_wire=lambda json_bool_instance: json_bool_instance.as_wire,

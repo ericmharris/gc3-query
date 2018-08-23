@@ -124,4 +124,4 @@ def test_BRAVADO_CONFIG(get_constants_setup):
     assert 'also_return_response' in bravado_config
     assert isinstance(bravado_config, dict)
     assert isinstance(bravado_config['formats'], list)
-    assert isinstance(bravado_config['gc3_format_names'], list)
+    assert bravado_config['formats']

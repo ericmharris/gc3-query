@@ -59,4 +59,3 @@ internally_dereference_refs = false
 # 'swagger_formats': [],
 # formats = [json_bool]
 formats = []
-gc3_format_names = ['json_bool_format', 'oc_datetime_format']

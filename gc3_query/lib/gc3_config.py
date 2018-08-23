@@ -27,7 +27,7 @@ from gc3_query.lib import *
 from gc3_query.lib.atoml.atoml_config import ATomlConfig
 from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
 from gc3_query.lib.gc3logging import get_logging
-from gc3_query.lib.open_api.swagger_formats import formats
+from gc3_query.lib.open_api.swagger_formats import gc3_formats
 
 ################################################################################
 ## Project Imports
@@ -92,6 +92,10 @@ class GC3Config(NestedOrderedDictAttrListBase):
     def BRAVADO_CONFIG(self) -> DictStrAny:
         bravado_config: DictStrAny = self.bravado.client_config.as_dict()
         bravado_config.update(self.bravado.core_config.as_dict())
+        gc3_format_names = [f.format for f in self.open_api.formats.values()]
+        for gc3_format in gc3_formats:
+            if gc3_format.format in gc3_format_names:
+                bravado_config['formats'].append(gc3_format)
         return bravado_config
 
     def get_credential(self, idm_domain_name: str) -> IDMCredential:
@@ -161,7 +165,7 @@ class GC3Config(NestedOrderedDictAttrListBase):
             raise RuntimeError(f"config_type={config_type} not found in {config_types.keys()}")
         config: dict = config_types[config_type]
         if config_type in ['bravado', 'bravado_core']:
-            config['formats'] = formats
+            config['formats'] = gc3_formats
         return deepcopy(config)
 
 

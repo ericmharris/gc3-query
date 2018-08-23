@@ -117,3 +117,11 @@ mydouble = SwaggerFormat(
   validate=validate_decimaltype,
   description="model format double internally as Decimal()"
 )
+
+
+date = SwaggerFormat(
+    format='date',
+    to_wire=lambda d: d.isoformat(),
+    to_python=lambda d: dateutil.parser.parse(d).date(),
+    validate=NO_OP,  # jsonschema validates date
+    description='Converts [wire]string:date <=> python datetime.date')
