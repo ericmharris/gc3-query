@@ -114,3 +114,16 @@ def test_open_api_catalog_dir(get_constants_setup):
     gc3_config = get_constants_setup
     open_api_catalog_dir = gc3_config.OPEN_API_CATALOG_DIR
     assert open_api_catalog_dir
+
+def test_BRAVADO_CONFIG(get_constants_setup):
+    gc3_config = get_constants_setup
+    bravado_config = gc3_config.BRAVADO_CONFIG
+    assert bravado_config
+    assert 'formats' in bravado_config
+    assert 'include_missing_properties' in bravado_config
+    assert 'also_return_response' in bravado_config
+    bravado_config_2 = gc3_config.bravado_config
+    assert bravado_config==bravado_config_2
+    assert bravado_config is not bravado_config_2
+    assert isinstance(bravado_config, dict)
+    assert isinstance(bravado_config['formats'], list)

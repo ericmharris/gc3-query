@@ -88,6 +88,12 @@ class GC3Config(NestedOrderedDictAttrListBase):
         open_api_spec_base = self.BASE_DIR.joinpath(self.open_api.open_api_spec_base)
         return open_api_spec_base
 
+    @property
+    def BRAVADO_CONFIG(self) -> DictStrAny:
+        bravado_config: DictStrAny = self.bravado.client_config.as_dict()
+        bravado_config.update(self.bravado.core_config.as_dict())
+        return bravado_config
+
     def get_credential(self, idm_domain_name: str) -> IDMCredential:
         if idm_domain_name not in self['idm']['domains']:
             raise RuntimeError(f"IDM Domain name provided, {idm_domain_name}, is not found in {self}")

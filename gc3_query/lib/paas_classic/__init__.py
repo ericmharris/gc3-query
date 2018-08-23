@@ -41,6 +41,4 @@ class PaaSServiceBase(IaaSServiceBase):
                  from_url: Optional[bool] = False,
                  storage_delegates: Optional[List[str]] = None,
                  **kwargs: DictStrAny):
-        http_client = RequestsClient()
-        http_client.set_basic_auth(rest_endpoint, opc_username, opc_password)
-        super().__init__( service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=, from_url=from_url, storage_delegates=storage_delegates , **kwargs)
+        super().__init__( service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client, from_url=from_url, storage_delegates=storage_delegates , **kwargs)

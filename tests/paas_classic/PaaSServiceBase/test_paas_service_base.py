@@ -7,8 +7,8 @@ from bravado_core.spec import Spec
 from gc3_query import BASE_DIR
 from gc3_query.lib import *
 from gc3_query.lib import gc3_cfg
-from gc3_query.lib.gc3_config import GC3Config
 from gc3_query.lib.paas_classic import PaaSServiceBase
+from gc3_query.lib.paas_classic.paas_requests_http_client import PaaSRequestsHTTPClient
 # from gc3_query.lib.open_api import API_SPECS_DIR
 
 TEST_BASE_DIR: Path = Path(__file__).parent
@@ -31,14 +31,13 @@ def test_setup():
 
 @pytest.fixture()
 def setup_gc30003() -> Tuple[Dict[str, Any]]:
-    service = 'Instances'
+    service = 'ServiceInstances'
     idm_domain = 'gc30003'
-    gc3_config = GC3Config(atoml_config_dir=config_dir)
-    service_cfg = gc3_config.paas_classic.services[service]
-    idm_cfg = gc3_config.idm.domains[idm_domain]
+    service_cfg = gc3_cfg.paas_classic.services[service]
+    idm_cfg = gc3_cfg.idm.domains[idm_domain]
     assert service==service_cfg.name
     assert idm_domain==idm_cfg.name
-    assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
+    assert gc3_cfg.user.cloud_username == 'eric.harris@oracle.com'
     yield service_cfg, idm_cfg
 
 
@@ -84,7 +83,7 @@ def test_bravado_service_call(setup_gc30003):
 
 def test_pre_authenticated_http_client(setup_gc30003):
     service_cfg, idm_cfg = setup_gc30003
-    http_client = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
+    http_client = PaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     http_client_id = id(http_client)
     assert http_client.skip_authentication==False
     assert http_client.idm_domain_name==idm_cfg.name
@@ -109,15 +108,14 @@ def test_pre_authenticated_http_client(setup_gc30003):
 
 @pytest.fixture()
 def setup_preauthed_gc30003():
-    service = 'Instances'
+    service = 'ServiceInstances'
     idm_domain = 'gc30003'
-    gc3_config = GC3Config(atoml_config_dir=config_dir)
-    service_cfg = gc3_config.paas_classic.services[service]
-    idm_cfg = gc3_config.idm.domains[idm_domain]
-    http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
+    service_cfg = gc3_cfg.paas_classic.services[service]
+    idm_cfg = gc3_cfg.idm.domains[idm_domain]
+    http_client: PaaSRequestsHTTPClient = PaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     assert service==service_cfg.name
     assert idm_domain==idm_cfg.name
-    assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
+    assert gc3_cfg.user.cloud_username == 'eric.harris@oracle.com'
     yield service_cfg, idm_cfg, http_client
 
 
@@ -154,14 +152,13 @@ def test_idm_root_container_name(setup_preauthed_gc30003):
 
 @pytest.fixture()
 def setup_gc30003_oapi_spec_catalog() -> Tuple[Dict[str, Any]]:
-    service = 'Instances'
+    service = 'ServiceInstances'
     idm_domain = 'gc30003'
-    gc3_config = GC3Config(atoml_config_dir=config_dir)
-    service_cfg = gc3_config.paas_classic.services[service]
-    idm_cfg = gc3_config.idm.domains[idm_domain]
+    service_cfg = gc3_cfg.paas_classic.services[service]
+    idm_cfg = gc3_cfg.idm.domains[idm_domain]
     assert service==service_cfg.name
     assert idm_domain==idm_cfg.name
-    assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
+    assert gc3_cfg.user.cloud_username == 'eric.harris@oracle.com'
     yield service_cfg, idm_cfg
 
 
@@ -183,20 +180,19 @@ def test_swagger_spec_and_spec_dict_throws():
     spec_file_name = 'SecRules_string_type.json'
     spec_file = spec_files_dir.joinpath(spec_file_name)
     assert spec_file.exists()
-    gc3_config = GC3Config(atoml_config_dir=config_dir)
-    service_cfg = gc3_config.paas_classic.services[service]
-    idm_cfg = gc3_config.idm.domains[idm_domain]
+    service_cfg = gc3_cfg.paas_classic.services[service]
+    idm_cfg = gc3_cfg.idm.domains[idm_domain]
     with spec_file.open() as fd:
         spec_dict = json.load(fp=fd)
     assert spec_dict
-    http_client: IaaSRequestsHTTPClient =  IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
-    bravado_config = BRAVADO_CONFIG
+    http_client: PaaSRequestsHTTPClient =  PaaSRequestsHTTPClient(idm_cfg=idm_cfg)
+    bravado_config = gc3_cfg.
     assert 'boolean_string' in [f.format for f in bravado_config['formats']]
     swagger_spec = Spec.from_dict(spec_dict=spec_dict, origin_url=idm_cfg.rest_endpoint, http_client=http_client, config=bravado_config)
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     assert service==service_cfg.name
     assert idm_domain==idm_cfg.name
-    assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
+    assert gc3_cfg.user.cloud_username == 'eric.harris@oracle.com'
 
     # sec_rules = SecRules(service_cfg=service_cfg, idm_cfg=idm_cfg, spec_dict=spec_dict, swagger_spec=swagger_spec)
     with pytest.raises(RuntimeError) as e:
