@@ -130,7 +130,9 @@ def test_get_all_sec_rules():
     # sec_rules = SecRules(service_cfg=service_cfg, idm_cfg=idm_cfg, spec_dict=spec_dict, swagger_spec=swagger_spec)
     sec_rules = SecRules(service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client, spec_dict=None, swagger_spec=swagger_spec)
 
-    assert 'json_bool' in [f.format for f in sec_rules.bravado_config['formats']]
+    formats = [f.format for f in bravado_config['formats']]
+    assert 'json-bool' in formats
+    # assert 'json_bool' in [f.format for f in bravado_config['formats']]
     result_json = sec_rules.get_all_sec_rules()
     assert isinstance(result_json['result'][0]['dst_is_ip'], bool)
     assert len(result_json['result']) > 0

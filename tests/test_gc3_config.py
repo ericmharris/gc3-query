@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import pytest
-
+from bravado_core.formatter import SwaggerFormat, NO_OP
 from gc3_query.lib.gc3_config import GC3Config, IDMCredential
 
 TEST_BASE_DIR: Path = Path(__file__).parent.joinpath("GC3Config")
@@ -125,3 +125,6 @@ def test_BRAVADO_CONFIG(get_constants_setup):
     assert isinstance(bravado_config, dict)
     assert isinstance(bravado_config['formats'], list)
     assert bravado_config['formats']
+    formats = [f.format for f in bravado_config['formats']]
+    assert 'json-bool' in formats
+    assert all([isinstance(i , SwaggerFormat) for i in bravado_config['formats']])

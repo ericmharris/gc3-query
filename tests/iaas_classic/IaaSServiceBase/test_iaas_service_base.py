@@ -194,7 +194,9 @@ def test_swagger_spec_and_spec_dict_throws():
     assert spec_dict
     http_client: IaaSRequestsHTTPClient =  IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     bravado_config = BRAVADO_CONFIG
-    assert 'json_bool' in [f.format for f in bravado_config['formats']]
+    formats = [f.format for f in bravado_config['formats']]
+    assert 'json-bool' in formats
+    # assert 'json_bool' in [f.format for f in bravado_config['formats']]
     swagger_spec = Spec.from_dict(spec_dict=spec_dict, origin_url=idm_cfg.rest_endpoint, http_client=http_client, config=bravado_config)
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     assert service==service_cfg.name
