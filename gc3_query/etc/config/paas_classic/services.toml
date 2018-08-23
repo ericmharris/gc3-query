@@ -1,16 +1,28 @@
 [paas_classic.services]
 
+[paas_classic.services.rest_endpoints]
+database = 'https://dbaas.oraclecloud.com/'
+java = 'https://jaas.oraclecloud.com/'
 
-[paas_classic.services.ServiceInstances]
+[paas_classic.services.database.ServiceInstances]
+api_collection_name = 'database'
 name = 'ServiceInstances'
 service_name = 'ServiceInstances'
 title = 'Service Instances'
-api_collection_name = 'database'
 api_version = '1.1'
 
-[paas_classic.services.SSHKeys]
+[paas_classic.services.database.SSHKeys]
+api_collection_name = 'database'
 name = 'SSHKeys'
 service_name = 'ServiceInstances'
 title = 'SSH Keys'
-api_collection_name = 'database'
 api_version = '1.1'
+
+
+[paas_classic.services.java.ServiceInstances]
+api_collection_name = 'java'
+name = 'ServiceInstances'
+service_name = 'ServiceInstances'
+title = 'Service Instances'
+api_version = '18.2.6'
+

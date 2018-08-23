@@ -17,8 +17,12 @@
 ## Standard Library Imports
 from functools import partial
 
+################################################################################
+## Third-Party Imports
+
 from bravado.client import ResourceDecorator
 from bravado_core.spec import Spec
+from bravado.requests_client import RequestsClient
 
 ################################################################################
 ## Project Imports
@@ -34,9 +38,6 @@ from gc3_query.lib.open_api.open_api_spec_catalog import OpenApiSpecCatalog
 from gc3_query.lib.signatures import GC3VersionTypedMixin
 from gc3_query.lib.utils import camelcase_to_snake
 
-################################################################################
-## Third-Party Imports
-
 
 from gc3_query.lib import get_logging
 
@@ -49,6 +50,7 @@ class IaaSServiceBase(GC3VersionTypedMixin):
     from_url: bool
     gc3_cfg: NestedOrderedDictAttrListBase
     open_api_specs_cfg: GC3Config = gc3_cfg.iaas_classic.open_api_specs
+    http_client_class = IaaSRequestsHTTPClient
 
     def __init__(self,
                  service_cfg: NestedOrderedDictAttrListBase,
@@ -105,7 +107,7 @@ class IaaSServiceBase(GC3VersionTypedMixin):
         self._spec_dict: DictStrAny = kwargs.get('spec_dict', False) or self.open_api_spec.spec_dict
         self._swagger_spec: Spec = kwargs.get('swagger_spec', None)
 
-        self.http_client = http_client if http_client else IaaSRequestsHTTPClient(idm_cfg=self.idm_cfg,
+        self.http_client = http_client if http_client else self.http_client_class(idm_cfg=self.idm_cfg,
                                                                                   skip_authentication=self.kwargs.get('skip_authentication',
                                                                                                                       False))
         # if self._swagger_spec:

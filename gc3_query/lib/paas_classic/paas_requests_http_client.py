@@ -33,7 +33,7 @@ from gc3_query.lib import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
-class IaaSRequestsHTTPBasicAuth(HTTPBasicAuth):
+class PaaSRequestsHTTPBasicAuth(HTTPBasicAuth):
 
     def __init__(self, username, password):
         super().__init__(username, password)
@@ -42,7 +42,7 @@ class IaaSRequestsHTTPBasicAuth(HTTPBasicAuth):
         r.headers['Authorization'] = _basic_auth_str(self.username, self.password)
         return r
 
-class IaaSRequestsBasicAuthenticator(BasicAuthenticator):
+class PaaSRequestsBasicAuthenticator(BasicAuthenticator):
 
     def __init__(self, host, username, password):
         super().__init__(host, username, password)
@@ -51,7 +51,7 @@ class IaaSRequestsBasicAuthenticator(BasicAuthenticator):
         pass
 
 
-class IaaSRequestsHTTPClient(RequestsClient):
+class PaaSRequestsHTTPClient(RequestsClient):
     """Synchronous HTTP client implementation with tweaks for Oracle Cloud.
     """
 
