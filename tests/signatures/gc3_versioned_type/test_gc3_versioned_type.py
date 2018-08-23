@@ -33,7 +33,7 @@ def test_setup():
 def test_init():
     service = 'Instances'
     gc3_config = GC3Config(atoml_config_dir=config_dir)
-    service_cfg = gc3_config.iaas_classic.services[service]
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
     oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=api_catalog_config)
     assert oapi_spec.name == service

@@ -1,25 +1,27 @@
 [iaas_classic.services]
 
+[iaas_classic.services.rest_endpoints]
 
-[iaas_classic.services.Instances]
+
+[iaas_classic.services.compute.Instances]
+api_collection_name = 'compute'
 name = 'Instances'
 service_name = 'Instances'
 title = 'Instances'
-api_collection_name = 'compute'
 api_version = '18.1.2'
 
 
-[iaas_classic.services.SecRules]
+[iaas_classic.services.compute.SecRules]
+api_collection_name = 'compute'
 name = 'SecRules'
 service_name = 'SecRules'
 title = "SecRules"
-api_collection_name = 'compute'
 api_version = '18.1.2'
 
-[iaas_classic.services.SecApplications]
+[iaas_classic.services.compute.SecApplications]
+api_collection_name = 'compute'
 name = 'SecApplications'
 service_name = 'SecApplications'
 title = "SecApplications"
-api_collection_name = 'compute'
 api_version = '18.1.2'
 

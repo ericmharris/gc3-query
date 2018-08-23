@@ -26,7 +26,7 @@ def test_list_security_rules_from_url():
     service = 'SecurityRules'
     idm_domain = 'gc30003'
     gc3_config = GC3Config(atoml_config_dir=config_dir)
-    service_cfg = gc3_config.iaas_classic.services[service]
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
     idm_cfg = gc3_config.idm.domains[idm_domain]
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     assert service==service_cfg.name

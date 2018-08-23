@@ -34,7 +34,7 @@ def test_list_sec_rules_from_url():
     service = 'SecRules'
     idm_domain = 'gc30003'
     gc3_config = GC3Config(atoml_config_dir=config_dir)
-    service_cfg = gc3_config.iaas_classic.services[service]
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
     idm_cfg = gc3_config.idm.domains[idm_domain]
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     assert service==service_cfg.name
@@ -62,7 +62,7 @@ def test_overlays_applied():
     service = 'SecRules'
     idm_domain = 'gc30003'
     gc3_config = GC3Config(atoml_config_dir=config_dir)
-    service_cfg = gc3_config.iaas_classic.services[service]
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
     idm_cfg = gc3_config.idm.domains[idm_domain]
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     assert service==service_cfg.name
@@ -92,7 +92,7 @@ def test_get_all_sec_rules_data_types_correct():
     service = 'SecRules'
     idm_domain = 'gc30003'
     gc3_config = GC3Config(atoml_config_dir=config_dir)
-    service_cfg = gc3_config.iaas_classic.services[service]
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
     idm_cfg = gc3_config.idm.domains[idm_domain]
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     assert service==service_cfg.name
@@ -113,7 +113,7 @@ def test_get_all_sec_rules():
     spec_file = gc3_cfg.BASE_DIR.joinpath('etc/open_api/iaas_classic/SecRules/SecRules.json')
     assert spec_file.exists()
     gc3_config = GC3Config(atoml_config_dir=config_dir)
-    service_cfg = gc3_config.iaas_classic.services[service]
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
     idm_cfg = gc3_config.idm.domains[idm_domain]
     with spec_file.open() as fd:
         spec_dict = json.load(fp=fd)

@@ -31,7 +31,7 @@ def setup_gc30003():
     service = 'Instances'
     idm_domain = 'gc30003'
     gc3_config = GC3Config(atoml_config_dir=config_dir)
-    service_cfg = gc3_config.iaas_classic.services[service]
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
     idm_cfg = gc3_config.idm.domains[idm_domain]
     http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     assert service==service_cfg.name
@@ -163,7 +163,7 @@ def test_idm_root_container_name(setup_gc30003):
 #     service = 'Instances'
 #     idm_domain = 'gc30003'
 #     gc3_config = GC3Config(atoml_config_dir=config_dir)
-#     service_cfg = gc3_config.iaas_classic.services[service]
+#     service_cfg = gc3_config.iaas_classic.services.compute[service]
 #     idm_cfg = gc3_config.idm.domains[idm_domain]
 #     http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
 #     assert service==service_cfg.name
@@ -184,7 +184,7 @@ def test_discover_root_instance_from_url_01():
     service = 'Instances'
     idm_domain = 'gc30003'
     gc3_config = GC3Config(atoml_config_dir=config_dir)
-    service_cfg = gc3_config.iaas_classic.services[service]
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
     idm_cfg = gc3_config.idm.domains[idm_domain]
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     assert service==service_cfg.name
@@ -207,7 +207,7 @@ def test_discover_instance_from_url_01():
     service = 'Instances'
     idm_domain = 'gc30003'
     gc3_config = GC3Config(atoml_config_dir=config_dir)
-    service_cfg = gc3_config.iaas_classic.services[service]
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
     idm_cfg = gc3_config.idm.domains[idm_domain]
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     assert service==service_cfg.name
@@ -227,7 +227,7 @@ def test_list_instance_from_url_01():
     service = 'Instances'
     idm_domain = 'gc30003'
     gc3_config = GC3Config(atoml_config_dir=config_dir)
-    service_cfg = gc3_config.iaas_classic.services[service]
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
     idm_cfg = gc3_config.idm.domains[idm_domain]
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     assert service==service_cfg.name

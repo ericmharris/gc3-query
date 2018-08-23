@@ -28,7 +28,7 @@ def test_init():
     service = 'SecLists'
     idm_domain = 'gc30003'
     gc3_config = GC3Config(atoml_config_dir=config_dir)
-    service_cfg = gc3_config.iaas_classic.services[service]
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
     idm_cfg = gc3_config.idm.domains[idm_domain]
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     assert service==service_cfg.name
@@ -42,7 +42,7 @@ def test_init():
 #     service = 'SecLists'
 #     idm_domain = 'gc30003'
 #     gc3_config = GC3Config(atoml_config_dir=config_dir)
-#     service_cfg = gc3_config.iaas_classic.services[service]
+#     service_cfg = gc3_config.iaas_classic.services.compute[service]
 #     idm_cfg = gc3_config.idm.domains[idm_domain]
 #     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
 #     assert service==service_cfg.name
@@ -72,7 +72,7 @@ def test_init():
 #     service = 'SecLists'
 #     idm_domain = 'gc30003'
 #     gc3_config = GC3Config(atoml_config_dir=config_dir)
-#     service_cfg = gc3_config.iaas_classic.services[service]
+#     service_cfg = gc3_config.iaas_classic.services.compute[service]
 #     idm_cfg = gc3_config.idm.domains[idm_domain]
 #     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
 #     assert service==service_cfg.name
@@ -92,7 +92,7 @@ def test_init():
 #     spec_file = spec_files_dir.joinpath(spec_file_name)
 #     assert spec_file.exists()
 #     gc3_config = GC3Config(atoml_config_dir=config_dir)
-#     service_cfg = gc3_config.iaas_classic.services[service]
+#     service_cfg = gc3_config.iaas_classic.services.compute[service]
 #     idm_cfg = gc3_config.idm.domains[idm_domain]
 #     with spec_file.open() as fd:
 #         spec_dict = json.load(fp=fd)

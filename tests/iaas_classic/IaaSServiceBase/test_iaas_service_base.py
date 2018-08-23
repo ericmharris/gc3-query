@@ -37,7 +37,7 @@ def setup_gc30003() -> Tuple[Dict[str, Any]]:
     service = 'Instances'
     idm_domain = 'gc30003'
     gc3_config = GC3Config(atoml_config_dir=config_dir)
-    service_cfg = gc3_config.iaas_classic.services[service]
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
     idm_cfg = gc3_config.idm.domains[idm_domain]
     assert service==service_cfg.name
     assert idm_domain==idm_cfg.name
@@ -115,7 +115,7 @@ def setup_preauthed_gc30003():
     service = 'Instances'
     idm_domain = 'gc30003'
     gc3_config = GC3Config(atoml_config_dir=config_dir)
-    service_cfg = gc3_config.iaas_classic.services[service]
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
     idm_cfg = gc3_config.idm.domains[idm_domain]
     http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     assert service==service_cfg.name
@@ -160,7 +160,7 @@ def setup_gc30003_oapi_spec_catalog() -> Tuple[Dict[str, Any]]:
     service = 'Instances'
     idm_domain = 'gc30003'
     gc3_config = GC3Config(atoml_config_dir=config_dir)
-    service_cfg = gc3_config.iaas_classic.services[service]
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
     idm_cfg = gc3_config.idm.domains[idm_domain]
     assert service==service_cfg.name
     assert idm_domain==idm_cfg.name
@@ -187,7 +187,7 @@ def test_swagger_spec_and_spec_dict_throws():
     spec_file = spec_files_dir.joinpath(spec_file_name)
     assert spec_file.exists()
     gc3_config = GC3Config(atoml_config_dir=config_dir)
-    service_cfg = gc3_config.iaas_classic.services[service]
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
     idm_cfg = gc3_config.idm.domains[idm_domain]
     with spec_file.open() as fd:
         spec_dict = json.load(fp=fd)

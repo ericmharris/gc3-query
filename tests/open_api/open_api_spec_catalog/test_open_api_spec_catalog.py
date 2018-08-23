@@ -39,7 +39,7 @@ def test_setup():
 # def test_schemes_updated():
 #     service = 'Instances'
 #     gc3_config = GC3Config(atoml_config_dir=config_dir)
-#     service_cfg = gc3_config.iaas_classic.services[service]
+#     service_cfg = gc3_config.iaas_classic.services.compute[service]
 #     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
 #     oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg)
 #     assert oapi_spec.name == service
@@ -53,7 +53,7 @@ def test_setup():
 #     service = 'Instances'
 #     gc3_config = GC3Config(atoml_config_dir=config_dir)
 #     idm_cfg = gc3_config.idm.domains[idm_domain]
-#     service_cfg = gc3_config.iaas_classic.services[service]
+#     service_cfg = gc3_config.iaas_classic.services.compute[service]
 #     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
 #     oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=open_api_specs_cfg, idm_cfg=idm_cfg)
 #     assert oapi_spec.name == service
@@ -82,7 +82,7 @@ def test_setup():
 #     service = 'Instances'
 #     gc3_config = GC3Config(atoml_config_dir=config_dir)
 #     idm_cfg = gc3_config.idm.domains[idm_domain]
-#     service_cfg = gc3_config.iaas_classic.services[service]
+#     service_cfg = gc3_config.iaas_classic.services.compute[service]
 #     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
 #     oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=open_api_specs_cfg, idm_cfg=idm_cfg)
 #     spec_file_path = oapi_spec.spec_file
@@ -106,7 +106,7 @@ def test_setup():
 #     service = 'Instances'
 #     gc3_config = GC3Config(atoml_config_dir=config_dir)
 #     idm_cfg = gc3_config.idm.domains[idm_domain]
-#     service_cfg = gc3_config.iaas_classic.services[service]
+#     service_cfg = gc3_config.iaas_classic.services.compute[service]
 #     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
 #     oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=open_api_specs_cfg, idm_cfg=idm_cfg)
 #     assert oapi_spec.name == service

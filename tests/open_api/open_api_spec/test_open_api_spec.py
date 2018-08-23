@@ -33,7 +33,7 @@ def test_setup():
 def test_init():
     service = 'Instances'
     gc3_config = GC3Config(atoml_config_dir=config_dir)
-    service_cfg = gc3_config.iaas_classic.services[service]
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
     open_api_specs_cfg = gc3_config.iaas_classic.open_api_specs
     idm_cfg = gc3_config.idm.domains.gc30003
     # oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=api_catalog_config)
@@ -46,7 +46,7 @@ def test_init_properties():
     service = 'Instances'
     gc3_config = GC3Config(atoml_config_dir=config_dir)
     idm_cfg = gc3_config.idm.domains[idm_domain]
-    service_cfg = gc3_config.iaas_classic.services[service]
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
     open_api_specs_cfg = gc3_config.iaas_classic.open_api_specs
     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
     oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=open_api_specs_cfg, idm_cfg=idm_cfg)
@@ -65,7 +65,7 @@ def test_get_spec():
     service = 'Instances'
     gc3_config = GC3Config(atoml_config_dir=config_dir)
     idm_cfg = gc3_config.idm.domains[idm_domain]
-    service_cfg = gc3_config.iaas_classic.services[service]
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
     open_api_specs_cfg = gc3_config.iaas_classic.open_api_specs
     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
     oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=open_api_specs_cfg, idm_cfg=idm_cfg)
@@ -73,7 +73,8 @@ def test_get_spec():
     assert oapi_spec._spec_data['schemes'] == ['https']
     bravado_core_spec = oapi_spec.get_swagger_spec(rest_endpoint=idm_cfg.rest_endpoint)
     assert bravado_core_spec.origin_url == idm_cfg.rest_endpoint
-    assert bravado_core_spec.spec_dict['info']['title'] == service
+    # assert bravado_core_spec.spec_dict['info']['title'] == service
+    assert bravado_core_spec.spec_dict['info']['title'] == service_cfg.title
 
 
 def test_get_spec_from_kwargs():
@@ -81,7 +82,7 @@ def test_get_spec_from_kwargs():
     service = 'Instances'
     gc3_config = GC3Config(atoml_config_dir=config_dir)
     idm_cfg = gc3_config.idm.domains[idm_domain]
-    service_cfg = gc3_config.iaas_classic.services[service]
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
     open_api_specs_cfg = gc3_config.iaas_classic.open_api_specs
     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
     # oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=api_catalog_config, rest_endpoint=idm_cfg.rest_endpoint)
@@ -98,7 +99,7 @@ def test_get_spec_from_kwargs():
 #     service = 'Instances'
 #     gc3_config = GC3Config(atoml_config_dir=config_dir)
 #     idm_cfg = gc3_config.idm.domains[idm_domain]
-#     service_cfg = gc3_config.iaas_classic.services[service]
+#     service_cfg = gc3_config.iaas_classic.services.compute[service]
 #     open_api_specs_cfg = gc3_config.iaas_classic.open_api_specs
 #     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
 #     oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=open_api_specs_cfg, idm_cfg=idm_cfg)
@@ -116,12 +117,12 @@ def test_check_spec_properties():
     service: str = 'Instances'
     gc3_config = GC3Config(atoml_config_dir=config_dir)
     idm_cfg = gc3_config.idm.domains[idm_domain]
-    service_cfg = gc3_config.iaas_classic.services[service]
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
     open_api_specs_cfg = gc3_config.iaas_classic.open_api_specs
     oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=open_api_specs_cfg, idm_cfg=idm_cfg)
     assert oapi_spec.name == service
     assert oapi_spec._spec_data['schemes'] == ['https']
-    assert oapi_spec.title == service
+    assert oapi_spec.title == service_cfg.title
     version_tupple = oapi_spec.version.split('.')
     assert version_tupple[0].isnumeric()
     assert service.lower() in oapi_spec.description
@@ -136,7 +137,27 @@ def test_check_spec_properties():
     assert operation_id_descrs
     assert 'deleteInstance' in operation_id_descrs
 
-#
+
+
+
+def test_get_paas_spec():
+    idm_domain = 'gc30003'
+    service = 'ServiceInstances'
+    service_cfg = gc3_cfg.paas_classic.services.database[service]
+    idm_cfg = gc3_cfg.idm.domains[idm_domain]
+    open_api_specs_cfg = gc3_cfg.paas_classic.open_api_specs
+    oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=open_api_specs_cfg, idm_cfg=idm_cfg)
+    assert oapi_spec.name == service
+    assert oapi_spec._spec_data['schemes'] == ['https']
+    bravado_core_spec = oapi_spec.get_swagger_spec(rest_endpoint=idm_cfg.rest_endpoint)
+    assert bravado_core_spec.origin_url == idm_cfg.rest_endpoint
+    assert bravado_core_spec.spec_dict['info']['title'] == service_cfg.title
+
+
+
+
+
+
 # @pytest.fixture()
 # def test_equality_setup():
 #     idm_domain = 'gc30003'
@@ -193,7 +214,7 @@ def test_check_spec_properties():
 #     service = 'Instances'
 #     gc3_config = GC3Config(atoml_config_dir=config_dir)
 #     idm_cfg = gc3_config.idm.domains[idm_domain]
-#     service_cfg = gc3_config.iaas_classic.services[service]
+#     service_cfg = gc3_config.iaas_classic.services.compute[service]
 #     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
 #     oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=open_api_specs_cfg, idm_cfg=idm_cfg)
 #     assert oapi_spec.name == service

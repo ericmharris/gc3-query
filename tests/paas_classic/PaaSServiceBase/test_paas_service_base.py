@@ -33,7 +33,7 @@ def test_setup():
 def setup_gc30003() -> Tuple[Dict[str, Any]]:
     service = 'ServiceInstances'
     idm_domain = 'gc30003'
-    service_cfg = gc3_cfg.paas_classic.services[service]
+    service_cfg = gc3_cfg.paas_classic.services.database[service]
     idm_cfg = gc3_cfg.idm.domains[idm_domain]
     assert service==service_cfg.name
     assert idm_domain==idm_cfg.name
@@ -110,7 +110,7 @@ def test_authentication(setup_gc30003):
 # def setup_preauthed_gc30003():
 #     service = 'ServiceInstances'
 #     idm_domain = 'gc30003'
-#     service_cfg = gc3_cfg.paas_classic.services[service]
+#     service_cfg = gc3_cfg.paas_classic.services.database[service]
 #     idm_cfg = gc3_cfg.idm.domains[idm_domain]
 #     http_client: PaaSRequestsHTTPClient = PaaSRequestsHTTPClient(idm_cfg=idm_cfg)
 #     assert service==service_cfg.name
@@ -154,7 +154,7 @@ def test_authentication(setup_gc30003):
 # def setup_gc30003_oapi_spec_catalog() -> Tuple[Dict[str, Any]]:
 #     service = 'ServiceInstances'
 #     idm_domain = 'gc30003'
-#     service_cfg = gc3_cfg.paas_classic.services[service]
+#     service_cfg = gc3_cfg.paas_classic.services.database[service]
 #     idm_cfg = gc3_cfg.idm.domains[idm_domain]
 #     assert service==service_cfg.name
 #     assert idm_domain==idm_cfg.name
@@ -180,7 +180,7 @@ def test_authentication(setup_gc30003):
 #     spec_file_name = 'SecRules_string_type.json'
 #     spec_file = spec_files_dir.joinpath(spec_file_name)
 #     assert spec_file.exists()
-#     service_cfg = gc3_cfg.paas_classic.services[service]
+#     service_cfg = gc3_cfg.paas_classic.services.database[service]
 #     idm_cfg = gc3_cfg.idm.domains[idm_domain]
 #     with spec_file.open() as fd:
 #         spec_dict = json.load(fp=fd)
