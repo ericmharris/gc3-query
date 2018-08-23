@@ -25,7 +25,7 @@ from bravado_core.spec import Spec
 from gc3_query.lib import *
 from gc3_query.lib import gc3_cfg
 from gc3_query.lib.gc3_config import GC3Config
-from gc3_query.lib.base_collections import OrderedDictAttrBase
+from gc3_query.lib.base_collections import OrderedDictAttrBase, NestedOrderedDictAttrListBase
 ## TODO: either change or add a snake_case function for camelCase
 from gc3_query.lib.iaas_classic.iaas_requests_http_client import IaaSRequestsHTTPClient
 from gc3_query.lib.iaas_classic.iaas_swagger_client import IaaSSwaggerClient, BRAVADO_CONFIG
@@ -43,15 +43,15 @@ _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
 class IaaSServiceBase(GC3VersionTypedMixin):
-    idm_cfg: DictStrAny
-    service_cfg: DictStrAny
+    idm_cfg: NestedOrderedDictAttrListBase
+    service_cfg: NestedOrderedDictAttrListBase
     from_url: bool
-    gc3_cfg: GC3Config
+    gc3_cfg: NestedOrderedDictAttrListBase
     open_api_specs_cfg: GC3Config = gc3_cfg.iaas_classic.open_api_specs
 
     def __init__(self,
-                 service_cfg: DictStrAny,
-                 idm_cfg: DictStrAny,
+                 service_cfg: NestedOrderedDictAttrListBase,
+                 idm_cfg: NestedOrderedDictAttrListBase,
                  http_client: Union[IaaSRequestsHTTPClient, None] = None,
                  from_url: Optional[bool] = False,
                  storage_delegates: Optional[List[str]]= None,
@@ -82,12 +82,25 @@ class IaaSServiceBase(GC3VersionTypedMixin):
         self.kwargs.update(kwargs)
 
 
-        self.oapi_spec_catalog = OpenApiSpecCatalog(api_catalog_config=gc3_cfg.iaas_classic.open_api_spec_catalog,
-                                                    services_config=gc3_cfg.iaas_classic.services,
-                                                    idm_cfg=self.idm_cfg,
-                                                    from_url=from_url)
+        # self.oapi_spec_catalog = OpenApiSpecCatalog(api_catalog_config=gc3_cfg.iaas_classic.open_api_spec_catalog,
+        #                                             services_config=gc3_cfg.iaas_classic.services,
+        #                                             idm_cfg=self.idm_cfg,
+        #                                             from_url=from_url)
         # self.open_api_spec: OpenApiSpec = kwargs['swagger_spec'] if 'swagger_spec' in kwargs else self.oapi_spec_catalog[self.service_name]
-        self.open_api_spec: OpenApiSpec = self.oapi_spec_catalog[self.service_name]
+        # self.open_api_spec: OpenApiSpec = self.oapi_spec_catalog[self.service_name]
+
+        #### OpenApiSpec init
+        # gc3_config = GC3Config(atoml_config_dir=config_dir)
+        # service_cfg = gc3_config.iaas_classic.services[service]
+        # open_api_specs_cfg = gc3_config.iaas_classic.open_api_specs
+        # idm_cfg = gc3_config.idm.domains.gc30003
+        # # oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=api_catalog_config)
+        # oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=open_api_specs_cfg, idm_cfg=idm_cfg)
+
+        self.open_api_spec: OpenApiSpec = OpenApiSpec(service_cfg=self.service_cfg,
+                                                      open_api_specs_cfg=self.open_api_specs_cfg,
+                                                      idm_cfg=self.idm_cfg)
+
         self._spec_dict: DictStrAny = kwargs.get('spec_dict', False) or self.open_api_spec.spec_dict
         self._swagger_spec: Spec = kwargs.get('swagger_spec', None)
 
