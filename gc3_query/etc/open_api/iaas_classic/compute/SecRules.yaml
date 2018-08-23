@@ -430,11 +430,11 @@ definitions:
                     type: string
                 type: array
     SecRule-list-response:
-        title: SecRule List Response
+        title: SecRule-list-response
         type: object
         properties:
             result:
-                type: object
+                type: array
                 items:
                     $ref: '#/definitions/SecRule-response'
     SecRule-post-request:
@@ -536,7 +536,7 @@ definitions:
                     the prefix <code>seclist</code>: or <code>seciplist</code>: to
                     identify the list type.'
     SecRule-response:
-        title: SecRule Response
+        title: SecRule-response
         type: object
         properties:
             action:
@@ -578,6 +578,15 @@ definitions:
             uri:
                 type: string
                 description: Uniform Resource Identifier
+            id:
+                type: string
+                description: id
+            dst_is_ip:
+                type: string
+                description: 'Is the destination an IP'
+            src_is_ip:
+                type: string
+                description: 'Is the source an IP'
 tags:
 -   name: SecRules
     description: A security rule defines network access over a specified protocol

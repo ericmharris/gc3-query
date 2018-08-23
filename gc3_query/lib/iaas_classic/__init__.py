@@ -72,6 +72,7 @@ class IaaSServiceBase(GC3VersionTypedMixin):
         self.storage_delegates = storage_delegates
 
         self.bravado_config: DictStrAny = gc3_cfg.bravado.client_config.as_dict()
+        self.bravado_config.update(gc3_cfg.bravado.core_config.as_dict())
 
         if kwargs.get('spec_dict', False) and kwargs.get('swagger_spec', False):
             raise RuntimeError(f"Supplying both a spec_dict and swagger_spec not allowed")
