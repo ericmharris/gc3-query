@@ -39,6 +39,7 @@ from gc3_query.lib.utils import camelcase_to_snake
 
 
 from gc3_query.lib import get_logging
+
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
@@ -54,7 +55,7 @@ class IaaSServiceBase(GC3VersionTypedMixin):
                  idm_cfg: NestedOrderedDictAttrListBase,
                  http_client: Union[IaaSRequestsHTTPClient, None] = None,
                  from_url: Optional[bool] = False,
-                 storage_delegates: Optional[List[str]]= None,
+                 storage_delegates: Optional[List[str]] = None,
                  **kwargs: DictStrAny):
         """
 
@@ -74,13 +75,12 @@ class IaaSServiceBase(GC3VersionTypedMixin):
 
         if kwargs.get('spec_dict', False) and kwargs.get('swagger_spec', False):
             raise RuntimeError(f"Supplying both a spec_dict and swagger_spec not allowed")
-        self.kwargs = {'swagger_spec': None,            #  bravado_core.spec.Spec
-                       'mock_version': None,            # Used for unit tests,
-                       'skip_authentication': None,    #  self.http_client won't authenticate against the IDM
-                       'spec_dict': None,               #  Spec values
+        self.kwargs = {'swagger_spec': kwargs.get('swagger_spec', False),  # bravado_core.spec.Spec
+                       'mock_version': kwargs.get('mock_version', False),  # Used for unit tests,
+                       'skip_authentication': kwargs.get('skip_authentication', False),  # self.http_client won't authenticate against the IDM
+                       'spec_dict': kwargs.get('spec_dict', False),  # Spec values
                        }
         self.kwargs.update(kwargs)
-
 
         # self.oapi_spec_catalog = OpenApiSpecCatalog(api_catalog_config=gc3_cfg.iaas_classic.open_api_spec_catalog,
         #                                             services_config=gc3_cfg.iaas_classic.services,
@@ -104,9 +104,9 @@ class IaaSServiceBase(GC3VersionTypedMixin):
         self._spec_dict: DictStrAny = kwargs.get('spec_dict', False) or self.open_api_spec.spec_dict
         self._swagger_spec: Spec = kwargs.get('swagger_spec', None)
 
-
-
-        self.http_client = http_client if http_client else IaaSRequestsHTTPClient(idm_cfg=self.idm_cfg, skip_authentication=self.kwargs.get('skip_authentication', False))
+        self.http_client = http_client if http_client else IaaSRequestsHTTPClient(idm_cfg=self.idm_cfg,
+                                                                                  skip_authentication=self.kwargs.get('skip_authentication',
+                                                                                                                      False))
         # if self._swagger_spec:
         #     # self.swagger_client = IaaSSwaggerClient(swagger_spec=self._swagger_spec, also_return_response=self.bravado_config['also_return_response'])
         #     self.swagger_client = IaaSSwaggerClient.from_spec(spec_dict=self.spec_dict,
@@ -121,10 +121,10 @@ class IaaSServiceBase(GC3VersionTypedMixin):
         #                                                   config=self.bravado_config
         #                                                   )
         self.swagger_client = IaaSSwaggerClient.from_spec(spec_dict=self.spec_dict,
-                                                      origin_url=self.idm_cfg.rest_endpoint,
-                                                      http_client=self.http_client,
-                                                      config=self.bravado_config
-                                                      )
+                                                          origin_url=self.idm_cfg.rest_endpoint,
+                                                          http_client=self.http_client,
+                                                          config=self.bravado_config
+                                                          )
 
         # This is the container from Bravado.client (SwaggerClient module) that holds CallableOperation created using the spec
         self.bravado_service_operations = getattr(self.swagger_client, service_cfg['service_name'])
@@ -235,7 +235,6 @@ class IaaSServiceBase(GC3VersionTypedMixin):
         # return self.get_idm_user_container_name(cloud_username=gc3_cfg.user.cloud_username)
         return f"{self.idm_root_container_name}/{gc3_cfg.user.cloud_username}"
 
-
     @property
     def idm_root_container_name(self) -> str:
         """Return IDM container name used in multi-part naming (eg. Compute-587626604)
@@ -243,6 +242,3 @@ class IaaSServiceBase(GC3VersionTypedMixin):
         :return:
         """
         return f"Compute-{self.idm_cfg.service_instance_id}"
-
-
-
