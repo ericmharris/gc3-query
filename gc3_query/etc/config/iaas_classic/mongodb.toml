@@ -1,0 +1,30 @@
+[iaas_classic.mongodb]
+__descr__ = 'MongoDB setup data'
+db_name = 'iaas_classic'
+db_alias = 'IaaS'
+
+[iaas_classic.mongodb.security]
+username = 'gc3user'
+password = 'keyring'
+
+[iaas_classic.mongodb.net]
+listen_port = 7117
+listen_address = '127.0.0.1'
+use_ssl = false
+use_auth = false
+
+[iaas_classic.mongodb.storage]
+directory_per_db = true
+db_path = '{{gc3_query.gc3_query_home}}\var\mongodb\data'
+db_fpath: fstr = '{BASE_DIR}\var\mongodb\data'
+[iaas_classic.mongodb.storage.journal]
+enabled = true
+
+[iaas_classic.mongodb.system_log]
+destination = 'file'
+service_path = '{{gc3_query.gc3_query_home}}\var\mongodb\logs\mongo-service.log'
+service_fpath: fstr = '{BASE_DIR}\var\mongodb\logs\mongo-service.log'
+cmd_path = '{{gc3_query.gc3_query_home}}\var\mongodb\logs\mongo-cmd.log'
+cmd_fpath: fstr = '{BASE_DIR}\var\mongodb\logs\mongo-cmd.log'
+log_append = true
+
