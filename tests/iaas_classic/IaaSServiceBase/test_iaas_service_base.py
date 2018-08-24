@@ -60,6 +60,11 @@ def test_authentication(setup_gc30003):
     assert iaas_service_base.http_client.auth_cookie_header is not None
     assert 'nimbula' in iaas_service_base.http_client.auth_cookie_header['Cookie']
 
+def test_get_rest_endpoint(setup_gc30003):
+    service_cfg, idm_cfg = setup_gc30003
+    iaas_service_base = IaaSServiceBase(service_cfg=service_cfg, idm_cfg=idm_cfg)
+    assert iaas_service_base.rest_endpoint=='https://compute.uscom-central-1.oraclecloud.com'
+
 
 def test_service_call(setup_gc30003):
     service_cfg, idm_cfg = setup_gc30003

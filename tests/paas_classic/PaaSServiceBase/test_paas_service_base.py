@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pytest
 from bravado_core.spec import Spec
+from bravado.response import  BravadoResponse, BravadoResponseMetadata
 
 from gc3_query.lib import gc3_cfg
 from gc3_query.lib import *
@@ -46,24 +47,42 @@ def test_init(setup_gc30003):
     assert paas_service_base.http_client.skip_authentication==False
     assert paas_service_base.http_client.authenticated
     assert paas_service_base.http_client.idm_domain_name==idm_cfg.name
-    
+
+def test_get_rest_endpoint(setup_gc30003):
+    service_cfg, idm_cfg = setup_gc30003
+    paas_service_base = PaaSServiceBase(service_cfg=service_cfg, idm_cfg=idm_cfg)
+    assert paas_service_base.rest_endpoint=='https://dbaas.oraclecloud.com/'
+    assert paas_service_base.http_client.authenticated
+
 
 
 def test_bravado_service_call(setup_gc30003):
     service_cfg, idm_cfg = setup_gc30003
     paas_service_base = PaaSServiceBase(service_cfg=service_cfg, idm_cfg=idm_cfg)
     assert paas_service_base.http_client.authenticated
-    http_future = paas_service_base.bravado_service_operations.getDomain(identityDomainId=idm_cfg.name)
-    service_response = http_future.response()
-    assert service_response.metadata.status_code==200
-    assert "/Compute-" in service_response.result
+    http_future = paas_service_base.bravado_service_operations.getDomain(identityDomainId=idm_cfg.name,
+                                                                         _request_options={"headers":paas_service_base.http_client.authentication_headers})
+    service_response: BravadoResponse = http_future.response()
+    assert service_response
+    result = service_response.result
+    metadata: BravadoResponseMetadata = service_response.metadata
+    assert metadata.status_code==200
+    assert len(result.services) > 0
 
 
 
 
-
-
-
+def test_service_call(setup_gc30003):
+    service_cfg, idm_cfg = setup_gc30003
+    paas_service_base = PaaSServiceBase(service_cfg=service_cfg, idm_cfg=idm_cfg)
+    assert paas_service_base.http_client.authenticated
+    http_future = paas_service_base.service_operations.get_domain(identityDomainId=idm_cfg.name)
+    service_response: BravadoResponse = http_future.response()
+    assert service_response
+    result = service_response.result
+    metadata: BravadoResponseMetadata = service_response.metadata
+    assert metadata.status_code==200
+    assert len(result.services) > 0
 
 
 

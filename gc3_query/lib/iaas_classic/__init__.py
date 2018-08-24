@@ -21,6 +21,7 @@ from functools import partial
 ## Third-Party Imports
 
 from bravado.client import ResourceDecorator
+from bravado.response import  BravadoResponse, BravadoResponseMetadata
 from bravado_core.spec import Spec
 from bravado.requests_client import RequestsClient
 
@@ -123,8 +124,14 @@ class IaaSServiceBase(GC3VersionTypedMixin):
         #                                                   http_client=self.http_client,
         #                                                   config=self.bravado_config
         #                                                   )
+
+        # self.swagger_client = IaaSSwaggerClient.from_spec(spec_dict=self.spec_dict,
+        #                                                   origin_url=self.idm_cfg.rest_endpoint,
+        #                                                   http_client=self.http_client,
+        #                                                   config=self.bravado_config
+        #                                                   )
+
         self.swagger_client = IaaSSwaggerClient.from_spec(spec_dict=self.spec_dict,
-                                                          origin_url=self.idm_cfg.rest_endpoint,
                                                           http_client=self.http_client,
                                                           config=self.bravado_config
                                                           )
@@ -132,7 +139,7 @@ class IaaSServiceBase(GC3VersionTypedMixin):
         # This is the container from Bravado.client (SwaggerClient module) that holds CallableOperation created using the spec
 
         # self.bravado_service_operations = getattr(self.swagger_client, service_cfg['service_name'])
-        self.bravado_service_operations = self.get_bravado_service_operations(swagger_client=self.swagger_client, service_cfg=self.service_cfg)
+        self.bravado_service_operations = self._find_bravado_service_operations(swagger_client=self.swagger_client, service_cfg=self.service_cfg)
 
         # This is populated with the CallableOperations from service_resources but the names are converted
         # from camelCase to python/snake-case (eg. discover_root_instance vs. discoverRootInstance)
@@ -184,7 +191,11 @@ class IaaSServiceBase(GC3VersionTypedMixin):
         descr = self.spec_dict['info']['description']
         return descr
 
-    def get_bravado_service_operations(self, swagger_client, service_cfg: NestedOrderedDictAttrListBase):
+    @property
+    def rest_endpoint(self):
+        return self.open_api_spec.rest_endpoint
+
+    def _find_bravado_service_operations(self, swagger_client, service_cfg: NestedOrderedDictAttrListBase):
         resource_decorator_name = dir(swagger_client).pop() if dir(swagger_client) else None
         if not resource_decorator_name:
             raise RuntimeError(f"Failed to find resource_decorator_name for {self}")

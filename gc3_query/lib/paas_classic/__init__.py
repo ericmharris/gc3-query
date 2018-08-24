@@ -15,6 +15,7 @@
 
 ################################################################################
 ## Standard Library Imports
+from copy import deepcopy
 
 ################################################################################
 ## Third-Party Imports
@@ -45,7 +46,7 @@ class PaaSServiceBase(IaaSServiceBase):
         super().__init__( service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client, from_url=from_url, storage_delegates=storage_delegates , **kwargs)
         _debug(f"{self.name} created")
 
-    def get_bravado_service_operations(self, swagger_client, service_cfg: NestedOrderedDictAttrListBase):
+    def _find_bravado_service_operations(self, swagger_client, service_cfg: NestedOrderedDictAttrListBase):
         resource_decorator_name = dir(swagger_client).pop() if dir(swagger_client) else None
         if not resource_decorator_name:
             raise RuntimeError(f"Failed to find resource_decorator_name for {self}")
@@ -62,9 +63,13 @@ class PaaSServiceBase(IaaSServiceBase):
         for service_operation_name in dir(bravado_service_operations):
             so_camel_name = camelcase_to_snake(service_operation_name)
             service_operation = getattr(bravado_service_operations, service_operation_name)
+            # operation_headers = {"Accept": ','.join(service_operation.operation.produces),
+            #                      "Content-Type": ','.join(service_operation.operation.consumes)
+            #                      }
             operation_headers = {"Accept": ','.join(service_operation.operation.produces),
                                  "Content-Type": ','.join(service_operation.operation.consumes)
                                  }
+            operation_headers.update(self.http_client.authentication_headers)
             # partial_service_operation = partial(service_operation, _request_options={"headers": {"Accept": "application/oracle-compute-v3+directory+json"}})
             partial_service_operation = partial(service_operation, _request_options={"headers": operation_headers})
             so[so_camel_name] = partial_service_operation

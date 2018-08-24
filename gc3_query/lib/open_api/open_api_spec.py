@@ -18,6 +18,8 @@
 import yaml
 import json
 import toml
+from urllib.parse import urlparse, ParseResult
+from copy import deepcopy
 from bravado.swagger_model import load_file, load_url
 from bravado_core.spec import Spec
 ################################################################################
@@ -224,7 +226,17 @@ class OpenApiSpec(GC3VersionTypedMixin):
 
     @property
     def spec_dict(self):
-        return self._spec_dict
+        """Return a spec_dict updated with correct host, etc. for this service
+
+        :return:
+        """
+        rest_parse_result: ParseResult = urlparse(self.rest_endpoint)
+        updated_spec_dict = deepcopy(self._spec_dict)
+        updated_spec_dict['host'] = rest_parse_result.netloc
+        # if 'tags' not in updated_spec_dict:
+        #     updated_spec_dict['tags'] = []
+        # updated_spec_dict['tags'].append('gc3')
+        return updated_spec_dict
 
     @property
     def rest_endpoint(self):
