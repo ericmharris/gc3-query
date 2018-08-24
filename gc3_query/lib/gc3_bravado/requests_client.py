@@ -8,6 +8,7 @@ from bravado.requests_client import RequestsClient
 from gc3_query.lib import *
 from gc3_query.lib import get_logging
 
+from gc3_query.lib import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 

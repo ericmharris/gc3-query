@@ -22,12 +22,14 @@ from urllib.parse import unquote_plus
 
 from bravado.requests_client import RequestsClient, BasicAuthenticator
 from requests.auth import HTTPBasicAuth
+from requests.auth import _basic_auth_str
 
 ################################################################################
 ## Project Imports
 from gc3_query.lib import *
 from gc3_query.lib import gc3_cfg
 
+from gc3_query.lib import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 

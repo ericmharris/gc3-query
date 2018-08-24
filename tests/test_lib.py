@@ -3,7 +3,7 @@
 
 """Tests for `gc3_query` package."""
 
-from gc3_query import BASE_DIR
+from gc3_query.lib import gc3_cfg
 
 
 def test_base_dir():

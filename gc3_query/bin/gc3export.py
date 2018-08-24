@@ -26,6 +26,7 @@ import click
 ## Project Imports
 from gc3_query.lib import gc3_cfg
 
+from gc3_query.lib import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 CONTEXT_SETTINGS = dict(

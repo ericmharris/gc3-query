@@ -206,7 +206,7 @@ class BooleanString:
         self._as_boolean = self.str_to_bool[from_wire.lower()]
         _debug(f'created')
         # if self.validate(boolish):
-        #     self.as_boolean = self.boolean_string_values[boolish]
+        #     self.as_boolean = self.json_bool_values[boolish]
         # if self.boolish_literal != self.boolish:
         #     _warning(f"case sensitive data passed, self.boolish_literal={self.boolish_literal}")
 
@@ -216,7 +216,7 @@ class BooleanString:
         try:
             as_boolean = cls.str_to_bool[from_wire.lower()]
         except KeyError:
-            raise SwaggerValidationError(f"Value={from_wire} not recognized as BooleanString")
+            raise SwaggerValidationError(f"Value={from_wire} not recognized as JsonBool")
         return isinstance(as_boolean, bool)
 
     def __bool__(self):
@@ -242,12 +242,12 @@ class BooleanString:
         return _str_to_python
 
 
-boolean_string_format = SwaggerFormat(
+json_bool_format = SwaggerFormat(
     # name of the format as used in the Swagger spec
-    format='boolean_string',
+    format='json_bool',
 
     # Callable to convert a python object to_wire representations
-    to_wire=lambda boolean_string_instance: boolean_string_instance.as_wire,
+    to_wire=lambda json_bool_instance: json_bool_instance.as_wire,
 
     # Callable to convert a from_wire to a python object
     to_python=lambda s: BooleanString(s),
@@ -258,7 +258,7 @@ boolean_string_format = SwaggerFormat(
 )
 
 
-formats.append(boolean_string_format)
+formats.append(json_bool_format)
 
 
 # ## Datetime Formats
@@ -494,11 +494,11 @@ client = SwaggerClient.from_spec(spec_dict=dbcs_spec_dict, origin_url=rest_endpo
 # In[28]:
 
 
-print(f"user_defined_formats=[{client.swagger_spec.user_defined_formats}]")
+print(f"user_defined_formats=[{client.spec.user_defined_formats}]")
 print(client.swagger_spec.origin_url)
 print(client.swagger_spec.api_url)
-print(f"bravado_config=[{client.swagger_spec.config['bravado']}]")
-print(f"schemes=[{client.swagger_spec.client_spec_dict['schemes']}]")
+print(f"bravado_config=[{client.spec.config['bravado']}]")
+print(f"schemes=[{client.spec.client_spec_dict['schemes']}]")
 
 
 # In[29]:

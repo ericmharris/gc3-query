@@ -1,4 +1,5 @@
 file.dat	binary
 *.zip		binary
 *.gz		binary
+*.jar		binary
 

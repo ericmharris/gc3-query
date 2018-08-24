@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-#@Filename : test_boolean_string
+#@Filename : test_json_bool
 #@Date : [8/13/2018 7:29 PM]
 #@Poject: gc3-query
 #@AUTHOR : emharris
@@ -23,15 +23,16 @@
 ################################################################################
 ## Project Imports
 from gc3_query.lib.iaas_classic.iaas_swagger_client import BRAVADO_CORE_CONFIG
-from gc3_query.lib.open_api.swagger_formats.boolean_string import BooleanString
+from gc3_query.lib.open_api.swagger_formats.json_bool import JsonBool
 
+from gc3_query.lib import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
-from gc3_query import BASE_DIR
+from gc3_query.lib import gc3_cfg
 
 TEST_BASE_DIR: Path = Path(__file__).parent
 # config_dir = TEST_BASE_DIR.joinpath("config")
-config_dir = BASE_DIR.joinpath("etc/config")
+config_dir = gc3_cfg.BASE_DIR.joinpath("etc/config")
 output_dir = TEST_BASE_DIR.joinpath('output')
 
 from gc3_query.lib.gc3_config import GC3Config
@@ -56,7 +57,7 @@ from bravado_core.param import marshal_param
 
 def test_setup():
     assert TEST_BASE_DIR.exists()
-    assert API_SPECS_DIR.exists()
+    # assert API_SPECS_DIR.exists()
     if not config_dir.exists():
         config_dir.mkdir()
     if not output_dir.exists():
@@ -64,12 +65,12 @@ def test_setup():
 
 
 
-def test_boolean_string_class():
-    bs_true = BooleanString(from_wire='true')
+def test_json_bool_class():
+    bs_true = JsonBool(from_wire='true')
     assert bs_true.validate(bs_true.boolish)
     assert bs_true.as_boolean==True
 
-    bs_false = BooleanString(from_wire='false')
+    bs_false = JsonBool(from_wire='false')
     assert bs_false.validate(bs_false.boolish)
     assert bs_false.as_boolean==False
 
@@ -83,9 +84,9 @@ def test_swagger_format():
     sec_rules = SecRules(service_cfg=secrules_service_cfg, idm_cfg=idm_cfg, from_url=True)
     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
     sec_rules_service_cfg = gc3_config.iaas_classic.services[secrules_service]
-    sec_rules_oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=sec_rules_service_cfg, idm_cfg=idm_cfg)
+    sec_rules_oapi_spec = OpenApiSpec(service_cfg=sec_rules_service_cfg, open_api_specs_cfg=api_catalog_config, idm_cfg=idm_cfg)
     assert sec_rules_oapi_spec.name == secrules_service
-    assert sec_rules_oapi_spec.spec_data['schemes'] == ['https']
+    assert sec_rules_oapi_spec._spec_data['schemes'] == ['https']
     assert sec_rules_oapi_spec.title==secrules_service
 
     # Retrieve the swagger spec from the server and json.load() it
@@ -109,11 +110,11 @@ def test_swagger_format():
     src_is_ip_param = op.params.get('src_is_ip')
 
     # Create a CIDR object - to_wire() will be called on this during marshalling
-    boolean_string_object = BooleanString(from_wire='true')
+    json_bool_object = JsonBool(from_wire='true')
     request_dict = {'params':{}}
 
     # Marshal the cidr_object into the request_dict.
-    marshal_param(dst_is_ip_param, boolean_string_object, request_dict)
+    marshal_param(dst_is_ip_param, json_bool_object, request_dict)
 
     # Lots of hand-wavey stuff here - use whatever http client you have to
     # send the request and receive a response

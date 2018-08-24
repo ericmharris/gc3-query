@@ -1,7 +1,8 @@
 from pathlib import Path
+from requests.auth import _basic_auth_str
 
 import pytest
-
+from bravado_core.formatter import SwaggerFormat, NO_OP
 from gc3_query.lib.gc3_config import GC3Config, IDMCredential
 
 TEST_BASE_DIR: Path = Path(__file__).parent.joinpath("GC3Config")
@@ -46,13 +47,22 @@ def test_load_atoml_files_individually(get_credential_setup):
     check_credential = gc3_config.get_credential(idm_domain_name='gc3test')
     assert check_credential==credential
 
+def test_credential_basic_auth(get_credential_setup):
+    credential = get_credential_setup
+    credential_expected_basic_auth =_basic_auth_str('eric.harris@oracle.com', '123Welcome')
+    gc3_config = GC3Config()
+    check_credential = gc3_config.get_credential(idm_domain_name='gc30003')
+    assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
+    assert check_credential.idm_domain_name=='gc30003'
+    assert check_credential.basic_auth_str.startswith('Basic')
+    assert check_credential.basic_auth_str != credential.basic_auth_str
+
 
 def test_get_main_credential():
     gc3_config = GC3Config()
     check_credential = gc3_config.get_credential(idm_domain_name='gc30003')
     assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
     assert check_credential.idm_domain_name=='gc30003'
-
 
 @pytest.fixture()
 def get_bravado_config_setup():
@@ -103,3 +113,28 @@ def test_bravado_config(get_bravado_config_setup):
     assert isinstance(bravado_config, dict)
     assert isinstance(bravado_config['formats'], list)
 
+
+@pytest.fixture()
+def get_constants_setup():
+    gc3_config = GC3Config()
+    assert 'iaas_classic' in gc3_config
+    yield (gc3_config)
+
+def test_open_api_catalog_dir(get_constants_setup):
+    gc3_config = get_constants_setup
+    open_api_catalog_dir = gc3_config.OPEN_API_CATALOG_DIR
+    assert open_api_catalog_dir
+
+def test_BRAVADO_CONFIG(get_constants_setup):
+    gc3_config = get_constants_setup
+    bravado_config = gc3_config.BRAVADO_CONFIG
+    assert bravado_config
+    assert 'formats' in bravado_config
+    assert 'include_missing_properties' in bravado_config
+    assert 'also_return_response' in bravado_config
+    assert isinstance(bravado_config, dict)
+    assert isinstance(bravado_config['formats'], list)
+    assert bravado_config['formats']
+    formats = [f.format for f in bravado_config['formats']]
+    assert 'json-bool' in formats
+    assert all([isinstance(i , SwaggerFormat) for i in bravado_config['formats']])

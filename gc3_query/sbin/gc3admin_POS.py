@@ -9,6 +9,7 @@ from gc3_query.lib.cookie_cutter.setup_home_kitty import SetupHomeKitty
 from gc3_query.lib.cookie_cutter.setup_mongodb import SetupMongoDB
 from gc3_query.lib.gc3admin.gc3admin import *
 
+from gc3_query.lib import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 CONTEXT_SETTINGS = dict(

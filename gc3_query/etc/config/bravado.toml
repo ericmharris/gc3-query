@@ -57,5 +57,5 @@ internally_dereference_refs = false
 # addition to the swagger_formats already supported by the Swagger 2.0
 # Specification.
 # 'swagger_formats': [],
-# formats = [boolean_string]
-
+# formats = [json_bool]
+formats = []

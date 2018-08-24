@@ -1,0 +1,18 @@
+[mongodb]
+__descr__ = 'MongoDB setup data'
+
+[mongodb.net]
+listen_port = 7117
+listen_address = '127.0.0.1'
+
+[mongodb.storage]
+directory_per_db = true
+db_path = '{{gc3_query.gc3_query_home}}\var\mongodb\data'
+[mongodb.storage.journal]
+enabled = true
+
+[mongodb.system_log]
+destination = 'file'
+path = '{{gc3_query.gc3_query_home}}\var\mongodb\logs\mongo-service.log'
+log_append = true
+

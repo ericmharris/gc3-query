@@ -15,9 +15,11 @@
 
 ################################################################################
 ## Standard Library Imports
+import yaml
 import json
-
 import toml
+from urllib.parse import urlparse, ParseResult
+from copy import deepcopy
 from bravado.swagger_model import load_file, load_url
 from bravado_core.spec import Spec
 ################################################################################
@@ -32,8 +34,9 @@ from gc3_query.lib import *
 from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
 from gc3_query.lib.iaas_classic.iaas_swagger_client import BRAVADO_CONFIG
 from gc3_query.lib.signatures import GC3VersionTypedMixin
-from . import OPEN_API_CATALOG_DIR
+# from . import OPEN_API_CATALOG_DIR
 
+from gc3_query.lib import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
@@ -55,170 +58,194 @@ class OperationIdDescr():
 #     path: str
 
 
+# class OpenApiSpec():
 class OpenApiSpec(GC3VersionTypedMixin):
-
-    def __init__(self, api_catalog_config: DictStrAny,
-                 service_cfg: Dict[str, Any],
-                 from_url: Optional[bool] = False,
-                 idm_cfg: Optional[DictStrAny] = None,
-                 **kwargs):
-        self.api_catalog_config = api_catalog_config
+    def __init__(self, service_cfg: Union[NestedOrderedDictAttrListBase, DictStrAny],
+                 open_api_specs_cfg: Union[NestedOrderedDictAttrListBase, DictStrAny],
+                 idm_cfg: Optional[Union[NestedOrderedDictAttrListBase, DictStrAny]] = None, **kwargs):
         self.service_cfg = service_cfg
+        self.open_api_specs_cfg = open_api_specs_cfg
         self.idm_cfg = idm_cfg
         self.name = service_cfg.name
+        self._title = service_cfg.title
+        self.api_collection_name = service_cfg.api_collection_name
+        self.api_version = service_cfg.api_version
 
         self.kwargs = {'rest_endpoint': None,   #
                        'mock_version': None,    # Used for unit tests,
                        }
         self.kwargs.update(kwargs)
+
         #  The ultimate form of the Spec depends on the specific REST Endpoint of a given IDM domain which differs from the API Catalog.
-        self.rest_endpoint = kwargs.get('rest_endpoint', None)
-        if not self.rest_endpoint:
-            self.rest_endpoint = idm_cfg['rest_endpoint'] if idm_cfg else self.rest_endpoint
+        # self.rest_endpoint = kwargs.get('rest_endpoint', None)
+        # if not self.rest_endpoint:
+        #     self.rest_endpoint = idm_cfg['rest_endpoint'] if idm_cfg else self.rest_endpoint
 
-        self.spec_dir: Path = OPEN_API_CATALOG_DIR.joinpath(api_catalog_config.api_catalog_name).joinpath(service_cfg.service_name)
-        self.spec_file: Path = self.spec_dir.joinpath(f"{service_cfg.service_name}.json")
+        self.spec_dir: Path = gc3_cfg.OPEN_API_SPEC_BASE.joinpath(open_api_specs_cfg.cloud_service_name, service_cfg.api_collection_name)
+        self.spec_file: Path = self.spec_dir.joinpath(f"{service_cfg.name}.{open_api_specs_cfg.file_format}")
+        self.spec_export_dir: Path = gc3_cfg.BASE_DIR.joinpath(gc3_cfg.open_api.export.export_dir,  self.open_api_specs_cfg.cloud_service_name, service_cfg.api_collection_name)
+        self._spec_dict = yaml.load(self.spec_file.open())
+        self._spec_data = NestedOrderedDictAttrListBase(mapping=self._spec_dict)
 
-        self.spec_overlay_format = gc3_cfg.open_api.open_api_spec_overlay.spec_overlay_format
-        self.spec_overlay_export_formatting = gc3_cfg[self.spec_overlay_format]['export']['formatting']
-        self.spec_overlay_file: Path = self.spec_dir.joinpath(f"{self.service_cfg.service_name}_overlay.{self.spec_overlay_format}")
+        # self._specdict = NestedOrderedDictAttrListBase(mapping=self._overlaid_spec_dict)
+        # self.spec_data = NestedOrderedDictAttrListBase(mapping=self._overlaid_spec_dict)
 
-        self._vanilla_spec_dict = self.load_spec(from_url=from_url)
-        self._overlaid_spec_dict = MeldDict(self._vanilla_spec_dict)
-
+        # self.spec_overlay_format = gc3_cfg.open_api.open_api_spec_overlay.spec_overlay_format
+        # self.spec_overlay_export_formatting = gc3_cfg[self.spec_overlay_format]['export']['formatting']
+        # self.spec_overlay_file: Path = self.spec_dir.joinpath(f"{self.service_cfg.service_name}_overlay.{self.spec_overlay_format}")
+        #
+        # self._vanilla_spec_dict = self.load_spec(from_url=from_url)
+        # self._overlaid_spec_dict = MeldDict(self._vanilla_spec_dict)
 
         # self.spec_dict = self.create_api_spec(spec_dict=self._spec_dict)
-        # self.api_spec_overlay = OpenApiSpecOverlay(open_api_spec=self, idm_cfg=self.idm_cfg)
-        if not self.spec_overlay_file.exists():
-            _ = self.create_spec_overlay_file(file_path=self.spec_overlay_file)
-        self.spec_overlays: MeldDict = self.load_spec_overlay_file()
-        self.spec_deletions: MeldDict = MeldDict(self.api_catalog_config.open_api_spec_deletions)
+        # # self.api_spec_overlay = OpenApiSpecOverlay(open_api_spec=self, idm_cfg=self.idm_cfg)
+        # if not self.spec_overlay_file.exists():
+        #     _ = self.create_spec_overlay_file(file_path=self.spec_overlay_file)
+        # self.spec_overlays: MeldDict = self.load_spec_overlay_file()
+        # self.spec_deletions: MeldDict = MeldDict(self.api_catalog_config.open_api_spec_deletions)
+        #
+        # ## Adding the default overlays gave schemes: ['http', 'https']
+        # self._overlaid_spec_dict.subtract(self.spec_deletions)
+        # self._overlaid_spec_dict.add(self.spec_overlays)
+        # self.spec_data = NestedOrderedDictAttrListBase(mapping=self._overlaid_spec_dict)
 
-        ## Adding the default overlays gave schemes: ['http', 'https']
-        self._overlaid_spec_dict.subtract(self.spec_deletions)
-        self._overlaid_spec_dict.add(self.spec_overlays)
-        self.spec_data = NestedOrderedDictAttrListBase(mapping=self._overlaid_spec_dict)
-
-
-        self.spec_archive_dir = self.spec_dir.joinpath(gc3_cfg.open_api.open_api_spec_catalog.archive_dir)
-        self.spec_archive_file_name = gc3_cfg.open_api.open_api_spec_catalog.archive_file_format.format(name=self.name, version=self.version)
-        self.spec_archive_file = self.spec_archive_dir.joinpath(self.spec_archive_file_name)
-        self.spec_overlay_archive_dir: Path = self.spec_dir.joinpath(gc3_cfg.open_api.open_api_spec_catalog.archive_dir)
-        self.spec_overlay_archive_file: Path = self.spec_overlay_archive_dir.joinpath(f"{self.service_cfg.service_name}_overlay_{self.version}.{self.spec_overlay_format}")
-        self.spec_export_dir: Path = BASE_DIR.joinpath('var/open_api_catalog', api_catalog_config.api_catalog_name, service_cfg.service_name)
-        _debug(f"self.spec_dir={self.spec_dir}\nself.spec_file={self.spec_file}\nself.spec_export_dir={self.spec_export_dir}")
-
-        if not self.spec_file.exists():
-            _warning(f"Spec file not found in catalog, saving to {self.spec_file}")
-            _ = self.save_spec()
-
-        if not all([p.exists() for p in self.export_paths.values()]):
-            _ = self.export()
-            _debug(f"Exported files not found in var, created export files: {self.export_paths.values()}")
-
-        if not self.spec_archive_file.exists():
-            _ = self.archive_spec_to_catalog()
-
-        if not self.spec_overlay_file.exists():
-            _warning(f"Spec overlay file not found in catalog, saving to {self.spec_file}")
-            _ = self.save_spec_overlay()
-
-        if not self.spec_overlay_archive_file.exists():
-            _ = self.archive_spec_overlay_to_catalog()
+        # self.spec_archive_dir = self.spec_dir.joinpath(gc3_cfg.open_api.open_api_spec_catalog.archive_dir)
+        # self.spec_archive_file_name = gc3_cfg.open_api.open_api_spec_catalog.archive_file_format.format(name=self.name, version=self.version)
+        # self.spec_archive_file = self.spec_archive_dir.joinpath(self.spec_archive_file_name)
+        # self.spec_overlay_archive_dir: Path = self.spec_dir.joinpath(gc3_cfg.open_api.open_api_spec_catalog.archive_dir)
+        # self.spec_overlay_archive_file: Path = self.spec_overlay_archive_dir.joinpath(f"{self.service_cfg.service_name}_overlay_{self.version}.{self.spec_overlay_format}")
+        # self.spec_export_dir: Path = BASE_DIR.joinpath('var/open_api_catalog', api_catalog_config.api_catalog_name, service_cfg.service_name)
+        # _debug(f"self.spec_dir={self.spec_dir}\nself.spec_file={self.spec_file}\nself.spec_export_dir={self.spec_export_dir}")
+        #
+        # if not self.spec_file.exists():
+        #     _warning(f"Spec file not found in catalog, saving to {self.spec_file}")
+        #     _ = self.save_spec()
+        #
+        # if not all([p.exists() for p in self.export_paths.values()]):
+        #     _ = self.export()
+        #     _debug(f"Exported files not found in var, created export files: {self.export_paths.values()}")
+        #
+        # if not self.spec_archive_file.exists():
+        #     _ = self.archive_spec_to_catalog()
+        #
+        # if not self.spec_overlay_file.exists():
+        #     _warning(f"Spec overlay file not found in catalog, saving to {self.spec_file}")
+        #     _ = self.save_spec_overlay()
+        #
+        # if not self.spec_overlay_archive_file.exists():
+        #     _ = self.archive_spec_overlay_to_catalog()
 
         _debug(f"{self.name} created")
 
-    def load_spec(self, from_url: bool) -> DictStrAny:
-        if from_url:
-            spec_url = f"{self.service_cfg.spec_furl}".format_map(self.service_cfg)
-            _debug(f"spec_url={spec_url}")
-            spec_dict: dict = load_url(spec_url=spec_url)
-            self.from_url = True
-        else:
-            if not self.spec_file.exists():
-                _warning(f"Spec file not found: {self.spec_file}!\nAttempting to load it from the API Catalog")
-                return self.load_spec(from_url=True)
-            spec_file_path = str(self.spec_file)
-            spec_dict: dict = load_file(spec_file=spec_file_path)
-            self.from_url = False
-        return spec_dict
+    # def load_spec(self, from_url: bool) -> DictStrAny:
+    #     if from_url:
+    #         spec_url = f"{self.service_cfg.spec_furl}".format_map(self.service_cfg)
+    #         _debug(f"spec_url={spec_url}")
+    #         spec_dict: dict = load_url(spec_url=spec_url)
+    #         self.from_url = True
+    #     else:
+    #         if not self.spec_file.exists():
+    #             _warning(f"Spec file not found: {self.spec_file}!\nAttempting to load it from the API Catalog")
+    #             return self.load_spec(from_url=True)
+    #         spec_file_path = str(self.spec_file)
+    #         spec_dict: dict = load_file(spec_file=spec_file_path)
+    #         self.from_url = False
+    #     return spec_dict
+    #
+    # def save_spec(self, file_path=None, overwrite: bool = False) -> Path:
+    #     spec_file = file_path if file_path else self.spec_file
+    #     if not spec_file.parent.exists():
+    #         spec_file.parent.mkdir()
+    #     _debug(f"Saving spec to spec_file={spec_file}")
+    #     if spec_file.exists() and not overwrite:
+    #         _warning(f"spec_file={spec_file} already exists and overwrite={overwrite}, leaving unchanged")
+    #     if not self.spec_dir.exists():
+    #         _warning(f"spec_dir={self.spec_dir} did not already exist, attempting to create.")
+    #         self.spec_dir.mkdir()
+    #     try:
+    #         json.dump(obj=self._vanilla_spec_dict, fp=spec_file.open('w'), indent=gc3_cfg.open_api.open_api_spec_catalog.json_export_indent_spaces)
+    #     except Exception as e:
+    #         _error(e)
+    #     return spec_file
 
-    def save_spec(self, file_path=None, overwrite: bool = False) -> Path:
-        spec_file = file_path if file_path else self.spec_file
-        if not spec_file.parent.exists():
-            spec_file.parent.mkdir()
-        _debug(f"Saving spec to spec_file={spec_file}")
-        if spec_file.exists() and not overwrite:
-            _warning(f"spec_file={spec_file} already exists and overwrite={overwrite}, leaving unchanged")
-        if not self.spec_dir.exists():
-            _warning(f"spec_dir={self.spec_dir} did not already exist, attempting to create.")
-            self.spec_dir.mkdir()
-        try:
-            json.dump(obj=self._vanilla_spec_dict, fp=spec_file.open('w'), indent=gc3_cfg.open_api.open_api_spec_catalog.json_export_indent_spaces)
-        except Exception as e:
-            _error(e)
-        return spec_file
-
-    def archive_spec_to_catalog(self) -> Path:
-        _debug(f"Archiving spec to self.spec_archive_file={self.spec_archive_file}")
-        spec_archive_file_path = self.save_spec(file_path=self.spec_archive_file)
-        return spec_archive_file_path
-
-
-    def create_spec_overlay_file(self, file_path: Path = None, overwrite: bool = False) -> Path:
-        default_overlays = self.api_catalog_config.open_api_spec_overlays
-        default_overlays = NestedOrderedDictAttrListBase(mapping=default_overlays)
-        exported_file = default_overlays.export(file_path=file_path, format=self.spec_overlay_format)
-        return exported_file
+    # def archive_spec_to_catalog(self) -> Path:
+    #     _debug(f"Archiving spec to self.spec_archive_file={self.spec_archive_file}")
+    #     spec_archive_file_path = self.save_spec(file_path=self.spec_archive_file)
+    #     return spec_archive_file_path
 
 
-    def save_spec_overlay(self, file_path: Path = None, overwrite: bool = False) -> Path:
-        spec_overlay_file = file_path if file_path else self.spec_overlay_file
-        if not spec_overlay_file.parent.exists():
-            spec_overlay_file.parent.mkdir()
-        _debug(f"Saving spec to spec_overlay_file={spec_overlay_file}")
-        if spec_overlay_file.exists() and not overwrite:
-            _warning(f"spec_overlay_file={spec_overlay_file} already exists and overwrite={overwrite}, leaving unchanged")
-            return spec_overlay_file
-        if not self.spec_dir.exists():
-            _warning(f"spec_dir={self.spec_dir} did not already exist, attempting to create.")
-            self.spec_dir.mkdir()
-        export_path = self.spec_data.export(file_path=spec_overlay_file, format=self.spec_overlay_format, overwrite=overwrite, export_formatting=self.spec_overlay_export_formatting)
-        return export_path
-
-
-    def archive_spec_overlay_to_catalog(self) -> Path:
-        _debug(f"Archiving spec overlay to self.spec_archive_file={self.spec_archive_file}")
-        spec_overlay_archive_path = self.spec_overlay_archive_file
-        _debug(f"Saving spec to spec_overlay_archive_path={spec_overlay_archive_path}")
-        if spec_overlay_archive_path.exists():
-            _warning(f"Overlay already exists, spec_overlay_archive_path={spec_overlay_archive_path}")
-            return spec_overlay_archive_path
-        if not spec_overlay_archive_path.parent.exists():
-            spec_overlay_archive_path.parent.mkdir()
-        export_path = self.spec_data.export(file_path=spec_overlay_archive_path, format=self.spec_overlay_format, overwrite=False,
-                                            export_formatting=self.spec_overlay_export_formatting)
-        return export_path
-
-    def load_spec_overlay_file(self, spec_overlay_file: Path = None) -> MeldDict:
-        """
-
-        :param overlay_spec_dict:
-        :return:
-        """
-        spec_overlay_file = spec_overlay_file if spec_overlay_file else self.spec_overlay_file
-        with spec_overlay_file.open() as fd:
-            try:
-                overlays = MeldDict(toml.load(f=fd))
-            except TomlDecodeError as e:
-                _error(f"TomlDecodeError while loading spec overlay: {fd}")
-                raise
-        return overlays
+    # def create_spec_overlay_file(self, file_path: Path = None, overwrite: bool = False) -> Path:
+    #     default_overlays = self.api_catalog_config.open_api_spec_overlays
+    #     default_overlays = NestedOrderedDictAttrListBase(mapping=default_overlays)
+    #     exported_file = default_overlays.export(file_path=file_path, format=self.spec_overlay_format)
+    #     return exported_file
+    #
+    #
+    # def save_spec_overlay(self, file_path: Path = None, overwrite: bool = False) -> Path:
+    #     spec_overlay_file = file_path if file_path else self.spec_overlay_file
+    #     if not spec_overlay_file.parent.exists():
+    #         spec_overlay_file.parent.mkdir()
+    #     _debug(f"Saving spec to spec_overlay_file={spec_overlay_file}")
+    #     if spec_overlay_file.exists() and not overwrite:
+    #         _warning(f"spec_overlay_file={spec_overlay_file} already exists and overwrite={overwrite}, leaving unchanged")
+    #         return spec_overlay_file
+    #     if not self.spec_dir.exists():
+    #         _warning(f"spec_dir={self.spec_dir} did not already exist, attempting to create.")
+    #         self.spec_dir.mkdir()
+    #     export_path = self.spec_data.export(file_path=spec_overlay_file, format=self.spec_overlay_format, overwrite=overwrite, export_formatting=self.spec_overlay_export_formatting)
+    #     return export_path
+    #
+    #
+    # def archive_spec_overlay_to_catalog(self) -> Path:
+    #     _debug(f"Archiving spec overlay to self.spec_archive_file={self.spec_archive_file}")
+    #     spec_overlay_archive_path = self.spec_overlay_archive_file
+    #     _debug(f"Saving spec to spec_overlay_archive_path={spec_overlay_archive_path}")
+    #     if spec_overlay_archive_path.exists():
+    #         _warning(f"Overlay already exists, spec_overlay_archive_path={spec_overlay_archive_path}")
+    #         return spec_overlay_archive_path
+    #     if not spec_overlay_archive_path.parent.exists():
+    #         spec_overlay_archive_path.parent.mkdir()
+    #     export_path = self.spec_data.export(file_path=spec_overlay_archive_path, format=self.spec_overlay_format, overwrite=False,
+    #                                         export_formatting=self.spec_overlay_export_formatting)
+    #     return export_path
+    #
+    # def load_spec_overlay_file(self, spec_overlay_file: Path = None) -> MeldDict:
+    #     """
+    #
+    #     :param overlay_spec_dict:
+    #     :return:
+    #     """
+    #     spec_overlay_file = spec_overlay_file if spec_overlay_file else self.spec_overlay_file
+    #     with spec_overlay_file.open() as fd:
+    #         try:
+    #             overlays = MeldDict(toml.load(f=fd))
+    #         except TomlDecodeError as e:
+    #             _error(f"TomlDecodeError while loading spec overlay: {fd}")
+    #             raise
+    #     return overlays
 
     @property
     def spec_dict(self):
-        return self._overlaid_spec_dict
+        """Return a spec_dict updated with correct host, etc. for this service
 
+        :return:
+        """
+        rest_parse_result: ParseResult = urlparse(self.rest_endpoint)
+        updated_spec_dict = deepcopy(self._spec_dict)
+        updated_spec_dict['host'] = rest_parse_result.netloc
+        # if 'tags' not in updated_spec_dict:
+        #     updated_spec_dict['tags'] = []
+        # updated_spec_dict['tags'].append('gc3')
+        return updated_spec_dict
+
+    @property
+    def rest_endpoint(self):
+        from_kwargs = self.kwargs.get('rest_endpoint', False)
+        if from_kwargs:
+            return from_kwargs
+        if 'rest_endpoint' in self.service_cfg:
+            return self.service_cfg.rest_endpoint
+        return self.idm_cfg.rest_endpoint
 
     def get_swagger_spec(self, rest_endpoint: Union[str, None] = None) -> Spec:
         """
@@ -229,54 +256,54 @@ class OpenApiSpec(GC3VersionTypedMixin):
         rest_endpoint = rest_endpoint if rest_endpoint else self.rest_endpoint
         if not rest_endpoint:
             raise RuntimeError("rest_endpoint not provided in either method call or in **wkargs={self.kwargs}")
-        core_spec: Spec = Spec(spec_dict=self.spec_dict, origin_url=rest_endpoint, http_client=None, config=BRAVADO_CONFIG)
+        spec: Spec = Spec(spec_dict=self.spec_dict, origin_url=rest_endpoint, http_client=None, config=BRAVADO_CONFIG)
         #### bravado_core.spec.Spec#client_spec_dict
         # Return a copy of spec_dict with x-scope metadata removed so that it
         #         is suitable for consumption by Swagger clients.
-        client_spec_dict = core_spec.client_spec_dict
-        return client_spec_dict
+        # client_spec_dict = spec.client_spec_dict
+        return spec
 
     @property
-    def swagger_spec(self) -> Spec:
+    def spec(self) -> Spec:
         return self.get_swagger_spec(rest_endpoint=self.rest_endpoint)
 
     @property
     def title(self) -> str:
-        return self.spec_data.info.title
+        return self._spec_data.info.title
 
     @property
     def version(self) -> str:
         if self.kwargs.get('mock_version', False):
             return self.kwargs.get('mock_version')
-        return self.spec_data.info.version
+        return self._spec_data.info.version
 
     @property
     def description(self) -> str:
-        return self.spec_data.info.description
+        return self._spec_data.info.description
 
     @property
     def descr(self) -> str:
-        return self.spec_data.info.description
+        return self._spec_data.info.description
 
     @property
     def paths(self) -> List[str]:
-        paths = self.spec_data.paths.keys()
+        paths = self._spec_data.paths.keys()
         return list(paths)
 
     @property
     def operation_ids(self) -> List[str]:
         ids = []
         for path in self.paths:
-            for http_method in self.spec_data.paths[path].keys():
-                ids.append(self.spec_data.paths[path][http_method]['operationId'])
+            for http_method in self._spec_data.paths[path].keys():
+                ids.append(self._spec_data.paths[path][http_method]['operationId'])
         return ids
 
     @property
     def operation_id_descrs(self) -> DictStrAny:
         operation_ids_d = {id: None for id in self.operation_ids}
         for path in self.paths:
-            for http_method in self.spec_data.paths[path].keys():
-                operation_spec = self.spec_data.paths[path][http_method]
+            for http_method in self._spec_data.paths[path].keys():
+                operation_spec = self._spec_data.paths[path][http_method]
                 operation_id = operation_spec.operationId
                 id_descr = OperationIdDescr(operation_id=operation_id,
                                             path=path,
@@ -302,6 +329,6 @@ class OpenApiSpec(GC3VersionTypedMixin):
             _warning(f"spec_export_dir={self.spec_export_dir} did not exist, attempting to create.")
             self.spec_export_dir.mkdir()
         for f, p in self.export_paths.items():
-            exported_file_path = self.spec_data.export(file_path=p, format=f, overwrite=True)
+            exported_file_path = self._spec_data.export(file_path=p, format=f, overwrite=True)
             exported_file_paths.append(exported_file_path)
         return exported_file_paths

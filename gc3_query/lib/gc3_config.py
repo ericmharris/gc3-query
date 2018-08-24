@@ -21,18 +21,19 @@ from copy import deepcopy
 import keyring
 ################################################################################
 ## Third-Party Imports
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from requests.auth import _basic_auth_str
 
+
+################################################################################
+## Project Imports
 from gc3_query.lib import *
 from gc3_query.lib.atoml.atoml_config import ATomlConfig
 from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
 from gc3_query.lib.gc3logging import get_logging
-from gc3_query.lib.open_api.swagger_formats import formats
+from gc3_query.lib.open_api.swagger_formats import gc3_formats
 
-################################################################################
-## Project Imports
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
-
 
 # atoml_config_dir = BASE_DIR.joinpath('etc/config')
 # _debug(f"atoml_config_dir={atoml_config_dir}")
@@ -45,8 +46,12 @@ class IDMCredential:
     idm_domain_name: str
     username: str
     password: str
+    basic_auth_str: str = field(init=False)
     is_ucm: bool
     is_classic: bool
+
+    def __post_init__(self):
+        self.basic_auth_str = _basic_auth_str(self.username, self.password)
 
 
 class GC3Config(NestedOrderedDictAttrListBase):
@@ -77,6 +82,26 @@ class GC3Config(NestedOrderedDictAttrListBase):
     @property
     def CONFIG_DIR(self) -> Path:
         return self.atoml_config_dir
+
+    @property
+    def OPEN_API_CATALOG_DIR(self) -> Path:
+        open_api_catalog_dir = self.BASE_DIR.joinpath(self.open_api.open_api_spec_catalog.api_catalog_dir)
+        return open_api_catalog_dir
+
+    @property
+    def OPEN_API_SPEC_BASE(self) -> Path:
+        open_api_spec_base = self.BASE_DIR.joinpath(self.open_api.open_api_spec_base)
+        return open_api_spec_base
+
+    @property
+    def BRAVADO_CONFIG(self) -> DictStrAny:
+        bravado_config: DictStrAny = self.bravado.client_config.as_dict()
+        bravado_config.update(self.bravado.core_config.as_dict())
+        gc3_format_names = [f.format for f in self.open_api.formats.values()]
+        for gc3_format in gc3_formats:
+            if gc3_format.format in gc3_format_names:
+                bravado_config['formats'].append(gc3_format)
+        return bravado_config
 
     def get_credential(self, idm_domain_name: str) -> IDMCredential:
         if idm_domain_name not in self['idm']['domains']:
@@ -145,7 +170,7 @@ class GC3Config(NestedOrderedDictAttrListBase):
             raise RuntimeError(f"config_type={config_type} not found in {config_types.keys()}")
         config: dict = config_types[config_type]
         if config_type in ['bravado', 'bravado_core']:
-            config['formats'] = formats
+            config['formats'] = gc3_formats
         return deepcopy(config)
 
 

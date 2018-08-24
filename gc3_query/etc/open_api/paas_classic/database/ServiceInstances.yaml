@@ -1,0 +1,1905 @@
+swagger: '2.0'
+info:
+    title: Service Instances
+    description: REST endpoints to create and manage Database Cloud Service instances.
+    version: '1.1'
+schemes:
+- https
+paths:
+    /paas/core/api/v1.1/healthcheck/{identityDomainId}/services/dbaas/instances/{serviceId}:
+        get:
+            operationId: getHealthcheck
+            summary: Monitor a Service Instance
+            description: 'Returns health monitoring data for the specified Oracle
+                Database Cloud Service instance.<p>For Single Instance Database Service
+                instance, the following health metrics are provided:<ul><li><code>last_logon_time</code>
+                - Number of days since last logon.</li><li><code>user_tablespace_usage</code>
+                - Max Percentage for a User Tablespace Used.</li><li><code>active_sessions</code>
+                - Active number of sessions.</li><b>Note</b>: Health monitoring metrics
+                are updated on an hourly basis. As a result, the metrics might be
+                slightly out-of-date until the next hourly refresh.'
+            produces:
+            - application/json
+            parameters:
+            -   name: identityDomainId
+                in: path
+                description: 'Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For
+                    a Cloud account with Identity Cloud Service</b>: the identity
+                    service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>.
+                    You can find this ID in the <b>Identity Service Id</b> field on
+                    the Overview tab of the Service Details page for Database Cloud
+                    Service in My Services.</p></li><li><p><b>For a traditional cloud
+                    account</b>: the name of the identity domain.</p></li></ul>'
+                required: true
+                type: string
+            -   name: serviceId
+                in: path
+                description: Name of the Database Cloud Service instance.
+                required: true
+                type: string
+            -   name: Authorization
+                in: header
+                description: Base64 encoding of the user name and password of the
+                    user making the request. For more information, see <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_secauth'>Security,
+                    Authentication and Authorization</a>.
+                required: true
+                type: string
+            -   name: X-ID-TENANT-NAME
+                in: header
+                description: 'Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For
+                    a Cloud account with Identity Cloud Service</b>: the identity
+                    service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>.
+                    You can find this ID in the <b>Identity Service Id</b> field on
+                    the Overview tab of the Service Details page for Database Cloud
+                    Service in My Services.</p></li><li><p><b>For a traditional cloud
+                    account</b>: the name of the identity domain.</p></li></ul>'
+                required: true
+                type: string
+            responses:
+                '200':
+                    description: OK. See <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_statuses'>Status
+                        Codes</a> for information about other possible HTTP status
+                        codes.
+                    schema:
+                        $ref: '#/definitions/monitor-instance'
+                '404':
+                    description: Not Found
+                '500':
+                    description: Internal Server Error
+    /paas/service/dbcs/api/v1.1/instances/{identityDomainId}:
+        post:
+            operationId: postDomain
+            summary: Create a Service Instance
+            description: Creates a Database Cloud Service instance.<p>Using this endpoint
+                you can create a Database Cloud Service instance hosting one of the
+                following types of database:</p><ul><li><p>A single-instance database</p></li><li><p>Two
+                single-instance databases, one acting as the primary database and
+                one acting as the standby database in an Oracle Data Guard configuration</p></li><li><p>A
+                two-node clustered database using Oracle Real Application Clusters
+                (RAC) technology; two compute nodes each host an Oracle Database instance,
+                and the two instances access the same shared database data store</p></li><li><p>Two
+                two-node Oracle RAC databases, one acting as the primary database
+                and one acting as the standby database in an Oracle Data Guard configuration</p></li><li><p>A
+                single-instance database acting as the standby database in an Oracle
+                Data Guard configuration. The primary database is on your own system</p></li></ul><p>Additionally,
+                if you create a single-instance database, you can create it as a "snapshot
+                clone" of another service instance or have its database loaded from
+                the cloud backup of another database (often called "instantiate from
+                backup").
+            consumes:
+            - application/vnd.com.oracle.oracloud.provisioning.Service+json
+            parameters:
+            -   name: identityDomainId
+                in: path
+                description: 'Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For
+                    a Cloud account with Identity Cloud Service</b>: the identity
+                    service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>.
+                    You can find this ID in the <b>Identity Service Id</b> field on
+                    the Overview tab of the Service Details page for Database Cloud
+                    Service in My Services.</p></li><li><p><b>For a traditional cloud
+                    account</b>: the name of the identity domain.</p></li></ul>'
+                required: true
+                type: string
+            -   name: Authorization
+                in: header
+                description: Base64 encoding of the user name and password of the
+                    user making the request. For more information, see <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_secauth'>Security,
+                    Authentication and Authorization</a>.
+                required: true
+                type: string
+            -   name: X-ID-TENANT-NAME
+                in: header
+                description: 'Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For
+                    a Cloud account with Identity Cloud Service</b>: the identity
+                    service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>.
+                    You can find this ID in the <b>Identity Service Id</b> field on
+                    the Overview tab of the Service Details page for Database Cloud
+                    Service in My Services.</p></li><li><p><b>For a traditional cloud
+                    account</b>: the name of the identity domain.</p></li></ul>'
+                required: true
+                type: string
+            -   name: body
+                in: body
+                description: ''
+                required: true
+                schema:
+                    $ref: '#/definitions/create-instance'
+            responses:
+                '202':
+                    headers:
+                        Location:
+                            description: A REST URI you can use to check the progress
+                                and completion of the instance creation operation.
+                            type: string
+                    description: Accepted. See <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_statuses'>Status
+                        Codes</a> for information about other possible HTTP status
+                        codes.
+        get:
+            operationId: getDomain
+            summary: View All Service Instances
+            description: Returns information about all Database Cloud Service instances.
+                You can view the full set of details by specifying the <code>?outputLevel=verbose</code>
+                query parameter.
+            produces:
+            - application/json
+            parameters:
+            -   name: identityDomainId
+                in: path
+                description: 'Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For
+                    a Cloud account with Identity Cloud Service</b>: the identity
+                    service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>.
+                    You can find this ID in the <b>Identity Service Id</b> field on
+                    the Overview tab of the Service Details page for Database Cloud
+                    Service in My Services.</p></li><li><p><b>For a traditional cloud
+                    account</b>: the name of the identity domain.</p></li></ul>'
+                required: true
+                type: string
+            -   name: outputLevel
+                in: query
+                description: Flag that when set to <code>verbose</code> specifies
+                    that the response should include the full set of details for all
+                    service instances.
+                required: false
+                type: boolean
+            -   name: Authorization
+                in: header
+                description: Base64 encoding of the user name and password of the
+                    user making the request. For more information, see <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_secauth'>Security,
+                    Authentication and Authorization</a>.
+                required: true
+                type: string
+            -   name: X-ID-TENANT-NAME
+                in: header
+                description: 'Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For
+                    a Cloud account with Identity Cloud Service</b>: the identity
+                    service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>.
+                    You can find this ID in the <b>Identity Service Id</b> field on
+                    the Overview tab of the Service Details page for Database Cloud
+                    Service in My Services.</p></li><li><p><b>For a traditional cloud
+                    account</b>: the name of the identity domain.</p></li></ul>'
+                required: true
+                type: string
+            responses:
+                '200':
+                    description: OK. See <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_statuses'>Status
+                        Codes</a> for information about other possible HTTP status
+                        codes.
+                    schema:
+                        $ref: '#/definitions/view-all-instances'
+                '202':
+                    description: Accepted. See <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_statuses'>Status
+                        Codes</a> for information about other possible HTTP status
+                        codes.
+                    schema:
+                        $ref: '#/definitions/view-all-instances'
+    /paas/service/dbcs/api/v1.1/instances/{identityDomainId}/{serviceId}:
+        get:
+            operationId: getServiceid
+            summary: View a Service Instance
+            description: Returns information about a Database Cloud Service instance.
+            produces:
+            - application/json
+            parameters:
+            -   name: identityDomainId
+                in: path
+                description: 'Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For
+                    a Cloud account with Identity Cloud Service</b>: the identity
+                    service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>.
+                    You can find this ID in the <b>Identity Service Id</b> field on
+                    the Overview tab of the Service Details page for Database Cloud
+                    Service in My Services.</p></li><li><p><b>For a traditional cloud
+                    account</b>: the name of the identity domain.</p></li></ul>'
+                required: true
+                type: string
+            -   name: serviceId
+                in: path
+                description: Name of the Database Cloud Service instance.
+                required: true
+                type: string
+            -   name: Authorization
+                in: header
+                description: Base64 encoding of the user name and password of the
+                    user making the request. For more information, see <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_secauth'>Security,
+                    Authentication and Authorization</a>.
+                required: true
+                type: string
+            -   name: X-ID-TENANT-NAME
+                in: header
+                description: 'Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For
+                    a Cloud account with Identity Cloud Service</b>: the identity
+                    service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>.
+                    You can find this ID in the <b>Identity Service Id</b> field on
+                    the Overview tab of the Service Details page for Database Cloud
+                    Service in My Services.</p></li><li><p><b>For a traditional cloud
+                    account</b>: the name of the identity domain.</p></li></ul>'
+                required: true
+                type: string
+            responses:
+                '202':
+                    description: Accepted. See <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_statuses'>Status
+                        Codes</a> for information about other possible HTTP status
+                        codes.
+                    schema:
+                        $ref: '#/definitions/view-instance'
+        post:
+            operationId: postServiceid
+            summary: Stop, Start or Restart a Service Instance or Compute Node
+            description: Stops, starts or restarts a service instance or one of its
+                compute nodes.
+            consumes:
+            - application/vnd.com.oracle.oracloud.provisioning.Service+json
+            parameters:
+            -   name: identityDomainId
+                in: path
+                description: 'Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For
+                    a Cloud account with Identity Cloud Service</b>: the identity
+                    service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>.
+                    You can find this ID in the <b>Identity Service Id</b> field on
+                    the Overview tab of the Service Details page for Database Cloud
+                    Service in My Services.</p></li><li><p><b>For a traditional cloud
+                    account</b>: the name of the identity domain.</p></li></ul>'
+                required: true
+                type: string
+            -   name: serviceId
+                in: path
+                description: Name of the Database Cloud Service instance.
+                required: true
+                type: string
+            -   name: Authorization
+                in: header
+                description: Base64 encoding of the user name and password of the
+                    user making the request. For more information, see <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_secauth'>Security,
+                    Authentication and Authorization</a>.
+                required: true
+                type: string
+            -   name: X-ID-TENANT-NAME
+                in: header
+                description: 'Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For
+                    a Cloud account with Identity Cloud Service</b>: the identity
+                    service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>.
+                    You can find this ID in the <b>Identity Service Id</b> field on
+                    the Overview tab of the Service Details page for Database Cloud
+                    Service in My Services.</p></li><li><p><b>For a traditional cloud
+                    account</b>: the name of the identity domain.</p></li></ul>'
+                required: true
+                type: string
+            -   name: payload
+                in: body
+                description: The request body defines the details of the stop, start
+                    or restart request.
+                required: true
+                schema:
+                    $ref: '#/definitions/stop-start-restart-instance'
+            responses:
+                '202':
+                    headers:
+                        Location:
+                            description: A REST URI you can use to check the progress
+                                and completion of the stop, start, or restart operation.
+                            type: string
+                    description: Accepted. See <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_statuses'>Status
+                        Codes</a> for information about other possible HTTP status
+                        codes.
+        put:
+            operationId: putServiceid
+            summary: Scale a Service Instance
+            description: Scales a service instance up or down. Specifically, you can:<ul><li><p>Scale
+                the shape of the service instance's compute nodes up or down.</p></li><li><p>Add
+                to the service instance's data or backup storage or add a new storage
+                volume to the compute node of a service instance hosting a single-instance
+                database.</p></li></ul>
+            consumes:
+            - application/vnd.com.oracle.oracloud.provisioning.Service+json
+            parameters:
+            -   name: identityDomainId
+                in: path
+                description: 'Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For
+                    a Cloud account with Identity Cloud Service</b>: the identity
+                    service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>.
+                    You can find this ID in the <b>Identity Service Id</b> field on
+                    the Overview tab of the Service Details page for Database Cloud
+                    Service in My Services.</p></li><li><p><b>For a traditional cloud
+                    account</b>: the name of the identity domain.</p></li></ul>'
+                required: true
+                type: string
+            -   name: serviceId
+                in: path
+                description: Name of the Database Cloud Service instance.
+                required: true
+                type: string
+            -   name: Authorization
+                in: header
+                description: Base64 encoding of the user name and password of the
+                    user making the request. For more information, see <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_secauth'>Security,
+                    Authentication and Authorization</a>.
+                required: true
+                type: string
+            -   name: X-ID-TENANT-NAME
+                in: header
+                description: 'Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For
+                    a Cloud account with Identity Cloud Service</b>: the identity
+                    service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>.
+                    You can find this ID in the <b>Identity Service Id</b> field on
+                    the Overview tab of the Service Details page for Database Cloud
+                    Service in My Services.</p></li><li><p><b>For a traditional cloud
+                    account</b>: the name of the identity domain.</p></li></ul>'
+                required: true
+                type: string
+            -   name: payload
+                in: body
+                description: The request body defines the details of the scaling request.
+                required: true
+                schema:
+                    $ref: '#/definitions/scale-putrequest'
+            responses:
+                '202':
+                    headers:
+                        Location:
+                            description: A REST URI you can use to check the progress
+                                and completion of the scaling operation.
+                            type: string
+                    description: Accepted. See <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_statuses'>Status
+                        Codes</a> for information about other possible HTTP status
+                        codes.
+        delete:
+            operationId: deleteServiceid
+            summary: Delete a Service Instance
+            description: 'Deletes a Database Cloud Service instance. '
+            consumes:
+            - application/vnd.com.oracle.oracloud.provisioning.Service+json
+            produces:
+            - application/json
+            parameters:
+            -   name: identityDomainId
+                in: path
+                description: 'Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For
+                    a Cloud account with Identity Cloud Service</b>: the identity
+                    service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>.
+                    You can find this ID in the <b>Identity Service Id</b> field on
+                    the Overview tab of the Service Details page for Database Cloud
+                    Service in My Services.</p></li><li><p><b>For a traditional cloud
+                    account</b>: the name of the identity domain.</p></li></ul>'
+                required: true
+                type: string
+            -   name: serviceId
+                in: path
+                description: Name of the Database Cloud Service instance.
+                required: true
+                type: string
+            -   name: deleteBackup
+                in: query
+                description: Flag that when set to <code>true</code> deletes all backups
+                    of the service instance from Oracle Cloud Storage container. Use
+                    caution in specifying this option. If this option is specified,
+                    instance can not be recovered as all backups will be deleted.
+                    Default value is <code>false</code>. This option is not currently
+                    supported for cluster databases.
+                required: false
+                type: boolean
+            -   name: Authorization
+                in: header
+                description: Base64 encoding of the user name and password of the
+                    user making the request. For more information, see <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_secauth'>Security,
+                    Authentication and Authorization</a>.
+                required: true
+                type: string
+            -   name: X-ID-TENANT-NAME
+                in: header
+                description: 'Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For
+                    a Cloud account with Identity Cloud Service</b>: the identity
+                    service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>.
+                    You can find this ID in the <b>Identity Service Id</b> field on
+                    the Overview tab of the Service Details page for Database Cloud
+                    Service in My Services.</p></li><li><p><b>For a traditional cloud
+                    account</b>: the name of the identity domain.</p></li></ul>'
+                required: true
+                type: string
+            responses:
+                '202':
+                    headers:
+                        Location:
+                            description: A REST URI you can use to check the progress
+                                and completion of the instance deletion operation.
+                            type: string
+                    description: Accepted. See <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_statuses'>Status
+                        Codes</a> for information about other possible HTTP status
+                        codes.
+    /paas/service/dbcs/api/v1.1/instances/{identityDomainId}/{serviceId}/servers:
+        get:
+            operationId: getServiceidServers
+            summary: View a Service Instance's Compute Nodes
+            description: Returns information about the compute nodes in a Database
+                Cloud Service instance.
+            produces:
+            - application/json
+            parameters:
+            -   name: identityDomainId
+                in: path
+                description: 'Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For
+                    a Cloud account with Identity Cloud Service</b>: the identity
+                    service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>.
+                    You can find this ID in the <b>Identity Service Id</b> field on
+                    the Overview tab of the Service Details page for Database Cloud
+                    Service in My Services.</p></li><li><p><b>For a traditional cloud
+                    account</b>: the name of the identity domain.</p></li></ul>'
+                required: true
+                type: string
+            -   name: serviceId
+                in: path
+                description: Name of the Database Cloud Service instance.
+                required: true
+                type: string
+            -   name: Authorization
+                in: header
+                description: Base64 encoding of the user name and password of the
+                    user making the request. For more information, see <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_secauth'>Security,
+                    Authentication and Authorization</a>.
+                required: true
+                type: string
+            -   name: X-ID-TENANT-NAME
+                in: header
+                description: 'Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For
+                    a Cloud account with Identity Cloud Service</b>: the identity
+                    service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>.
+                    You can find this ID in the <b>Identity Service Id</b> field on
+                    the Overview tab of the Service Details page for Database Cloud
+                    Service in My Services.</p></li><li><p><b>For a traditional cloud
+                    account</b>: the name of the identity domain.</p></li></ul>'
+                required: true
+                type: string
+            responses:
+                '202':
+                    description: Accepted. See <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_statuses'>Status
+                        Codes</a> for information about other possible HTTP status
+                        codes.
+                    schema:
+                        $ref: '#/definitions/view-instance-nodes'
+    /paas/service/dbcs/api/v1.1/instances/{identityDomainId}/status/{requestName}/job/{jobId}:
+        get:
+            operationId: getStatusRequestnameJobJobid
+            summary: View the Job Status of an Operation
+            description: Returns the status of a Database Cloud Service instance operation.
+            produces:
+            - application/json
+            parameters:
+            -   name: identityDomainId
+                in: path
+                description: 'Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For
+                    a Cloud account with Identity Cloud Service</b>: the identity
+                    service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>.
+                    You can find this ID in the <b>Identity Service Id</b> field on
+                    the Overview tab of the Service Details page for Database Cloud
+                    Service in My Services.</p></li><li><p><b>For a traditional cloud
+                    account</b>: the name of the identity domain.</p></li></ul>'
+                required: true
+                type: string
+            -   name: requestName
+                in: path
+                description: 'Name of the request for which you want to view status.
+                    Valid values include:<ul><li><code>create</code>: View the status
+                    for a create service instance operation.</li><li><code>delete</code>:
+                    View the status of a delete instance operation.</li><li><code>control</code>:
+                    View the status of a stop, start or restart operation.</li></ul>'
+                required: true
+                type: string
+            -   name: jobId
+                in: path
+                description: Job ID.
+                required: true
+                type: string
+            -   name: Authorization
+                in: header
+                description: Base64 encoding of the user name and password of the
+                    user making the request. For more information, see <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_secauth'>Security,
+                    Authentication and Authorization</a>.
+                required: true
+                type: string
+            -   name: X-ID-TENANT-NAME
+                in: header
+                description: 'Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For
+                    a Cloud account with Identity Cloud Service</b>: the identity
+                    service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>.
+                    You can find this ID in the <b>Identity Service Id</b> field on
+                    the Overview tab of the Service Details page for Database Cloud
+                    Service in My Services.</p></li><li><p><b>For a traditional cloud
+                    account</b>: the name of the identity domain.</p></li></ul>'
+                required: true
+                type: string
+            responses:
+                '200':
+                    description: OK. See <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_statuses'>Status
+                        Codes</a> for information about other possible HTTP status
+                        codes.
+                    schema:
+                        $ref: '#/definitions/jobstatus-response'
+    /paas/service/dbcs/api/v1.1/instances/{identityDomainId}/{serviceId}/standby:
+        post:
+            operationId: postServiceidStandby
+            summary: Change Roles in a Data Guard Configuration
+            description: 'Change the roles of the primary and standby databases on
+                the two nodes of a Database Cloud Service instance hosting an Oracle
+                Data Guard configuration. You can make three role changes:<ul><li><p><b>Switchover</b>:
+                Switches the roles of the primary database and the standby database.
+                There is no data loss during a switchover. After a switchover, each
+                database continues to participate in the Oracle Data Guard configuration
+                in its new role.</p></li><li><p><b>Failover</b>: Causes the standby
+                database to take over as the primary database. The primary database
+                is no longer considered a part of the Data Guard configuration.</p></li><li><p><b>Reinstate</b>:
+                Used after a failover to reinstate the previous primary database as
+                part of the Data Guard configuration, giving it the standby role.</p></li></ul>'
+            consumes:
+            - application/vnd.com.oracle.oracloud.provisioning.Service+json
+            parameters:
+            -   name: identityDomainId
+                in: path
+                description: 'Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For
+                    a Cloud account with Identity Cloud Service</b>: the identity
+                    service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>.
+                    You can find this ID in the <b>Identity Service Id</b> field on
+                    the Overview tab of the Service Details page for Database Cloud
+                    Service in My Services.</p></li><li><p><b>For a traditional cloud
+                    account</b>: the name of the identity domain.</p></li></ul>'
+                required: true
+                type: string
+            -   name: serviceId
+                in: path
+                description: Name of the Database Cloud Service instance.
+                required: true
+                type: string
+            -   name: Authorization
+                in: header
+                description: Base64 encoding of the user name and password of the
+                    user making the request. For more information, see <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_secauth'>Security,
+                    Authentication and Authorization</a>.
+                required: true
+                type: string
+            -   name: X-ID-TENANT-NAME
+                in: header
+                description: 'Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For
+                    a Cloud account with Identity Cloud Service</b>: the identity
+                    service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>.
+                    You can find this ID in the <b>Identity Service Id</b> field on
+                    the Overview tab of the Service Details page for Database Cloud
+                    Service in My Services.</p></li><li><p><b>For a traditional cloud
+                    account</b>: the name of the identity domain.</p></li></ul>'
+                required: true
+                type: string
+            -   name: body
+                in: body
+                description: ''
+                required: true
+                schema:
+                    $ref: '#/definitions/change-role-postrequest'
+            responses:
+                '202':
+                    headers:
+                        Location:
+                            description: A REST URI you can use to check the progress
+                                and completion of the change role operation.
+                            type: string
+                    description: Accepted. See <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_statuses'>Status
+                        Codes</a> for information about other possible HTTP status
+                        codes.
+    /paas/service/dbcs/api/v1.1/instances/{identityDomainId}/{serviceId}/ibkup:
+        put:
+            operationId: putServiceidIbkup
+            summary: Replace an Existing Instance's Database Using a Cloud Backup
+            description: Replace the database in an existing Database Cloud Service
+                instance hosting a single-instance database using a backup of another
+                database. The backup must be have been created by Oracle Database
+                Backup Cloud Service and stored in an Oracle Storage Cloud Service
+                container. Additionally, the database contained by the cloud backup
+                must meet certain requirements:<ul><li><p>It must be at version 11.2.0.4.0
+                or version 12.1.0.2.0 with the latest PSU (patch set update) applied.</p></li><li><p>If
+                it is an Oracle 12c database, it must be multitenant (CDB). Database
+                Cloud Service does not support non-CDB Oracle 12c databases.</p></li><li><p>It
+                must use File System or ASM as its storage method for data files.</p></li></ul>
+            consumes:
+            - multipart/form-data
+            parameters:
+            -   name: identityDomainId
+                in: path
+                description: 'Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For
+                    a Cloud account with Identity Cloud Service</b>: the identity
+                    service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>.
+                    You can find this ID in the <b>Identity Service Id</b> field on
+                    the Overview tab of the Service Details page for Database Cloud
+                    Service in My Services.</p></li><li><p><b>For a traditional cloud
+                    account</b>: the name of the identity domain.</p></li></ul>'
+                required: true
+                type: string
+            -   name: serviceId
+                in: path
+                description: Name of the Database Cloud Service instance.
+                required: true
+                type: string
+            -   name: Authorization
+                in: header
+                description: Base64 encoding of the user name and password of the
+                    user making the request. For more information, see <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_secauth'>Security,
+                    Authentication and Authorization</a>.
+                required: true
+                type: string
+            -   name: X-ID-TENANT-NAME
+                in: header
+                description: 'Identity domain ID for the Database Cloud Service account:<br>&nbsp;<ul><li><p><b>For
+                    a Cloud account with Identity Cloud Service</b>: the identity
+                    service ID, which has the form <code>idcs-<i>letters-and-numbers</i></code>.
+                    You can find this ID in the <b>Identity Service Id</b> field on
+                    the Overview tab of the Service Details page for Database Cloud
+                    Service in My Services.</p></li><li><p><b>For a traditional cloud
+                    account</b>: the name of the identity domain.</p></li></ul>'
+                required: true
+                type: string
+            -   name: walletArchiveFile
+                in: formData
+                required: false
+                type: file
+                description: Zip file containing the contents of the source database's
+                    Transparent Database Encryption (TDE) wallet directory.
+            -   name: payload
+                in: formData
+                required: true
+                type: string
+                description: 'String containing a JSON object with the following parameters.<br>&nbsp;<ul><li>adminPassword:
+                    string<br>The password to use for the Oracle Database SYS and
+                    SYSTEM users in the newly replaced database.<br>&nbsp;</li><li>ibkupBackupTAG:
+                    string<br>Backup tag of the specific backup to use to replace
+                    the existing database. This parameter is valid only if <code>ibkupOnPremise</code>
+                    is set to <code>no</code>. If no value is specified, the latest
+                    backup is used.<br>&nbsp;</li><li>ibkupCloudStorageContainer:
+                    string<br>Name of the Oracle Storage Cloud Service container where
+                    the existing cloud backup is stored. This parameter is required
+                    if <code>ibkupOnPremise</code> is set to <code>yes</code>.<br>&nbsp;</li><li>ibkupCloudStoragePassword:
+                    string<br>Password of the Oracle Cloud user specified in <code>ibkupCloudStorageUser</code>.
+                    This parameter is required if <code>ibkupOnPremise</code> is set
+                    to <code>yes</code>.<br>&nbsp;</li><li>ibkupCloudStorageUser:
+                    string<br>User name of an Oracle Cloud user who has read access
+                    to the container specified in <code>ibkupCloudStorageContainer</code>.
+                    This parameter is required if <code>ibkupOnPremise</code> is set
+                    to <code>yes</code>.<br>&nbsp;</li><li>ibkupDatabaseID: string<br>Database
+                    id of the database from which the existing cloud backup was created.
+                    This parameter is required if <code>ibkupOnPremise</code> is set
+                    to <code>yes</code>.<br>&nbsp;</li><li>ibkupDecryptionKey: string<br>Password
+                    used to create the existing, password-encrypted cloud backup.
+                    This password is used to decrypt the backup. Specify either this
+                    parameter or the <code>walletArchiveFile</code> form parameter.
+                    This parameter (or the <code>walletArchiveFile</code> form parameter)
+                    is required if <code>ibkupOnPremise</code> is set to <code>yes</code>.<br>&nbsp;</li><li>ibkupOnPremise:
+                    boolean<br>Specify if the existing cloud backup being used to
+                    replace the database is from an on-premises database or another
+                    Database Cloud Service instance. Valid values are <code>true</code>
+                    for an on-premises database and <code>false</code> for a Database
+                    Cloud Service instance. Default value is <code>true</code>.<br>&nbsp;</li><li>ibkupServiceID:
+                    string<br>Oracle Database Cloud Service instance name from which
+                    the database of new Oracle Database Cloud Service instance should
+                    be created. This parameter is required if <code>ibkupOnPremise</code>
+                    is set to <code>no</code>.</li></ul>'
+            responses:
+                '202':
+                    headers:
+                        Location:
+                            description: A REST URI you can use to check the progress
+                                and completion of the replace database operation.
+                            type: string
+                    description: Accepted. See <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_statuses'>Status
+                        Codes</a> for information about other possible HTTP status
+                        codes.
+definitions:
+    monitor-instance:
+        title: Response Body, monitor
+        type: object
+        description: ''
+        properties:
+            identity_domain:
+                type: string
+                description: Identity domain ID for the Oracle Database Cloud Service
+                    account.
+            service_components:
+                type: array
+                description: Groups the health details for Oracle Database Cloud Service
+                    components.
+                items:
+                    $ref: '#/definitions/monitor-instance-service_components-array-item'
+            service_name:
+                type: string
+                description: Name of the Oracle Database Cloud Service instance.
+            summary:
+                $ref: '#/definitions/monitor-instance-summary-object'
+    monitor-instance-summary-object:
+        title: summary Object
+        type: object
+        description: ''
+        properties:
+            status:
+                type: string
+                description: Status of the instance. Valid values are <code>UP</code>,
+                    <code>DOWN</code>, or <code>ERROR</code> (indicating a system
+                    error was encountered during health check).
+            status_time:
+                type: string
+                description: Time at which the status was recorded (UTC).
+            status_message:
+                type: string
+                description: Detailed status message.
+    monitor-instance-service_components-array-item:
+        title: service_components Array Item
+        type: object
+        properties:
+            component:
+                type: string
+                description: Component for which health data is recorded. Component
+                    is  <code>DB</code> for Database Cloud Service instance.
+            health_data:
+                type: array
+                description: Groups the runtime metrics for the Oracle Database Cloud
+                    Service instance component.
+                items:
+                    $ref: '#/definitions/monitor-instance-health_data-array-item'
+            vms:
+                type: array
+                description: Groups the health details of VMs associated with an Oracle
+                    Database Cloud Service component.
+                items:
+                    $ref: '#/definitions/monitor-instance-vms-array-item'
+    monitor-instance-health_data-array-item:
+        title: health_data Array Item
+        type: object
+        properties:
+            displayName:
+                type: string
+                description: Display name for the health monitoring runtime metric.
+            name:
+                type: string
+                description: Name of the health monitoring runtime metric.
+            unit:
+                type: string
+                description: Unit measurement of the metric. For example, <code>MB</code>
+                    and <code>ms</code>.
+            type:
+                type: string
+                description: Data type. For example, <code>int</code>.
+            value:
+                type: string
+                description: Value of the health monitoring data.
+    monitor-instance-vms-array-item:
+        title: vms Array Item
+        type: object
+        properties:
+            servers:
+                type: array
+                description: Groups the health details of servers running on a VM.
+                items:
+                    $ref: '#/definitions/monitor-instance-servers-array-item'
+            summary:
+                type: object
+                description: Groups the health summary for a VM.
+                properties:
+                    status:
+                        type: string
+                        description: Status of the VM. Valid values are <code>UP</code>,
+                            <code>DOWN</code>, or <code>ERROR</code> (indicating a
+                            system error was encountered during health check).
+                    status_message:
+                        type: string
+                        description: Status message, if available.
+                    status_time:
+                        type: string
+                        description: Time at which the status was recorded (UTC).
+                    sub_status:
+                        type: string
+                        description: Status of a subcomponent, if applicable.
+            vm:
+                type: string
+                description: Name of the VM.
+    monitor-instance-servers-array-item:
+        title: servers Array Item
+        type: object
+        properties:
+            health_data:
+                type: array
+                description: Groups the health details for the server.
+                items:
+                    $ref: '#/definitions/monitor-instance-health_data-array-item'
+            server_name:
+                type: string
+                description: Name of the server.
+            server_role:
+                type: string
+                description: 'Server type. For example: <code>MANAGED</code> or <code>ADMIN</code>.'
+            summary:
+                type: object
+                description: Groups the health status summary for the server.
+                properties:
+                    status:
+                        type: string
+                        description: Status of the server. Valid values are <code>UP</code>,
+                            <code>DOWN</code>, or <code>ERROR</code> (indicating a
+                            system error was encountered during health check).
+                    status_message:
+                        type: string
+                        description: Status message, if available.
+                    status_time:
+                        type: string
+                        description: Time at which the status was recorded (UTC).
+    create-instance:
+        title: Request Body, create-instance
+        type: object
+        description: create-instances
+        required:
+        - edition
+        - level
+        - parameters
+        - serviceName
+        - shape
+        - subscriptionType
+        - version
+        - vmPublicKeyText
+        properties:
+            serviceName:
+                type: string
+                description: Name of Database Cloud Service instance. The service
+                    name:<ul><li>Must not exceed 50 characters.</li><li>Must start
+                    with a letter.</li><li>Must contain only letters, numbers, or
+                    hyphens.</li><li>Must not contain any other special characters.</li><li>Must
+                    be unique within the identity domain.</li></ul>
+            description:
+                type: string
+                description: Free-form text that provides additional information about
+                    the service instance.
+            shape:
+                type: string
+                description: Desired compute shape. A shape defines a number of Oracle
+                    Compute Units (OCPUs) and an amount of processor RAM. The valid
+                    shapes you can choose from depend on which infrastructure you
+                    are using for the instance:<br>&nbsp;<ul><li><p>For instances
+                    on Oracle Cloud Infrastructure:</p><p>View a list of currently
+                    available shapes by going to the <a href='https://cloud.oracle.com/compute/pricing'
+                    target='_blank'>Pricing</a> page for Oracle Cloud Infrastructure
+                    Compute on cloud.oracle.com. The "BM.Standard" shapes in the <b>Compute
+                    - Bare Metal Instances</b> table and the "VM.Standard" shapes
+                    in the <b>Compute - Virtual Machine Instances</b> table are available
+                    in Oracle Database Cloud Service.</p></li><li><p>For instances
+                    on Oracle Cloud Infrastructure Classic:</p><p>View a list of currently
+                    available shapes by going to the <a href='https://cloud.oracle.com/en_US/compute-classic/pricing'
+                    target='_blank'>Pricing</a> page for Oracle Cloud Infrastructure
+                    Compute Classic - General Purpose Compute on cloud.oracle.com.
+                    The shapes in the <b>General Purpose Shapes</b> and the <b>High
+                    Memory Shapes</b> tables are available in Oracle Database Cloud
+                    Service.</p></li></ul><p><b>Note:</b> Not all shapes are available
+                    in all regions or sites.</p>
+            vmPublicKeyText:
+                type: string
+                description: Public key for the secure shell (SSH). This key will
+                    be used for authentication when connecting to the Database Cloud
+                    Service instance using an SSH client. You generate an SSH public-private
+                    key pair using a standard SSH key generation tool. See <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=CSDBI3443'
+                    target='_blank'>Connecting to a Compute Node Through Secure Shell
+                    (SSH)</a> in <i>Using Oracle Database Cloud Service</i>.
+            subscriptionType:
+                type: string
+                description: Billing unit. Specify the value <code>HOURLY</code> or
+                    <code>MONTHLY</code>.<p><b>Note:</b> The <code>MONTHLY</code>
+                    value is not available in accounts that use the Universal Credits
+                    payment model.</b>
+            level:
+                type: string
+                description: Service level for the service instance. Specify the value
+                    <code>PAAS</code>.<p><b>Note:</b> Some older accounts also support
+                    the value <code>BASIC</code> to denote the "Oracle Database Cloud
+                    Service - Virtual Image" service level.</p>
+            version:
+                type: string
+                description: 'Oracle Database software version; one of: <code>18.0.0.0</code>,
+                    <code>12.2.0.1</code>, <code>12.1.0.2</code>, or <code>11.2.0.4</code>.'
+            edition:
+                type: string
+                description: '<p>Database edition for the service instance:</p><ul><li><p><code>SE</code>:
+                    Standard Edition</p></li><li><p><code>EE</code>: Enterprise Edition</p></li><li><p><code>EE_HP</code>:
+                    Enterprise Edition - High Performance</p></li><li><p><code>EE_EP</code>:
+                    Enterprise Edition - Extreme Performance</p></li></ul><p>If you
+                    specify <code>SE</code>, a Standard Edition 2 database is created
+                    if you specify <code>12.2.0.1</code> or <code>12.1.0.2</code>
+                    for <code>version</code> and a Standard Edition One database is
+                    created if you specify <code>11.2.0.4</code> for <code>version</code>.</p><p>Edition
+                    must be <code>Enterprise Edition - Extreme Performance</code>
+                    to configure the Database Cloud Service instance as Cluster Database.'
+            region:
+                type: string
+                description: Applicable only to accounts that support regions.<p>Name
+                    of the Oracle Cloud Infrastructure or Oracle Cloud Infrastructure
+                    Classic region where the Oracle Database Cloud Service instance
+                    is to be provisioned.</p><p><b>Note:</b> When specifying an Oracle
+                    Cloud Infrastructure region, the region must be in the default
+                    data region of the Cloud account.</p>
+            availabilityDomain:
+                type: string
+                description: Required if <code>region</code> is an Oracle Cloud Infrastructure
+                    region.<p>Name of the availability domain within the region where
+                    the Oracle Database Cloud Service instance is to be provisioned.</p>
+            subnet:
+                type: string
+                description: Required if <code>region</code> is an Oracle Cloud Infrastructure
+                    region.<p>The Oracle Cloud Identifier (OCID) of the subnet in
+                    the virtual cloud network (VCN) within the region where the Oracle
+                    Database Cloud Service instance is to be provisioned.</p><p>The
+                    OCID is a unique autogenerated ID. To find the OCID of a subnet,
+                    go to the Oracle Cloud Infrastructure web console, select the
+                    Networking tab, click the VCN that your subnet is in, and look
+                    for the OCID field under the subnet that you want to use.</p>
+            ipNetwork:
+                type: string
+                description: 'Applicable only if <code>region</code> is an Oracle
+                    Cloud Infrastructure Classic region.<p>The three-part name of
+                    a custom IP network to use. For example: <code>/Compute-<i>identity_domain/user/object</i></code>.</p><p>A
+                    <code>region</code> must be specified in order to use <code>ipNetwork</code>.
+                    Only IP networks created in the specified region can be used.</p>'
+            ipReservations:
+                type: string
+                description: Applicable only if <code>region</code> is an Oracle Cloud
+                    Infrastructure Classic region.<p>A single IP reservation name
+                    or multiple IP reservation names separated by commas. Only IP
+                    reservations created in the specified region can be used.</p><p>When
+                    IP reservations are used, all compute nodes of an instance must
+                    be provisioned with IP reservations, so the number of names in
+                    <code>ipReservations</code> must match the number of compute nodes
+                    in the service instance.</p>
+            useHighPerformanceStorage:
+                type: boolean
+                description: Applicable only in Oracle Cloud Infrastructure Classic
+                    regions.<p>Specify if high performance storage should be used
+                    for the Database Cloud Service instance. Default data storage
+                    will allocate your database block storage on spinning devices.  By
+                    checking this box, your block storage will be allocated on solid
+                    state devices. Valid values are <code>true</code> and <code>false</code>.
+                    Default value is <code>false</code>.</p>
+            isBYOL:
+                type: boolean
+                description: Specify if you want to use an existing perpetual license
+                    to Oracle Database to establish the right to use Oracle Database
+                    on the new instance. When <code>true</code>, your Oracle Cloud
+                    account will be charged a lesser amount for the new instance because
+                    the right to use Oracle Database is covered by your perpetual
+                    license agreement. Valid values are <code>true</code> and <code>false</code>.
+                    Default value is <code>false</code>.
+            enableNotification:
+                type: boolean
+                description: Specify if you want an email notification sent upon successful
+                    or unsuccessful completion of the instance-creation operation.
+                    When <code>true</code>, you must also specify <code>notificationEmail</code>.
+                    Valid values are <code>true</code> and <code>false</code>. Default
+                    value is <code>false</code>.<p>This parameter is not available
+                    on Oracle Cloud at Customer.</p>
+            notificationEmail:
+                type: string
+                description: Required if <code>enableNotification</code> is set to
+                    <code>true</code>.<p>The email address to send completion notifications
+                    to.</p><p>This parameter is not available on Oracle Cloud at Customer.</p>
+            standbys:
+                title: standbys Array
+                type: array
+                description: Applicable only in Oracle Cloud Infrastructure regions.<p>Array
+                    of one JSON object that specifies configuration details of the
+                    standby database when <code>failoverDatabase</code> is set to
+                    <code>true</code>. <code>disasterRecovery</code> must be set to
+                    <code>true</code>.</p>
+                items:
+                    $ref: '#/definitions/create-instance-standbys-item'
+            parameters:
+                title: parameters Array
+                type: array
+                description: Array of one JSON object that specifies configuration
+                    details of the services instance. This array is not required if
+                    the <code>level</code> value is <code>BASIC</code>.
+                items:
+                    $ref: '#/definitions/create-instance-parameters-item'
+            assignPublicIP:
+                type: boolean
+                description: Applicable only if <code>region</code> is an Oracle Cloud
+                    Infrastructure Classic region and an <code>ipNetwork</code> value
+                    is provided.<p>Specify whether to assign public IP addresses to
+                    the compute nodes of the service instance:</p><ul><li><p>When
+                    set to <code>true</code>, any compute node added during instance
+                    creation, or later added as part of a scaling operation, will
+                    have a public IP address assigned to it. Thus, all compute nodes
+                    will be accessible from the public Internet, provided that access
+                    rules permitting such access are enabled.</p></li><li><p>When
+                    set to <code>false</code>, any compute node added during instance
+                    creation, or later added as part of a scaling operation, will
+                    <b>not</b> have a public IP address assigned to it. Thus, no compute
+                    node will be accessible from the public Internet. Use this value
+                    in situations where the nodes and the database will only be accessed
+                    from within the IP network or from an on-premises data center
+                    over a VPN network.</p></li></ul><p>Default value is <code>true</code>.</p>
+    create-instance-parameters-item:
+        title: parameters Array Item
+        type: object
+        required:
+        - type
+        - usableStorage
+        - adminPassword
+        - sid
+        - backupDestination
+        properties:
+            type:
+                type: string
+                description: 'Component type to which the set of parameters applies.
+                    Valid values are: <ul><li><code>db</code> - Oracle Database </li>.'
+            usableStorage:
+                type: string
+                description: 'Storage size for data (in GB). Minimum value is 15.
+                    Maximum value depends on the backup destination: if <code>BOTH</code>
+                    is specified, the maximum value is 1200; if <code>OSS</code> or
+                    <code>NONE</code> is specified, the maximum value is 2048.'
+            adminPassword:
+                type: string
+                description: '<p>The password for the following administrative users:</p><ul><li>Oracle
+                    Database administrative users <code>sys</code> and <code>system</code></li><li>Oracle
+                    Application Express admin user</li><li>DBaaS Monitor user</li></ul><p>The
+                    password:</p><ul><li>Must be 8 to 30 characters in length.</li><li>Must
+                    contain at least one lowercase letter.</li><li>Must contain at
+                    least one uppercase letter.</li><li>Must contain at least one
+                    number.</li><li>Must contain at least one of these symbols: _
+                    (underscore), # (hash sign), or $ (dollar sign).</li><li>Must
+                    not contain the word "oracle".</li></ul>'
+            sid:
+                type: string
+                description: Database Name (sid) for the Database Cloud Service instance.
+                    Default value is <code>ORCL</code>.
+            pdbName:
+                type: string
+                description: <b>Note:</b> This attribute is valid when Database Cloud
+                    Service instance is configured with version <code>12c</code>.<p>Pluggable
+                    Database Name for the Database Cloud Service instance. Default
+                    value is <code>pdb1</code>.
+            timezone:
+                type: string
+                description: Time Zone for the Database Cloud Service instance. Default
+                    value is <code>UTC</code>. <p>Valid values are <code>Africa/Cairo</code>,
+                    <code>Africa/Casablanca</code>, <code>Africa/Harare</code>, <code>Africa/Monrovia</code>,
+                    <code>Africa/Nairobi</code>, <code>Africa/Tripoli</code>, <code>Africa/Windhoek</code>,
+                    <code>America/Araguaina</code>, <code>America/Asuncion</code>,
+                    <code>America/Bogota</code>, <code>America/Caracas</code>, <code>America/Chihuahua</code>,
+                    <code>America/Cuiaba</code>, <code>America/Denver</code>, <code>America/Fortaleza</code>,
+                    <code>America/Guatemala</code>, <code>America/Halifax</code>,
+                    <code>America/Manaus</code>, <code>America/Matamoros</code>, <code>America/Monterrey</code>,
+                    <code>America/Montevideo</code>, <code>America/Phoenix</code>,
+                    <code>America/Santiago</code>, <code>America/Tijuana</code>, <code>Asia/Amman</code>,
+                    <code>Asia/Ashgabat</code>, <code>Asia/Baghdad</code>, <code>Asia/Baku</code>,
+                    <code>Asia/Bangkok</code>, <code>Asia/Beirut</code>, <code>Asia/Calcutta</code>,
+                    <code>Asia/Damascus</code>, <code>Asia/Dhaka</code>, <code>Asia/Irkutsk</code>,
+                    <code>Asia/Jerusalem</code>, <code>Asia/Kabul</code>, <code>Asia/Karachi</code>,
+                    <code>Asia/Kathmandu</code>, <code>Asia/Krasnoyarsk</code>, <code>Asia/Magadan</code>,
+                    <code>Asia/Muscat</code>, <code>Asia/Novosibirsk</code>, <code>Asia/Riyadh</code>,
+                    <code>Asia/Seoul</code>, <code>Asia/Shanghai</code>, <code>Asia/Singapore</code>,
+                    <code>Asia/Taipei</code>, <code>Asia/Tehran</code>, <code>Asia/Tokyo</code>,
+                    <code>Asia/Ulaanbaatar</code>, <code>Asia/Vladivostok</code>,
+                    <code>Asia/Yakutsk</code>, <code>Asia/Yerevan</code>, <code>Atlantic/Azores</code>,
+                    <code>Australia/Adelaide</code>, <code>Australia/Brisbane</code>,
+                    <code>Australia/Darwin</code>, <code>Australia/Hobart</code>,
+                    <code>Australia/Perth</code>, <code>Australia/Sydney</code>, <code>Brazil/East</code>,
+                    <code>Canada/Newfoundland</code>, <code>Canada/Saskatchewan</code>,
+                    <code>Europe/Amsterdam</code>, <code>Europe/Athens</code>, <code>Europe/Dublin</code>,
+                    <code>Europe/Helsinki</code>, <code>Europe/Istanbul</code>, <code>Europe/Kaliningrad</code>,
+                    <code>Europe/Moscow</code>, <code>Europe/Paris</code>, <code>Europe/Prague</code>,
+                    <code>Europe/Sarajevo</code>, <code>Pacific/Auckland</code>, <code>Pacific/Fiji</code>,
+                    <code>Pacific/Guam</code>, <code>Pacific/Honolulu</code>, <code>Pacific/Samoa</code>,
+                    <code>US/Alaska</code>, <code>US/Central</code>, <code>US/Eastern</code>,
+                    <code>US/East-Indiana</code>, <code>US/Pacific</code>, <code>UTC</code>.
+            ncharset:
+                type: string
+                description: National Character Set for the Database Cloud Service
+                    instance. Default value is <code>AL16UTF16</code>. <p>Valid values
+                    are <code>AL16UTF16</code> and <code>UTF8</code>.
+            charset:
+                type: string
+                description: Character Set for the Database Cloud Service Instance.
+                    Default value is <code>AL32UTF8</code>. <p>Valid values are <code>AL32UTF8</code>,
+                    <code>AR8ADOS710</code>, <code>AR8ADOS720</code>, <code>AR8APTEC715</code>,
+                    <code>AR8ARABICMACS</code>, <code>AR8ASMO8X</code>, <code>AR8ISO8859P6</code>,
+                    <code>AR8MSWIN1256</code>, <code>AR8MUSSAD768</code>, <code>AR8NAFITHA711</code>,
+                    <code>AR8NAFITHA721</code>, <code>AR8SAKHR706</code>, <code>AR8SAKHR707</code>,
+                    <code>AZ8ISO8859P9E</code>, <code>BG8MSWIN</code>, <code>BG8PC437S</code>,
+                    <code>BLT8CP921</code>, <code>BLT8ISO8859P13</code>, <code>BLT8MSWIN1257</code>,
+                    <code>BLT8PC775</code>, <code>BN8BSCII</code>, <code>CDN8PC863</code>,
+                    <code>CEL8ISO8859P14</code>, <code>CL8ISO8859P5</code>, <code>CL8ISOIR111</code>,
+                    <code>CL8KOI8R</code>, <code>CL8KOI8U</code>, <code>CL8MACCYRILLICS</code>,
+                    <code>CL8MSWIN1251</code>, <code>EE8ISO8859P2</code>, <code>EE8MACCES</code>,
+                    <code>EE8MACCROATIANS</code>, <code>EE8MSWIN1250</code>, <code>EE8PC852</code>,
+                    <code>EL8DEC</code>, <code>EL8ISO8859P7</code>, <code>EL8MACGREEKS</code>,
+                    <code>EL8MSWIN1253</code>, <code>EL8PC437S</code>, <code>EL8PC851</code>,
+                    <code>EL8PC869</code>, <code>ET8MSWIN923</code>, <code>HU8ABMOD</code>,
+                    <code>HU8CWI2</code>, <code>IN8ISCII</code>, <code>IS8PC861</code>,
+                    <code>IW8ISO8859P8</code>, <code>IW8MACHEBREWS</code>, <code>IW8MSWIN1255</code>,
+                    <code>IW8PC1507</code>, <code>JA16EUC</code>, <code>JA16EUCTILDE</code>,
+                    <code>JA16SJIS</code>, <code>JA16SJISTILDE</code>, <code>JA16VMS</code>,
+                    <code>KO16KSC5601</code>, <code>KO16KSCCS</code>, <code>KO16MSWIN949</code>,
+                    <code>LA8ISO6937</code>, <code>LA8PASSPORT</code>, <code>LT8MSWIN921</code>,
+                    <code>LT8PC772</code>, <code>LT8PC774</code>, <code>LV8PC1117</code>,
+                    <code>LV8PC8LR</code>, <code>LV8RST104090</code>, <code>N8PC865</code>,
+                    <code>NE8ISO8859P10</code>, <code>NEE8ISO8859P4</code>, <code>RU8BESTA</code>,
+                    <code>RU8PC855</code>, <code>RU8PC866</code>, <code>SE8ISO8859P3</code>,
+                    <code>TH8MACTHAIS</code>, <code>TH8TISASCII</code>, <code>TR8DEC</code>,
+                    <code>TR8MACTURKISHS</code>, <code>TR8MSWIN1254</code>, <code>TR8PC857</code>,
+                    <code>US7ASCII</code>, <code>US8PC437</code>, <code>UTF8</code>,
+                    <code>VN8MSWIN1258</code>, <code>VN8VN3</code>, <code>WE8DEC</code>,
+                    <code>WE8DG</code>, <code>WE8ISO8859P1</code>, <code>WE8ISO8859P15</code>,
+                    <code>WE8ISO8859P9</code>, <code>WE8MACROMAN8S</code>, <code>WE8MSWIN1252</code>,
+                    <code>WE8NCR4970</code>, <code>WE8NEXTSTEP</code>, <code>WE8PC850</code>,
+                    <code>WE8PC858</code>, <code>WE8PC860</code>, <code>WE8ROMAN8</code>,
+                    <code>ZHS16CGB231280</code>, <code>ZHS16GBK</code>, <code>ZHT16BIG5</code>,
+                    <code>ZHT16CCDC</code>, <code>ZHT16DBT</code>, <code>ZHT16HKSCS</code>,
+                    <code>ZHT16MSWIN950</code>, <code>ZHT32EUC</code>, <code>ZHT32SOPS</code>,
+                    <code>ZHT32TRIS</code>.
+            isRac:
+                type: string
+                description: Specify if a cluster database using Oracle Real Application
+                    Clusters should be configured. Valid values are <code>yes</code>
+                    and <code>no</code>. Default value is <code>no</code>.
+            failoverDatabase:
+                type: string
+                description: Specify if an Oracle Data Guard configuration comprising
+                    a primary database and a standby database is created. Valid values
+                    are <code>yes</code> and <code>no</code>. Default value is <code>no</code>.
+            disasterRecovery:
+                type: string
+                description: Specify if an Oracle Data Guard configuration is created
+                    using the Disaster Recovery option or the High Availability option.
+                    Valid values are <code>yes</code> and <code>no</code>:<ul><li><p><code>yes</code>
+                    - The Disaster Recovery option is used, which places the compute
+                    node hosting the primary database and the compute node hosting
+                    the standby database in compute zones of different data centers.</p></li><li><p><code>no</code>
+                    - The High Availability option is used, which places the compute
+                    node hosting the primary database and the compute node hosting
+                    the standby database in different compute zones of the same data
+                    center.</p></li></ul><p>Default value is <code>no</code>.</p><p>This
+                    option is applicable only when <code>failoverDatabase</code> is
+                    set to <code>yes</code>.</p>
+            goldenGate:
+                type: string
+                description: Specify if the database should be configured for use
+                    as the replication database of an Oracle GoldenGate Cloud Service
+                    instance. Valid values are <code>yes</code> and <code>no</code>.
+                    Default value is <code>no</code>. <p>You cannot set <code>goldenGate</code>
+                    to <code>yes</code> if either <code>isRac</code> or <code>failoverDatabase</code>
+                    is set to <code>yes</code>.
+            backupDestination:
+                type: string
+                description: 'Backup destination. Valid values are: <ul><li><code>BOTH</code>
+                    - Both Cloud Storage and Local Storage</li><li><code>OSS</code>
+                    - Cloud Storage only</li><li><code>NONE</code> - None</li></ul>'
+            cloudStorageContainer:
+                type: string
+                description: The location where backups to cloud storage are to be
+                    stored:<ul><li><p>For service instances in Oracle Cloud Infrastructure,
+                    enter the URL of an existing Oracle Cloud Infrastructure Object
+                    Storage bucket. The URL is of the form:</p><pre>https://swiftobjectstorage.<i>region</i>.oraclecloud.com/v1/<i>account</i>/<i>bucket</i></pre><p>For
+                    example:</p><pre>https://swiftobjectstorage.us-phoenix-1.oraclecloud.com/v1/mycompany/mybucket</pre><p>You
+                    must create this storage bucket before you begin creating the
+                    service instace. See <a href='https://www.oracle.com/pls/topic/lookup?ctx=cloud&amp;id=oci_api_objectstorage'>Object
+                    Storage API</a> in Oracle Cloud Infrastructure documentation.</p></li><li><p>For
+                    database deployments in Oracle Cloud Infrastructure Classic, enter
+                    the location of an Oracle Cloud Infrastructure Object Storage
+                    Classic container using this form:</p><pre>Storage-<i>identity_domain</i>/<i>container</i></pre><p>where
+                    <i><code>identity_domain</code></i> is the id of the identity
+                    domain, and <i><code>container</code></i> is the name of the container.</p><p><b>Note:</b>
+                    In some Oracle Cloud Infrastructure Classic accounts, you cannot
+                    use the above form. If you get an error when you try to use this
+                    form, you must instead provide a full URL for the container using
+                    this form:</p><pre><i>rest-endpoint-url</i>/<i>container</i></pre><p>To
+                    determine the <code><i>rest-endpoint-url</i></code> value for
+                    your account, see <a href='https://www.oracle.com/pls/topic/lookup?ctx=en/cloud/paas/database-dbaas-cloud/csdbi&amp;id=CSSTO-GUID-629F5636-C378-4E35-8E54-CF32855285CB'>Finding
+                    the REST Endpoint URL for Your Service Instance</a> in <i>Using
+                    Oracle Cloud Infrastructure Object Storage Classic</i>.</p>
+            cloudStorageUser:
+                type: string
+                description: A user with read/write (and creation, if necessary) access
+                    to the location specified in <code>cloudStorageContainer</code>:<ul><li><p>For
+                    service instances in Oracle Cloud Infrastructure, enter the user
+                    name you use to sign in to the Oracle Cloud Infrastructure console.</p></li><li><p>For
+                    service instances in Oracle Cloud Infrastructure Classic, enter
+                    the Oracle Cloud user name of the administrator of the Oracle
+                    Cloud Infrastructure Object Storage Classic container specified
+                    in <code>cloudStorageContainer</code>. Usually, this is your Oracle
+                    Cloud user name.</p></li></ul>
+            cloudStoragePwd:
+                type: string
+                description: The password necessary to access the location specified
+                    in <code>cloudStorageContainer</code>:<ul><li><p>For service instances
+                    in Oracle Cloud Infrastructure, enter your Swift password.</p></li><li><p>For
+                    service instances in Oracle Cloud Infrastructure Classic, enter
+                    the password of the Oracle Cloud user specified in <code>cloudStorageUser</code>.</p></li></ul>
+            createStorageContainerIfMissing:
+                type: boolean
+                description: Applicable only to Oracle Cloud Infrastructure Object
+                    Storage Classic containers.<p>Specify if the given <code>cloudStorageContainer</code>
+                    is to be created if it does not already exist. Valid values are
+                    <code>true</code> and <code>false</code>. Default value is <code>false</code>.</p>
+            listenerPort:
+                type: string
+                description: The port number for the Oracle Net Listener. The port
+                    number must be between 1521 and 5499 (inclusive). Default value
+                    is <code>1521</code>.
+            sourceServiceName:
+                type: string
+                description: When present, indicates that the service instance should
+                    be created as a "snapshot clone" of another service instance.
+                    Provide the name of the existing service instance whose snapshot
+                    is to be used.
+            snapshotName:
+                type: string
+                description: The name of the snapshot of the service instance specified
+                    by <code>sourceServiceName</code> that is to be used to create
+                    a "snapshot clone". This parameter is valid only if <code>sourceServiceName</code>
+                    is specified.
+            ibkup:
+                type: string
+                description: Specify if the service instance's database should, after
+                    the instance is created, be replaced by a database stored in an
+                    existing cloud backup that was created using Oracle Database Backup
+                    Cloud Service. Valid values are <code>yes</code> and <code>no</code>.
+                    Default value is <code>no</code>.
+            ibkupOnPremise:
+                type: boolean
+                description: Specify if the existing cloud backup being used to replace
+                    the database is from an on-premises database or another Database
+                    Cloud Service instance. Valid values are <code>true</code> for
+                    an on-premises database and <code>false</code> for a Database
+                    Cloud Service instance. Default value is <code>true</code>.
+            ibkupDatabaseID:
+                type: string
+                description: Database id of the database from which the existing cloud
+                    backup was created. This parameter is required if <code>ibkup</code>
+                    is set to <code>yes</code> and <code>ibkupOnPremise</code> is
+                    set to <code>yes</code>.
+            ibkupDecryptionKey:
+                type: string
+                description: Password used to create the existing, password-encrypted
+                    cloud backup. This password is used to decrypt the backup. Specify
+                    either <code>ibkupDecryptionKey</code> or <code>ibkupWalletFileContent</code>
+                    for decrypting the backup. This parameter is required if <code>ibkup</code>
+                    is set to <code>yes</code> and <code>ibkupOnPremise</code> is
+                    set to <code>yes</code>.
+            ibkupWalletFileContent:
+                type: string
+                description: String containing the xsd:base64Binary representation
+                    of the cloud backup's wallet file. This wallet is used to decrypt
+                    the backup. Specify either <code>ibkupDecryptionKey</code> or
+                    <code>ibkupWalletFileContent</code> for decrypting the backup.
+                    This parameter is required if <code>ibkup</code> is set to <code>yes</code>
+                    and <code>ibkupOnPremise</code> is set to <code>yes</code>.
+            ibkupCloudStorageContainer:
+                type: string
+                description: Name of the Oracle Storage Cloud Service container where
+                    the existing cloud backup is stored. This parameter is required
+                    if <code>ibkup</code> is set to <code>yes</code> and <code>ibkupOnPremise</code>
+                    is set to <code>yes</code>.
+            ibkupCloudStorageUser:
+                type: string
+                description: User name of an Oracle Cloud user who has read access
+                    to the container specified in <code>ibkupCloudStorageContainer</code>.
+                    This parameter is required if <code>ibkup</code> is set to <code>yes</code>
+                    and <code>ibkupOnPremise</code> is set to <code>yes</code>.
+            ibkupCloudStoragePassword:
+                type: string
+                description: Password of the Oracle Cloud user specified in <code>ibkupCloudStorageUser</code>.
+                    This parameter is required if <code>ibkup</code> is set to <code>yes</code>
+                    and <code>ibkupOnPremise</code> is set to <code>yes</code>.
+            ibkupServiceID:
+                type: string
+                description: Oracle Databsae Cloud Service instance name from which
+                    the database of new Oracle Database Cloud Service instance should
+                    be created. This parameter is required if <code>ibkup</code> is
+                    set to <code>yes</code> and <code>ibkupOnPremise</code> is set
+                    to <code>no</code>.
+            ibkupBackupTAG:
+                type: string
+                description: Backup tag of the specific backup from which the database
+                    of new Oracle Database Cloud Service instance should be created.
+                    This parameter is valid only if <code>ibkup</code> is set to <code>yes</code>
+                    and <code>ibkupOnPremise</code> is set to <code>no</code>. If
+                    no value is specified, the latest backup is used.
+            hdg:
+                type: string
+                description: Specify if an Oracle Hybrid Disaster Recovery configuration
+                    comprising a primary database on customer premisesand a standby
+                    database in Oracle Public Cloud should be configured. Valid values
+                    are <code>yes</code> and <code>no</code>. Default value is <code>no</code>.
+                    <p>You cannot set <code>failoverDatabase</code> or <code>isRac</code>
+                    to <code>yes</code> if Hybrid Disaster Recovery options is chosen.</p>
+            hdgCloudStorageContainer:
+                type: string
+                description: Name of the Oracle Storage Cloud Service container where
+                    the backup from on-premise instance is stored. This parameter
+                    is required if <code>hdg</code> is set to <code>yes</code>.
+            hdgCloudStorageUser:
+                type: string
+                description: User name of an Oracle Cloud user who has read access
+                    to the container specified in <code>hdgCloudStorageContainer</code>.
+                    This parameter is required if <code>hdg</code> is set to <code>yes</code>.
+            hdgCloudStoragePassword:
+                type: string
+                description: Password of the Oracle Cloud user specified in <code>hdgCloudStorageUser</code>.
+                    This parameter is required if <code>hdg</code> is set to <code>yes</code>.
+            additionalParams:
+                $ref: '#/definitions/create-instance-parameters-item-additionalParams'
+    create-instance-parameters-item-additionalParams:
+        title: additionalParams Object
+        type: object
+        properties:
+            db_demo:
+                type: string
+                description: 'Indicates whether to include the Demos PDB: <code>"yes"</code>
+                    or <code>"no"</code>.'
+    create-instance-standbys-item:
+        title: standbys Array Item
+        type: object
+        required:
+        - availabilityDomain
+        - subnet
+        properties:
+            availabilityDomain:
+                type: string
+                description: Applicable only in Oracle Cloud Infrastructure regions.<p>Name
+                    of the availability domain within the region where the standby
+                    database of the Oracle Database Cloud Service instance is to be
+                    provisioned.</p>
+            subnet:
+                type: string
+                description: Applicable only in Oracle Cloud Infrastructure regions.<p>Name
+                    of the subnet within the region where the standby database of
+                    the Oracle Database Cloud Service instance is to be provisioned.</p>
+    view-all-instances:
+        title: Response Body (view-all-instance)
+        type: object
+        description: view-all-instances
+        properties:
+            uri:
+                type: string
+                description: REST endpoint URI for Database Cloud Service in the identity
+                    domain.
+            service_type:
+                type: string
+                description: The value <code>dbaas</code> to denote Database Cloud
+                    Service.
+            implementation_version:
+                type: string
+                description: The value <code>1.0</code>.
+            services:
+                title: services Array
+                type: array
+                description: Array of JSON object elements, with one element for each
+                    service instance in the identity domain.
+                items:
+                    $ref: '#/definitions/view-all-instances-services-array-item'
+    view-all-instances-services-array-item:
+        title: services Array Item
+        x-model: DBInstance
+        type: object
+        properties:
+            backup_supported_version:
+                type: string
+                description: The version of cloud tooling for backup and recovery
+                    supported by the service instance.
+            created_by:
+                type: string
+                description: The user name of the Oracle Cloud user who created the
+                    service instance.
+            creation_time:
+                type: string
+                format: paas-date-time
+                description: The date-and-time stamp when the service instance was
+                    created.
+            description:
+                type: string
+                description: The description of the service instance, if one was provided
+                    when the instance was created.
+            identity_domain:
+                type: string
+                description: The identity domain housing the service instance.
+            last_modified_time:
+                type: string
+                format: paas-date-time
+                description: The date-and-time stamp when the service instance was
+                    last modified.
+            service_name:
+                type: string
+                description: The name of the service instance.
+            service_uri:
+                type: string
+                description: The REST endpoint URI of the service instance.
+            sm_plugin_version:
+                type: string
+                description: The version of the cloud tooling service manager plugin
+                    supported by the service instance.
+            status:
+                type: string
+                description: 'The status of the service instance:<ul><li><code>Configured</code>:
+                    the service instance has been configured.</li><li><code>In Progress</code>:
+                    the service instance is being created.</li><li><code>Maintenance</code>:
+                    the service instance is being stopped, started, restarted or scaled.</li><li><code>Running</code>:
+                    the service instance is running.</li><li><code>Stopped</code>:
+                    the service instance is stopped.</li><li><code>Terminating</code>:
+                    the service instance is being deleted.</li></ul>'
+            version:
+                type: string
+                description: The Oracle Database version on the service instance.
+            legacy:
+                type: boolean
+                description: Is is legacy
+
+  
+    view-instance:
+        title: Response Body, view-instances
+        type: object
+        description: ''
+        properties:
+            apex_url:
+                type: string
+                description: The URL to use to connect to Oracle Application Express
+                    on the service instance.
+            availabilityDomain:
+                type: string
+                description: Applicable only in Oracle Cloud Infrastructure regions.<p>Name
+                    of the availability domain within the region where the Oracle
+                    Database Cloud Service instance is provisioned.</p>
+            backup_destination:
+                type: string
+                description: The backup configuration of the service instance.
+            backup_supported_version:
+                type: string
+                description: The version of cloud tooling for backup and recovery
+                    supported by the service instance.
+            charset:
+                type: string
+                description: The database character set of the database.
+            cloud_storage_container:
+                type: string
+                description: The Oracle Storage Cloud container for backups.
+            compute_site_name:
+                type: string
+                description: The Oracle Cloud location housing the service instance.
+            connect_descriptor:
+                type: string
+                description: The connection descriptor for Oracle Net Services (SQL*Net).
+            connect_descriptor_with_public_ip:
+                type: string
+                description: The connection descriptor for Oracle Net Services (SQL*Net)
+                    with IP addresses instead of host names.
+            created_by:
+                type: string
+                description: The user name of the Oracle Cloud user who created the
+                    service instance.
+            creation_job_id:
+                type: string
+                description: The job id of the job that created the service instance.
+            creation_time:
+                type: string
+                description: The date-and-time stamp when the service instance was
+                    created.
+            current_version:
+                type: string
+                description: The Oracle Database version on the service instance,
+                    including the patch level.
+            dbaasmonitor_url:
+                type: string
+                description: The URL to use to connect to Oracle DBaaS Monitor on
+                    the service instance.
+            description:
+                type: string
+                description: The description of the service instance, if one was provided
+                    when the instance was created.
+            edition:
+                type: string
+                description: The software edition of the service instance.
+            em_url:
+                type: string
+                description: The URL to use to connect to Enterprise Manager on the
+                    service instance.
+            failover_database:
+                type: boolean
+                description: Indicates whether the service instance hosts an Oracle
+                    Data Guard configuration.
+            glassfish_url:
+                type: string
+                description: The URL to use to connect to the Oracle GlassFish Server
+                    Administration Console on the service instance.
+            hdgPremIP:
+                type: string
+                description: Data Guard Role of the on-premise instance in Oracle
+                    Hybrid Disaster Recovery configuration.
+            hybrid_dg:
+                type: string
+                description: Indicates whether the service instance hosts an Oracle
+                    Hybrid Disaster Recovery configuration.
+            identity_domain:
+                type: string
+                description: The identity domain housing the service instance.
+            ipNetwork:
+                type: string
+                description: 'This attribute is only applicable to accounts where
+                    regions are supported. The three-part name of an IP network to
+                    which the service instance is added. For example: /Compute-identity_domain/user/object '
+            ipReservations:
+                type: string
+                description: Groups one or more IP reservations in use on this service
+                    instance. This attribute is only applicable to accounts where
+                    regions are supported. This attribute is returned when you set
+                    the <code>?outputLevel=verbose</code> query parameter.
+            isBYOL:
+                type: boolean
+                description: Indicates whether service instance was provisioned with
+                    the 'Bring Your Own License' (BYOL) option.
+            jaas_instances_using_service:
+                type: string
+                description: The Oracle Java Cloud Service instances using this Database
+                    Cloud Service instance.
+            last_modified_time:
+                type: string
+                description: The date-and-time stamp when the service instance was
+                    last modified.
+            level:
+                type: string
+                description: 'The service level of the service instance:<ul><li><code>BASIC</code>:
+                    The Oracle Database Cloud Service - Virtual Image service level</li><li><code>PAAS</code>:The
+                    Oracle Database Cloud Service service level</li></ul>'
+            listenerPort:
+                type: integer
+                description: The listener port for Oracle Net Services (SQL*Net) connections.
+            ncharset:
+                type: string
+                description: The national character set of the database.
+            num_ip_reservations:
+                type: integer
+                description: The number of Oracle Compute Service IP reservations
+                    assigned to the service instance.
+            num_nodes:
+                type: string
+                description: The number of compute nodes in the service instance.
+            pdbName:
+                type: string
+                description: The name of the default PDB (pluggable database) created
+                    when the service instance was created.
+            rac_database:
+                type: boolean
+                description: Indicates whether the service instance hosts an Oracle
+                    RAC database.
+            region:
+                type: string
+                description: This attribute is only applicable to accounts where regions
+                    are supported. Location where the service instance is provisioned
+                    (only for accounts where regions are supported).
+            service_name:
+                type: string
+                description: The name of the service instance.
+            service_uri:
+                type: string
+                description: The REST endpoint URI of the service instance.
+            shape:
+                type: string
+                description: The Oracle Compute Cloud shape of the service instance.
+            sid:
+                type: string
+                description: The SID of the database.
+            sm_plugin_version:
+                type: string
+                description: The version of the cloud tooling service manager plugin
+                    supported by the service instance.
+            status:
+                type: string
+                description: 'The status of the service instance:<ul><li><code>Configured</code>:
+                    the service instance has been configured.</li><li><code>In Progress</code>:
+                    the service instance is being created.</li><li><code>Maintenance</code>:
+                    the service instance is being stopped, started, restarted or scaled.</li><li><code>Running</code>:
+                    the service instance is running.</li><li><code>Stopped</code>:
+                    the service instance is stopped.</li><li><code>Terminating</code>:
+                    the service instance is being deleted.</li></ul>'
+            subnet:
+                type: string
+                description: Applicable only in Oracle Cloud Infrastructure regions.<p>Name
+                    of the subnet within the region where the Oracle Database Cloud
+                    Service instance is provisioned.</p>
+            subscriptionType:
+                type: string
+                description: The billing frequency of the service instance; either
+                    <code>MONTHLY</code> or <code>HOURLY</code>.
+            timezone:
+                type: string
+                description: The time zone of the operating system.
+            total_shared_storage:
+                type: integer
+                description: For service instances hosting an Oracle RAC database,
+                    the size in GB of the storage shared and accessed by the nodes
+                    of the RAC database.
+            useHighPerformanceStorage:
+                type: boolean
+                description: Indicates whether the service instance was provisioned
+                    with high performance storage.
+            version:
+                type: string
+                description: The Oracle Database version on the service instance.
+    view-instance-nodes:
+        title: Response Body, veiwasdf
+        type: array
+        description: Array of JSON object elements, with one element for each of the
+            service instance's compute nodes.
+        items:
+            $ref: '#/definitions/view-instance-nodes-array-item'
+    view-instance-nodes-array-item:
+        title: Response Body Array Item
+        type: object
+        properties:
+            availabilityDomain:
+                type: string
+                description: Applicable only in Oracle Cloud Infrastructure regions.<p>Name
+                    of the availability domain within the region where the compute
+                    node is provisioned.</p>
+            connect_descriptor:
+                type: string
+                description: The connection descriptor for Oracle Net Services (SQL*Net).
+            connect_descriptor_with_public_ip:
+                type: string
+                description: The connection descriptor for Oracle Net Services (SQL*Net)
+                    with IP addresses instead of host names.
+            created_by:
+                type: string
+                description: The user name of the Oracle Cloud user who created the
+                    service instance.
+            creation_job_id:
+                type: string
+                description: The job id of the job that created the service instance.
+            creation_time:
+                type: string
+                description: The date-and-time stamp when the service instance was
+                    created.
+            hostname:
+                type: string
+                description: The host name of the compute node.
+            initialPrimary:
+                type: boolean
+                description: Indicates whether the compute node hosted the primary
+                    database of an Oracle Data Guard configuration when the service
+                    instance was created.
+            listenerPort:
+                type: integer
+                description: The listener port for Oracle Net Services (SQL*Net) connections.
+            pdbName:
+                type: string
+                description: The name of the default PDB (pluggable database) created
+                    when the service instance was created.
+            reservedIP:
+                type: string
+                description: The IP address of the compute node.
+            shape:
+                type: string
+                description: The Oracle Compute Cloud shape of the compute node.
+            sid:
+                type: string
+                description: The SID of the database on the compute node.
+            status:
+                type: string
+                description: 'The status of the compute node:<ul><li><code>Configured</code>:
+                    the compute node has been configured.</li><li><code>In Progress</code>:
+                    the compute node is being created.</li><li><code>Maintenance</code>:
+                    the compute node is being stopped, started, restarted or scaled.</li><li><code>Running</code>:
+                    the compute node is running.</li><li><code>Stopped</code>: the
+                    compute node is stopped.</li><li><code>Terminating</code>: the
+                    compute node is being deleted.</li></ul>'
+            storageAllocated:
+                type: integer
+                description: The size in GB of the storage allocated to the compute
+                    node. For compute nodes of a service instance hosting an Oracle
+                    RAC database, this number does not include the storage shared
+                    by the nodes.
+            subnet:
+                type: string
+                description: Applicable only in Oracle Cloud Infrastructure regions.<p>Name
+                    of the subnet within the region where the compute node is provisioned.</p>
+    stop-start-restart-instance:
+        title: Request Body, start-stop
+        type: object
+        description: ''
+        properties:
+            lifecycleState:
+                type: string
+                description: 'Type of the request. Valid values are:<ul><li><code>stop</code>:
+                    Stops the Database Cloud Service instance or compute node.</li><li><code>start</code>:
+                    Starts the Database Cloud Service instance or compute node.</li><li><code>restart</code>:
+                    Restarts the Database Cloud Service instance or compute node.'
+            lifecycleTimeout:
+                type: string
+                description: Timeout (minutes) for each request. The range of valid
+                    values are <code>1</code> to <code>300</code> minutes (inclusive).
+                    This value defaults to <code>60</code> minutes.
+            vmName:
+                type: string
+                description: Name of compute node to stop, start, or restart.
+    scale-putrequest:
+        title: Request Body, scale-put
+        type: object
+        description: scale-putrequest
+        properties:
+            shape:
+                type: string
+                description: Specify new shape for the Database Cloud Service instance.
+                    User can specify a higher shape (Scale Up) or a lower shape (Scale
+                    Down). Shape is optional. User can add storage only without changing
+                    shape.
+            additionalStorage:
+                type: string
+                description: 'Specify size of additional storage in Giga Bytes. This
+                    parameter is optional. User can change shape only without adding
+                    storage. If additionalStorage is specified, minimum value is 1GB
+                    and maximum value is 1TB. '
+            componentInstanceName:
+                type: string
+                description: (Applies only to service instances that use Oracle RAC
+                    and Oracle Data Guard together.)<p>Specifies whether the scaling
+                    operation applies to the primary database or standby database
+                    of the Data Guard configuration. Specify the value <code>DB_1</code>
+                    for the primary database or the value <code>DB_2</code> for the
+                    standby database.
+            usage:
+                type: string
+                description: This parameter specifies usage of additional storage
+                    and is applicable only when additionalStorage is specified. Specify
+                    usage to extend Data or Backup storage volumes of Database Cloud
+                    Service instance. Valid values are <code>data</code> to extend
+                    Data Storage Volume and <code>fra</code> to extend Backup Storage
+                    Volume. If usage is not specified, new storage volume will be
+                    created.
+    change-role-postrequest:
+        title: Request Body, change-role-post
+        type: object
+        description: change-role-postrequest
+        properties:
+            action:
+                type: string
+                description: 'The role-change action to be performed on the Database
+                    Cloud Service instance hosting an Oracle Data Guard configuration.
+                    Valid values: <code>switchover</code>, <code>failover</code>,
+                    <code>reinstate</code>.'
+            force:
+                type: string
+                description: 'Optional parameter only when the <code>failover</code>
+                    action is specified. Valid values: <code>yes</code> and <code>no</code>.
+                    Default value is <code>no</code>. <p>In general, You should use
+                    the deafult value of <code>no</code>. However, if a failover operation
+                    fails and you review the messages describing the cause of the
+                    failure, you might choose to try the failover operation again
+                    with the <code>force</code> parameter set to <code>yes</code>.
+                    Note that forcing a failover operation can result in potential
+                    data loss.</p>'
+    jobstatus-response:
+        title: Response Body, jobstatus-response
+        type: object
+        description: jobstatus-response
+        properties:
+            service_name:
+                type: string
+                description: The name of the service instance.
+            version:
+                type: string
+                description: The Oracle Database software version in use.
+            status:
+                type: string
+                description: '<p>The instance status; one of: <code>Running</code>,
+                    <code>In Progress</code>, <code>Maintenance</code>, <code>Stopped</code>,
+                    <code>Terminating</code>, <li><code>Configured</code></li>, <code>Failed</code>.</p>'
+            description:
+                type: string
+                description: The instance description.
+            identity_domain:
+                type: string
+                description: The identity domain hosting the instance.
+            creation_time:
+                type: string
+                description: The instance creation date and time.
+            last_modified_time:
+                type: string
+                description: The date and time of last modification.
+            created_by:
+                type: string
+                description: The name of the Oracle Cloud user who created the instance.
+            service-uri:
+                type: string
+                description: The resource URL for the instance.
+            message:
+                type: array
+                description: Array of strings that contain details of operation progress.
+                items:
+                    $ref: '#/definitions/jobstatus-response-message-array-item'
+            job_start_date:
+                type: string
+                description: The date and time when the job started.
+            job_status:
+                type: string
+                description: '<p>Current status of the job; one of: <code>In Progress</code>,
+                    <code>Succeded</code>, <code>Failed</code>.</p>'
+            job_operation:
+                type: string
+                description: Current operation name in the job.
+            job_request_parameters:
+                $ref: '#/definitions/jobstatus-response-job-request-parameters-object'
+    jobstatus-response-message-array-item:
+        title: message Array Item
+        type: string
+        description: String containing one operation progress message.
+    jobstatus-response-job-request-parameters-object:
+        title: job_request_parameters Object
+        type: object
+        description: ''
+        properties:
+            operationName:
+                type: string
+                description: The name of the operation.
+            tenant:
+                type: string
+                description: The identity domain hosting the service instance.
+            serviceInstance:
+                type: string
+                description: The name of the service instance.
+            serviceVersion:
+                type: string
+                description: The Oracle Database software version in use.
+            service-vm-name:
+                type: string
+                description: The name of the service instance's compute node.
+            computeResourceTimeout:
+                type: string
+                description: The value <code>60</code>.
+            serviceType:
+                type: string
+                description: The value <code>dbaas</code>.
+            lifecycleState:
+                type: string
+                description: The name of the life-cycle state change for operations
+                    that change the life-cycle state.
+            namespace:
+                type: string
+                description: The value <code>dbaas</code>.
+    tag-details:
+      description: Each tag object is a key/value pair.
+      type: object
+      properties:
+        isPlacementTag:
+          type: boolean
+          description: Flag for internal use only.
+        isExternalTag:
+          type: boolean
+          description: Flag to identify an account tag.<p>This property is only shown
+            if the value is <code>true</code>.
+        isMeteringTag:
+          type: boolean
+          description: Flag to identify an account tag that is used for metering.<p>This
+            property is only shown if the value is <code>true</code>.
+        key:
+          type: string
+          description: Key for this tag.
+        value:
+          type: string
+          description: Value for this tag.
+        state:
+          type: string
+          description: 'Whether a tag is created or is in the process of being deleted.
+            Possible values: <code>Ready</code>, <code>Deleting</code>'

@@ -25,9 +25,10 @@ import mongoengine
 ## Project Imports
 from gc3_query.lib import *
 from gc3_query.lib import gc3_cfg
-from gc3_query.lib.gc3logging import get_logging
-from lib import BASE_DIR
+#from gc3_query.lib.gc3logging import get_logging
+# from lib import BASE_DIR
 
+from gc3_query.lib import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 # MONGODB_DB_NAME = "gc3_query"
@@ -74,4 +75,4 @@ def storage_adapter_init(user: str = gc3_cfg.mongodb.security.username,
     return db_config
 
 
-MONGODB_MODELS_DIR = BASE_DIR.joinpath('lib/iaas_classic/models')
+MONGODB_MODELS_DIR = gc3_cfg.BASE_DIR.joinpath('lib/iaas_classic/models')

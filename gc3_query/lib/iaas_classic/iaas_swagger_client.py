@@ -24,14 +24,15 @@ from bravado.client import inject_headers_for_remote_refs
 ################################################################################
 ## Project Imports
 from gc3_query.lib import *
-from gc3_query.lib.open_api.swagger_formats import formats
+from gc3_query.lib.open_api.swagger_formats import gc3_formats
 
 BRAVADO_CORE_CONFIG: DictStrAny = gc3_cfg.bravado.core_config.as_dict()
-BRAVADO_CORE_CONFIG['formats'] = formats
+BRAVADO_CORE_CONFIG['formats'] = gc3_formats
 BRAVADO_CLIENT_CONFIG: DictStrAny = gc3_cfg.bravado.client_config.as_dict()
 BRAVADO_CONFIG: DictStrAny = gc3_cfg.bravado.core_config.as_dict_melded_with(gc3_cfg.bravado.client_config)
-BRAVADO_CONFIG['formats'] = formats
+BRAVADO_CONFIG['formats'] = gc3_formats
 
+from gc3_query.lib import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 

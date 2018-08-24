@@ -2,11 +2,11 @@ from pathlib import Path
 
 import pytest
 
-from gc3_query import BASE_DIR
+from gc3_query.lib import gc3_cfg
 from gc3_query.lib.gc3_config import GC3Config
 from gc3_query.lib.iaas_classic.instances import Instances
 from gc3_query.lib.iaas_classic.sec_rules import SecRules
-from gc3_query.lib.open_api import API_SPECS_DIR
+# fixme? from gc3_query.lib.open_api import API_SPECS_DIR
 from gc3_query.lib.open_api.open_api_spec import OpenApiSpec
 from gc3_query.lib.signatures import GC3Type
 
@@ -14,7 +14,7 @@ from gc3_query.lib.signatures import GC3Type
 
 TEST_BASE_DIR: Path = Path(__file__).parent
 # config_dir = TEST_BASE_DIR.joinpath("config")
-config_dir = BASE_DIR.joinpath("etc/config")
+config_dir = gc3_cfg.BASE_DIR.joinpath("etc/config")
 output_dir = TEST_BASE_DIR.joinpath('output')
 
 
@@ -22,7 +22,7 @@ output_dir = TEST_BASE_DIR.joinpath('output')
 
 def test_setup():
     assert TEST_BASE_DIR.exists()
-    assert API_SPECS_DIR.exists()
+    # assert API_SPECS_DIR.exists()
     if not config_dir.exists():
         config_dir.mkdir()
     if not output_dir.exists():
@@ -33,9 +33,9 @@ def test_setup():
 def test_init():
     service = 'Instances'
     gc3_config = GC3Config(atoml_config_dir=config_dir)
-    service_cfg = gc3_config.iaas_classic.services[service]
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
-    oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg)
+    oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=api_catalog_config)
     assert oapi_spec.name == service
     gc3type = GC3Type(name='OpenApiSpec', descr="Some text", class_type=oapi_spec.__class__)
     assert gc3type
@@ -50,7 +50,7 @@ def test_equality_setup():
 
     instances_service: str = 'Instances'
     instances_service_cfg = gc3_config.iaas_classic.services[instances_service]
-    instances_oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=instances_service_cfg, idm_cfg=idm_cfg)
+    instances_oapi_spec = OpenApiSpec(service_cfg=instances_service_cfg, open_api_specs_cfg=api_catalog_config, idm_cfg=idm_cfg)
     assert instances_oapi_spec.name == instances_service
 
     secrules_service: str = 'SecRules'
@@ -67,7 +67,7 @@ def test_eqality(test_equality_setup):
 
     instances_service: str = 'Instances'
     instances_service_cfg = gc3_config.iaas_classic.services[instances_service]
-    instances_oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=instances_service_cfg, idm_cfg=idm_cfg)
+    instances_oapi_spec = OpenApiSpec(service_cfg=instances_service_cfg, open_api_specs_cfg=api_catalog_config, idm_cfg=idm_cfg)
     assert instances_oapi_spec.name == instances_service
     instances_oapi_spec_type = GC3Type(name='OpenApiSpec', descr="Some text", class_type=instances_oapi_spec.__class__)
     instances_oapi_spec_type_2 = GC3Type(name='OpenApiSpec', descr="Some text", class_type=instances_oapi_spec.__class__)
@@ -76,8 +76,8 @@ def test_eqality(test_equality_setup):
 
     secrules_service: str = 'SecRules'
     secrules_service_cfg = gc3_config.iaas_classic.services[secrules_service]
-    secrules_oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=secrules_service_cfg, idm_cfg=idm_cfg)
-    secrules_oapi_spec_2 = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=secrules_service_cfg, idm_cfg=idm_cfg)
+    secrules_oapi_spec = OpenApiSpec(service_cfg=secrules_service_cfg, open_api_specs_cfg=api_catalog_config, idm_cfg=idm_cfg)
+    secrules_oapi_spec_2 = OpenApiSpec(service_cfg=secrules_service_cfg, open_api_specs_cfg=api_catalog_config, idm_cfg=idm_cfg)
     assert secrules_oapi_spec.name == secrules_service
     secrules_oapi_spec_type = GC3Type(name='OpenApiSpec', descr="Some text", class_type=secrules_oapi_spec.__class__)
     secrules_oapi_spec_type_2 = GC3Type(name='OpenApiSpec', descr="Some text", class_type=secrules_oapi_spec_2.__class__)
@@ -99,7 +99,7 @@ def test_eqality(test_equality_setup):
 #     service = 'Instances'
 #     gc3_config = GC3Config(atoml_config_dir=config_dir)
 #     idm_cfg = gc3_config.idm.domains[idm_domain]
-#     service_cfg = gc3_config.iaas_classic.services[service]
+#     service_cfg = gc3_config.iaas_classic.services.compute[service]
 #     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
 #     oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg)
 #     assert oapi_spec.name == service
@@ -111,7 +111,7 @@ def test_eqality(test_equality_setup):
 #     service = 'Instances'
 #     gc3_config = GC3Config(atoml_config_dir=config_dir)
 #     idm_cfg = gc3_config.idm.domains[idm_domain]
-#     service_cfg = gc3_config.iaas_classic.services[service]
+#     service_cfg = gc3_config.iaas_classic.services.compute[service]
 #     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
 #     oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg)
 #     assert oapi_spec.name == service
@@ -125,7 +125,7 @@ def test_eqality(test_equality_setup):
 #     service = 'Instances'
 #     gc3_config = GC3Config(atoml_config_dir=config_dir)
 #     idm_cfg = gc3_config.idm.domains[idm_domain]
-#     service_cfg = gc3_config.iaas_classic.services[service]
+#     service_cfg = gc3_config.iaas_classic.services.compute[service]
 #     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
 #     oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg, rest_endpoint=idm_cfg.rest_endpoint)
 #     assert oapi_spec.name == service
@@ -139,7 +139,7 @@ def test_eqality(test_equality_setup):
 #     service = 'Instances'
 #     gc3_config = GC3Config(atoml_config_dir=config_dir)
 #     idm_cfg = gc3_config.idm.domains[idm_domain]
-#     service_cfg = gc3_config.iaas_classic.services[service]
+#     service_cfg = gc3_config.iaas_classic.services.compute[service]
 #     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
 #     oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg, from_url=True)
 #     assert oapi_spec.name == service
@@ -155,7 +155,7 @@ def test_eqality(test_equality_setup):
 #     service: str = 'Instances'
 #     gc3_config = GC3Config(atoml_config_dir=config_dir)
 #     idm_cfg = gc3_config.idm.domains[idm_domain]
-#     service_cfg = gc3_config.iaas_classic.services[service]
+#     service_cfg = gc3_config.iaas_classic.services.compute[service]
 #     api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
 #     oapi_spec = OpenApiSpec(api_catalog_config=api_catalog_config, service_cfg=service_cfg, idm_cfg=idm_cfg)
 #     assert oapi_spec.name == service

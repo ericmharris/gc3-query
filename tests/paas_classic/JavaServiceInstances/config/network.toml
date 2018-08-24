@@ -1,0 +1,6 @@
+[network]
+http_proxy = 'http://www-proxy-ash7.us.oracle.com:80'
+https_proxy = 'https://www-proxy-ash7.us.oracle.com:80'
+
+
+

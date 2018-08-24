@@ -1,5 +1,6 @@
 [open_api]
 __doc__ = "API catalog"
+open_api_spec_base: Path = 'etc/open_api'
 
 [open_api.open_api_spec_catalog]
 name  = 'open_api_spec_catalog'
@@ -14,3 +15,18 @@ export_dir: Path =  'var/open_api_catalog'
 [open_api.open_api_spec_overlay]
 spec_overlay_format = 'toml'
 
+[open_api.iaas_classic]
+
+[open_api.formats]
+
+[open_api.formats.oc_datetime]
+format = 'oc-datetime'
+description = 'Converts string:date-time <=> python Maya object'
+
+[open_api.formats.json_bool]
+format = 'json-bool'
+description = 'Converts "true" and "false" to/from equivalent booleans.'
+
+[open_api.formats.date]
+format = 'date'
+description = 'Converts "true" and "false" to/from equivalent booleans.'
