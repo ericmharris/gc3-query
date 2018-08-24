@@ -10,7 +10,7 @@ info:
     Security Rules</a> in <em>Using Oracle Cloud Infrastructure Compute Classic</em>.
   title: SecRules
 schemes:
-- http
+- https
 consumes:
 - application/oracle-compute-v3+json
 - application/oracle-compute-v3+directory+json
