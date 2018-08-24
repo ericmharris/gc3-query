@@ -30,6 +30,7 @@ _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 @dataclass
 class ServiceResponse:
     results: List[Any]
+    json_results: Dict
     metadata: BravadoResponseMetadata
     uses_models: bool
     bravado_config: Dict[str,any] = field(init=False)

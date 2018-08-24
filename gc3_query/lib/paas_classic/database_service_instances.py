@@ -47,5 +47,7 @@ class DatabaseServiceInstances(PaaSServiceBase):
         metadata: BravadoResponseMetadata = service_response.metadata
         result = service_response.result
         results = service_response.result['services']
-        pass_service_response = PaaSServiceResponse(results = results, metadata=metadata, uses_models=True)
+        json_result = service_response.incoming_response.json()
+        json_results = json_result['services']
+        pass_service_response = PaaSServiceResponse(results=results, json_results=json_results, metadata=metadata, uses_models=True)
         return pass_service_response
