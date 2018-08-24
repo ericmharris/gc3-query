@@ -89,8 +89,12 @@ def test_get_all_domain_data(setup_gc30003):
     service_cfg, idm_cfg = setup_gc30003
     dbcs_service_instances: DatabaseServiceInstances = DatabaseServiceInstances(service_cfg=service_cfg, idm_cfg=idm_cfg)
     assert dbcs_service_instances.http_client.authenticated
-    all_domain_data = dbcs_service_instances.get_all_domain_data()
-    assert len(all_domain_data) > 0
+    pass_service_response = dbcs_service_instances.get_all_domain_data()
+    assert len(pass_service_response) > 0
+    db_data = pass_service_response.results[0]
+    assert db_data
+    assert 'identity_domain' in db_data
+    assert db_data['identity_domain']==idm_cfg.name
 
 
 

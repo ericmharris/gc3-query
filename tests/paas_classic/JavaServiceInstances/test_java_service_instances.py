@@ -42,47 +42,47 @@ def setup_gc30003() -> Tuple[Dict[str, Any]]:
     assert gc3_cfg.user.cloud_username == 'eric.harris@oracle.com'
     yield service_cfg, idm_cfg
 
-
-def test_init(setup_gc30003):
-    service_cfg, idm_cfg = setup_gc30003
-    dbcs_service_instances: JavaServiceInstances = JavaServiceInstances(service_cfg=service_cfg, idm_cfg=idm_cfg)
-    assert dbcs_service_instances.http_client.skip_authentication==False
-    assert dbcs_service_instances.http_client.authenticated
-    assert dbcs_service_instances.http_client.idm_domain_name==idm_cfg.name
-
-def test_get_rest_endpoint(setup_gc30003):
-    service_cfg, idm_cfg = setup_gc30003
-    dbcs_service_instances: JavaServiceInstances = JavaServiceInstances(service_cfg=service_cfg, idm_cfg=idm_cfg)
-    assert dbcs_service_instances.rest_endpoint=='https://dbaas.oraclecloud.com/'
-    assert dbcs_service_instances.http_client.authenticated
-
-
-
-def test_bravado_service_call(setup_gc30003):
-    service_cfg, idm_cfg = setup_gc30003
-    dbcs_service_instances: JavaServiceInstances = JavaServiceInstances(service_cfg=service_cfg, idm_cfg=idm_cfg)
-    assert dbcs_service_instances.http_client.authenticated
-    http_future = dbcs_service_instances.bravado_service_operations.getDomain(identityDomainId=idm_cfg.name,
-                                                                              _request_options={"headers":dbcs_service_instances.http_client.authentication_headers})
-    service_response: BravadoResponse = http_future.response()
-    assert service_response
-    result = service_response.result
-    metadata: BravadoResponseMetadata = service_response.metadata
-    assert metadata.status_code==200
-    assert len(result.services) > 0
-
-def test_service_call(setup_gc30003):
-    service_cfg, idm_cfg = setup_gc30003
-    dbcs_service_instances = JavaServiceInstances(service_cfg=service_cfg, idm_cfg=idm_cfg)
-    assert dbcs_service_instances.http_client.authenticated
-    http_future = dbcs_service_instances.service_operations.get_domain(identityDomainId=idm_cfg.name)
-    service_response: BravadoResponse = http_future.response()
-    assert service_response
-    result = service_response.result
-    metadata: BravadoResponseMetadata = service_response.metadata
-    assert metadata.status_code==200
-    assert len(result.services) > 0
-
+#
+# def test_init(setup_gc30003):
+#     service_cfg, idm_cfg = setup_gc30003
+#     dbcs_service_instances: JavaServiceInstances = JavaServiceInstances(service_cfg=service_cfg, idm_cfg=idm_cfg)
+#     assert dbcs_service_instances.http_client.skip_authentication==False
+#     assert dbcs_service_instances.http_client.authenticated
+#     assert dbcs_service_instances.http_client.idm_domain_name==idm_cfg.name
+#
+# def test_get_rest_endpoint(setup_gc30003):
+#     service_cfg, idm_cfg = setup_gc30003
+#     dbcs_service_instances: JavaServiceInstances = JavaServiceInstances(service_cfg=service_cfg, idm_cfg=idm_cfg)
+#     assert dbcs_service_instances.rest_endpoint=='https://dbaas.oraclecloud.com/'
+#     assert dbcs_service_instances.http_client.authenticated
+#
+#
+#
+# def test_bravado_service_call(setup_gc30003):
+#     service_cfg, idm_cfg = setup_gc30003
+#     dbcs_service_instances: JavaServiceInstances = JavaServiceInstances(service_cfg=service_cfg, idm_cfg=idm_cfg)
+#     assert dbcs_service_instances.http_client.authenticated
+#     http_future = dbcs_service_instances.bravado_service_operations.getDomain(identityDomainId=idm_cfg.name,
+#                                                                               _request_options={"headers":dbcs_service_instances.http_client.authentication_headers})
+#     service_response: BravadoResponse = http_future.response()
+#     assert service_response
+#     result = service_response.result
+#     metadata: BravadoResponseMetadata = service_response.metadata
+#     assert metadata.status_code==200
+#     assert len(result.services) > 0
+#
+# def test_service_call(setup_gc30003):
+#     service_cfg, idm_cfg = setup_gc30003
+#     dbcs_service_instances = JavaServiceInstances(service_cfg=service_cfg, idm_cfg=idm_cfg)
+#     assert dbcs_service_instances.http_client.authenticated
+#     http_future = dbcs_service_instances.service_operations.get_domain(identityDomainId=idm_cfg.name)
+#     service_response: BravadoResponse = http_future.response()
+#     assert service_response
+#     result = service_response.result
+#     metadata: BravadoResponseMetadata = service_response.metadata
+#     assert metadata.status_code==200
+#     assert len(result.services) > 0
+#
 
 #
 # def test_get_all_domain_data(setup_gc30003):

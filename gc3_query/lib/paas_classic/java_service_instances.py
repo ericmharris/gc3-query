@@ -31,9 +31,9 @@ class JavaServiceInstances(PaaSServiceBase):
                  idm_cfg: NestedOrderedDictAttrListBase,
                  http_client: Union[IaaSRequestsHTTPClient, None] = None,
                  from_url: Optional[bool] = False,
-                 storage_delegates: Optional[List[str]] = None,
+                 export_delegates: Optional[List[str]] = None,
                  **kwargs: DictStrAny):
-        super().__init__(service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client, from_url=from_url, storage_delegates=storage_delegates, **kwargs)
+        super().__init__(service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client, from_url=from_url, export_delegates=export_delegates, **kwargs)
         _debug(f"{self.name} created")
 
     def get_all_domain_data(self):

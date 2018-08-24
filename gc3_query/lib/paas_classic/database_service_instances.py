@@ -32,9 +32,9 @@ class DatabaseServiceInstances(PaaSServiceBase):
                  idm_cfg: NestedOrderedDictAttrListBase,
                  http_client: Union[IaaSRequestsHTTPClient, None] = None,
                  from_url: Optional[bool] = False,
-                 storage_delegates: Optional[List[str]] = None,
+                 export_delegates: Optional[List[str]] = None,
                  **kwargs: DictStrAny):
-        super().__init__(service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client, from_url=from_url, storage_delegates=storage_delegates, **kwargs)
+        super().__init__(service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client, from_url=from_url, export_delegates=export_delegates, **kwargs)
         _debug(f"{self.name} created")
 
     def get_all_domain_data(self):
@@ -44,7 +44,8 @@ class DatabaseServiceInstances(PaaSServiceBase):
         """
         http_future = self.service_operations.get_domain(identityDomainId=self.idm_cfg.name)
         service_response: BravadoResponse = http_future.response()
-        result = service_response.result
         metadata: BravadoResponseMetadata = service_response.metadata
-        domains = result['services']
-        return domains
+        result = service_response.result
+        results = service_response.result['services']
+        pass_service_response = PaaSServiceResponse(results = results, metadata=metadata, uses_models=True)
+        return pass_service_response

@@ -38,7 +38,8 @@ from gc3_query.lib.open_api.open_api_spec import OpenApiSpec
 from gc3_query.lib.open_api.open_api_spec_catalog import OpenApiSpecCatalog
 from gc3_query.lib.signatures import GC3VersionTypedMixin
 from gc3_query.lib.utils import camelcase_to_snake
-from gc3_query.lib.export_delegates.response_export import  ResponseExport
+from gc3_query.lib.export_delegates.response_export import ResponseExport
+from gc3_query.lib.open_api.service_responses import IaaSServiceResponse
 
 from gc3_query.lib import get_logging
 
@@ -58,7 +59,7 @@ class IaaSServiceBase(GC3VersionTypedMixin):
                  idm_cfg: NestedOrderedDictAttrListBase,
                  http_client: Union[IaaSRequestsHTTPClient, None] = None,
                  from_url: Optional[bool] = False,
-                 storage_delegates: Optional[List[str]] = None,
+                 export_delegates: Optional[List[str]] = None,
                  **kwargs: DictStrAny):
         """
 
@@ -72,7 +73,7 @@ class IaaSServiceBase(GC3VersionTypedMixin):
         self.service_cfg = service_cfg
         self.idm_cfg = idm_cfg
         self.service_name = service_cfg['service_name']
-        self.storage_delegates = storage_delegates
+        self.export_delegates = export_delegates
 
         self.bravado_config: DictStrAny = gc3_cfg.bravado.client_config.as_dict()
         self.bravado_config.update(gc3_cfg.bravado.core_config.as_dict())

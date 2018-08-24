@@ -26,7 +26,9 @@ from bravado.requests_client import RequestsClient
 ## Project Imports
 
 from gc3_query.lib.iaas_classic import *
+from gc3_query.lib.open_api.service_responses import PaaSServiceResponse
 from .paas_requests_http_client import PaaSRequestsHTTPClient
+from gc3_query.lib.export_delegates.response_export import ResponseExport
 
 from gc3_query.lib import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
@@ -41,9 +43,9 @@ class PaaSServiceBase(IaaSServiceBase):
                  idm_cfg: NestedOrderedDictAttrListBase,
                  http_client: Union[IaaSRequestsHTTPClient, None] = None,
                  from_url: Optional[bool] = False,
-                 storage_delegates: Optional[List[str]] = None,
+                 export_delegates: Optional[List[str]] = None,
                  **kwargs: DictStrAny):
-        super().__init__( service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client, from_url=from_url, storage_delegates=storage_delegates , **kwargs)
+        super().__init__( service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client, from_url=from_url, export_delegates=export_delegates , **kwargs)
         _debug(f"{self.name} created")
 
     def _find_bravado_service_operations(self, swagger_client, service_cfg: NestedOrderedDictAttrListBase):

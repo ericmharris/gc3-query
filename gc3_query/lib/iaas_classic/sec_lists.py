@@ -32,12 +32,12 @@ _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 class SecLists(IaaSServiceBase):
 
     def __init__(self, service_cfg: Dict[str, Any], idm_cfg: Dict[str, Any], http_client: IaaSRequestsHTTPClient = None,
-                 from_url: bool = False, storage_delegates: List[str] = None, **kwargs: Dict[str, Any]):
+                 from_url: bool = False, export_delegates: List[str] = None, **kwargs: Dict[str, Any]):
         super().__init__(service_cfg=service_cfg,
                          idm_cfg=idm_cfg,
                          http_client=http_client,
                          from_url=from_url,
-                         storage_delegates=storage_delegates,
+                         export_delegates=export_delegates,
                          **kwargs)
         _debug(f"{self.service_name} created using service_cfg: {self.service_cfg}")
 
