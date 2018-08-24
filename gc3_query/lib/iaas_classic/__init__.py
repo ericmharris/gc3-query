@@ -136,9 +136,7 @@ class IaaSServiceBase(GC3VersionTypedMixin):
 
         # This is populated with the CallableOperations from service_resources but the names are converted
         # from camelCase to python/snake-case (eg. discover_root_instance vs. discoverRootInstance)
-        #
-        self.service_operations = self.populate_service_operations(
-            service_operations=getattr(self.swagger_client, service_cfg['service_name']))
+        self.service_operations = self.populate_service_operations(bravado_service_operations=self.bravado_service_operations)
 
         ### TODO:
         # self.gc3_type = GC3VersionedType(name=__class__.__name__,
@@ -187,19 +185,26 @@ class IaaSServiceBase(GC3VersionTypedMixin):
         return descr
 
     def get_bravado_service_operations(self, swagger_client, service_cfg: NestedOrderedDictAttrListBase):
-        bravado_service_operations = getattr(swagger_client, service_cfg['service_name'])
+        resource_decorator_name = dir(swagger_client).pop() if dir(swagger_client) else None
+        if not resource_decorator_name:
+            raise RuntimeError(f"Failed to find resource_decorator_name for {self}")
+        bravado_service_operations = getattr(swagger_client, resource_decorator_name)
         return bravado_service_operations
 
-    def populate_service_operations(self, service_operations: ResourceDecorator) -> OrderedDictAttrBase:
+    # def get_bravado_service_operations(self, swagger_client, service_cfg: NestedOrderedDictAttrListBase):
+    #     bravado_service_operations = getattr(swagger_client, service_cfg['service_name'])
+    #     return bravado_service_operations
+
+    def populate_service_operations(self, bravado_service_operations: ResourceDecorator) -> OrderedDictAttrBase:
         """Return container of callable operations with names converted from camel to python/snake-case
 
-        :param service_operations:
+        :param bravado_service_operations:
         :return:
         """
         so = OrderedDictAttrBase()
-        for service_operation_name in dir(service_operations):
+        for service_operation_name in dir(bravado_service_operations):
             so_camel_name = camelcase_to_snake(service_operation_name)
-            service_operation = getattr(service_operations, service_operation_name)
+            service_operation = getattr(bravado_service_operations, service_operation_name)
             operation_headers = {"Accept": ','.join(service_operation.operation.produces),
                                  "Content-Type": ','.join(service_operation.operation.consumes)
                                  }

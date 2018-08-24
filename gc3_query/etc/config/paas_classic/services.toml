@@ -10,6 +10,7 @@ name = 'ServiceInstances'
 service_name = 'ServiceInstances'
 title = 'Service Instances'
 api_version = '1.1'
+rest_endpoint = 'https://dbaas.oraclecloud.com/'
 
 [paas_classic.services.database.SSHKeys]
 api_collection_name = 'database'
@@ -17,6 +18,7 @@ name = 'SSHKeys'
 service_name = 'ServiceInstances'
 title = 'SSH Keys'
 api_version = '1.1'
+rest_endpoint = 'https://dbaas.oraclecloud.com/'
 
 
 [paas_classic.services.java.ServiceInstances]
@@ -25,4 +27,4 @@ name = 'ServiceInstances'
 service_name = 'ServiceInstances'
 title = 'Service Instances'
 api_version = '18.2.6'
-
+rest_endpoint = 'https://jaas.oraclecloud.com/'

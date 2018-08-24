@@ -43,21 +43,25 @@ class PaaSServiceBase(IaaSServiceBase):
                  storage_delegates: Optional[List[str]] = None,
                  **kwargs: DictStrAny):
         super().__init__( service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client, from_url=from_url, storage_delegates=storage_delegates , **kwargs)
+        _debug(f"{self.name} created")
 
     def get_bravado_service_operations(self, swagger_client, service_cfg: NestedOrderedDictAttrListBase):
-        bravado_service_operations = getattr(swagger_client, service_cfg['service_name'])
+        resource_decorator_name = dir(swagger_client).pop() if dir(swagger_client) else None
+        if not resource_decorator_name:
+            raise RuntimeError(f"Failed to find resource_decorator_name for {self}")
+        bravado_service_operations = getattr(swagger_client, resource_decorator_name)
         return bravado_service_operations
 
-    def populate_service_operations(self, service_operations: ResourceDecorator) -> OrderedDictAttrBase:
+    def populate_service_operations(self, bravado_service_operations: ResourceDecorator) -> OrderedDictAttrBase:
         """Return container of callable operations with names converted from camel to python/snake-case
 
-        :param service_operations:
+        :param bravado_service_operations:
         :return:
         """
         so = OrderedDictAttrBase()
-        for service_operation_name in dir(service_operations):
+        for service_operation_name in dir(bravado_service_operations):
             so_camel_name = camelcase_to_snake(service_operation_name)
-            service_operation = getattr(service_operations, service_operation_name)
+            service_operation = getattr(bravado_service_operations, service_operation_name)
             operation_headers = {"Accept": ','.join(service_operation.operation.produces),
                                  "Content-Type": ','.join(service_operation.operation.consumes)
                                  }

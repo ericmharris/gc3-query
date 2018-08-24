@@ -143,7 +143,8 @@ def test_check_spec_properties():
 def test_get_paas_spec():
     idm_domain = 'gc30003'
     service = 'ServiceInstances'
-    service_cfg = gc3_cfg.paas_classic.services.database[service]
+    paas_type = 'database'
+    service_cfg = gc3_cfg.paas_classic.services.get(paas_type)[service]
     idm_cfg = gc3_cfg.idm.domains[idm_domain]
     open_api_specs_cfg = gc3_cfg.paas_classic.open_api_specs
     oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=open_api_specs_cfg, idm_cfg=idm_cfg)
@@ -155,8 +156,34 @@ def test_get_paas_spec():
 
 
 
+def test_paas_rest_endpoint_dbcs():
+    idm_domain = 'gc30003'
+    service = 'ServiceInstances'
+    paas_type = 'database'
+    service_cfg = gc3_cfg.paas_classic.services.get(paas_type)[service]
+    idm_cfg = gc3_cfg.idm.domains[idm_domain]
+    open_api_specs_cfg = gc3_cfg.paas_classic.open_api_specs
+    oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=open_api_specs_cfg, idm_cfg=idm_cfg)
+    assert oapi_spec.name == service
+    assert oapi_spec._spec_data['schemes'] == ['https']
+    bravado_core_spec = oapi_spec.get_swagger_spec(rest_endpoint=idm_cfg.rest_endpoint)
+    assert oapi_spec.rest_endpoint=='https://dbaas.oraclecloud.com/'
+    assert oapi_spec._spec_data['schemes'] == ['https']
 
 
+def test_paas_rest_endpoint_jaas():
+    idm_domain = 'gc30003'
+    service = 'ServiceInstances'
+    paas_type = 'java'
+    service_cfg = gc3_cfg.paas_classic.services.get(paas_type)[service]
+    idm_cfg = gc3_cfg.idm.domains[idm_domain]
+    open_api_specs_cfg = gc3_cfg.paas_classic.open_api_specs
+    oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=open_api_specs_cfg, idm_cfg=idm_cfg)
+    assert oapi_spec.name == service
+    assert oapi_spec._spec_data['schemes'] == ['https']
+    bravado_core_spec = oapi_spec.get_swagger_spec(rest_endpoint=idm_cfg.rest_endpoint)
+    assert oapi_spec.rest_endpoint=='https://jaas.oraclecloud.com/'
+    assert oapi_spec._spec_data['schemes'] == ['https']
 
 # @pytest.fixture()
 # def test_equality_setup():

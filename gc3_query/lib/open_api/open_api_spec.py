@@ -75,9 +75,9 @@ class OpenApiSpec(GC3VersionTypedMixin):
         self.kwargs.update(kwargs)
 
         #  The ultimate form of the Spec depends on the specific REST Endpoint of a given IDM domain which differs from the API Catalog.
-        self.rest_endpoint = kwargs.get('rest_endpoint', None)
-        if not self.rest_endpoint:
-            self.rest_endpoint = idm_cfg['rest_endpoint'] if idm_cfg else self.rest_endpoint
+        # self.rest_endpoint = kwargs.get('rest_endpoint', None)
+        # if not self.rest_endpoint:
+        #     self.rest_endpoint = idm_cfg['rest_endpoint'] if idm_cfg else self.rest_endpoint
 
         self.spec_dir: Path = gc3_cfg.OPEN_API_SPEC_BASE.joinpath(open_api_specs_cfg.cloud_service_name, service_cfg.api_collection_name)
         self.spec_file: Path = self.spec_dir.joinpath(f"{service_cfg.name}.{open_api_specs_cfg.file_format}")
@@ -226,6 +226,14 @@ class OpenApiSpec(GC3VersionTypedMixin):
     def spec_dict(self):
         return self._spec_dict
 
+    @property
+    def rest_endpoint(self):
+        from_kwargs = self.kwargs.get('rest_endpoint', False)
+        if from_kwargs:
+            return from_kwargs
+        if 'rest_endpoint' in self.service_cfg:
+            return self.service_cfg.rest_endpoint
+        return self.idm_cfg.rest_endpoint
 
     def get_swagger_spec(self, rest_endpoint: Union[str, None] = None) -> Spec:
         """
