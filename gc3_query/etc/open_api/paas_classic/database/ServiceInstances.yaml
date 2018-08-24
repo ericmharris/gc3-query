@@ -1444,6 +1444,11 @@ definitions:
             version:
                 type: string
                 description: The Oracle Database version on the service instance.
+            legacy:
+                type: boolean
+                description: Is is legacy
+
+  
     view-instance:
         title: Response Body, view-instances
         type: object
@@ -1873,4 +1878,28 @@ definitions:
             namespace:
                 type: string
                 description: The value <code>dbaas</code>.
-
+    tag-details:
+      description: Each tag object is a key/value pair.
+      type: object
+      properties:
+        isPlacementTag:
+          type: boolean
+          description: Flag for internal use only.
+        isExternalTag:
+          type: boolean
+          description: Flag to identify an account tag.<p>This property is only shown
+            if the value is <code>true</code>.
+        isMeteringTag:
+          type: boolean
+          description: Flag to identify an account tag that is used for metering.<p>This
+            property is only shown if the value is <code>true</code>.
+        key:
+          type: string
+          description: Key for this tag.
+        value:
+          type: string
+          description: Value for this tag.
+        state:
+          type: string
+          description: 'Whether a tag is created or is in the process of being deleted.
+            Possible values: <code>Ready</code>, <code>Deleting</code>'

@@ -127,30 +127,34 @@ class DatabaseServiceInstancesModel(DynamicDocument):
     description = StringField()
     identity_domain = StringField()
     last_modified_time = DateTimeField()
-    legacy = BooleanField
+    legacy = BooleanField()
     service_name = StringField()
     service_uri = URLField()
     # service_uuid = StringField()
-    service_uuid = UUIDField
+    service_uuid = UUIDField()
     sm_plugin_version = StringField()
     status = StringField()
     version = StringField()
     items = ListField(StringField())
     tools_version = StringField()
+    legacy =  BooleanField()
 
 
-meta = {
-        "db_alias": gc3_cfg.paas_classic.mongodb.db_alias,
-        "collection": "DatabaseServiceInstances",
-        "indexes": [
-            "created_by",
-            "service_name",
-            "service_uuid",
-            "creation_time",
-            "identity_domain",
-            "legacy",
-            'version',
-        ],
+    meta = {
+    "db_alias": gc3_cfg.paas_classic.mongodb.db_alias,
+    "collection": "DatabaseServiceInstances",
+    "indexes": [
+        "created_by",
+        "service_name",
+        "service_uuid",
+        "creation_time",
+        "identity_domain",
+        "legacy",
+        'version',
+    ],
     }
 
 
+    def __init__(self, *args, **values):
+        super().__init__(*args, **values)
+        _debug(f"{self.__class__.__name__}.__init__(args={args}, values={values}):")
