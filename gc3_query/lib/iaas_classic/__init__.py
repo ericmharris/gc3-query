@@ -130,7 +130,9 @@ class IaaSServiceBase(GC3VersionTypedMixin):
                                                           )
 
         # This is the container from Bravado.client (SwaggerClient module) that holds CallableOperation created using the spec
-        self.bravado_service_operations = getattr(self.swagger_client, service_cfg['service_name'])
+
+        # self.bravado_service_operations = getattr(self.swagger_client, service_cfg['service_name'])
+        self.bravado_service_operations = self.get_bravado_service_operations(swagger_client=self.swagger_client, service_cfg=self.service_cfg)
 
         # This is populated with the CallableOperations from service_resources but the names are converted
         # from camelCase to python/snake-case (eg. discover_root_instance vs. discoverRootInstance)
@@ -183,6 +185,10 @@ class IaaSServiceBase(GC3VersionTypedMixin):
     def descr(self) -> str:
         descr = self.spec_dict['info']['description']
         return descr
+
+    def get_bravado_service_operations(self, swagger_client, service_cfg: NestedOrderedDictAttrListBase):
+        bravado_service_operations = getattr(swagger_client, service_cfg['service_name'])
+        return bravado_service_operations
 
     def populate_service_operations(self, service_operations: ResourceDecorator) -> OrderedDictAttrBase:
         """Return container of callable operations with names converted from camel to python/snake-case

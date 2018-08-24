@@ -1,4 +1,5 @@
 from pathlib import Path
+from requests.auth import _basic_auth_str
 
 import pytest
 from bravado_core.formatter import SwaggerFormat, NO_OP
@@ -46,13 +47,22 @@ def test_load_atoml_files_individually(get_credential_setup):
     check_credential = gc3_config.get_credential(idm_domain_name='gc3test')
     assert check_credential==credential
 
+def test_credential_basic_auth(get_credential_setup):
+    credential = get_credential_setup
+    credential_expected_basic_auth =_basic_auth_str('eric.harris@oracle.com', '123Welcome')
+    gc3_config = GC3Config()
+    check_credential = gc3_config.get_credential(idm_domain_name='gc30003')
+    assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
+    assert check_credential.idm_domain_name=='gc30003'
+    assert check_credential.basic_auth_str.startswith('Basic')
+    assert check_credential.basic_auth_str != credential.basic_auth_str
+
 
 def test_get_main_credential():
     gc3_config = GC3Config()
     check_credential = gc3_config.get_credential(idm_domain_name='gc30003')
     assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
     assert check_credential.idm_domain_name=='gc30003'
-
 
 @pytest.fixture()
 def get_bravado_config_setup():

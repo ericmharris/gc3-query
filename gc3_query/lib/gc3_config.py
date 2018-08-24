@@ -21,18 +21,19 @@ from copy import deepcopy
 import keyring
 ################################################################################
 ## Third-Party Imports
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from requests.auth import _basic_auth_str
 
+
+################################################################################
+## Project Imports
 from gc3_query.lib import *
 from gc3_query.lib.atoml.atoml_config import ATomlConfig
 from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
 from gc3_query.lib.gc3logging import get_logging
 from gc3_query.lib.open_api.swagger_formats import gc3_formats
 
-################################################################################
-## Project Imports
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
-
 
 # atoml_config_dir = BASE_DIR.joinpath('etc/config')
 # _debug(f"atoml_config_dir={atoml_config_dir}")
@@ -45,8 +46,12 @@ class IDMCredential:
     idm_domain_name: str
     username: str
     password: str
+    basic_auth_str: str = field(init=False)
     is_ucm: bool
     is_classic: bool
+
+    def __post_init__(self):
+        self.basic_auth_str = _basic_auth_str(self.username, self.password)
 
 
 class GC3Config(NestedOrderedDictAttrListBase):

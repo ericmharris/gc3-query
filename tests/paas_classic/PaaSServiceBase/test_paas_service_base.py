@@ -41,14 +41,7 @@ def setup_gc30003() -> Tuple[Dict[str, Any]]:
     yield service_cfg, idm_cfg
 
 
-def test_init_no_auth(setup_gc30003):
-    service_cfg, idm_cfg = setup_gc30003
-    iaas_service_base = PaaSServiceBase(service_cfg=service_cfg, idm_cfg=idm_cfg, skip_authentication=True)
-    assert iaas_service_base.http_client.skip_authentication==True
-    assert iaas_service_base.http_client.idm_domain_name==idm_cfg.name
-
-
-def test_authentication(setup_gc30003):
+def test_init(setup_gc30003):
     service_cfg, idm_cfg = setup_gc30003
     iaas_service_base = PaaSServiceBase(service_cfg=service_cfg, idm_cfg=idm_cfg)
     assert iaas_service_base.http_client.skip_authentication==False
