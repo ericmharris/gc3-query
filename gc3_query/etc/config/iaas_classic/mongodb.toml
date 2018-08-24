@@ -3,6 +3,9 @@ __descr__ = 'MongoDB setup data'
 db_name = 'iaas_classic'
 db_alias = 'IaaS'
 
+[iaas_classic.mongodb.models]
+models_dir = 'lib/iaas_classic/models'
+
 [iaas_classic.mongodb.security]
 username = 'gc3user'
 password = 'keyring'
