@@ -1,6 +1,4 @@
-[submodule "gc3_query/opt/reference/toml"]
-	path = gc3_query/opt/reference/toml
-	url = https://github.com/uiri/toml.git
+
 [submodule "gc3_query/opt/reference/oci-python-sdk"]
 	path = gc3_query/opt/reference/oci-python-sdk
 	url = https://github.com/oracle/oci-python-sdk.git
@@ -10,15 +8,4 @@
 [submodule "gc3_query/opt/reference/oci-ansible-modules"]
 	path = gc3_query/opt/reference/oci-ansible-modules
 	url = https://github.com/oracle/oci-ansible-modules.git
-[submodule "gc3_query/opt/reference/bravado"]
-	path = gc3_query/opt/reference/bravado
-	url = https://github.com/Yelp/bravado.git
-[submodule "gc3_query/opt/reference/mongoengine"]
-	path = gc3_query/opt/reference/mongoengine
-	url = https://github.com/MongoEngine/mongoengine.git
-[submodule "gc3_query/opt/reference/bravado-core"]
-	path = gc3_query/opt/reference/bravado-core
-	url = https://github.com/Yelp/bravado-core.git
-[submodule "gc3_query/opt/swagger-editor"]
-	path = gc3_query/opt/swagger-editor
-	url = https://github.com/swagger-api/swagger-editor.git
+
