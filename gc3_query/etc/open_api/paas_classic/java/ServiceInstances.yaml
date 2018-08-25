@@ -31,26 +31,6 @@ paths:
       - name: tagFilter
         in: query
         description: An expression using tag keys and values for filtering search
-          results. Only results that satisfy the expression are returned in a search.
-          <p>When creating your filter expression:<ul><li>Use the percent sign (%)
-          to match multiple characters.</li><li>Use the underscore character (_) to
-          match a single character.</li><li>Precede a literal character by a backslash
-          character (\) if a key or value contains a literal percent sign (%), apostrophe
-          or single quote ('), or underscore (_).</li></ul> <p>Valid expressions include:<ul><li><code>'foo':'bar'</code>
-          - Finds all service instances that have a key of 'foo' and a value of 'bar'</li><li><code>'ora\_%':'%prod%'</code>
-          - Finds all service instances that have a key starting with 'ora_' and a
-          value containing 'prod'.</li><li><code>'haMode'</code> - Finds all service
-          instances that have a tag key of 'haMode'</li><li><code>'ora\_%'</code>
-          - Finds all service instances that a tag key starting with 'ora_'</li><li><code>'site':'pe_r'</code>
-          - Uses the underscore wildcard to wildcard-match only a single character.
-          For example, <code>site=pear</code> or <code>site=peer</code> is a match.
-          <code>site=pepper</code> is not a match.</li><li><code>'foo':''</code> -
-          Finds all service instances that have a tag key of 'foo' and an empty string
-          as the value.</li><li><code>'accuracy':'100\%'</code> - Uses the literal
-          percent sign in a value, so that it is not interpreted as a wildcard match.</li><li><code>'type':'Abe\'s
-          test'</code> - Uses the apostrophe (single quote) in a key or value.</li><li><code>'key\_contains\_underscores':'value\_does\_too'</code>
-          - Uses underscores in a key or value, so that they are not interpreted as
-          single-character wildcards.</li></ul>
         required: false
         type: string
       responses:
