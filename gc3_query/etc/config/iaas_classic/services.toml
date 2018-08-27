@@ -32,3 +32,10 @@ service_name = 'Accounts'
 title = "Accounts"
 api_version = '18.1.2'
 
+[iaas_classic.services.compute.SSHKeys]
+api_collection_name = 'compute'
+name = 'SSHKeys'
+service_name = 'SSHKeys'
+title = "SSHKeys"
+api_version = '18.1.2'
+
