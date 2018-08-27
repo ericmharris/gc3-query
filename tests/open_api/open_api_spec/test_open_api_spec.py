@@ -40,6 +40,20 @@ def test_init():
     oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=open_api_specs_cfg, idm_cfg=idm_cfg)
     assert oapi_spec.name == service
 
+def test_str_repr():
+    service = 'Instances'
+    gc3_config = GC3Config(atoml_config_dir=config_dir)
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
+    open_api_specs_cfg = gc3_config.iaas_classic.open_api_specs
+    idm_cfg = gc3_config.idm.domains.gc30003
+    oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=open_api_specs_cfg, idm_cfg=idm_cfg)
+    s = str(oapi_spec)
+    r = repr(oapi_spec)
+    assert s
+    assert r
+    assert s==r
+    assert service in s
+    assert 'OpenApiSpec' in r
 
 def test_init_properties():
     idm_domain = 'gc30003'

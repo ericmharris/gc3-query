@@ -25,3 +25,10 @@ service_name = 'SecApplications'
 title = "SecApplications"
 api_version = '18.1.2'
 
+[iaas_classic.services.compute.Accounts]
+api_collection_name = 'compute'
+name = 'Accounts'
+service_name = 'Accounts'
+title = "Accounts"
+api_version = '18.1.2'
+

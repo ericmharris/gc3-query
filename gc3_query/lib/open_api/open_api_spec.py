@@ -87,142 +87,15 @@ class OpenApiSpec(GC3VersionTypedMixin):
         self._spec_dict = yaml.load(self.spec_file.open())
         self._spec_data = NestedOrderedDictAttrListBase(mapping=self._spec_dict)
 
-        # self._specdict = NestedOrderedDictAttrListBase(mapping=self._overlaid_spec_dict)
-        # self.spec_data = NestedOrderedDictAttrListBase(mapping=self._overlaid_spec_dict)
-
-        # self.spec_overlay_format = gc3_cfg.open_api.open_api_spec_overlay.spec_overlay_format
-        # self.spec_overlay_export_formatting = gc3_cfg[self.spec_overlay_format]['export']['formatting']
-        # self.spec_overlay_file: Path = self.spec_dir.joinpath(f"{self.service_cfg.service_name}_overlay.{self.spec_overlay_format}")
-        #
-        # self._vanilla_spec_dict = self.load_spec(from_url=from_url)
-        # self._overlaid_spec_dict = MeldDict(self._vanilla_spec_dict)
-
-        # self.spec_dict = self.create_api_spec(spec_dict=self._spec_dict)
-        # # self.api_spec_overlay = OpenApiSpecOverlay(open_api_spec=self, idm_cfg=self.idm_cfg)
-        # if not self.spec_overlay_file.exists():
-        #     _ = self.create_spec_overlay_file(file_path=self.spec_overlay_file)
-        # self.spec_overlays: MeldDict = self.load_spec_overlay_file()
-        # self.spec_deletions: MeldDict = MeldDict(self.api_catalog_config.open_api_spec_deletions)
-        #
-        # ## Adding the default overlays gave schemes: ['http', 'https']
-        # self._overlaid_spec_dict.subtract(self.spec_deletions)
-        # self._overlaid_spec_dict.add(self.spec_overlays)
-        # self.spec_data = NestedOrderedDictAttrListBase(mapping=self._overlaid_spec_dict)
-
-        # self.spec_archive_dir = self.spec_dir.joinpath(gc3_cfg.open_api.open_api_spec_catalog.archive_dir)
-        # self.spec_archive_file_name = gc3_cfg.open_api.open_api_spec_catalog.archive_file_format.format(name=self.name, version=self.version)
-        # self.spec_archive_file = self.spec_archive_dir.joinpath(self.spec_archive_file_name)
-        # self.spec_overlay_archive_dir: Path = self.spec_dir.joinpath(gc3_cfg.open_api.open_api_spec_catalog.archive_dir)
-        # self.spec_overlay_archive_file: Path = self.spec_overlay_archive_dir.joinpath(f"{self.service_cfg.service_name}_overlay_{self.version}.{self.spec_overlay_format}")
-        # self.spec_export_dir: Path = BASE_DIR.joinpath('var/open_api_catalog', api_catalog_config.api_catalog_name, service_cfg.service_name)
-        # _debug(f"self.spec_dir={self.spec_dir}\nself.spec_file={self.spec_file}\nself.spec_export_dir={self.spec_export_dir}")
-        #
-        # if not self.spec_file.exists():
-        #     _warning(f"Spec file not found in catalog, saving to {self.spec_file}")
-        #     _ = self.save_spec()
-        #
-        # if not all([p.exists() for p in self.export_paths.values()]):
-        #     _ = self.export()
-        #     _debug(f"Exported files not found in var, created export files: {self.export_paths.values()}")
-        #
-        # if not self.spec_archive_file.exists():
-        #     _ = self.archive_spec_to_catalog()
-        #
-        # if not self.spec_overlay_file.exists():
-        #     _warning(f"Spec overlay file not found in catalog, saving to {self.spec_file}")
-        #     _ = self.save_spec_overlay()
-        #
-        # if not self.spec_overlay_archive_file.exists():
-        #     _ = self.archive_spec_overlay_to_catalog()
-
         _debug(f"{self.name} created")
 
-    # def load_spec(self, from_url: bool) -> DictStrAny:
-    #     if from_url:
-    #         spec_url = f"{self.service_cfg.spec_furl}".format_map(self.service_cfg)
-    #         _debug(f"spec_url={spec_url}")
-    #         spec_dict: dict = load_url(spec_url=spec_url)
-    #         self.from_url = True
-    #     else:
-    #         if not self.spec_file.exists():
-    #             _warning(f"Spec file not found: {self.spec_file}!\nAttempting to load it from the API Catalog")
-    #             return self.load_spec(from_url=True)
-    #         spec_file_path = str(self.spec_file)
-    #         spec_dict: dict = load_file(spec_file=spec_file_path)
-    #         self.from_url = False
-    #     return spec_dict
-    #
-    # def save_spec(self, file_path=None, overwrite: bool = False) -> Path:
-    #     spec_file = file_path if file_path else self.spec_file
-    #     if not spec_file.parent.exists():
-    #         spec_file.parent.mkdir()
-    #     _debug(f"Saving spec to spec_file={spec_file}")
-    #     if spec_file.exists() and not overwrite:
-    #         _warning(f"spec_file={spec_file} already exists and overwrite={overwrite}, leaving unchanged")
-    #     if not self.spec_dir.exists():
-    #         _warning(f"spec_dir={self.spec_dir} did not already exist, attempting to create.")
-    #         self.spec_dir.mkdir()
-    #     try:
-    #         json.dump(obj=self._vanilla_spec_dict, fp=spec_file.open('w'), indent=gc3_cfg.open_api.open_api_spec_catalog.json_export_indent_spaces)
-    #     except Exception as e:
-    #         _error(e)
-    #     return spec_file
 
-    # def archive_spec_to_catalog(self) -> Path:
-    #     _debug(f"Archiving spec to self.spec_archive_file={self.spec_archive_file}")
-    #     spec_archive_file_path = self.save_spec(file_path=self.spec_archive_file)
-    #     return spec_archive_file_path
+    def __str__(self):
+        s = f"<{self.__class__.__name__}: {self.spec_file.name}>"
+        return s
 
-
-    # def create_spec_overlay_file(self, file_path: Path = None, overwrite: bool = False) -> Path:
-    #     default_overlays = self.api_catalog_config.open_api_spec_overlays
-    #     default_overlays = NestedOrderedDictAttrListBase(mapping=default_overlays)
-    #     exported_file = default_overlays.export(file_path=file_path, format=self.spec_overlay_format)
-    #     return exported_file
-    #
-    #
-    # def save_spec_overlay(self, file_path: Path = None, overwrite: bool = False) -> Path:
-    #     spec_overlay_file = file_path if file_path else self.spec_overlay_file
-    #     if not spec_overlay_file.parent.exists():
-    #         spec_overlay_file.parent.mkdir()
-    #     _debug(f"Saving spec to spec_overlay_file={spec_overlay_file}")
-    #     if spec_overlay_file.exists() and not overwrite:
-    #         _warning(f"spec_overlay_file={spec_overlay_file} already exists and overwrite={overwrite}, leaving unchanged")
-    #         return spec_overlay_file
-    #     if not self.spec_dir.exists():
-    #         _warning(f"spec_dir={self.spec_dir} did not already exist, attempting to create.")
-    #         self.spec_dir.mkdir()
-    #     export_path = self.spec_data.export(file_path=spec_overlay_file, format=self.spec_overlay_format, overwrite=overwrite, export_formatting=self.spec_overlay_export_formatting)
-    #     return export_path
-    #
-    #
-    # def archive_spec_overlay_to_catalog(self) -> Path:
-    #     _debug(f"Archiving spec overlay to self.spec_archive_file={self.spec_archive_file}")
-    #     spec_overlay_archive_path = self.spec_overlay_archive_file
-    #     _debug(f"Saving spec to spec_overlay_archive_path={spec_overlay_archive_path}")
-    #     if spec_overlay_archive_path.exists():
-    #         _warning(f"Overlay already exists, spec_overlay_archive_path={spec_overlay_archive_path}")
-    #         return spec_overlay_archive_path
-    #     if not spec_overlay_archive_path.parent.exists():
-    #         spec_overlay_archive_path.parent.mkdir()
-    #     export_path = self.spec_data.export(file_path=spec_overlay_archive_path, format=self.spec_overlay_format, overwrite=False,
-    #                                         export_formatting=self.spec_overlay_export_formatting)
-    #     return export_path
-    #
-    # def load_spec_overlay_file(self, spec_overlay_file: Path = None) -> MeldDict:
-    #     """
-    #
-    #     :param overlay_spec_dict:
-    #     :return:
-    #     """
-    #     spec_overlay_file = spec_overlay_file if spec_overlay_file else self.spec_overlay_file
-    #     with spec_overlay_file.open() as fd:
-    #         try:
-    #             overlays = MeldDict(toml.load(f=fd))
-    #         except TomlDecodeError as e:
-    #             _error(f"TomlDecodeError while loading spec overlay: {fd}")
-    #             raise
-    #     return overlays
+    def __repr__(self):
+        return self.__str__()
 
     @property
     def spec_dict(self):
