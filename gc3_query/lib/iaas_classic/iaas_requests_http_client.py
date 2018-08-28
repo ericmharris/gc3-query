@@ -139,50 +139,50 @@ class IaaSRequestsHTTPClient(RequestsClient):
     #
     #
 
-    @staticmethod
-    def separate_params(request_params: DictStrAny) -> Tuple[DictStrAny, DictStrAny]:
-        """Splits the passed in dict of request_params into two buckets, and Replace %xx escapes in the URL by their single-character
-        equivalent.
-
-        - sanitized_params are valid kwargs for constructing a
-          requests.Request(..)
-        - misc_options are things like timeouts which can't be communicated
-          to the Requests library via the requests.Request(...) constructor.
-
-        :param request_params: kitchen sink of request params. Treated as a
-            read-only dict.
-        :returns: tuple(sanitized_params, misc_options)
-        """
-        _debug(f"input request_params={request_params}")
-        # sanitized_params, misc_options = super().separate_params(request_params=request_params)
-        # sanitized_params: Dict[str,Any], misc_options: Dict[str,Any] = RequestsClient.separate_params(request_params=request_params)
-        sanitized_params: Dict[str, Any]
-        misc_options: Dict[str, Any]
-        sanitized_params, misc_options = RequestsClient.separate_params(request_params=request_params)
-        _debug(f"From RequestsClient baseclass: sanitized_params={sanitized_params}, misc_options={misc_options}")
-        unquoted_url = unquote_plus(sanitized_params['url'])
-        _debug(f"unquoted_url={unquoted_url}")
-        sanitized_params['url'] = unquoted_url
-        #
-        # url = sanitized_params.get("url", None)
-        # # ParseResult(scheme='https', netloc='compute.uscom-central-1.oraclecloud.com', file_path='/instance/Compute-587626604%2Feric.harris%40oracle.com%2F', params='', query='', fragment='')
-        # parsed_url: ParseResult = urlparse3(url)
-        # unqoted_path = unquote_plus(parsed_url.path)
-        # requoted_path = quote(unqoted_path)
-        # parsed_url_d = parsed_url._asdict()
-        #
-        # ### https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604/eric.harris%40oracle.com/
-        # # parsed_url_d['file_path'] = requoted_path
-        # # new_url = urlunparse(parsed_url_d.values())
-        # ### https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604/eric.harris@oracle.com/
-        # parsed_url_d["file_path"] = unqoted_path
-        # new_url = urlunparse(parsed_url_d.values())
-        #
-        # sanitized_params["url"] = new_url
-        # _debug(f"url={url} parsed_url={parsed_url}, unqoted_path={unqoted_path}, requoted_path={requoted_path}, new_url={new_url}")
-        # _debug(f"returned request_params={sanitized_params}")
-
-        return sanitized_params, misc_options
+    # @staticmethod
+    # def separate_params(request_params: DictStrAny) -> Tuple[DictStrAny, DictStrAny]:
+    #     """Splits the passed in dict of request_params into two buckets, and Replace %xx escapes in the URL by their single-character
+    #     equivalent.
+    #
+    #     - sanitized_params are valid kwargs for constructing a
+    #       requests.Request(..)
+    #     - misc_options are things like timeouts which can't be communicated
+    #       to the Requests library via the requests.Request(...) constructor.
+    #
+    #     :param request_params: kitchen sink of request params. Treated as a
+    #         read-only dict.
+    #     :returns: tuple(sanitized_params, misc_options)
+    #     """
+    #     _debug(f"input request_params={request_params}")
+    #     # sanitized_params, misc_options = super().separate_params(request_params=request_params)
+    #     # sanitized_params: Dict[str,Any], misc_options: Dict[str,Any] = RequestsClient.separate_params(request_params=request_params)
+    #     sanitized_params: Dict[str, Any]
+    #     misc_options: Dict[str, Any]
+    #     sanitized_params, misc_options = RequestsClient.separate_params(request_params=request_params)
+    #     _debug(f"From RequestsClient baseclass: sanitized_params={sanitized_params}, misc_options={misc_options}")
+    #     unquoted_url = unquote_plus(sanitized_params['url'])
+    #     _debug(f"unquoted_url={unquoted_url}")
+    #     sanitized_params['url'] = unquoted_url
+    #     #
+    #     # url = sanitized_params.get("url", None)
+    #     # # ParseResult(scheme='https', netloc='compute.uscom-central-1.oraclecloud.com', file_path='/instance/Compute-587626604%2Feric.harris%40oracle.com%2F', params='', query='', fragment='')
+    #     # parsed_url: ParseResult = urlparse3(url)
+    #     # unqoted_path = unquote_plus(parsed_url.path)
+    #     # requoted_path = quote(unqoted_path)
+    #     # parsed_url_d = parsed_url._asdict()
+    #     #
+    #     # ### https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604/eric.harris%40oracle.com/
+    #     # # parsed_url_d['file_path'] = requoted_path
+    #     # # new_url = urlunparse(parsed_url_d.values())
+    #     # ### https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604/eric.harris@oracle.com/
+    #     # parsed_url_d["file_path"] = unqoted_path
+    #     # new_url = urlunparse(parsed_url_d.values())
+    #     #
+    #     # sanitized_params["url"] = new_url
+    #     # _debug(f"url={url} parsed_url={parsed_url}, unqoted_path={unqoted_path}, requoted_path={requoted_path}, new_url={new_url}")
+    #     # _debug(f"returned request_params={sanitized_params}")
+    #
+    #     return sanitized_params, misc_options
 
     # def request(self, request_params, operation=None, request_config=None, response_callbacks=None, also_return_response=False):
     #     """

@@ -176,7 +176,7 @@ paths:
 definitions:
   Account-discover-response:
     title: Account-discover-response
-    x-model: Account-discover-response
+    "x-model": Account-discover-response
     type: object
     properties:
       result:
@@ -185,42 +185,53 @@ definitions:
         type: array
   Account-list-response:
     title: Account-list-response
-    x-model: Account-list-response
+    "x-model": "Account-list-response"
     type: object
     properties:
       result:
         type: array
+        title: Response Array
+        description: Response array
         items:
           "$ref": "#/definitions/Account-response"
   Account-response:
     title: Account-response
-    x-model: Account-response
+    description: Account-response
+    "x-model": Account-response
     type: object
     properties:
       accounttype:
         type: string
         description: Account Type for this account
+        "x-nullable": true
       credentials:
         additionalProperties:
           type: object
+          "x-nullable": true
         type: object
+        "x-nullable": true
         description: Credentials specific to the account, which may include a username,
           password or certificate. The credentials are not returned.
       description:
         type: string
         description: Description of this account.
+        "x-nullable": true
       name:
         type: string
+        "x-nullable": true
         description: 'Two-part name of the account: <code>/Compute-<em>identity_domain</em>/default</code>
           or <code>/Compute-<em>identity_domain</em>/cloud_storage</code>'
       uri:
         type: string
+        "x-nullable": true
         description: Uniform Resource Identifier
       objectproperties:
         type: object
+        "x-nullable": true
         description: Properties to be applied to specific objects created using this account
         additionalProperties:
           type: object
+          "x-nullable": true
 tags:
 - name: Accounts
   description: An account is used in Compute Classic to store credentials that must
