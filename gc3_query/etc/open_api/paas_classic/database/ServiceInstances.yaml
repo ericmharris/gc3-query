@@ -869,7 +869,7 @@ definitions:
                     the service instance.
             shape:
                 type: string
-                description: "Desired compute shape. A shape defines a number of Oracle
+                description: Desired compute shape. A shape defines a number of Oracle
                     Compute Units (OCPUs) and an amount of processor RAM. The valid
                     shapes you can choose from depend on which infrastructure you
                     are using for the instance:<br>&nbsp;<ul><li><p>For instances
@@ -887,7 +887,7 @@ definitions:
                     The shapes in the <b>General Purpose Shapes</b> and the <b>High
                     Memory Shapes</b> tables are available in Oracle Database Cloud
                     Service.</p></li></ul><p><b>Note:</b> Not all shapes are available
-                    in all regions or sites.</p>"
+                    in all regions or sites.</p>
             vmPublicKeyText:
                 type: string
                 description: Public key for the secure shell (SSH). This key will
@@ -1163,7 +1163,7 @@ definitions:
                     are <code>yes</code> and <code>no</code>. Default value is <code>no</code>.
             disasterRecovery:
                 type: string
-                description: "Specify if an Oracle Data Guard configuration is created
+                description: Specify if an Oracle Data Guard configuration is created
                     using the Disaster Recovery option or the High Availability option.
                     Valid values are <code>yes</code> and <code>no</code>:<ul><li><p><code>yes</code>
                     - The Disaster Recovery option is used, which places the compute
@@ -1174,7 +1174,7 @@ definitions:
                     the standby database in different compute zones of the same data
                     center.</p></li></ul><p>Default value is <code>no</code>.</p><p>This
                     option is applicable only when <code>failoverDatabase</code> is
-                    set to <code>yes</code>.</p>"
+                    set to <code>yes</code>.</p>
             goldenGate:
                 type: string
                 description: Specify if the database should be configured for use
@@ -1190,7 +1190,7 @@ definitions:
                     - Cloud Storage only</li><li><code>NONE</code> - None</li></ul>'
             cloudStorageContainer:
                 type: string
-                description: "The location where backups to cloud storage are to be
+                description: The location where backups to cloud storage are to be
                     stored:<ul><li><p>For service instances in Oracle Cloud Infrastructure,
                     enter the URL of an existing Oracle Cloud Infrastructure Object
                     Storage bucket. The URL is of the form:</p><pre>https://swiftobjectstorage.<i>region</i>.oraclecloud.com/v1/<i>account</i>/<i>bucket</i></pre><p>For
@@ -1210,7 +1210,7 @@ definitions:
                     determine the <code><i>rest-endpoint-url</i></code> value for
                     your account, see <a href='https://www.oracle.com/pls/topic/lookup?ctx=en/cloud/paas/database-dbaas-cloud/csdbi&amp;id=CSSTO-GUID-629F5636-C378-4E35-8E54-CF32855285CB'>Finding
                     the REST Endpoint URL for Your Service Instance</a> in <i>Using
-                    Oracle Cloud Infrastructure Object Storage Classic</i>.</p>"
+                    Oracle Cloud Infrastructure Object Storage Classic</i>.</p>
             cloudStorageUser:
                 type: string
                 description: A user with read/write (and creation, if necessary) access
