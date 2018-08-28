@@ -30,7 +30,7 @@ tags:
     the HTTP requests listed below.
 
 paths:
-  /account/{container}/:
+  "/account/{container}/":
     get:
       tags:
       - Accounts
