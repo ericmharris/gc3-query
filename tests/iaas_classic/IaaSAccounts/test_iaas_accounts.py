@@ -57,6 +57,24 @@ def test_setup():
         spec_files_dir.mkdir()
 
 
+
+def test_get_spec():
+    idm_domain = 'gc30003'
+    service = 'Accounts'
+    gc3_config = GC3Config(atoml_config_dir=config_dir)
+    idm_cfg = gc3_config.idm.domains[idm_domain]
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
+    open_api_specs_cfg = gc3_config.iaas_classic.open_api_specs
+    api_catalog_config = gc3_config.iaas_classic.open_api_spec_catalog
+    oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=open_api_specs_cfg, idm_cfg=idm_cfg)
+    assert oapi_spec.name == service
+    assert oapi_spec._spec_data['schemes'] == ['https']
+    bravado_core_spec = oapi_spec.get_swagger_spec(rest_endpoint=idm_cfg.rest_endpoint)
+    assert bravado_core_spec.origin_url == idm_cfg.rest_endpoint
+    # assert bravado_core_spec.spec_dict['info']['title'] == service
+    assert bravado_core_spec.spec_dict['info']['title'] == service_cfg.title
+
+
 @pytest.fixture()
 def setup_gc30003():
     service = 'Accounts'
@@ -85,4 +103,11 @@ def test_list_all_accounts(setup_gc30003):
     accounts = Accounts(service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client)
     assert 'nimbula' in accounts.http_client.auth_cookie_header['Cookie']
     all_accounts = accounts.get_all_accounts()
+    assert all_accounts
+
+def test_get_all_account_data(setup_gc30003):
+    service_cfg, idm_cfg, http_client = setup_gc30003
+    accounts = Accounts(service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client)
+    assert 'nimbula' in accounts.http_client.auth_cookie_header['Cookie']
+    all_accounts = accounts.get_all_account_data()
     assert all_accounts
