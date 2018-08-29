@@ -35,7 +35,7 @@ from gc3_query.lib.gc3_config import GC3Config
 from gc3_query.lib.iaas_classic import BRAVADO_CONFIG
 from gc3_query.lib.iaas_classic import IaaSRequestsHTTPClient
 from gc3_query.lib.iaas_classic.accounts import Accounts
-# from gc3_query.lib.open_api import gc3_cfg.OPEN_API_CATALOG_DIR
+from gc3_query.lib.open_api.open_api_spec import OpenApiSpec
 
 # from pprint import pprint, pformat
 
