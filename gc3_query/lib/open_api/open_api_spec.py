@@ -27,6 +27,7 @@ from bravado_core.spec import Spec
 from dataclasses import dataclass
 from melddict import MeldDict
 from toml import TomlDecodeError
+from swagger_spec_validator import validator20
 
 ################################################################################
 ## Project Imports
@@ -139,6 +140,28 @@ class OpenApiSpec(GC3VersionTypedMixin):
     @property
     def spec(self) -> Spec:
         return self.get_swagger_spec(rest_endpoint=self.rest_endpoint)
+
+    def build(self) -> bool:
+        _ = self.spec.build()
+        return True
+
+
+    def validate(self) -> bool:
+        """
+    def _validate_spec(self):
+        if self.config['validate_swagger_spec']:
+            self.resolver = validator20.validate_spec(
+                spec_dict=self.spec_dict,
+                spec_url=self.origin_url or '',
+                http_handlers=build_http_handlers(self.http_client),
+            )
+
+
+
+        :return:
+        """
+        raise RuntimeError('Todo:  look at Spec._validate, etc.')
+
 
     @property
     def title(self) -> str:
