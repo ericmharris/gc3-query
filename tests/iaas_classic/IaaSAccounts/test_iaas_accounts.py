@@ -17,6 +17,9 @@ import sys, os
 ## Third-Party Imports
 from dataclasses import dataclass
 import pytest
+from bravado_core.spec import Spec
+from bravado_core.validate import validate_object
+from yaml import load, Loader, dump, Dumper
 
 ################################################################################
 ## Project Imports
@@ -35,7 +38,8 @@ from gc3_query.lib.gc3_config import GC3Config
 from gc3_query.lib.iaas_classic import BRAVADO_CONFIG
 from gc3_query.lib.iaas_classic import IaaSRequestsHTTPClient
 from gc3_query.lib.iaas_classic.accounts import Accounts
-# from gc3_query.lib.open_api import gc3_cfg.OPEN_API_CATALOG_DIR
+from gc3_query.lib.open_api.open_api_spec import OpenApiSpec
+
 
 # from pprint import pprint, pformat
 
@@ -70,6 +74,7 @@ def test_get_spec():
     assert oapi_spec.name == service
     assert oapi_spec._spec_data['schemes'] == ['https']
     bravado_core_spec = oapi_spec.get_swagger_spec(rest_endpoint=idm_cfg.rest_endpoint)
+    bravado_core_spec.build()
     assert bravado_core_spec.origin_url == idm_cfg.rest_endpoint
     # assert bravado_core_spec.spec_dict['info']['title'] == service
     assert bravado_core_spec.spec_dict['info']['title'] == service_cfg.title
