@@ -16,7 +16,7 @@ produces:
 - application/oracle-compute-v3+json
 - application/oracle-compute-v3+directory+json
 paths:
-    /instance/:
+    "/instance":
         get:
             tags:
             - Instances
@@ -97,7 +97,7 @@ paths:
                 description: 'The Cookie: header must be included with every request
                     to the service. It must be set to the value of the set-cookie
                     header in the response received to the POST /authenticate/ call.'
-    /instance/{container}/:
+    x-/instance/{container}/:
         get:
             tags:
             - Instances

@@ -2,7 +2,7 @@
   "swagger" : "2.0",
   "info" : {
     "version" : "18.1.2-20180126.052521",
-    "description" : "A Compute Classic instance is a virtual machine running a specific operating system and with CPU and memory resources that you specify. See <a target=\"_blank\" href=\"http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=STCSG-GUID-F928F362-2DB6-4E45-843F-C269E0740A36\">About Instances</a> in <em>Using Oracle Cloud Infrastructure Compute Classic</em>.<p>You can view and delete instances using the HTTP requests listed below.",
+    "description" : "A Compute Classic instance is a virtual machine running a specific operating system and with CPU and memory resources that you specify. See About Instances in Using Oracle Cloud Infrastructure Compute Classic.You can view and delete instances using the HTTP requests listed below.",
     "title" : "Instances"
   },
   "schemes" : [ "http" ],
@@ -13,7 +13,7 @@
       "get" : {
         "tags" : [ "Instances" ],
         "summary" : "Retrieve Names of Containers",
-        "description" : "Retrieves the names of containers that contain objects that you can access. You can use this information to construct the multipart name of an object.<p><b>Required Role: </b>To complete this task, you must have the <code>Compute_Monitor</code> or <code>Compute_Operations</code> role. If this role isn't assigned to you or you're not sure, then ask your system administrator to ensure that the role is assigned to you in Oracle Cloud My Services. See <a target=\"_blank\" href=\"http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6\">Modifying User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.",
+        "description" : "Retrieves the names of containers that contain objects that you can access. You can use this information to construct the multipart name of an object.Required Role: To complete this task, you must have the Compute_Monitor or Compute_Operations role. If this role isn't assigned to you or you're not sure, then ask your system administrator to ensure that the role is assigned to you in Oracle Cloud My Services. See Modifying User Roles in Managing and Monitoring Oracle Cloud.",
         "operationId" : "discoverRootInstance",
         "responses" : {
           "200" : {
@@ -23,7 +23,7 @@
                 "description" : "The cookie value is returned if the session is extended"
               }
             },
-            "description" : "OK. See <a class=\"xref\" href=\"Status%20Codes.html\">Status Codes</a> for information about other possible HTTP status codes.",
+            "description" : "OK. See Status Codes for information about other possible HTTP status codes.",
             "schema" : {
               "$ref" : "#/definitions/Instance-discover-response"
             }
@@ -43,7 +43,7 @@
       "get" : {
         "tags" : [ "Instances" ],
         "summary" : "Retrieve Names of all Instances and Subcontainers in a Container",
-        "description" : "Retrieves the names of objects and subcontainers that you can access in the specified container.<p><b>Required Role: </b>To complete this task, you must have the <code>Compute_Operations</code> role. If this role isn't assigned to you or you're not sure, then ask your system administrator to ensure that the role is assigned to you in Oracle Cloud My Services. See <a target=\"_blank\" href=\"http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6\">Modifying User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.",
+        "description" : "Retrieves the names of objects and subcontainers that you can access in the specified container.Required Role: To complete this task, you must have the Compute_Operations role. If this role isn't assigned to you or you're not sure, then ask your system administrator to ensure that the role is assigned to you in Oracle Cloud My Services. See Modifying User Roles in Managing and Monitoring Oracle Cloud.",
         "operationId" : "discoverInstance",
         "responses" : {
           "200" : {
@@ -53,7 +53,7 @@
                 "description" : "The cookie value is returned if the session is extended"
               }
             },
-            "description" : "OK. See <a class=\"xref\" href=\"Status%20Codes.html\">Status Codes</a> for information about other possible HTTP status codes.",
+            "description" : "OK. See Status Codes for information about other possible HTTP status codes.",
             "schema" : {
               "$ref" : "#/definitions/Instance-discover-response"
             }
@@ -64,7 +64,7 @@
         "parameters" : [ {
           "name" : "container",
           "in" : "path",
-          "description" : "Specify <code>/Compute-<i>identityDomain</i>/<i>user</i>/</code> to retrieve the names of objects that you can access. Specify <code>/Compute-<i>identityDomain</i>/</code> to retrieve the names of containers that contain objects that you can access.",
+          "description" : "Specify /Compute-identityDomain/user/ to retrieve the names of objects that you can access. Specify /Compute-identityDomain/ to retrieve the names of containers that contain objects that you can access.",
           "required" : true,
           "type" : "string"
         }, {
@@ -79,7 +79,7 @@
       "get" : {
         "tags" : [ "Instances" ],
         "summary" : "Retrieve Details of all Instances in a Container",
-        "description" : "Retrieves details of the instances that are in the specified container and match the specified query criteria. If you don't specify any query criteria, then details of all the instances in the container are displayed. To filter the search results, you can pass one or more of the following query parameters, by appending them to the URI in the following syntax:<p><code>?parameter1=value1&ampparameter2=value2&ampparameterN=valueN</code><p><b>Required Role: </b>To complete this task, you must have the <code>Compute_Monitor</code> or <code>Compute_Operations</code> role. If this role isn't assigned to you or you're not sure, then ask your system administrator to ensure that the role is assigned to you in Oracle Cloud My Services. See <a target=\"_blank\" href=\"http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6\">Modifying User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.",
+        "description" : "Retrieves details of the instances that are in the specified container and match the specified query criteria. If you don't specify any query criteria, then details of all the instances in the container are displayed. To filter the search results, you can pass one or more of the following query parameters, by appending them to the URI in the following syntax:?parameter1=value1&ampparameter2=value2&ampparameterN=valueNRequired Role: To complete this task, you must have the Compute_Monitor or Compute_Operations role. If this role isn't assigned to you or you're not sure, then ask your system administrator to ensure that the role is assigned to you in Oracle Cloud My Services. See Modifying User Roles in Managing and Monitoring Oracle Cloud.",
         "operationId" : "listInstance",
         "responses" : {
           "200" : {
@@ -89,7 +89,7 @@
                 "description" : "The cookie value is returned if the session is extended"
               }
             },
-            "description" : "OK. See <a class=\"xref\" href=\"Status%20Codes.html\">Status Codes</a> for information about other possible HTTP status codes.",
+            "description" : "OK. See Status Codes for information about other possible HTTP status codes.",
             "schema" : {
               "$ref" : "#/definitions/Instance-list-response"
             }
@@ -100,7 +100,7 @@
         "parameters" : [ {
           "name" : "container",
           "in" : "path",
-          "description" : "<code>/Compute-<em>identity_domain</em>/<em>user</em></code> or <p><code>/Compute-<em>identity_domain</em></code>",
+          "description" : "/Compute-identity_domain/user or /Compute-identity_domain",
           "required" : true,
           "type" : "string"
         }, {
@@ -130,7 +130,7 @@
       "put" : {
         "tags" : [ "Instances" ],
         "summary" : "Update an Instance",
-        "description" : "You can use this request to shut down and restart individual instances which use a persistent bootable storage volume. <p>* Set the value of the <code>desired_state</code> parameter as <code>shutdown</code> to shut down the instance.<p>* Set the value of the <code>desired_state</code> parameter as <code>running</code> to restart an instance that you had previously shutdown. The instance is restarted without losing any of the instance data or configuration.<p>You can also update the value for the <code>tags</code> parameter. If the instance is already shut down, you can also change the value of the <code>shape</code> parameter.<p>Shutting down an instance is useful when you've created multiple instances in a single orchestration. In this case, stopping the instance orchestration would cause all instances to be deleted. If you want to stop one or more instances, while letting other instances in the same orchestration run, you can shut down the required instances individually.<p>Here's what happens when you shut down an instance:<p>* The instance ID is retained and reused when you restart the instance. So the multipart instance name doesn't change. This is useful in case the instance name is referenced by other objects, such as storage attachments.<p>* For instances created using orchestrations v1, the instance orchestration shows an error. However, even if the HA policy specified is active, the instance isn't automatically re-created.<p>* The resources associated with that instance, such as storage volumes and IP reservations, are freed up and can be used by other instances if required. However, if you attempt to restart an instance, ensure that the required resources are available, otherwise the instance can't restart and will go into an error state.<p>* The private IP address on the shared network is released. If you restart the instance later, it is allotted a private IP address afresh. So the private IP address of the instance on the shared network is likely to change.<p>* Dynamically allocated IP addresses on IP networks are also released. So if you start the instance later, dynamically allocated IP addresses on IP networks are also likely to change. Static private IP addresses that are allocated to interfaces in the instance orchestration won't change.<p>* Any changes that you'd made to the instance in Compute Classic after the instance was created will be lost. For example, if you added the instance to security lists, attached storage volumes to the instance, or detached and attached an IP reservation, you'll need to make those changes again. The instance will be restarted with the resources that are associated with it in the instance orchestration.<p><b>Note:</b> Changes made to the instance by logging in to the instance won't be lost, however, as these are preserved on the persistent storage volumes attached to the instance. Data on storage volumes isn't affected by shutting down an instance.<p><b>Required Role: </b>To complete this task, you must have the <code>Compute_Monitor</code> or <code>Compute_Operations</code> role. If this role isn't assigned to you or you're not sure, then ask your system administrator to ensure that the role is assigned to you in Oracle Cloud My Services. See <a target=\"_blank\" href=\"http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6\">Modifying User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.",
+        "description" : "You can use this request to shut down and restart individual instances which use a persistent bootable storage volume. * Set the value of the desired_state parameter as shutdown to shut down the instance.* Set the value of the desired_state parameter as running to restart an instance that you had previously shutdown. The instance is restarted without losing any of the instance data or configuration.You can also update the value for the tags parameter. If the instance is already shut down, you can also change the value of the shape parameter.Shutting down an instance is useful when you've created multiple instances in a single orchestration. In this case, stopping the instance orchestration would cause all instances to be deleted. If you want to stop one or more instances, while letting other instances in the same orchestration run, you can shut down the required instances individually.Here's what happens when you shut down an instance:* The instance ID is retained and reused when you restart the instance. So the multipart instance name doesn't change. This is useful in case the instance name is referenced by other objects, such as storage attachments.* For instances created using orchestrations v1, the instance orchestration shows an error. However, even if the HA policy specified is active, the instance isn't automatically re-created.* The resources associated with that instance, such as storage volumes and IP reservations, are freed up and can be used by other instances if required. However, if you attempt to restart an instance, ensure that the required resources are available, otherwise the instance can't restart and will go into an error state.* The private IP address on the shared network is released. If you restart the instance later, it is allotted a private IP address afresh. So the private IP address of the instance on the shared network is likely to change.* Dynamically allocated IP addresses on IP networks are also released. So if you start the instance later, dynamically allocated IP addresses on IP networks are also likely to change. Static private IP addresses that are allocated to interfaces in the instance orchestration won't change.* Any changes that you'd made to the instance in Compute Classic after the instance was created will be lost. For example, if you added the instance to security lists, attached storage volumes to the instance, or detached and attached an IP reservation, you'll need to make those changes again. The instance will be restarted with the resources that are associated with it in the instance orchestration.Note: Changes made to the instance by logging in to the instance won't be lost, however, as these are preserved on the persistent storage volumes attached to the instance. Data on storage volumes isn't affected by shutting down an instance.Required Role: To complete this task, you must have the Compute_Monitor or Compute_Operations role. If this role isn't assigned to you or you're not sure, then ask your system administrator to ensure that the role is assigned to you in Oracle Cloud My Services. See Modifying User Roles in Managing and Monitoring Oracle Cloud.",
         "operationId" : "updateInstance",
         "responses" : {
           "200" : {
@@ -140,7 +140,7 @@
                 "description" : "The cookie value is returned if the session is extended"
               }
             },
-            "description" : "OK. See <a class=\"xref\" href=\"Status%20Codes.html\">Status Codes</a> for information about other possible HTTP status codes.",
+            "description" : "OK. See Status Codes for information about other possible HTTP status codes.",
             "schema" : {
               "$ref" : "#/definitions/Instance-response"
             }
@@ -171,7 +171,7 @@
       "delete" : {
         "tags" : [ "Instances" ],
         "summary" : "Delete an Instance",
-        "description" : "Shuts down an instance and removes it permanently from the system. No response is returned.<p><b>Required Role: </b>To complete this task, you must have the <code>Compute_Operations</code> role. If this role isn't assigned to you or you're not sure, then ask your system administrator to ensure that the role is assigned to you in Oracle Cloud My Services. See <a target=\"_blank\" href=\"http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6\">Modifying User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.",
+        "description" : "Shuts down an instance and removes it permanently from the system. No response is returned.Required Role: To complete this task, you must have the Compute_Operations role. If this role isn't assigned to you or you're not sure, then ask your system administrator to ensure that the role is assigned to you in Oracle Cloud My Services. See Modifying User Roles in Managing and Monitoring Oracle Cloud.",
         "operationId" : "deleteInstance",
         "responses" : {
           "204" : {
@@ -181,7 +181,7 @@
                 "description" : "The cookie value is returned if the session is extended"
               }
             },
-            "description" : "No Content. See <a class=\"xref\" href=\"Status%20Codes.html\">Status Codes</a> for information about other possible HTTP status codes."
+            "description" : "No Content. See Status Codes for information about other possible HTTP status codes."
           }
         },
         "consumes" : [ "application/oracle-compute-v3+json" ],
@@ -189,7 +189,7 @@
         "parameters" : [ {
           "name" : "name",
           "in" : "path",
-          "description" : "<p>Multipart name of the object.",
+          "description" : "Multipart name of the object.",
           "required" : true,
           "type" : "string"
         }, {
@@ -202,7 +202,7 @@
       "get" : {
         "tags" : [ "Instances" ],
         "summary" : "Retrieve Details of an Instance",
-        "description" : "Retrieves details of the specified instance.<p><b>Required Role: </b>To complete this task, you must have the <code>Compute_Monitor</code> or <code>Compute_Operations</code> role. If this role isn't assigned to you or you're not sure, then ask your system administrator to ensure that the role is assigned to you in Oracle Cloud My Services. See <a target=\"_blank\" href=\"http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6\">Modifying User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.",
+        "description" : "Retrieves details of the specified instance.Required Role: To complete this task, you must have the Compute_Monitor or Compute_Operations role. If this role isn't assigned to you or you're not sure, then ask your system administrator to ensure that the role is assigned to you in Oracle Cloud My Services. See Modifying User Roles in Managing and Monitoring Oracle Cloud.",
         "operationId" : "getInstance",
         "responses" : {
           "200" : {
@@ -212,7 +212,7 @@
                 "description" : "The cookie value is returned if the session is extended"
               }
             },
-            "description" : "OK. See <a class=\"xref\" href=\"Status%20Codes.html\">Status Codes</a> for information about other possible HTTP status codes.",
+            "description" : "OK. See Status Codes for information about other possible HTTP status codes.",
             "schema" : {
               "$ref" : "#/definitions/Instance-response"
             }
@@ -223,7 +223,7 @@
         "parameters" : [ {
           "name" : "name",
           "in" : "path",
-          "description" : "<p>Multipart name of the object.",
+          "description" : "Multipart name of the object.",
           "required" : true,
           "type" : "string"
         }, {
@@ -303,11 +303,11 @@
       "properties" : {
         "desired_state" : {
           "type" : "string",
-          "description" : "Desired state for the instance.<p>* Set the value of the <code>desired_state</code> parameter as <code>shutdown</code> to shut down the instance.<p>* Set the value of the <code>desired_state</code> parameter as <code>running</code> to restart an instance that you had previously shutdown. The instance is restarted without losing any of the instance data or configuration."
+          "description" : "Desired state for the instance.* Set the value of the desired_state parameter as shutdown to shut down the instance.* Set the value of the desired_state parameter as running to restart an instance that you had previously shutdown. The instance is restarted without losing any of the instance data or configuration."
         },
         "shape" : {
           "type" : "string",
-          "description" : "A shape is a resource profile that specifies the number of CPU threads and the amount of memory (in MB) to be allocated to an instance.<p>If the instance is already shut down, you can change the shape that is associated with the instance."
+          "description" : "A shape is a resource profile that specifies the number of CPU threads and the amount of memory (in MB) to be allocated to an instance.If the instance is already shut down, you can change the shape that is associated with the instance."
         },
         "tags" : {
           "items" : {
@@ -344,7 +344,7 @@
         },
         "desired_state" : {
           "type" : "string",
-          "description" : "Desired state for the instance. The value can be <code>shutdown</code> or <code>running</code> to shutdown an instance or to restart a previously shutdown instance respectively."
+          "description" : "Desired state for the instance. The value can be shutdown or running to shutdown an instance or to restart a previously shutdown instance respectively."
         },
         "disk_attach" : {
           "type" : "string",
@@ -402,7 +402,7 @@
             "type" : "object"
           },
           "type" : "object",
-          "description" : "Mapping of <device name> to network specifiers for virtual NICs to be attached to this instance."
+          "description" : "Mapping of  to network specifiers for virtual NICs to be attached to this instance."
         },
         "placement_requirements" : {
           "items" : {
@@ -494,7 +494,7 @@
     "Interval" : {
       "x-oneOf-instructions" : "Provide one of the valid object representations documented here.  For more information about oneOf see http://json-schema.org/latest/json-schema-validation.html#anchor88",
       "type" : "object",
-      "description" : "There are two kinds of Intervals. Each Interval has its own JSON format. Your Interval field should look like one of the following:<p><ul><li><code>\"interval\":{\"Hourly\":{\"hourlyInterval\":2}}</code></li><li><code>{\"DailyWeekly\":{\"daysOfWeek\":[\"MONDAY\"],\"timeOfDay\":\"03:15\",\"userTimeZone\":\"America/Los_Angeles\"}}</code></li></ul><p>Days of the week is any day of the week fully capitalized (MONDAY, TUESDAY, etc). The user time zone is any IANA user timezone.  For example user time zones see <a href=\"https://en.wikipedia.org/wiki/IANA_time_zone_database\">List of IANA time zones</a>.",
+      "description" : "There are two kinds of Intervals. Each Interval has its own JSON format. Your Interval field should look like one of the following:\"interval\":{\"Hourly\":{\"hourlyInterval\":2}}{\"DailyWeekly\":{\"daysOfWeek\":[\"MONDAY\"],\"timeOfDay\":\"03:15\",\"userTimeZone\":\"America/Los_Angeles\"}}Days of the week is any day of the week fully capitalized (MONDAY, TUESDAY, etc). The user time zone is any IANA user timezone.  For example user time zones see List of IANA time zones.",
       "x-oneOf" : {
         "oneOf" : [ {
           "type" : "object",
@@ -526,6 +526,6 @@
   },
   "tags" : [ {
     "name" : "Instances",
-    "description" : "A Compute Classic instance is a virtual machine running a specific operating system and with CPU and memory resources that you specify. See <a target=\"_blank\" href=\"http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=STCSG-GUID-F928F362-2DB6-4E45-843F-C269E0740A36\">About Instances</a> in <em>Using Oracle Cloud Infrastructure Compute Classic</em>.<p>You can view and delete instances using the HTTP requests listed below."
+    "description" : "A Compute Classic instance is a virtual machine running a specific operating system and with CPU and memory resources that you specify. See About Instances in Using Oracle Cloud Infrastructure Compute Classic.You can view and delete instances using the HTTP requests listed below."
   } ]
 }
