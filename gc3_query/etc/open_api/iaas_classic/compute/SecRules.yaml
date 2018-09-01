@@ -108,18 +108,18 @@ paths:
 definitions:
   "SecRule-list-response":
     title: "SecRule-list-response"
-    "x-model": "SecRule-list-response"
     type: object
-    additionalProperties: true
     properties:
       result:
+        title: SecRules Array
         type: array
+        description: Array of json
         items:
           $ref: '#/definitions/SecRule-response'
   "SecRule-response":
     title: "SecRule-response"
-    "x-model": "SecRule-response"
     type: object
+    x-model: "SecRule-response"
     description: SecRule-response
     additionalProperties: true
     properties:
