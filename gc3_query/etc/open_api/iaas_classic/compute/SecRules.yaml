@@ -1,4 +1,40 @@
 ---
+
+
+
+# {
+#     "result": [
+#     {
+#         "dst_is_ip": "false",
+#         "src_is_ip": "true",
+#         "dst_list": "seclist:/Compute-587626604/mayurnath.gokare@oracle.com/paas/SOA/gc3ntagrogr605/lb/ora_otd_infraadmin",
+#         "name": "/Compute-587626604/mayurnath.gokare@oracle.com/paas/SOA/gc3ntagrogr605/lb/sys_infra2otd_admin_ssh",
+#         "src_list": "seciplist:/oracle/public/paas-infra",
+#         "uri": "https://compute.uscom-central-1.oraclecloud.com/secrule/Compute-587626604/mayurnath.gokare%40oracle.com/paas/SOA/gc3ntagrogr605/lb/sys_infra2otd_admin_ssh",
+#         "disabled": false,
+#         "application": "/oracle/public/ssh",
+#         "action": "PERMIT",
+#         "id": "bfc39682-3929-4635-9834-e95b8ba7c2c2",
+#         "description": "DO NOT MODIFY: Permit PSM to ssh to admin host"
+#     },
+#     {
+#         "dst_is_ip": "false",
+#         "src_is_ip": "true",
+#         "dst_list": "seclist:/Compute-587626604/eric.harris@oracle.com/gc3_naac_soar_seclist_01",
+#         "name": "/Compute-587626604/eric.harris@oracle.com/gc3_naac_soar_secrule_07",
+#         "src_list": "seciplist:/Compute-587626604/eric.harris@oracle.com/emh-home-ip",
+#         "uri": "https://compute.uscom-central-1.oraclecloud.com/secrule/Compute-587626604/eric.harris%40oracle.com/gc3_naac_soar_secrule_07",
+#         "disabled": false,
+#         "application": "/oracle/public/all",
+#         "action": "PERMIT",
+#         "id": "5aee8ea3-8065-4ca2-8a28-e4306829da1e",
+#         "description": ""
+#     }]
+# }
+
+
+
+
 swagger: "2.0"
 info:
   title: SecRules
