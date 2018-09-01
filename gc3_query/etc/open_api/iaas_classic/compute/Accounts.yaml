@@ -25,7 +25,7 @@ tags:
 - name: Accounts
   description: An account is used in Compute Classic to store credentials that must
 paths:
-  "/account/{container}/":
+  "/account/{container}":
     get:
       tags:
       - Accounts
@@ -60,6 +60,14 @@ paths:
         "400":
           description: bad input parameter
 definitions:
+  Accounts:
+    type: object
+    title: Accounts
+    properties:
+      result:
+        type: array
+        items:
+          "$ref": "#/defin"
   Account:
     type: object
     title: Account

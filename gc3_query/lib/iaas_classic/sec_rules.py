@@ -49,7 +49,9 @@ class SecRules(IaaSServiceBase):
 
 
     def get_all_sec_rules(self):
-        http_future = self.service_operations.list_sec_rule(container=self.idm_root_container_name)
+        container = f"{self.idm_container_name}/"
+        http_future = self.service_operations.list_sec_rule(container=container)
+        # http_future = self.service_operations.list_sec_rule(container=self.idm_root_container_name)
         # http_future = self.bravado_service_operations.listSecRule(container=self.idm_root_container_name)
         request_url = http_future.future.request.url
         service_response = http_future.response()
