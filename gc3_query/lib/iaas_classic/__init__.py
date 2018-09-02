@@ -37,7 +37,7 @@ from gc3_query.lib.iaas_classic.iaas_swagger_client import IaaSSwaggerClient
 from gc3_query.lib.open_api.open_api_spec import OpenApiSpec
 from gc3_query.lib.open_api.open_api_spec_catalog import OpenApiSpecCatalog
 from gc3_query.lib.signatures import GC3VersionTypedMixin
-from gc3_query.lib.utils import camelcase_to_snake
+from gc3_query.lib.util import camelcase_to_snake
 from gc3_query.lib.export_delegates.response_export import ResponseExport
 from gc3_query.lib.open_api.service_responses import IaaSServiceResponse
 

@@ -20,6 +20,8 @@ from dataclasses import dataclass
 ################################################################################
 ## Project Imports
 from gc3_query.lib import *
+from gc3_query.lib.util import str_to_bool, bool_to_str
+from gc3_query.lib.gc3logging import  get_logging
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
@@ -43,16 +45,12 @@ SWAGGER_PRIMITIVES = (
 )
 
 
-def is_bool_like(spec):
-    """
-    :param spec: swagger object specification in dict form
-    :rtype: boolean
-    """
-    # Calling isinstance(spec, Mapping) is relatively slow. As this function
-    # gets usually called with a dict type argument we optimize for that case
-    # by executing a much cheaper isinstance(spec, dict) check before the more
-    # expensive isinstance(spec, Mapping) check.
-    return isinstance(spec, (dict, Mapping))
+def is_str_bool_like(s: str) -> bool:
+    try:
+        _s = str_to_bool(s)
+    except RuntimeError:
+        return False
+    return True
 
 
 # def is_list_like(spec):

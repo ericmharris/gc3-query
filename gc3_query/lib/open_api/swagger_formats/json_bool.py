@@ -18,7 +18,7 @@
 
 ################################################################################
 ## Third-Party Imports
-from bravado_core.formatter import SwaggerFormat
+from bravado_core.formatter import SwaggerFormat, NO_OP
 from bravado_core.exception import SwaggerValidationError
 
 ################################################################################

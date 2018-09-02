@@ -564,9 +564,9 @@ definitions:
         description: Is the destination an IP
         type: string
         "x-nullable": true
-        format: "json-bool"
+        format: "bool-in-str"
       src_is_ip:
         description: Is the source an IP
         type: string
         "x-nullable": true
-        format: "json-bool"
+        format: "bool-in-str"
