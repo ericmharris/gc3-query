@@ -11,15 +11,27 @@ info:
     Security Rules</a> in <em>Using Oracle Cloud Infrastructure Compute Classic</em>.
   title: SecRules
 schemes:
-- http
+- https
 consumes:
+- application/json
 - application/oracle-compute-v3+json
 - application/oracle-compute-v3+directory+json
 produces:
+- application/json
 - application/oracle-compute-v3+json
 - application/oracle-compute-v3+directory+json
+tags:
+- name: SecRules
+  description: A security rule defines network access over a specified protocol between
+    instances in two security lists, or from a set of external hosts (an IP list)
+    to instances in a security list.<p>Security rules tie the security list, security
+    IP list, and security application entities together.<p>You can create, delete,
+    update, and view security rules using the HTTP requests listed below. For more
+    information about security rules, see <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=STCSG-GUID-1AEDDA2C-3561-4759-B5AD-FB4CD9C2FBD8">About
+    Security Rules</a> in <em>Using Oracle Cloud Infrastructure Compute Classic</em>.
+basePath: "/secrule"
 paths:
-  "/secrule/":
+  "/":
     post:
       tags:
       - SecRules
@@ -44,6 +56,7 @@ paths:
       consumes:
       - application/oracle-compute-v3+json
       produces:
+      - application/json
       - application/oracle-compute-v3+json
       parameters:
       - name: body
@@ -83,6 +96,7 @@ paths:
       consumes:
       - application/oracle-compute-v3+json
       produces:
+      - application/json
       - application/oracle-compute-v3+directory+json
       parameters:
       - name: Cookie
@@ -91,48 +105,48 @@ paths:
         description: 'The Cookie: header must be included with every request to the
           service. It must be set to the value of the set-cookie header in the response
           received to the POST /authenticate/ call.'
-  "/secrule/{container}":
-    get:
-      tags:
-      - SecRules
-      summary: Retrieve Names of all Security Rules and Subcontainers in a Container
-      description: 'Retrieves the names of objects and subcontainers that you can
-        access in the specified container.<p><b>Required Role: </b>To complete this
-        task, you must have the <code>Compute_Monitor</code> or <code>Compute_Operations</code>
-        role. If this role isn''t assigned to you or you''re not sure, then ask your
-        system administrator to ensure that the role is assigned to you in Oracle
-        Cloud My Services. See <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6">Modifying
-        User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.'
-      operationId: discoverSecRule
-      responses:
-        '200':
-          headers:
-            set-cookie:
-              type: string
-              description: The cookie value is returned if the session is extended
-          description: OK. See <a class="xref" href="Status%20Codes.html">Status Codes</a>
-            for information about other possible HTTP status codes.
-          schema:
-            "$ref": "#/definitions/SecRule-discover-response"
-      consumes:
-      - application/oracle-compute-v3+json
-      produces:
-      - application/oracle-compute-v3+directory+json
-      parameters:
-      - name: container
-        in: path
-        description: Specify <code>/Compute-<i>identityDomain</i>/<i>user</i>/</code>
-          to retrieve the names of objects that you can access. Specify <code>/Compute-<i>identityDomain</i>/</code>
-          to retrieve the names of containers that contain objects that you can access.
-        required: true
-        type: string
-      - name: Cookie
-        in: header
-        type: string
-        description: 'The Cookie: header must be included with every request to the
-          service. It must be set to the value of the set-cookie header in the response
-          received to the POST /authenticate/ call.'
-  "/secrule/{container}/":
+#  "/{container}":
+#    get:
+#      tags:
+#      - SecRules
+#      summary: Retrieve Names of all Security Rules and Subcontainers in a Container
+#      description: 'Retrieves the names of objects and subcontainers that you can
+#        access in the specified container.<p><b>Required Role: </b>To complete this
+#        task, you must have the <code>Compute_Monitor</code> or <code>Compute_Operations</code>
+#        role. If this role isn''t assigned to you or you''re not sure, then ask your
+#        system administrator to ensure that the role is assigned to you in Oracle
+#        Cloud My Services. See <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6">Modifying
+#        User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.'
+#      operationId: discoverSecRule
+#      responses:
+#        '200':
+#          headers:
+#            set-cookie:
+#              type: string
+#              description: The cookie value is returned if the session is extended
+#          description: OK. See <a class="xref" href="Status%20Codes.html">Status Codes</a>
+#            for information about other possible HTTP status codes.
+#          schema:
+#            "$ref": "#/definitions/SecRule-discover-response"
+#      consumes:
+#      - application/oracle-compute-v3+json
+#      produces:
+#      - application/oracle-compute-v3+directory+json
+#      parameters:
+#      - name: container
+#        in: path
+#        description: Specify <code>/Compute-<i>identityDomain</i>/<i>user</i>/</code>
+#          to retrieve the names of objects that you can access. Specify <code>/Compute-<i>identityDomain</i>/</code>
+#          to retrieve the names of containers that contain objects that you can access.
+#        required: true
+#        type: string
+#      - name: Cookie
+#        in: header
+#        type: string
+#        description: 'The Cookie: header must be included with every request to the
+#          service. It must be set to the value of the set-cookie header in the response
+#          received to the POST /authenticate/ call.'
+  "/{container}":
     get:
       tags:
       - SecRules
@@ -162,6 +176,7 @@ paths:
       consumes:
       - application/oracle-compute-v3+json
       produces:
+      - application/json
       - application/oracle-compute-v3+json
       parameters:
       - name: container
@@ -219,7 +234,7 @@ paths:
         description: 'The Cookie: header must be included with every request to the
           service. It must be set to the value of the set-cookie header in the response
           received to the POST /authenticate/ call.'
-  "/secrule/{name}":
+  "/{name}":
     put:
       tags:
       - SecRules
@@ -245,6 +260,7 @@ paths:
       consumes:
       - application/oracle-compute-v3+json
       produces:
+      - application/json
       - application/oracle-compute-v3+json
       parameters:
       - name: name
@@ -285,6 +301,7 @@ paths:
       consumes:
       - application/oracle-compute-v3+json
       produces:
+      - application/json
       - application/oracle-compute-v3+json
       parameters:
       - name: name
@@ -324,6 +341,7 @@ paths:
       consumes:
       - application/oracle-compute-v3+json
       produces:
+      - application/json
       - application/oracle-compute-v3+json
       parameters:
       - name: name
@@ -538,12 +556,17 @@ definitions:
       uri:
         type: string
         description: Uniform Resource Identifier
-tags:
-- name: SecRules
-  description: A security rule defines network access over a specified protocol between
-    instances in two security lists, or from a set of external hosts (an IP list)
-    to instances in a security list.<p>Security rules tie the security list, security
-    IP list, and security application entities together.<p>You can create, delete,
-    update, and view security rules using the HTTP requests listed below. For more
-    information about security rules, see <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=STCSG-GUID-1AEDDA2C-3561-4759-B5AD-FB4CD9C2FBD8">About
-    Security Rules</a> in <em>Using Oracle Cloud Infrastructure Compute Classic</em>.
+      id:
+        description: id
+        type: string
+        "x-nullable": true
+      dst_is_ip:
+        description: Is the destination an IP
+        type: string
+        "x-nullable": true
+        format: "json-bool"
+      src_is_ip:
+        description: Is the source an IP
+        type: string
+        "x-nullable": true
+        format: "json-bool"

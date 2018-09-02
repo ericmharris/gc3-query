@@ -21,6 +21,15 @@ produces:
 - application/json
 - application/oracle-compute-v3+json
 - application/oracle-compute-v3+directory+json
+tags:
+- name: SecRules
+  description: A security rule defines network access over a specified protocol between
+    instances in two security lists, or from a set of external hosts (an IP list)
+    to instances in a security list.<p>Security rules tie the security list, security
+    IP list, and security application entities together.<p>You can create, delete,
+    update, and view security rules using the HTTP requests listed below. For more
+    information about security rules, see <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=STCSG-GUID-1AEDDA2C-3561-4759-B5AD-FB4CD9C2FBD8">About
+    Security Rules</a> in <em>Using Oracle Cloud Infrastructure Compute Classic</em>.
 basePath: "/secrule"
 paths:
   "/{container}":
@@ -217,12 +226,3 @@ definitions:
         type: string
         "x-nullable": true
         format: "json-bool"
-tags:
-- name: SecRules
-  description: A security rule defines network access over a specified protocol between
-    instances in two security lists, or from a set of external hosts (an IP list)
-    to instances in a security list.<p>Security rules tie the security list, security
-    IP list, and security application entities together.<p>You can create, delete,
-    update, and view security rules using the HTTP requests listed below. For more
-    information about security rules, see <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=STCSG-GUID-1AEDDA2C-3561-4759-B5AD-FB4CD9C2FBD8">About
-    Security Rules</a> in <em>Using Oracle Cloud Infrastructure Compute Classic</em>.
