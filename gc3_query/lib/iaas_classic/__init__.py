@@ -33,7 +33,7 @@ from gc3_query.lib.gc3_config import GC3Config
 from gc3_query.lib.base_collections import OrderedDictAttrBase, NestedOrderedDictAttrListBase
 ## TODO: either change or add a snake_case function for camelCase
 from gc3_query.lib.iaas_classic.iaas_requests_http_client import IaaSRequestsHTTPClient
-from gc3_query.lib.iaas_classic.iaas_swagger_client import IaaSSwaggerClient, BRAVADO_CONFIG
+from gc3_query.lib.iaas_classic.iaas_swagger_client import IaaSSwaggerClient
 from gc3_query.lib.open_api.open_api_spec import OpenApiSpec
 from gc3_query.lib.open_api.open_api_spec_catalog import OpenApiSpecCatalog
 from gc3_query.lib.signatures import GC3VersionTypedMixin
@@ -75,8 +75,9 @@ class IaaSServiceBase(GC3VersionTypedMixin):
         self.service_name = service_cfg['service_name']
         self.export_delegates = export_delegates
 
-        self.bravado_config: DictStrAny = gc3_cfg.bravado.client_config.as_dict()
-        self.bravado_config.update(gc3_cfg.bravado.core_config.as_dict())
+        # self.bravado_config: DictStrAny = gc3_cfg.bravado.client_config.as_dict()
+        # self.bravado_config.update(gc3_cfg.bravado.core_config.as_dict())
+        self.bravado_config: DictStrAny = gc3_cfg.BRAVADO_CONFIG
 
         if kwargs.get('spec_dict', False) and kwargs.get('swagger_spec', False):
             raise RuntimeError(f"Supplying both a spec_dict and swagger_spec not allowed")

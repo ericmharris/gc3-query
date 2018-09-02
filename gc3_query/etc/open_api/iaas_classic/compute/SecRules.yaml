@@ -223,10 +223,12 @@ definitions:
         description: Is the destination an IP
         type: string
         "x-nullable": true
+        format: "json-bool"
       src_is_ip:
         description: Is the source an IP
         type: string
         "x-nullable": true
+        format: "json-bool"
 tags:
 - name: SecRules
   description: A security rule defines network access over a specified protocol between
