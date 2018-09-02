@@ -110,3 +110,7 @@ target/
 !/gc3_query/**/open_api_catalog
 !beta_01/**
 /gc3_query/tmp
+!/gc3_query/var/scratchpad/beta_01/
+!/gc3_query/var/scratchpad/mongodb/
+!/gc3_query/var/scratchpad/
+!/gc3_query/opt/reference/mongoengine/

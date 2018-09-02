@@ -869,25 +869,10 @@ definitions:
                     the service instance.
             shape:
                 type: string
-                description: Desired compute shape. A shape defines a number of Oracle
+                description: "Desired compute shape. A shape defines a number of Oracle
                     Compute Units (OCPUs) and an amount of processor RAM. The valid
                     shapes you can choose from depend on which infrastructure you
-                    are using for the instance:<br>&nbsp;<ul><li><p>For instances
-                    on Oracle Cloud Infrastructure:</p><p>View a list of currently
-                    available shapes by going to the <a href='https://cloud.oracle.com/compute/pricing'
-                    target='_blank'>Pricing</a> page for Oracle Cloud Infrastructure
-                    Compute on cloud.oracle.com. The "BM.Standard" shapes in the <b>Compute
-                    - Bare Metal Instances</b> table and the "VM.Standard" shapes
-                    in the <b>Compute - Virtual Machine Instances</b> table are available
-                    in Oracle Database Cloud Service.</p></li><li><p>For instances
-                    on Oracle Cloud Infrastructure Classic:</p><p>View a list of currently
-                    available shapes by going to the <a href='https://cloud.oracle.com/en_US/compute-classic/pricing'
-                    target='_blank'>Pricing</a> page for Oracle Cloud Infrastructure
-                    Compute Classic - General Purpose Compute on cloud.oracle.com.
-                    The shapes in the <b>General Purpose Shapes</b> and the <b>High
-                    Memory Shapes</b> tables are available in Oracle Database Cloud
-                    Service.</p></li></ul><p><b>Note:</b> Not all shapes are available
-                    in all regions or sites.</p>
+                    are using for the instance"
             vmPublicKeyText:
                 type: string
                 description: Public key for the secure shell (SSH). This key will
@@ -1163,18 +1148,8 @@ definitions:
                     are <code>yes</code> and <code>no</code>. Default value is <code>no</code>.
             disasterRecovery:
                 type: string
-                description: Specify if an Oracle Data Guard configuration is created
-                    using the Disaster Recovery option or the High Availability option.
-                    Valid values are <code>yes</code> and <code>no</code>:<ul><li><p><code>yes</code>
-                    - The Disaster Recovery option is used, which places the compute
-                    node hosting the primary database and the compute node hosting
-                    the standby database in compute zones of different data centers.</p></li><li><p><code>no</code>
-                    - The High Availability option is used, which places the compute
-                    node hosting the primary database and the compute node hosting
-                    the standby database in different compute zones of the same data
-                    center.</p></li></ul><p>Default value is <code>no</code>.</p><p>This
-                    option is applicable only when <code>failoverDatabase</code> is
-                    set to <code>yes</code>.</p>
+                description: "Specify if an Oracle Data Guard configuration is created
+                    using the Disaster Recovery option or the High Availability option."
             goldenGate:
                 type: string
                 description: Specify if the database should be configured for use

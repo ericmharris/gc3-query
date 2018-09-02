@@ -26,7 +26,9 @@ from gc3_query.lib import *
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
-
+### TODO:  If it's possible, make the interface between any major component a SwaggerAPI defined service.  So,
+###        data sent between cloud and us is a Swagger Service Call, and once we're done processing it, the data needs to be sent
+###         to Mongo, the screen/stdout, excel, whatever ... that should use something like a Swagger/API interface too.
 @dataclass
 class ServiceResponse:
     results: List[Any]
