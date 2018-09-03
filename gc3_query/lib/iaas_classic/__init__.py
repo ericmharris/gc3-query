@@ -16,6 +16,7 @@
 ################################################################################
 ## Standard Library Imports
 from functools import partial
+from copy import deepcopy
 
 ################################################################################
 ## Third-Party Imports
@@ -220,6 +221,11 @@ class IaaSServiceBase(GC3VersionTypedMixin):
         for service_operation_name in dir(bravado_service_operations):
             so_camel_name = camelcase_to_snake(service_operation_name)
             service_operation = getattr(bravado_service_operations, service_operation_name)
+
+            ## Need to make sure 'application/json' is in the request or models will never work.
+            if 'application/json' not in service_operation.operation.produces:
+                service_operation.operation.produces.insert(0, 'application/json')
+
             operation_headers = {"Accept": ','.join(service_operation.operation.produces),
                                  "Content-Type": ','.join(service_operation.operation.consumes)
                                  }

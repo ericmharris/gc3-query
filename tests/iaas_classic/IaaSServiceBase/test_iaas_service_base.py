@@ -8,10 +8,10 @@ from gc3_query.lib import gc3_cfg
 from gc3_query.lib import *
 from gc3_query.lib import gc3_cfg
 from gc3_query.lib.gc3_config import GC3Config
-from gc3_query.lib.iaas_classic import BRAVADO_CONFIG
 from gc3_query.lib.iaas_classic import IaaSServiceBase
 from gc3_query.lib.iaas_classic.iaas_requests_http_client import IaaSRequestsHTTPClient
 from gc3_query.lib.iaas_classic.sec_rules import SecRules
+from gc3_query.lib.open_api.open_api_spec import OpenApiSpec
 # # fixme? from gc3_query.lib.open_api import API_SPECS_DIR
 
 TEST_BASE_DIR: Path = Path(__file__).parent
@@ -89,6 +89,23 @@ def test_bravado_service_call(setup_gc30003):
     assert "/Compute-" in service_response.result
 
 
+def test_populate_service_operations_headers(setup_gc30003):
+    service_cfg, idm_cfg = setup_gc30003
+    service = 'Instances'
+    gc3_config = GC3Config(atoml_config_dir=config_dir)
+    open_api_specs_cfg = gc3_config.iaas_classic.open_api_specs
+    oapi_spec = OpenApiSpec(service_cfg=service_cfg, open_api_specs_cfg=open_api_specs_cfg, idm_cfg=idm_cfg)
+
+    iaas_service_base = IaaSServiceBase(service_cfg=service_cfg, idm_cfg=idm_cfg)
+    assert 'nimbula' in iaas_service_base.http_client.auth_cookie_header['Cookie']
+    # http_future = iaas_service_base.service_operations.discover_root_instance(_request_options={"headers": {"Accept": "application/oracle-compute-v3+directory+json"}})
+    # http_future = iaas_service_base.bravado_service_operations.discoverRootInstance(_request_options={"headers": {"Accept": "application/oracle-compute-v3+directory+json"}})
+    http_future = iaas_service_base.service_operations.discover_root_instance()
+    service_response = http_future.response()
+    assert service_response.metadata.status_code==200
+    assert 'application/json' not in oapi_spec.spec_dict['paths']['/']['get']['produces']
+    assert 'application/json' in iaas_service_base._spec_dict['paths']['/']['get']['produces']
+    assert "/Compute-" in service_response.result
 
 def test_pre_authenticated_http_client(setup_gc30003):
     service_cfg, idm_cfg = setup_gc30003
@@ -198,7 +215,7 @@ def test_swagger_spec_and_spec_dict_throws():
         spec_dict = json.load(fp=fd)
     assert spec_dict
     http_client: IaaSRequestsHTTPClient =  IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
-    bravado_config = BRAVADO_CONFIG
+    bravado_config = gc3_cfg.BRAVADO_CONFIG
     formats = [f.format for f in bravado_config['formats']]
     assert 'json-bool' in formats
     # assert 'json_bool' in [f.format for f in bravado_config['formats']]
