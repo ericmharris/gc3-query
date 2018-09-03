@@ -16,6 +16,7 @@ also_return_response = true
 # On the server side, validate outgoing responses
 # 'validate_responses': True,
 validate_responses = true
+# validate_responses = false
 
 # On the client side, validate outgoing requests
 # On the server side, validate incoming requests

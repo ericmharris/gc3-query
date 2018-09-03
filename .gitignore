@@ -15,6 +15,7 @@ mongodb-for-python-for-developers
 # eclipse
 .metadata
 .project
+.pydevproject
 .settings
 
 /**/*.tdb.json
