@@ -6,7 +6,7 @@ from bravado_core.spec import Spec
 from gc3_query.lib import gc3_cfg
 from gc3_query.lib import *
 from gc3_query.lib.gc3_config import GC3Config
-from gc3_query.lib.iaas_classic import BRAVADO_CONFIG
+# from gc3_query.lib.iaas_classic import BRAVADO_CONFIG
 from gc3_query.lib.iaas_classic import IaaSRequestsHTTPClient
 from gc3_query.lib.iaas_classic.sec_rules import SecRules
 # from gc3_query.lib.open_api import gc3_cfg.OPEN_API_CATALOG_DIR
@@ -102,7 +102,8 @@ def test_get_all_sec_rules_data_types_correct():
     result_json = sec_rules.get_all_sec_rules()
     assert len(result_json['result']) > 0
     assert 'src_list' in result_json['result'][0]
-    assert isinstance(result_json['result'][0]['dst_is_ip'], bool)
+    assert bool(result_json.result[0].dst_is_ip) == False
+    assert bool(result_json.result[0].src_is_ip) == True
 
 
 def test_get_all_sec_rules():
@@ -119,7 +120,7 @@ def test_get_all_sec_rules():
         spec_dict = json.load(fp=fd)
     assert spec_dict
     http_client: IaaSRequestsHTTPClient =  IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
-    bravado_config = BRAVADO_CONFIG
+    bravado_config = gc3_cfg.BRAVADO_CONFIG
     assert 'json_bool' in [f.format for f in bravado_config['formats']]
     swagger_spec = Spec.from_dict(spec_dict=spec_dict, origin_url=idm_cfg.rest_endpoint, http_client=http_client, config=bravado_config)
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)

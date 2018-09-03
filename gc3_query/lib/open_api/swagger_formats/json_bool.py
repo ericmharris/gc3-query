@@ -18,7 +18,7 @@
 
 ################################################################################
 ## Third-Party Imports
-from bravado_core.formatter import SwaggerFormat
+from bravado_core.formatter import SwaggerFormat, NO_OP
 from bravado_core.exception import SwaggerValidationError
 
 ################################################################################
@@ -27,6 +27,7 @@ from gc3_query.lib import *
 from gc3_query.lib.gc3logging import get_logging
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
+
 
 
 class JsonBool:

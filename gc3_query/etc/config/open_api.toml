@@ -27,6 +27,11 @@ description = 'Converts string:date-time <=> python Maya object'
 format = 'json-bool'
 description = 'Converts "true" and "false" to/from equivalent booleans.'
 
+[open_api.formats.bool_in_str]
+format = 'bool-in-str'
+description = 'Converts "true" and "false" to/from equivalent booleans.'
+
+
 [open_api.formats.date]
 format = 'date'
 description = 'Converts "true" and "false" to/from equivalent booleans.'

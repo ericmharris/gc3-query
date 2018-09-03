@@ -16,6 +16,7 @@ mongodb-for-python-for-developers
 .metadata
 .project
 .settings
+.pydevproject
 
 /**/*.tdb.json
 
