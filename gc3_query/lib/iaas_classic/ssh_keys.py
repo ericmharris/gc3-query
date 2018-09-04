@@ -44,7 +44,8 @@ class SSHKeys(IaaSServiceBase):
 
 
     def get_all_ssh_keys(self):
-        http_future = self.service_operations.list_ssh_key(container=self.idm_root_container_name)
+        container = f"{self.idm_container_name}"
+        http_future = self.service_operations.list_ssh_key(container=container)
         # http_future = self.bravado_service_operations.listSecRule(container=self.idm_root_container_name)
         request_url = http_future.future.request.url
         service_response = http_future.response()

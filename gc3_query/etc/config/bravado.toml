@@ -15,13 +15,14 @@ also_return_response = true
 # On the client side, validate incoming responses
 # On the server side, validate outgoing responses
 # 'validate_responses': True,
-# validate_responses = true
-validate_responses = false
+validate_responses = true
+# validate_responses = false
 
 # On the client side, validate outgoing requests
 # On the server side, validate incoming requests
 # 'validate_requests': True,
-validate_requests = true
+# validate_requests = true
+validate_requests = false
 
 # Use swagger_spec_validator to validate the swagger spec
 # 'validate_swagger_spec': True,
@@ -36,17 +37,19 @@ validate_swagger_spec = true
 #       server side can use either models or dicts.
 # 'use_models': True,
 use_models = true
+# use_models = false
 
 # Create properties with the value None if they were not submitted during object unmarshalling
 # 'include_missing_properties': True,
-include_missing_properties = true
+# include_missing_properties = true
+include_missing_properties = false
 
 # What to do when a type is missing
 # If True, set the type to object and validate
 # If False, do no validation
 # 'default_type_to_object': False,
-default_type_to_object = false
-# default_type_to_object = true
+# default_type_to_object = false
+default_type_to_object = true
 
 # Completely dereference $refs to maximize marshaling and unmarshalling performances.
 # NOTE: this depends on validate_swagger_spec

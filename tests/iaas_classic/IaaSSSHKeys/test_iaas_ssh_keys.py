@@ -32,7 +32,6 @@ from bravado_core.spec import Spec
 from gc3_query.lib import gc3_cfg
 from gc3_query.lib import *
 from gc3_query.lib.gc3_config import GC3Config
-from gc3_query.lib.iaas_classic import BRAVADO_CONFIG
 from gc3_query.lib.iaas_classic import IaaSRequestsHTTPClient
 from gc3_query.lib.iaas_classic.ssh_keys import SSHKeys
 # from gc3_query.lib.open_api import gc3_cfg.OPEN_API_CATALOG_DIR

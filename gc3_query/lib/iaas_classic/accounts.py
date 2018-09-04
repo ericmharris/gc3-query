@@ -44,7 +44,8 @@ class Accounts(IaaSServiceBase):
 
 
     def get_all_accounts(self):
-        http_future = self.service_operations.list_account(container=self.idm_root_container_name)
+        container = f"{self.idm_container_name}"
+        http_future = self.service_operations.list_account(container=container)
         # http_future = self.bravado_service_operations.listSecRule(container=self.idm_root_container_name)
         request_url = http_future.future.request.url
         service_response = http_future.response()

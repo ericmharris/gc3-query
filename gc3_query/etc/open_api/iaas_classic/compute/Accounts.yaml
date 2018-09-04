@@ -17,8 +17,15 @@ produces:
 - application/json
 - application/oracle-compute-v3+json
 - application/oracle-compute-v3+directory+json
+tags:
+- name: Accounts
+  description: An account is used in Compute Classic to store credentials that must
+    be used to access another service. For example, you use an account to define the
+    credentials and other details of the Oracle Cloud Infrastructure Object Storage
+    Classic instance in which you store machine images.<p>You can view accounts using
+basePath: "/account"
 paths:
-  /account/:
+  "/":
     get:
       tags:
       - Accounts
@@ -54,7 +61,7 @@ paths:
         description: 'The Cookie: header must be included with every request to the
           service. It must be set to the value of the set-cookie header in the response
           received to the POST /authenticate/ call.'
-  /account/{container}:
+  "/{container}":
     get:
       tags:
       - Accounts
@@ -95,7 +102,7 @@ paths:
         description: 'The Cookie: header must be included with every request to the
           service. It must be set to the value of the set-cookie header in the response
           received to the POST /authenticate/ call.'
-  /account/{container}/:
+  "/{container}/":
     get:
       tags:
       - Accounts
@@ -137,7 +144,7 @@ paths:
         description: 'The Cookie: header must be included with every request to the
           service. It must be set to the value of the set-cookie header in the response
           received to the POST /authenticate/ call.'
-  /account/{name}:
+  "/{name}":
     get:
       tags:
       - Accounts
@@ -283,10 +290,3 @@ definitions:
             - $ref: '#/definitions/HourlyInterval'
             - type: object
               properties: {}
-tags:
-- name: Accounts
-  description: An account is used in Compute Classic to store credentials that must
-    be used to access another service. For example, you use an account to define the
-    credentials and other details of the Oracle Cloud Infrastructure Object Storage
-    Classic instance in which you store machine images.<p>You can view accounts using
-    the HTTP requests listed below.

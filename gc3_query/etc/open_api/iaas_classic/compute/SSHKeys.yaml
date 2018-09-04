@@ -20,8 +20,18 @@ produces:
 - application/json
 - application/oracle-compute-v3+json
 - application/oracle-compute-v3+directory+json
+tags:
+- name: SSHKeys
+  description: To connect to an instance using SSH, you must associate it with one
+    or more SSH public keys. You must first generate the required SSH key pairs, by
+    using a tool such as <code>ssh-keygen</code>, and then upload the public keys
+    to Compute Classic.<p>You can add, delete, update, and view SSH public keys using
+    the HTTP requests listed below. For instructions to generate SSH key pairs, see
+    <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=STCSG-GUID-EE29085A-79B1-4A3A-BF25-A2A9516EC5F3">Generating
+    an SSH Key Pair</a> in <em>Using Oracle Cloud Infrastructure Compute Classic</em>.
+basePath: "/sshkey"
 paths:
-  "/sshkey/":
+  "/":
     post:
       tags:
       - SSHKeys
@@ -102,7 +112,7 @@ paths:
         description: 'The Cookie: header must be included with every request to the
           service. It must be set to the value of the set-cookie header in the response
           received to the POST /authenticate/ call.'
-  "/sshkey/{container}":
+  "/{container}":
     get:
       tags:
       - SSHKeys
@@ -144,7 +154,25 @@ paths:
         description: 'The Cookie: header must be included with every request to the
           service. It must be set to the value of the set-cookie header in the response
           received to the POST /authenticate/ call.'
-  "/sshkey/{container}/":
+  
+  
+#  {
+#    "result": [
+#        {
+#            "enabled": true,
+#            "uri": "https://compute.uscom-central-1.oraclecloud.com/sshkey/Compute-587626604/eric.harris%40oracle.com/dbaas.gc3-ntag-pod1-d01-jcsdb.DB.ora_user",
+#            "key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDkl16+TS1DB5jFwxr8tRMfztjLCHK2+wpfqy2eKeUzDJx8oGlasmBTAdwPX9cH3bfPRLJzru6SG2fJWsow4sU0d2clcwLRtqVdFMAdA3MSpIqayQMQJJ7NE5omkucF0pf0RG2p5cT3mBZDw/9IrSKnIAzaescUi72QOtcVSVgOiBcvJeQVn75GFQ0+JVKnVooh4pL2xDwTUj4EeSn5aLSA4ycqpBqvFFzrGsfDjDn55HiL0Dwwo9uM6VasAPHatqVIRA4EXGMu+QU6iw0m75e5n5CzEoL5ut4D2Og6MqrAVHTmtwf3WhPlDIzLu5OZbILydPq3/u58g6IVUHeB/wBd",
+#            "name": "/Compute-587626604/eric.harris@oracle.com/dbaas.gc3-ntag-pod1-d01-jcsdb.DB.ora_user"
+#        },
+#        {
+#            "enabled": true,
+#            "uri": "https://compute.uscom-central-1.oraclecloud.com/sshkey/Compute-587626604/eric.harris%40oracle.com/eric_harris-cloud-01",
+#            "key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDkl16+TS1DB5jFwxr8tRMfztjLCHK2+wpfqy2eKeUzDJx8oGlasmBTAdwPX9cH3bfPRLJzru6SG2fJWsow4sU0d2clcwLRtqVdFMAdA3MSpIqayQMQJJ7NE5omkucF0pf0RG2p5cT3mBZDw/9IrSKnIAzaescUi72QOtcVSVgOiBcvJeQVn75GFQ0+JVKnVooh4pL2xDwTUj4EeSn5aLSA4ycqpBqvFFzrGsfDjDn55HiL0Dwwo9uM6VasAPHatqVIRA4EXGMu+QU6iw0m75e5n5CzEoL5ut4D2Og6MqrAVHTmtwf3WhPlDIzLu5OZbILydPq3/u58g6IVUHeB/wBd",
+#            "name": "/Compute-587626604/eric.harris@oracle.com/eric_harris-cloud-01"
+#        },
+#  
+#  
+  "/{container}/":
     get:
       tags:
       - SSHKeys
@@ -195,7 +223,7 @@ paths:
         description: 'The Cookie: header must be included with every request to the
           service. It must be set to the value of the set-cookie header in the response
           received to the POST /authenticate/ call.'
-  "/sshkey/{name}":
+  "/{name}":
     put:
       tags:
       - SSHKeys
@@ -452,12 +480,3 @@ definitions:
       uri:
         type: string
         description: Uniform Resource Identifier
-tags:
-- name: SSHKeys
-  description: To connect to an instance using SSH, you must associate it with one
-    or more SSH public keys. You must first generate the required SSH key pairs, by
-    using a tool such as <code>ssh-keygen</code>, and then upload the public keys
-    to Compute Classic.<p>You can add, delete, update, and view SSH public keys using
-    the HTTP requests listed below. For instructions to generate SSH key pairs, see
-    <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=STCSG-GUID-EE29085A-79B1-4A3A-BF25-A2A9516EC5F3">Generating
-    an SSH Key Pair</a> in <em>Using Oracle Cloud Infrastructure Compute Classic</em>.
