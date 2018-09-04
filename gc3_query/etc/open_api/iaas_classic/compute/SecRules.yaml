@@ -419,18 +419,21 @@ definitions:
             - type: object
               properties: {}
   SecRule-discover-response:
+    type: object
     properties:
       result:
         items:
           type: string
         type: array
   SecRule-list-response:
+    type: object
     properties:
       result:
         items:
           "$ref": "#/definitions/SecRule-response"
         type: array
   SecRule-post-request:
+    type: object
     required:
     - action
     - application
@@ -476,6 +479,7 @@ definitions:
           of the source security list or security IP list.<p>You must use the prefix
           <code>seclist</code>: or <code>seciplist</code>: to identify the list type."
   SecRule-put-request:
+    type: object
     required:
     - action
     - application
@@ -551,6 +555,7 @@ definitions:
 #     }]
 # }
   SecRule-response:
+    type: object
     properties:
       action:
         type: string

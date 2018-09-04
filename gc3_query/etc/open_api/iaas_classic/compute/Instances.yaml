@@ -281,6 +281,7 @@ paths:
         description: 'The Cookie: header must be included with every request to the
           service. It must be set to the value of the set-cookie header in the response
           received to the POST /authenticate/ call.'
+### This get overlaps with listInstance since both have a single in-path parameter
     get:
       tags:
       - Instances
@@ -504,6 +505,8 @@ definitions:
 
   Instance-response:
     type: object
+    additionalProperties:
+      type: string
     properties:
       account:
         type: string

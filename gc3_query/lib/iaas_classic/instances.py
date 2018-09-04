@@ -50,7 +50,10 @@ class Instances(IaaSServiceBase):
 
         :return:
         """
-        http_future = self.bravado_service_operations.getInstance(name=name)
+        # http_future = self.bravado_service_operations.getInstance(name=name)
+        # http_future = self.bravado_service_operations.getInstance(name=name)
+        container = f"{self.idm_container_name}/"
+        http_future = self.service_operations.list_instance(container=name)
         request_url = http_future.future.request.url
         service_response = http_future.response()
         result_json = service_response.incoming_response.json()
