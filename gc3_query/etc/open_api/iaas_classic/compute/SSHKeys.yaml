@@ -156,22 +156,7 @@ paths:
           received to the POST /authenticate/ call.'
   
   
-#  {
-#    "result": [
-#        {
-#            "enabled": true,
-#            "uri": "https://compute.uscom-central-1.oraclecloud.com/sshkey/Compute-587626604/eric.harris%40oracle.com/dbaas.gc3-ntag-pod1-d01-jcsdb.DB.ora_user",
-#            "key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDkl16+TS1DB5jFwxr8tRMfztjLCHK2+wpfqy2eKeUzDJx8oGlasmBTAdwPX9cH3bfPRLJzru6SG2fJWsow4sU0d2clcwLRtqVdFMAdA3MSpIqayQMQJJ7NE5omkucF0pf0RG2p5cT3mBZDw/9IrSKnIAzaescUi72QOtcVSVgOiBcvJeQVn75GFQ0+JVKnVooh4pL2xDwTUj4EeSn5aLSA4ycqpBqvFFzrGsfDjDn55HiL0Dwwo9uM6VasAPHatqVIRA4EXGMu+QU6iw0m75e5n5CzEoL5ut4D2Og6MqrAVHTmtwf3WhPlDIzLu5OZbILydPq3/u58g6IVUHeB/wBd",
-#            "name": "/Compute-587626604/eric.harris@oracle.com/dbaas.gc3-ntag-pod1-d01-jcsdb.DB.ora_user"
-#        },
-#        {
-#            "enabled": true,
-#            "uri": "https://compute.uscom-central-1.oraclecloud.com/sshkey/Compute-587626604/eric.harris%40oracle.com/eric_harris-cloud-01",
-#            "key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDkl16+TS1DB5jFwxr8tRMfztjLCHK2+wpfqy2eKeUzDJx8oGlasmBTAdwPX9cH3bfPRLJzru6SG2fJWsow4sU0d2clcwLRtqVdFMAdA3MSpIqayQMQJJ7NE5omkucF0pf0RG2p5cT3mBZDw/9IrSKnIAzaescUi72QOtcVSVgOiBcvJeQVn75GFQ0+JVKnVooh4pL2xDwTUj4EeSn5aLSA4ycqpBqvFFzrGsfDjDn55HiL0Dwwo9uM6VasAPHatqVIRA4EXGMu+QU6iw0m75e5n5CzEoL5ut4D2Og6MqrAVHTmtwf3WhPlDIzLu5OZbILydPq3/u58g6IVUHeB/wBd",
-#            "name": "/Compute-587626604/eric.harris@oracle.com/eric_harris-cloud-01"
-#        },
-#  
-#  
+
   "/{container}/":
     get:
       tags:
@@ -465,6 +450,23 @@ definitions:
       name:
         type: string
         description: "<p>The three-part name of the object (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>)."
+        
+#  {
+#    "result": [
+#        {
+#            "enabled": true,
+#            "uri": "https://compute.uscom-central-1.oraclecloud.com/sshkey/Compute-587626604/eric.harris%40oracle.com/dbaas.gc3-ntag-pod1-d01-jcsdb.DB.ora_user",
+#            "key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDkl16+TS1DB5jFwxr8tRMfztjLCHK2+wpfqy2eKeUzDJx8oGlasmBTAdwPX9cH3bfPRLJzru6SG2fJWsow4sU0d2clcwLRtqVdFMAdA3MSpIqayQMQJJ7NE5omkucF0pf0RG2p5cT3mBZDw/9IrSKnIAzaescUi72QOtcVSVgOiBcvJeQVn75GFQ0+JVKnVooh4pL2xDwTUj4EeSn5aLSA4ycqpBqvFFzrGsfDjDn55HiL0Dwwo9uM6VasAPHatqVIRA4EXGMu+QU6iw0m75e5n5CzEoL5ut4D2Og6MqrAVHTmtwf3WhPlDIzLu5OZbILydPq3/u58g6IVUHeB/wBd",
+#            "name": "/Compute-587626604/eric.harris@oracle.com/dbaas.gc3-ntag-pod1-d01-jcsdb.DB.ora_user"
+#        },
+#        {
+#            "enabled": true,
+#            "uri": "https://compute.uscom-central-1.oraclecloud.com/sshkey/Compute-587626604/eric.harris%40oracle.com/eric_harris-cloud-01",
+#            "key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDkl16+TS1DB5jFwxr8tRMfztjLCHK2+wpfqy2eKeUzDJx8oGlasmBTAdwPX9cH3bfPRLJzru6SG2fJWsow4sU0d2clcwLRtqVdFMAdA3MSpIqayQMQJJ7NE5omkucF0pf0RG2p5cT3mBZDw/9IrSKnIAzaescUi72QOtcVSVgOiBcvJeQVn75GFQ0+JVKnVooh4pL2xDwTUj4EeSn5aLSA4ycqpBqvFFzrGsfDjDn55HiL0Dwwo9uM6VasAPHatqVIRA4EXGMu+QU6iw0m75e5n5CzEoL5ut4D2Og6MqrAVHTmtwf3WhPlDIzLu5OZbILydPq3/u58g6IVUHeB/wBd",
+#            "name": "/Compute-587626604/eric.harris@oracle.com/eric_harris-cloud-01"
+#        },
+#  
+#         
   SSHKey-response:
     type: object
     properties:

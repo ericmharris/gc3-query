@@ -41,8 +41,8 @@ use_models = true
 
 # Create properties with the value None if they were not submitted during object unmarshalling
 # 'include_missing_properties': True,
-# include_missing_properties = true
-include_missing_properties = false
+include_missing_properties = true
+# include_missing_properties = false
 
 # What to do when a type is missing
 # If True, set the type to object and validate

@@ -17,8 +17,16 @@ produces:
 - application/json
 - application/oracle-compute-v3+json
 - application/oracle-compute-v3+directory+json
+tags:
+- name: SecApplications
+  description: A security application is an IP protocol-to-port mapping that you can
+    use in security rules. In the web UI, security applications are called protocols.
+    Compute Classic provides several predefined security applications. You can also
+    define your own security applications.<p>You can create, delete, and view security
+    applications using the HTTP requests listed below.
+basePath: "/secapplication"
 paths:
-  /secapplication/:
+  "/":
     post:
       tags:
       - SecApplications
@@ -94,7 +102,7 @@ paths:
         description: 'The Cookie: header must be included with every request to the
           service. It must be set to the value of the set-cookie header in the response
           received to the POST /authenticate/ call.'
-  /secapplication/{container}:
+  "/{container}":
     get:
       tags:
       - SecApplications
@@ -139,7 +147,7 @@ paths:
         description: 'The Cookie: header must be included with every request to the
           service. It must be set to the value of the set-cookie header in the response
           received to the POST /authenticate/ call.'
-  /secapplication/{container}/:
+  "/{container}/":
     get:
       tags:
       - SecApplications
@@ -239,7 +247,7 @@ paths:
         description: 'The Cookie: header must be included with every request to the
           service. It must be set to the value of the set-cookie header in the response
           received to the POST /authenticate/ call.'
-  /secapplication/{name}:
+  "/{name}":
     delete:
       tags:
       - SecApplications
@@ -443,6 +451,35 @@ definitions:
           <code>rdp</code>, <code>esp</code>, <code>ah</code>, <code>gre</code>, <code>icmpv6</code>,
           <code>ospf</code>, <code>pim</code>, <code>sctp</code>, <code>mplsip</code>,
           <code>all</code>.<p>To specify all protocols, set this to <code>all</code>.'
+  
+#  {
+#    "result": [
+#        {
+#            "protocol": "tcp",
+#            "description": "Permit public access to https administration port",
+#            "uri": "https://compute.uscom-central-1.oraclecloud.com/secapplication/Compute-587626604/mayurnath.gokare%40oracle.com/paas/JaaS/gc3ntagrogr604/lb/ora_ahttps-587626604/mayurnath.gokare%40oracle.com/paas/JaaS/gc3ntagrogr604/lb/tresources",
+#            "icmptype": "",
+#            "value2": -1,
+#            "value1": 8989,
+#            "dport": "8989",
+#            "icmpcode": "",
+#            "id": "5fe5214b-66e5-4ef6-8295-90fe853a3728",
+#            "name": "/Compute-587626604/mayurnath.gokare@oracle.com/paas/JaaS/gc3ntagrogr604/lb/ora_ahttps-587626604/mayurnath.gokare@oracle.com/paas/JaaS/gc3ntagrogr604/lb/tresources"
+#        },
+#        {
+#            "protocol": "tcp",
+#            "description": "NGINX Proxy",
+#            "uri": "https://compute.uscom-central-1.oraclecloud.com/secapplication/Compute-587626604/ramesh.dadhania%40oracle.com/paas/BDCSCE/rdbdcstest/1/bdcsce/ora_nginx-587626604/ramesh.dadhania%40oracle.com/paas/BDCSCE/rdbdcstest/1/bdcsce/tresources",
+#            "icmptype": "",
+#            "value2": -1,
+#            "value1": 1080,
+#            "dport": "1080",
+#            "icmpcode": "",
+#            "id": "5a6568ed-2240-46fd-969b-9d5555b036f2",
+#            "name": "/Compute-587626604/ramesh.dadhania@oracle.com/paas/BDCSCE/rdbdcstest/1/bdcsce/ora_nginx-587626604/ramesh.dadhania@oracle.com/paas/BDCSCE/rdbdcstest/1/bdcsce/tresources"
+#        },
+#  
+#  
   SecApplication-response:
     type: object
     properties:
@@ -489,10 +526,3 @@ definitions:
       uri:
         type: string
         description: Uniform Resource Identifier
-tags:
-- name: SecApplications
-  description: A security application is an IP protocol-to-port mapping that you can
-    use in security rules. In the web UI, security applications are called protocols.
-    Compute Classic provides several predefined security applications. You can also
-    define your own security applications.<p>You can create, delete, and view security
-    applications using the HTTP requests listed below.
