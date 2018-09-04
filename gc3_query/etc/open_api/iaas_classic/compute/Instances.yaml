@@ -53,7 +53,6 @@ paths:
       consumes:
       - application/oracle-compute-v3+json
       produces:
-      - application/json
       - application/oracle-compute-v3+directory+json
       parameters:
       - name: Cookie
