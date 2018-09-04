@@ -8,11 +8,13 @@ info:
     the HTTP requests listed below.
   title: Accounts
 schemes:
-- http
+- https
 consumes:
+- application/json
 - application/oracle-compute-v3+json
 - application/oracle-compute-v3+directory+json
 produces:
+- application/json
 - application/oracle-compute-v3+json
 - application/oracle-compute-v3+directory+json
 paths:
@@ -43,6 +45,7 @@ paths:
       consumes:
       - application/oracle-compute-v3+json
       produces:
+      - application/json
       - application/oracle-compute-v3+directory+json
       parameters:
       - name: Cookie
@@ -77,6 +80,7 @@ paths:
       consumes:
       - application/oracle-compute-v3+json
       produces:
+      - application/json
       - application/oracle-compute-v3+directory+json
       parameters:
       - name: container
@@ -118,6 +122,7 @@ paths:
       consumes:
       - application/oracle-compute-v3+json
       produces:
+      - application/json
       - application/oracle-compute-v3+json
       parameters:
       - name: container
@@ -158,6 +163,7 @@ paths:
       consumes:
       - application/oracle-compute-v3+json
       produces:
+      - application/json
       - application/oracle-compute-v3+json
       parameters:
       - name: name
@@ -174,18 +180,21 @@ paths:
           received to the POST /authenticate/ call.'
 definitions:
   Account-discover-response:
+    type: object
     properties:
       result:
         items:
           type: string
         type: array
   Account-list-response:
+    type: object
     properties:
       result:
         items:
           $ref: '#/definitions/Account-response'
         type: array
   Account-response:
+    type: object
     properties:
       accounttype:
         type: string
