@@ -504,19 +504,26 @@ definitions:
 
   Instance-response:
     type: object
-    additionalProperties:
-      type: string
     properties:
       account:
         type: string
         description: Shows the default account for your identity domain.
       attributes:
         additionalProperties:
-          type: object
+          type: string
+          "x-nullable": true
         type: object
-        description: A dictionary of attributes to be made available to the instance.
-          A value with the key "userdata" will be made available in an EC2-compatible
-          manner.
+        description: A dictionary of attributes to be made available to the instance. A value with the key "userdata" will be made available in an EC2-compatible manner.
+        "x-nullable": true
+        properties:
+          sshkeys:
+            type: array
+            items:
+              type: string
+            description: GC3, SSH public keys
+          nimbula_orchestration:
+            type: string
+            description: GC3
       availability_domain:
         type: string
         description: The availability domain the instance is in
@@ -539,6 +546,7 @@ definitions:
       entry:
         type: integer
         description: Optional imagelistentry number (default will be used if not specified).
+        "x-nullable": true
       error_reason:
         type: string
         description: The reason for the instance going to error state, if available.
@@ -550,15 +558,24 @@ definitions:
         description: The hostname for this instance.
       hypervisor:
         additionalProperties:
-          type: object
+          type: string
         type: object
         description: A dictionary of hypervisor-specific attributes.
+        properties:
+          mode:
+            type: string
+            description: GC3
+            "x-nullable": true
       image_format:
         type: string
         description: The format of the image.
+      image_metadata_bag:
+        type: string
+        description: GC3, No clue what this thing is, wasn't in the spec
       imagelist:
         type: string
         description: Name of imagelist to be launched.
+        "x-nullable": true
       ip:
         type: string
         description: IP address of the instance.
@@ -579,8 +596,7 @@ definitions:
         items:
           type: string
         type: array
-        description: A list of strings specifying arbitrary tags on nodes to be matched
-          on placement.
+        description: A list of strings specifying arbitrary tags on nodes to be matched on placement.
       platform:
         type: string
         description: The OS platform for the instance.
@@ -590,6 +606,10 @@ definitions:
       quota:
         type: string
         description: Not used
+      quota_reservation:
+        type: string
+        description: GC3, No clue.
+        "x-nullable": true
       relationships:
         items:
           additionalProperties:
@@ -603,13 +623,17 @@ definitions:
           type: string
         type: array
         description: Resolvers to use instead of the default resolvers.
+        "x-nullable": true
       reverse_dns:
         type: boolean
         description: Add PTR records for the hostname.
       shape:
         type: string
-        description: A shape is a resource profile that specifies the number of CPU
-          threads and the amount of memory (in MB) to be allocated to an instance.
+        description: A shape is a resource profile that specifies the number of CPU threads and the amount of memory (in MB) to be allocated to an instance.
+      site:
+        type: string
+        description: GC3, No clue.
+        "x-nullable": true
       sshkeys:
         items:
           type: string
@@ -618,14 +642,28 @@ definitions:
       start_time:
         type: string
         description: Start time of the instance.
+        format: oc-datetime
       state:
         type: string
         description: State of the instance.
       storage_attachments:
-        items:
-          type: string
         type: array
         description: List of dictionaries containing storage attachment Information.
+        items:
+          additionalProperties:
+            #            type: object
+            type: string
+          type: object
+          properties:
+            index:
+              type: integer
+              description: GC3, no clue
+            storage_volume_name:
+              type: string
+              description: GC3, no clue
+            name:
+              type: string
+              description: GC3, no clue
       tags:
         items:
           type: string
@@ -637,6 +675,10 @@ definitions:
       vcable_id:
         type: string
         description: vCable for this instance.
+      virtio:
+        type: string
+        description: GC3, No clue.
+        "x-nullable": true
       vnc:
         type: string
         description: IP address and port of the VNC console for the instance.
