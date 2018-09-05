@@ -158,6 +158,27 @@ def test_idm_root_container_name(setup_gc30003):
     assert expected_name==idm_root_container_name
     assert literal_name==idm_root_container_name
 
+
+def test_get_all_instances(setup_gc30003):
+    service_cfg, idm_cfg, http_client = setup_gc30003
+    instances = Instances(service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client)
+    instance_details = instances.get_all_instances()
+    assert instance_details
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # @pytest.fixture()
 # def setup_gc30003_from_url():
 #     service = 'Instances'

@@ -13,13 +13,25 @@ info:
 schemes:
 - https
 consumes:
+- application/json
 - application/oracle-compute-v3+json
 - application/oracle-compute-v3+directory+json
 produces:
+- application/json
 - application/oracle-compute-v3+json
 - application/oracle-compute-v3+directory+json
+tags:
+- name: SSHKeys
+  description: To connect to an instance using SSH, you must associate it with one
+    or more SSH public keys. You must first generate the required SSH key pairs, by
+    using a tool such as <code>ssh-keygen</code>, and then upload the public keys
+    to Compute Classic.<p>You can add, delete, update, and view SSH public keys using
+    the HTTP requests listed below. For instructions to generate SSH key pairs, see
+    <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=STCSG-GUID-EE29085A-79B1-4A3A-BF25-A2A9516EC5F3">Generating
+    an SSH Key Pair</a> in <em>Using Oracle Cloud Infrastructure Compute Classic</em>.
+basePath: "/sshkey"
 paths:
-  "/sshkey/":
+  "/":
     post:
       tags:
       - SSHKeys
@@ -51,6 +63,7 @@ paths:
       consumes:
       - application/oracle-compute-v3+json
       produces:
+      - application/json
       - application/oracle-compute-v3+json
       parameters:
       - name: body
@@ -90,6 +103,7 @@ paths:
       consumes:
       - application/oracle-compute-v3+json
       produces:
+      - application/json
       - application/oracle-compute-v3+directory+json
       parameters:
       - name: Cookie
@@ -98,7 +112,7 @@ paths:
         description: 'The Cookie: header must be included with every request to the
           service. It must be set to the value of the set-cookie header in the response
           received to the POST /authenticate/ call.'
-  "/sshkey/{container}":
+  "/{container}":
     get:
       tags:
       - SSHKeys
@@ -124,6 +138,7 @@ paths:
       consumes:
       - application/oracle-compute-v3+json
       produces:
+      - application/json
       - application/oracle-compute-v3+directory+json
       parameters:
       - name: container
@@ -139,7 +154,10 @@ paths:
         description: 'The Cookie: header must be included with every request to the
           service. It must be set to the value of the set-cookie header in the response
           received to the POST /authenticate/ call.'
-  "/sshkey/{container}/":
+  
+  
+
+  "/{container}/":
     get:
       tags:
       - SSHKeys
@@ -170,6 +188,7 @@ paths:
       consumes:
       - application/oracle-compute-v3+json
       produces:
+      - application/json
       - application/oracle-compute-v3+json
       parameters:
       - name: container
@@ -189,7 +208,7 @@ paths:
         description: 'The Cookie: header must be included with every request to the
           service. It must be set to the value of the set-cookie header in the response
           received to the POST /authenticate/ call.'
-  "/sshkey/{name}":
+  "/{name}":
     put:
       tags:
       - SSHKeys
@@ -215,6 +234,7 @@ paths:
       consumes:
       - application/oracle-compute-v3+json
       produces:
+      - application/json
       - application/oracle-compute-v3+json
       parameters:
       - name: name
@@ -260,6 +280,7 @@ paths:
       consumes:
       - application/oracle-compute-v3+json
       produces:
+      - application/json
       - application/oracle-compute-v3+json
       parameters:
       - name: name
@@ -298,6 +319,7 @@ paths:
       consumes:
       - application/oracle-compute-v3+json
       produces:
+      - application/json
       - application/oracle-compute-v3+json
       parameters:
       - name: name
@@ -312,8 +334,69 @@ paths:
           service. It must be set to the value of the set-cookie header in the response
           received to the POST /authenticate/ call.'
 definitions:
+  DailyWeeklyInterval:
+    allOf:
+    - "$ref": "#/definitions/Interval"
+    - type: object
+      properties:
+        userTimeZone:
+          type: string
+          description: 'Any IANA time zone. e.g: America/Los_Angeles'
+        timeOfDay:
+          pattern: "([01]?[0-9]|2[0-3]):[0-5][0-9]"
+          type: string
+          description: Time of the day to run a backup
+        daysOfWeek:
+          items:
+            enum:
+            - MONDAY
+            - TUESDAY
+            - WEDNESDAY
+            - THURSDAY
+            - FRIDAY
+            - SATURDAY
+            - SUNDAY
+            type: string
+          type: array
+          description: Days of the week to run a backup
+      description: Backup Interval running once a day on certain days of the week
+  HourlyInterval:
+    allOf:
+    - "$ref": "#/definitions/Interval"
+    - type: object
+      properties:
+        hourlyInterval:
+          type: integer
+          description: Hours to wait before starting the next backup
+          format: int32
+      description: Backup Interval running every X hours
+  Interval:
+    x-oneOf-instructions: Provide one of the valid object representations documented
+      here.  For more information about oneOf see http://json-schema.org/latest/json-schema-validation.html#anchor88
+    type: object
+    description: There are two kinds of Intervals. Each Interval has its own JSON
+      format. Your Interval field should look like one of the following:<p><ul><li><code>"interval":{"Hourly":{"hourlyInterval":2}}</code></li><li><code>{"DailyWeekly":{"daysOfWeek":["MONDAY"],"timeOfDay":"03:15","userTimeZone":"America/Los_Angeles"}}</code></li></ul><p>Days
+      of the week is any day of the week fully capitalized (MONDAY, TUESDAY, etc).
+      The user time zone is any IANA user timezone.  For example user time zones see
+      <a href="https://en.wikipedia.org/wiki/IANA_time_zone_database">List of IANA
+      time zones</a>.
+    x-oneOf:
+      oneOf:
+      - type: object
+        properties:
+          DailyWeekly:
+            allOf:
+            - "$ref": "#/definitions/DailyWeeklyInterval"
+            - type: object
+              properties: {}
+      - type: object
+        properties:
+          Hourly:
+            allOf:
+            - "$ref": "#/definitions/HourlyInterval"
+            - type: object
+              properties: {}
   SSHKey-discover-response:
-    title: SSHKey-discover-response
     type: object
     properties:
       result:
@@ -321,7 +404,6 @@ definitions:
           type: string
         type: array
   SSHKey-list-response:
-    title: SSHKey-list-response
     type: object
     properties:
       result:
@@ -368,8 +450,24 @@ definitions:
       name:
         type: string
         description: "<p>The three-part name of the object (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>)."
+        
+#  {
+#    "result": [
+#        {
+#            "enabled": true,
+#            "uri": "https://compute.uscom-central-1.oraclecloud.com/sshkey/Compute-587626604/eric.harris%40oracle.com/dbaas.gc3-ntag-pod1-d01-jcsdb.DB.ora_user",
+#            "key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDkl16+TS1DB5jFwxr8tRMfztjLCHK2+wpfqy2eKeUzDJx8oGlasmBTAdwPX9cH3bfPRLJzru6SG2fJWsow4sU0d2clcwLRtqVdFMAdA3MSpIqayQMQJJ7NE5omkucF0pf0RG2p5cT3mBZDw/9IrSKnIAzaescUi72QOtcVSVgOiBcvJeQVn75GFQ0+JVKnVooh4pL2xDwTUj4EeSn5aLSA4ycqpBqvFFzrGsfDjDn55HiL0Dwwo9uM6VasAPHatqVIRA4EXGMu+QU6iw0m75e5n5CzEoL5ut4D2Og6MqrAVHTmtwf3WhPlDIzLu5OZbILydPq3/u58g6IVUHeB/wBd",
+#            "name": "/Compute-587626604/eric.harris@oracle.com/dbaas.gc3-ntag-pod1-d01-jcsdb.DB.ora_user"
+#        },
+#        {
+#            "enabled": true,
+#            "uri": "https://compute.uscom-central-1.oraclecloud.com/sshkey/Compute-587626604/eric.harris%40oracle.com/eric_harris-cloud-01",
+#            "key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDkl16+TS1DB5jFwxr8tRMfztjLCHK2+wpfqy2eKeUzDJx8oGlasmBTAdwPX9cH3bfPRLJzru6SG2fJWsow4sU0d2clcwLRtqVdFMAdA3MSpIqayQMQJJ7NE5omkucF0pf0RG2p5cT3mBZDw/9IrSKnIAzaescUi72QOtcVSVgOiBcvJeQVn75GFQ0+JVKnVooh4pL2xDwTUj4EeSn5aLSA4ycqpBqvFFzrGsfDjDn55HiL0Dwwo9uM6VasAPHatqVIRA4EXGMu+QU6iw0m75e5n5CzEoL5ut4D2Og6MqrAVHTmtwf3WhPlDIzLu5OZbILydPq3/u58g6IVUHeB/wBd",
+#            "name": "/Compute-587626604/eric.harris@oracle.com/eric_harris-cloud-01"
+#        },
+#  
+#         
   SSHKey-response:
-    title: SSHKey-response
     type: object
     properties:
       enabled:
@@ -384,12 +482,3 @@ definitions:
       uri:
         type: string
         description: Uniform Resource Identifier
-tags:
-- name: SSHKeys
-  description: To connect to an instance using SSH, you must associate it with one
-    or more SSH public keys. You must first generate the required SSH key pairs, by
-    using a tool such as <code>ssh-keygen</code>, and then upload the public keys
-    to Compute Classic.<p>You can add, delete, update, and view SSH public keys using
-    the HTTP requests listed below. For instructions to generate SSH key pairs, see
-    <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=STCSG-GUID-EE29085A-79B1-4A3A-BF25-A2A9516EC5F3">Generating
-    an SSH Key Pair</a> in <em>Using Oracle Cloud Infrastructure Compute Classic</em>.

@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-#@Filename : Accounts
-#@Date : [8/14/2018 2:24 PM]
-#@Poject: gc3-query
-#@AUTHOR : emharris
-
+gc3-query.sec_applications    [9/4/2018 12:40 PM]
 ~~~~~~~~~~~~~~~~
 
 <DESCR SHORT>
@@ -15,9 +11,11 @@
 
 ################################################################################
 ## Standard Library Imports
+import sys, os
 
 ################################################################################
 ## Third-Party Imports
+from dataclasses import dataclass
 
 ################################################################################
 ## Project Imports
@@ -29,10 +27,15 @@ from gc3_query.lib import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
-class Accounts(IaaSServiceBase):
+class SecApplications(IaaSServiceBase):
 
-    def __init__(self, service_cfg: Dict[str, Any], idm_cfg: Dict[str, Any], http_client: IaaSRequestsHTTPClient = None,
-                 from_url: bool = False, export_delegates: List[str] = None, **kwargs: Dict[str, Any]):
+    def __init__(self,
+                 service_cfg: Dict[str, Any],
+                 idm_cfg: Dict[str, Any],
+                 http_client: Union[IaaSRequestsHTTPClient, None] = None,
+                 from_url: Optional[bool] = False,
+                 export_delegates: Optional[List[str]]= None,
+                 **kwargs: Dict[str, Any]):
         super().__init__(service_cfg=service_cfg,
                          idm_cfg=idm_cfg,
                          http_client=http_client,
@@ -43,19 +46,12 @@ class Accounts(IaaSServiceBase):
 
 
 
-    def get_all_accounts(self):
+    def get_all_sec_applications(self):
         container = f"{self.idm_container_name}"
-        http_future = self.service_operations.list_account(container=container)
+        http_future = self.service_operations.list_sec_application(container=container)
+        # http_future = self.service_operations.list_sec_application(container=self.idm_root_container_name)
         # http_future = self.bravado_service_operations.listSecRule(container=self.idm_root_container_name)
         request_url = http_future.future.request.url
         service_response = http_future.response()
-        result_json = service_response.incoming_response.json()
-        return result_json
-
-    def get_all_account_data(self):
-        http_future = self.service_operations.get_all_account_data(container=self.idm_root_container_name)
-        # http_future = self.bravado_service_operations.listSecRule(container=self.idm_root_container_name)
-        request_url = http_future.future.request.url
-        service_response = http_future.response()
-        result_json = service_response.incoming_response.json()
-        return result_json
+        # result_json = service_response.incoming_response.json()
+        return service_response.resultging(name=__name__)

@@ -1,23 +1,32 @@
----
 swagger: '2.0'
 info:
-  version: 18.1.2-20180126.052521
-  description: A Compute Classic instance is a virtual machine running a specific
-    operating system and with CPU and memory resources that you specify. See <a target="_blank"
-    href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=STCSG-GUID-F928F362-2DB6-4E45-843F-C269E0740A36">About
-    Instances</a> in <em>Using Oracle Cloud Infrastructure Compute Classic</em>.<p>You
-    can view and delete instances using the HTTP requests listed below.
-  title: Instances
+    version: 18.1.2-20180126.052521
+    description: A Compute Classic instance is a virtual machine running a specific
+        operating system and with CPU and memory resources that you specify. See <a
+        target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=STCSG-GUID-F928F362-2DB6-4E45-843F-C269E0740A36">About
+        Instances</a> in <em>Using Oracle Cloud Infrastructure Compute Classic</em>.<p>You
+        can view and delete instances using the HTTP requests listed below.
+    title: Instances
 schemes:
-- http
+- https
 consumes:
+- application/json
 - application/oracle-compute-v3+json
 - application/oracle-compute-v3+directory+json
 produces:
+- application/json
 - application/oracle-compute-v3+json
 - application/oracle-compute-v3+directory+json
+tags:
+-   name: Instances
+    description: A Compute Classic instance is a virtual machine running a specific
+      operating system and with CPU and memory resources that you specify. See <a
+      target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=STCSG-GUID-F928F362-2DB6-4E45-843F-C269E0740A36">About
+      Instances</a> in <em>Using Oracle Cloud Infrastructure Compute Classic</em>.<p>You
+      can view and delete instances using the HTTP requests listed below.
+basePath: "/instance"
 paths:
-  "/instance/":
+  "/":
     get:
       tags:
       - Instances
@@ -40,7 +49,7 @@ paths:
           description: OK. See <a class="xref" href="Status%20Codes.html">Status Codes</a>
             for information about other possible HTTP status codes.
           schema:
-            "$ref": "#/definitions/Instance-discover-response"
+            $ref: "#/definitions/Instance-discover-response"
       consumes:
       - application/oracle-compute-v3+json
       produces:
@@ -52,48 +61,49 @@ paths:
         description: 'The Cookie: header must be included with every request to the
           service. It must be set to the value of the set-cookie header in the response
           received to the POST /authenticate/ call.'
-  "/instance/{container}":
-    get:
-      tags:
-      - Instances
-      summary: Retrieve Names of all Instances and Subcontainers in a Container
-      description: 'Retrieves the names of objects and subcontainers that you can
-        access in the specified container.<p><b>Required Role: </b>To complete this
-        task, you must have the <code>Compute_Operations</code> role. If this role
-        isn''t assigned to you or you''re not sure, then ask your system administrator
-        to ensure that the role is assigned to you in Oracle Cloud My Services. See
-        <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6">Modifying
-        User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.'
-      operationId: discoverInstance
-      responses:
-        '200':
-          headers:
-            set-cookie:
-              type: string
-              description: The cookie value is returned if the session is extended
-          description: OK. See <a class="xref" href="Status%20Codes.html">Status Codes</a>
-            for information about other possible HTTP status codes.
-          schema:
-            "$ref": "#/definitions/Instance-discover-response"
-      consumes:
-      - application/oracle-compute-v3+json
-      produces:
-      - application/oracle-compute-v3+directory+json
-      parameters:
-      - name: container
-        in: path
-        description: Specify <code>/Compute-<i>identityDomain</i>/<i>user</i>/</code>
-          to retrieve the names of objects that you can access. Specify <code>/Compute-<i>identityDomain</i>/</code>
-          to retrieve the names of containers that contain objects that you can access.
-        required: true
-        type: string
-      - name: Cookie
-        in: header
-        type: string
-        description: 'The Cookie: header must be included with every request to the
-          service. It must be set to the value of the set-cookie header in the response
-          received to the POST /authenticate/ call.'
-  "/instance/{container}/":
+#  "/{container}":
+#    get:
+#      tags:
+#      - Instances
+#      summary: Retrieve Names of all Instances and Subcontainers in a Container
+#      description: 'Retrieves the names of objects and subcontainers that you can
+#        access in the specified container.<p><b>Required Role: </b>To complete this
+#        task, you must have the <code>Compute_Operations</code> role. If this role
+#        isn''t assigned to you or you''re not sure, then ask your system administrator
+#        to ensure that the role is assigned to you in Oracle Cloud My Services. See
+#        <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6">Modifying
+#        User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.'
+#      operationId: discoverInstance
+#      responses:
+#        '200':
+#          headers:
+#            set-cookie:
+#              type: string
+#              description: The cookie value is returned if the session is extended
+#          description: OK. See <a class="xref" href="Status%20Codes.html">Status Codes</a>
+#            for information about other possible HTTP status codes.
+#          schema:
+#            $ref: "#/definitions/Instance-discover-response"
+#      consumes:
+#      - application/oracle-compute-v3+json
+#      produces:
+#      - application/json
+#      - application/oracle-compute-v3+directory+json
+#      parameters:
+#      - name: container
+#        in: path
+#        description: Specify <code>/Compute-<i>identityDomain</i>/<i>user</i>/</code>
+#          to retrieve the names of objects that you can access. Specify <code>/Compute-<i>identityDomain</i>/</code>
+#          to retrieve the names of containers that contain objects that you can access.
+#        required: true
+#        type: string
+#      - name: Cookie
+#        in: header
+#        type: string
+#        description: 'The Cookie: header must be included with every request to the
+#          service. It must be set to the value of the set-cookie header in the response
+#          received to the POST /authenticate/ call.'
+  "/{container}":
     get:
       tags:
       - Instances
@@ -119,10 +129,11 @@ paths:
           description: OK. See <a class="xref" href="Status%20Codes.html">Status Codes</a>
             for information about other possible HTTP status codes.
           schema:
-            "$ref": "#/definitions/Instance-list-response"
+            $ref: "#/definitions/Instance-list-response"
       consumes:
       - application/oracle-compute-v3+json
       produces:
+      - application/json
       - application/oracle-compute-v3+json
       parameters:
       - name: container
@@ -150,7 +161,7 @@ paths:
         description: 'The Cookie: header must be included with every request to the
           service. It must be set to the value of the set-cookie header in the response
           received to the POST /authenticate/ call.'
-  "/instance/{name}":
+  "/{name}":
     put:
       tags:
       - Instances
@@ -209,10 +220,11 @@ paths:
           description: OK. See <a class="xref" href="Status%20Codes.html">Status Codes</a>
             for information about other possible HTTP status codes.
           schema:
-            "$ref": "#/definitions/Instance-response"
+            $ref: "#/definitions/Instance-response"
       consumes:
       - application/oracle-compute-v3+json
       produces:
+      - application/json
       - application/oracle-compute-v3+json
       parameters:
       - name: name
@@ -224,7 +236,7 @@ paths:
         in: body
         required: true
         schema:
-          "$ref": "#/definitions/Instance-put-request"
+          $ref: "#/definitions/Instance-put-request"
       - name: Cookie
         in: header
         type: string
@@ -254,6 +266,7 @@ paths:
       consumes:
       - application/oracle-compute-v3+json
       produces:
+      - application/json
       - application/oracle-compute-v3+json
       parameters:
       - name: name
@@ -267,6 +280,7 @@ paths:
         description: 'The Cookie: header must be included with every request to the
           service. It must be set to the value of the set-cookie header in the response
           received to the POST /authenticate/ call.'
+### This get overlaps with listInstance since both have a single in-path parameter
     get:
       tags:
       - Instances
@@ -288,10 +302,11 @@ paths:
           description: OK. See <a class="xref" href="Status%20Codes.html">Status Codes</a>
             for information about other possible HTTP status codes.
           schema:
-            "$ref": "#/definitions/Instance-response"
+            $ref: "#/definitions/Instance-response"
       consumes:
       - application/oracle-compute-v3+json
       produces:
+      - application/json
       - application/oracle-compute-v3+json
       parameters:
       - name: name
@@ -308,7 +323,7 @@ paths:
 definitions:
   DailyWeeklyInterval:
     allOf:
-    - "$ref": "#/definitions/Interval"
+    - $ref: "#/definitions/Interval"
     - type: object
       properties:
         userTimeZone:
@@ -334,7 +349,7 @@ definitions:
       description: Backup Interval running once a day on certain days of the week
   HourlyInterval:
     allOf:
-    - "$ref": "#/definitions/Interval"
+    - $ref: "#/definitions/Interval"
     - type: object
       properties:
         hourlyInterval:
@@ -343,18 +358,21 @@ definitions:
           format: int32
       description: Backup Interval running every X hours
   Instance-discover-response:
+    type: object
     properties:
       result:
         items:
           type: string
         type: array
   Instance-list-response:
+    type: object
     properties:
       result:
         items:
-          "$ref": "#/definitions/Instance-response"
+          $ref: "#/definitions/Instance-response"
         type: array
   Instance-put-request:
+    type: object
     description: 'The request body contains details of the instance that you want
       to update. '
     properties:
@@ -376,19 +394,136 @@ definitions:
           type: string
         type: array
         description: Comma-separated list of strings that you can use to tag the instance.
-          Later on you can use these tags to retrieve the instance.
+          Later on you can use these tags to retrieve the instance. 
+
+#{
+#    "domain": "compute-587626604.oraclecloud.internal.",
+#    "placement_requirements": [
+#        "/system/compute/placement/default",
+#        "/oracle/compute/dedicated/fcbaed9f-242b-42ce-ac77-dd727f9710eb",
+#        "/system/compute/allow_instances"
+#    ],
+#    "ip": "10.19.6.118",
+#    "fingerprint": "5c:80:b0:fb:bc:c5:bb:13:7c:a5:92:1b:53:96:b2:cc",
+#    "image_metadata_bag": "/oracle/machineimage_metadata/40fd26b4106b48e989a2ca1b1f90e923",
+#    "site": "",
+#    "shape": "oc4",
+#    "imagelist": null,
+#    "image_format": "raw",
+#    "relationships": [],
+#    "availability_domain": "/uscom-central-1a",
+#    "networking": {
+#        "eth0": {
+#            "model": "",
+#            "seclists": [
+#                "/Compute-587626604/eric.harris@oracle.com/gc3_naac_soar_seclist_01"
+#            ],
+#            "dns": [
+#                "gc3-naac-soar-ebs1226-demo-01.compute-587626604.oraclecloud.internal."
+#            ],
+#            "vethernet": "/oracle/public/default",
+#            "nat": "ipreservation:/Compute-587626604/eric.harris@oracle.com/gc3_naac_soar_ip02"
+#        }
+#    },
+#    "storage_attachments": [
+#        {
+#            "index": 1,
+#            "storage_volume_name": "/Compute-587626604/eric.harris@oracle.com/gc3_naac_soar_ebs1226_demo_01_storage",
+#            "name": "/Compute-587626604/eric.harris@oracle.com/gc3_naac_soar_ebs1226_demo_01/8706cea9-6f49-428f-b354-a3748478d1c2/5b499dc8-2b5f-4f7f-9779-c0c52a6059cd"
+#        }
+#    ],
+#    "hostname": "gc3-naac-soar-ebs1226-demo-01.compute-587626604.oraclecloud.internal.",
+#    "quota_reservation": null,
+#    "disk_attach": "",
+#    "label": "OPC_OL6_8_EBS_1226_VISION_SINGLE_20180615175635",
+#    "priority": "/oracle/public/default",
+#    "platform": "linux",
+#    "state": "running",
+#    "virtio": null,
+#    "vnc": "10.19.6.117:5900",
+#    "desired_state": "running",
+#    "tags": [
+#        "naac",
+#        "soar",
+#        "EBS",
+#        "EBS 12.2.6"
+#    ],
+#    "start_time": "2018-06-16T01:00:17Z",
+#    "quota": "/Compute-587626604",
+#    "entry": null,
+#    "error_reason": "",
+#    "sshkeys": [
+#        "/Compute-587626604/eric.harris@oracle.com/gc3_naac_soar",
+#        "/Compute-587626604/eric.harris@oracle.com/eric_harris-cloud-01"
+#    ],
+#    "resolvers": null,
+#    "account": "/Compute-587626604/default",
+#    "name": "/Compute-587626604/eric.harris@oracle.com/gc3_naac_soar_ebs1226_demo_01/8706cea9-6f49-428f-b354-a3748478d1c2",
+#    "vcable_id": "/Compute-587626604/eric.harris@oracle.com/48e894f3-2984-4089-99b2-237da9775e9f",
+#    "hypervisor": {
+#        "mode": "hvm"
+#    },
+#    "uri": "https://compute.uscom-central-1.oraclecloud.com/instance/Compute-587626604/eric.harris%40oracle.com/gc3_naac_soar_ebs1226_demo_01/8706cea9-6f49-428f-b354-a3748478d1c2",
+#    "reverse_dns": true,
+#    "attributes": {
+#        "sshkeys": [
+#            "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDkl16+TS1DB5jFwxr8tRMfztjLCHK2+wpfqy2eKeUzDJx8oGlasmBTAdwPX9cH3bfPRLJzru6SG2fJWsow4sU0d2clcwLRtqVdFMAdA3MSpIqayQMQJJ7NE5omkucF0pf0RG2p5cT3mBZDw/9IrSKnIAzaescUi72QOtcVSVgOiBcvJeQVn75GFQ0+JVKnVooh4pL2xDwTUj4EeSn5aLSA4ycqpBqvFFzrGsfDjDn55HiL0Dwwo9uM6VasAPHatqVIRA4EXGMu+QU6iw0m75e5n5CzEoL5ut4D2Og6MqrAVHTmtwf3WhPlDIzLu5OZbILydPq3/u58g6IVUHeB/wBd",
+#            "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDMvQhtNg2BmrGoKZVtChz6TFyy53KuB09L5SsmnbQxzM6C0PNfH1TwsG7p/emWOhc6jB2KFxdkuM/Q4BD9PreuFPN37FU5D1cIWKB8yPub3kTVJf1g5PkF1HsoG5vjf3tbUdB6I+pclMiV8tXPXBWA64wtfXc9g6dZSNvg4JDYh8J5eOul5Jct4QK9juA9pZNI7fOeYcT2z4PdmwYDkj517Ei47wX2xSM6++wM2+AkOPP2f6EZYaOQdex68in3R1g5T0rBfqPF1+7KRdPaP5c+s/ASqeFmitf7+/BQZa+9Em/F6EOoDwWbhAAFzJBidjzwWv+E+fsEbUjrWrBFB5Bkd3j2s3ojfTxDoLo+GzGrZtxuL4CcwWVTe98gRvRj7vRwTX8JIJfvKiJCkDPUZlW0Kxwysn6wZVXWLHnjf7c4NcMXJc5mdihtGTxGyZDyR4NLyoLGatN5ZAdYpiztkYxqxyWRrLT8DANZeWi0w+EdE0JAuvVyyBajV+FczHkViGY0xVm4SjcfFDz8KrByaEn/3ioZd6tK6ahFy/aT+N+cqu0xeFjPDOyxfQ7qtufbq/yJ0XktISBumVvBMOv7MbDXiUmqHlqP2pbw6V1XXqSIw6/Jsi4/9NeRPSjLbNvem3RFzAbxXIOiNlQKl+e03jCkDZ3pNFQ81RQhgegmhOtQqw=="
+#        ],
+#        "oracle_metadata": {
+#            "v1": {
+#                "object": "/Compute-587626604/eric.harris@oracle.com/gc3_naac_soar_ebs1226_demo_01/instance",
+#                "orchestration": "/Compute-587626604/eric.harris@oracle.com/gc3_naac_soar_ebs1226_demo_01"
+#            }
+#        },
+#        "network": {
+#            "nimbula_vcable-eth0": {
+#                "vethernet_id": "0",
+#                "vethernet": "/oracle/public/default",
+#                "address": [
+#                    "c6:b0:24:5b:b3:4a",
+#                    "10.19.6.118"
+#                ],
+#                "model": "",
+#                "vethernet_type": "vlan",
+#                "id": "/Compute-587626604/eric.harris@oracle.com/48e894f3-2984-4089-99b2-237da9775e9f",
+#                "dhcp_options": []
+#            }
+#        },
+#        "dns": {
+#            "domain": "compute-587626604.oraclecloud.internal.",
+#            "hostname": "gc3-naac-soar-ebs1226-demo-01.compute-587626604.oraclecloud.internal.",
+#            "nimbula_vcable-eth0": "gc3-naac-soar-ebs1226-demo-01.compute-587626604.oraclecloud.internal."
+#        },
+#        "nimbula_orchestration": "/Compute-587626604/eric.harris@oracle.com/gc3_naac_soar_ebs1226_demo_01"
+#    },
+#    "boot_order": [
+#        1
+#    ]
+#}
+
   Instance-response:
+    type: object
     properties:
       account:
         type: string
         description: Shows the default account for your identity domain.
       attributes:
         additionalProperties:
-          type: object
+          type: string
+          "x-nullable": true
         type: object
-        description: A dictionary of attributes to be made available to the instance.
-          A value with the key "userdata" will be made available in an EC2-compatible
-          manner.
+        description: A dictionary of attributes to be made available to the instance. A value with the key "userdata" will be made available in an EC2-compatible manner.
+        "x-nullable": true
+        properties:
+          sshkeys:
+            type: array
+            items:
+              type: string
+            description: GC3, SSH public keys
+          nimbula_orchestration:
+            type: string
+            description: GC3
       availability_domain:
         type: string
         description: The availability domain the instance is in
@@ -411,6 +546,7 @@ definitions:
       entry:
         type: integer
         description: Optional imagelistentry number (default will be used if not specified).
+        "x-nullable": true
       error_reason:
         type: string
         description: The reason for the instance going to error state, if available.
@@ -422,15 +558,24 @@ definitions:
         description: The hostname for this instance.
       hypervisor:
         additionalProperties:
-          type: object
+          type: string
         type: object
         description: A dictionary of hypervisor-specific attributes.
+        properties:
+          mode:
+            type: string
+            description: GC3
+            "x-nullable": true
       image_format:
         type: string
         description: The format of the image.
+      image_metadata_bag:
+        type: string
+        description: GC3, No clue what this thing is, wasn't in the spec
       imagelist:
         type: string
         description: Name of imagelist to be launched.
+        "x-nullable": true
       ip:
         type: string
         description: IP address of the instance.
@@ -451,8 +596,7 @@ definitions:
         items:
           type: string
         type: array
-        description: A list of strings specifying arbitrary tags on nodes to be matched
-          on placement.
+        description: A list of strings specifying arbitrary tags on nodes to be matched on placement.
       platform:
         type: string
         description: The OS platform for the instance.
@@ -462,6 +606,10 @@ definitions:
       quota:
         type: string
         description: Not used
+      quota_reservation:
+        type: string
+        description: GC3, No clue.
+        "x-nullable": true
       relationships:
         items:
           additionalProperties:
@@ -475,13 +623,17 @@ definitions:
           type: string
         type: array
         description: Resolvers to use instead of the default resolvers.
+        "x-nullable": true
       reverse_dns:
         type: boolean
         description: Add PTR records for the hostname.
       shape:
         type: string
-        description: A shape is a resource profile that specifies the number of CPU
-          threads and the amount of memory (in MB) to be allocated to an instance.
+        description: A shape is a resource profile that specifies the number of CPU threads and the amount of memory (in MB) to be allocated to an instance.
+      site:
+        type: string
+        description: GC3, No clue.
+        "x-nullable": true
       sshkeys:
         items:
           type: string
@@ -490,14 +642,28 @@ definitions:
       start_time:
         type: string
         description: Start time of the instance.
+        format: oc-datetime
       state:
         type: string
         description: State of the instance.
       storage_attachments:
-        items:
-          type: string
         type: array
         description: List of dictionaries containing storage attachment Information.
+        items:
+          additionalProperties:
+            #            type: object
+            type: string
+          type: object
+          properties:
+            index:
+              type: integer
+              description: GC3, no clue
+            storage_volume_name:
+              type: string
+              description: GC3, no clue
+            name:
+              type: string
+              description: GC3, no clue
       tags:
         items:
           type: string
@@ -509,6 +675,10 @@ definitions:
       vcable_id:
         type: string
         description: vCable for this instance.
+      virtio:
+        type: string
+        description: GC3, No clue.
+        "x-nullable": true
       vnc:
         type: string
         description: IP address and port of the VNC console for the instance.
@@ -528,20 +698,13 @@ definitions:
         properties:
           DailyWeekly:
             allOf:
-            - "$ref": "#/definitions/DailyWeeklyInterval"
+            - $ref: "#/definitions/DailyWeeklyInterval"
             - type: object
               properties: {}
       - type: object
         properties:
           Hourly:
             allOf:
-            - "$ref": "#/definitions/HourlyInterval"
+            - $ref: "#/definitions/HourlyInterval"
             - type: object
               properties: {}
-tags:
-- name: Instances
-  description: A Compute Classic instance is a virtual machine running a specific
-    operating system and with CPU and memory resources that you specify. See <a target="_blank"
-    href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=STCSG-GUID-F928F362-2DB6-4E45-843F-C269E0740A36">About
-    Instances</a> in <em>Using Oracle Cloud Infrastructure Compute Classic</em>.<p>You
-    can view and delete instances using the HTTP requests listed below.
