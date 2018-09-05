@@ -1,22 +1,10 @@
-[bravado.client_config]
-# C:/tools/python_3.6/Lib/site-packages/bravado/config.py
-# What class to use for response metadata
-response_metadata_class = 'bravado.response.BravadoResponseMetadata'
-
-# Do not use fallback results even if they're provided
-disable_fallback_results = false
-
-# DEPRECATED: Determines what is returned by HttpFuture.result().
-# Please use HttpFuture.response() for accessing the http response.
-also_return_response = true
-
 [bravado.core_config]
 # C:/tools/python_3.6/Lib/site-packages/bravado_core/spec.py
 # On the client side, validate incoming responses
 # On the server side, validate outgoing responses
 # 'validate_responses': True,
-validate_responses = true
-# validate_responses = false
+# validate_responses = true
+validate_responses = false
 
 # On the client side, validate outgoing requests
 # On the server side, validate incoming requests
@@ -64,3 +52,15 @@ internally_dereference_refs = false
 # 'swagger_formats': [],
 # formats = [json_bool]
 formats = []
+
+[bravado.client_config]
+# C:/tools/python_3.6/Lib/site-packages/bravado/config.py
+# What class to use for response metadata
+response_metadata_class = 'bravado.response.BravadoResponseMetadata'
+
+# Do not use fallback results even if they're provided
+disable_fallback_results = false
+
+# DEPRECATED: Determines what is returned by HttpFuture.result().
+# Please use HttpFuture.response() for accessing the http response.
+also_return_response = true

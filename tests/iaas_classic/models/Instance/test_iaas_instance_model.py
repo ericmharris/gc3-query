@@ -93,10 +93,10 @@ def setup_gc30003_instances():
 def test_instance_model_save(setup_gc30003_instances):
     service_cfg, idm_cfg, http_client, connection_config, instances = setup_gc30003_instances
     name = 'Compute-587626604/eric.harris@oracle.com/gc3_naac_soar_ebs1226_demo_01/8706cea9-6f49-428f-b354-a3748478d1c2/'
-    http_future = instances.service_operations.get_instance(name=name)
-    request_url = http_future.future.request.url
-    service_response = http_future.response()
-    result = service_response.result
+    service_response = instances.get_instance(name=name)
+    # request_url = http_future.future.request.url
+    # service_response = http_future.response()
+    # result = service_response.result
 
     # instance_details = instances.get_instance_details(name=name)
     # assert instance_details.domain == 'compute-587626604.oraclecloud.internal.'

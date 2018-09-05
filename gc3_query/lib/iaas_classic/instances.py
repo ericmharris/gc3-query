@@ -20,6 +20,7 @@
 ## Third-Party Imports
 
 from sortedcontainers import SortedDict
+from bravado.response import  BravadoResponse, BravadoResponseMetadata
 
 ################################################################################
 ## Project Imports
@@ -62,6 +63,32 @@ class Instances(IaaSServiceBase):
         # http_response = service_response.incoming_response
         instance_details = IaaSServiceResponse(service_response=service_response)
         return instance_details
+
+
+
+
+    def get_instance(self, name: str, swagger_client_config: DictStrAny = None) -> BravadoResponse:
+        """
+
+        :return:
+        """
+        http_future = self.service_operations.list_instance(container=name)
+        request_url = http_future.future.request.url
+        service_response = http_future.response()
+        result_json = service_response.incoming_response.json()
+        r = SortedDict(result_json['result'][0])
+        # result = service_response.result
+        # http_response = service_response.incoming_response
+        return service_response
+
+
+
+
+
+
+
+
+
 
     def get_all_instances(self):
         """
