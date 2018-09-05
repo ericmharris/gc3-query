@@ -39,3 +39,10 @@ service_name = 'SSHKeys'
 title = "SSHKeys"
 api_version = '18.1.2'
 
+[iaas_classic.services.compute.IPReservations]
+api_collection_name = 'compute'
+name = 'IPReservations'
+service_name = 'IPReservations'
+title = "IPReservations"
+api_version = '18.1.2'
+
