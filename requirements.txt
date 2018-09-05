@@ -1,0 +1,11 @@
+click
+requests
+cookiecutter
+pymongo
+mongoengine
+cryptography
+keyring
+toml
+maya
+bravado
+logbook

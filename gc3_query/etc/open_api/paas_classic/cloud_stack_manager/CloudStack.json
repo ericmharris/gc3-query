@@ -1,0 +1,651 @@
+
+{
+    "swagger":"2.0",
+    "info":{
+        "title":"Oracle Cloud Stack",
+        "description":"Create, manage and monitor cloud stacks in Oracle Cloud Stack Manager",
+        "version":"1.1",
+        "x-summary":"Use the REST API to manage cloud stacks in Oracle Cloud Stack Manager"
+    },
+    "schemes":[
+        "http"
+    ],
+    "paths":{
+        "/paas/api/v1.1/instancemgmt/{identityDomainId}/services/stack/instances":{
+            "post":{
+                "summary":"Create a Stack",
+                "description":"Create a cloud stack from an existing template",
+                "operationId":"createStack",
+                "consumes":[
+                    "multipart/form-data"
+                ],
+                "produces":[
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "name":"identityDomainId",
+                        "in":"path",
+                        "description":"Name of the Oracle Cloud identity domain",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"name",
+                        "in":"formData",
+                        "description":"Name of the stack to create",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"description",
+                        "in":"formData",
+                        "description":"Description of the new stack",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"parameterValues",
+                        "in":"formData",
+                        "description":"Template parameter input values in JSON format.",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"template",
+                        "in":"formData",
+                        "description":"Name of an existing template that will be used to create the stack",
+                        "required":true,
+                        "type":"string"
+                    }
+                ],
+                "responses":{
+                    "202":{
+                        "description":"Accepted. Stack creation is in progress.",
+                        "schema":{
+                            "$ref":"#/definitions/ondemand-response"
+                        }
+                    },
+                    "400":{
+                        "description":"Bad Request. Returned if there is bad input."
+                    },
+                    "500":{
+                        "description":"Server Error. Returned if a server error has occurred."
+                    }
+                },
+                "x-internal-id":"paas-service-stack-api-v1.1-createStack-{identityDomainId}-post"
+            },
+            "get":{
+                "summary":"List All Stacks",
+                "description":"Retrieves all stacks in the identity domain.",
+                "operationId":"getStacks",
+                "produces":[
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "name":"identityDomainId",
+                        "in":"path",
+                        "description":"Name of the Oracle Cloud identity domain",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"status",
+                        "in":"query",
+                        "description":"Retrieve only those stacks with this status. Valid values are NEW, INITIALIZING, READY, CONFIGURING, TERMINATING, STOPPING, STOPPED, STARTING, DISABLING, DISABLED and TERMINATED.",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"expand",
+                        "in":"query",
+                        "description":"The types of information to retrieve. Valid values are ALL, instances, resources, template and attributes.",
+                        "required":false,
+                        "type":"string"
+                    },
+                    {
+                        "name":"orderBy",
+                        "in":"query",
+                        "description":"The stack attributes used to sort the list. Valid values are createdOn, creator, name, type, and state.",
+                        "required":false,
+                        "type":"string"
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"OK",
+                        "schema":{
+                            "$ref":"#/definitions/viewallstacks-response"
+                        }
+                    }
+                },
+                "x-internal-id":"paas-service-stack-api-v1.1-listallstacks-{identityDomainId}-get"
+            }
+        },
+        "/paas/api/v1.1/instancemgmt/{identityDomainId}/services/stack/instances/{stackName}":{
+            "get":{
+                "summary":"View Stack Details",
+                "description":"Retrieve information about a specific stack",
+                "operationId":"getStackDetails",
+                "produces":[
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "name":"identityDomainId",
+                        "in":"path",
+                        "description":"Name of the Oracle Cloud identity domain",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"stackName",
+                        "in":"path",
+                        "description":"Name of the stack to retrieve",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"expand",
+                        "in":"query",
+                        "description":"The types of information to retrieve. Valid values are ALL, instances, resources, template and attributes.",
+                        "required":false,
+                        "type":"string"
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"OK",
+                        "schema":{
+                            "$ref":"#/definitions/viewstack-response"
+                        }
+                    }
+                },
+                "x-internal-id":"paas-service-stack-api-v1.1-getstack-{identityDomainId}-{stackName}-get"
+            },
+            "put":{
+                "summary":"Delete a Stack",
+                "description":"Delete an existing stack and terminate its resources",
+                "operationId":"deleteStack",
+                "consumes":[
+                    "application/json"
+                ],
+                "produces":[
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "name":"identityDomainId",
+                        "in":"path",
+                        "description":"Name of the Oracle Cloud identity domain",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"stackName",
+                        "in":"path",
+                        "description":"Name of the stack to be deleted",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"config-payload",
+                        "in":"formData",
+                        "description":"Path to a JSON file containing any deletion parameters for the resources in this stack. These parameters are specific to each resource type.",
+                        "required":false,
+                        "type":"string"
+                    }
+                ],
+                "responses":{
+                    "202":{
+                        "description":"Accepted. The stack deletion is in progress.",
+                        "schema":{
+                            "$ref":"#/definitions/ondemand-response"
+                        }
+                    },
+                    "400":{
+                        "description":"Bad Request. Returned if there is bad input."
+                    },
+                    "404":{
+                        "description":"Not Found. Returned if the stack does not exist."
+                    },
+                    "500":{
+                        "description":"Server Error. Returned if a server error has occurred."
+                    }
+                },
+                "x-internal-id":"paas-service-stack-api-v1.1-stack-{identityDomainId}-{stackName}-put"
+            }
+        },
+        "/paas/api/v1.1/instancemgmt/{identityDomainId}/services/stack/instances/{stackName}/template":{
+            "get":{
+                "summary":"Export Stack Template",
+                "description":"Export the template used to create a stack as a YAML file",
+                "operationId":"exportStackTemplate",
+                "produces":[
+                    "text/plain"
+                ],
+                "parameters":[
+                    {
+                        "name":"identityDomainId",
+                        "in":"path",
+                        "description":"Name of the Oracle Cloud identity domain",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"stackName",
+                        "in":"path",
+                        "description":"Name of the stack whose template you want to export",
+                        "required":true,
+                        "type":"string"
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"OK",
+                        "schema":{
+                            "$ref":"#/definitions/exporttemplate-response"
+                        }
+                    },
+                    "400":{
+                        "description":"Bad Request. Returned if unable to export template."
+                    }
+                },
+                "x-internal-id":"paas-service-stack-api-v1.1-gettemplate-{identityDomainId}-{stackName}-get"
+            }
+        },
+        "/paas/api/v1.1/instancemgmt/{identityDomainId}/services/stack/instances/{stackName}/resume":{
+            "post":{
+                "summary":"Resume Stack Creation",
+                "description":"Continue the creation of a stack that had previously encountered an error and was not automatically rolled back",
+                "operationId":"resumeCreateStack",
+                "consumes":[
+                    "multipart/form-data"
+                ],
+                "produces":[
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "name":"identityDomainId",
+                        "in":"path",
+                        "description":"Name of the Oracle Cloud identity domain",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"stackName",
+                        "in":"path",
+                        "description":"Name of a stack whose creation did not complete successfully",
+                        "required":true,
+                        "type":"string"
+                    }
+                ],
+                "responses":{
+                    "202":{
+                        "description":"Accepted. The creation of the stack will resume.",
+                        "schema":{
+                            "$ref":"#/definitions/ondemand-response"
+                        }
+                    },
+                    "400":{
+                        "description":"Bad Request. Returned if there is bad input."
+                    },
+                    "500":{
+                        "description":"Server Error. Returned if a server error has occurred."
+                    }
+                },
+                "x-internal-id":"paas-service-stack-api-v1.1-resumeStack-{identityDomainId}-{stackName}-post"
+            }
+        },
+        "/paas/api/v1.1/instancemgmt/{identityDomainId}/services/stack/instances/{stackName}/start":{
+            "post":{
+                "summary":"Start a Stack",
+                "description":"Start all the resources in the stack.",
+                "operationId":"startStack",
+                "consumes":[
+                    "application/json"
+                ],
+                "produces":[
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "name":"identityDomainId",
+                        "in":"path",
+                        "description":"Name of the Oracle Cloud identity domain",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"stackName",
+                        "in":"path",
+                        "description":"Name of a stack whose resources are to be started",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"config-payload",
+                        "in":"formData",
+                        "description":"Path to a JSON file containing any start parameters for the resources in this stack. These parameters are specific to each resource type.",
+                        "required":false,
+                        "type":"string"
+                    }
+                ],
+                "responses":{
+                    "202":{
+                        "description":"Accepted. Will start all the resources in the stack.",
+                        "schema":{
+                            "$ref":"#/definitions/ondemand-response"
+                        }
+                    },
+                    "400":{
+                        "description":"Bad Request. Returned if there is bad input."
+                    }
+                },
+                "x-internal-id":"paas-service-stack-api-v1.1-startStack-{identityDomainId}-{stackName}-post"
+            }
+        },
+        "/paas/api/v1.1/instancemgmt/{identityDomainId}/services/stack/instances/{stackName}/stop":{
+            "post":{
+                "summary":"Stop a Stack",
+                "description":"Stop all the resources in the stack.",
+                "operationId":"stopStack",
+                "consumes":[
+                    "application/json"
+                ],
+                "produces":[
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "name":"identityDomainId",
+                        "in":"path",
+                        "description":"Name of the Oracle Cloud identity domain",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"stackName",
+                        "in":"path",
+                        "description":"Name of a stack whose resources are to be stopped",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"config-payload",
+                        "in":"formData",
+                        "description":"Path to a JSON file containing any stop parameters for the resources in this stack. These parameters are specific to each resource type.",
+                        "required":false,
+                        "type":"string"
+                    }
+                ],
+                "responses":{
+                    "202":{
+                        "description":"Accepted. Will stop all the resources in the stack.",
+                        "schema":{
+                            "$ref":"#/definitions/ondemand-response"
+                        }
+                    },
+                    "400":{
+                        "description":"Bad Request. Returned if there is bad input."
+                    }
+                },
+                "x-internal-id":"paas-service-stack-api-v1.1-stopStack-{identityDomainId}-{stackName}-post"
+            }
+        },
+        "/paas/api/v1.1/activitylog/{identityDomainId}/stack/job/{jobId}":{
+            "get":{
+                "summary":"View the Status of a Stack Operation",
+                "description":"Retrieve information about a specific job in Cloud Stack Manager",
+                "operationId":"getStackJobStatus",
+                "produces":[
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "name":"identityDomainId",
+                        "in":"path",
+                        "description":"Name of the Oracle Cloud identity domain",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"jobId",
+                        "in":"path",
+                        "description":"ID of the operation to view",
+                        "required":true,
+                        "type":"string"
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"OK",
+                        "schema":{
+                            "$ref":"#/definitions/viewstackjobactivitylog-response"
+                        }
+                    },
+                    "400":{
+                        "description":"Bad Request. Returned if there is bad input."
+                    },
+                    "404":{
+                        "description":"Not Found. Returned if the activity log does not exist."
+                    }
+                },
+                "x-internal-id":"paas-service-stack-api-v1.1-getstackjobactivitylog-{identityDomainId}-{jobId}-get"
+            }
+        },
+        "/paas/api/v1.1/activitylog/{identityDomainId}/stack/{stackName}":{
+            "get":{
+                "summary":"View a Stack Activity Log",
+                "description":"Retrieve the activity log for a specific cloud stack. The activity log is a list of the jobs performed for this cloud stack.",
+                "operationId":"getStackLog",
+                "produces":[
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "name":"identityDomainId",
+                        "in":"path",
+                        "description":"Name of the Oracle Cloud identity domain",
+                        "required":true,
+                        "type":"string"
+                    },
+                    {
+                        "name":"stackName",
+                        "in":"path",
+                        "description":"Name of a cloud stack whose activity log you want to view",
+                        "required":true,
+                        "type":"string"
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"OK",
+                        "schema":{
+                            "$ref":"#/definitions/viewstackactivitylog-response"
+                        }
+                    },
+                    "500":{
+                        "description":"Server Error. Returned if a server error has occurred."
+                    }
+                },
+                "x-internal-id":"paas-service-stack-api-v1.1-getstackactivitylog-{identityDomainId}-{jobId}-get"
+            }
+        }
+    },
+    "definitions":{
+        "viewallstacks-response":{
+            "description":"The response body contains information about one or more cloud stacks.",
+            "properties":{
+                "applications":{
+                    "type":"array",
+                    "description":"A list of cloud stacks.",
+                    "items":{
+                        "$ref":"#/definitions/viewstack-response"
+                    }
+                }
+            }
+        },
+        "ondemand-response":{
+            "properties":{
+                "details":{
+                    "description":"The response body contains information about the requested stack operation.",
+                    "properties":{
+                        "message":{
+                            "type":"string",
+                            "description":"Message"
+                        },
+                        "jobId":{
+                            "type":"string",
+                            "description":"Job ID"
+                        }
+                    }
+                }
+            }
+        },
+        "viewstack-response":{
+            "description":"The response body contains information about the stack.",
+            "properties":{
+                "identityDomain":{
+                    "type":"string",
+                    "description":"Name of the Oracle Cloud identity domain"
+                },
+                "serviceName":{
+                    "type":"string",
+                    "description":"Name of the stack"
+                },
+                "description":{
+                    "type":"string",
+                    "description":"Description of the stack"
+                },
+                "state":{
+                    "type":"string",
+                    "description":"Status of the stack"
+                },
+                "stateDetail":{
+                    "type":"string",
+                    "description":"Additional description about the stack status"
+                },
+                "createdBy":{
+                    "type":"string",
+                    "description":"Name of the user who created the stack"
+                },
+                "createdOn":{
+                    "type":"string",
+                    "description":"Creation time of the stack"
+                },
+                "modifiedOn":{
+                    "type":"string",
+                    "description":"Modification time of the stack"
+                },
+                "creationJobId":{
+                    "type":"string",
+                    "description":"ID of the job that created the stack"
+                }
+            }
+        },
+        "viewstackactivitylog-response":{
+            "description":"The response body contains the activity log of a stack. The activity log is a list of the jobs performed for this cloud stack.",
+            "properties":{
+                "activityLogs":{
+                    "$ref":"#/definitions/viewstackjobactivitylog-response"
+                }
+            }
+        },
+        "viewstackjobactivitylog-response":{
+            "description":"The response body contains information about a specific job in Cloud Stack Manager. A job includes a list of log messages.",
+            "properties":{
+                "activityLogId":{
+                    "type":"string",
+                    "description":"ID of the activity log that this job belongs to"
+                },
+                "serviceName":{
+                    "type":"string",
+                    "description":"Name of the cloud stack"
+                },
+                "serviceType":{
+                    "type":"string",
+                    "description":"Type of service (cloudstack)"
+                },
+                "identityDomain":{
+                    "type":"string",
+                    "description":"Name of the Oracle Cloud identity domain"
+                },
+                "serviceId":{
+                    "type":"string",
+                    "description":"ID for the cloud stack"
+                },
+                "jobId":{
+                    "type":"string",
+                    "description":"ID of the job"
+                },
+                "startDate":{
+                    "type":"string",
+                    "description":"Start date and time of the operation"
+                },
+                "endDate":{
+                    "type":"string",
+                    "description":"End date and time of the operation"
+                },
+                "status":{
+                    "type":"string",
+                    "description":"Status of the operation"
+                },
+                "operationId":{
+                    "type":"string",
+                    "description":"ID for the operation (the cloud stack ID)"
+                },
+                "operationType":{
+                    "type":"string",
+                    "description":"Type of operation"
+                },
+                "summaryMessage":{
+                    "type":"string",
+                    "description":"Summary of the operation"
+                },
+                "authDomain":{
+                    "type":"string",
+                    "description":"Name of the Oracle Cloud identity domain"
+                },
+                "authUser":{
+                    "type":"string",
+                    "description":"Name of the user who initiated the operation"
+                },
+                "initiatedBy":{
+                    "type":"string",
+                    "description":"Indicates whether this operation was initiated by a user or the system"
+                },
+                "messages":{
+                    "type":"array",
+                    "items":{
+                        "$ref":"#/definitions/viewactivitymessage-response"
+                    }
+                }
+            }
+        },
+        "viewactivitymessage-response":{
+            "description":"The response body contains information about a message in the activity log.",
+            "properties":{
+                "activityDate":{
+                    "type":"string",
+                    "description":"Date and time of the message"
+                },
+                "message":{
+                    "type":"string",
+                    "description":"Message text"
+                }
+            }
+        },
+        "exporttemplate-response":{
+            "description":"The response body contains template contents in YAML format.",
+            "properties":{
+                "message":{
+                    "type":"string",
+                    "description":"Template contents in YAML format."
+                }
+            }
+        }
+    }
+}
