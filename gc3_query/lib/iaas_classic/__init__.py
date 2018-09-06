@@ -223,6 +223,7 @@ class IaaSServiceBase(GC3VersionTypedMixin):
             service_operation = getattr(bravado_service_operations, service_operation_name)
 
             ## Need to make sure 'application/json' is in the request or models will never work.
+            ## TODO:  Move this to OpenAPI code
             if 'application/json' not in service_operation.operation.produces:
                 service_operation.operation.produces.insert(0, 'application/json')
 
@@ -234,6 +235,22 @@ class IaaSServiceBase(GC3VersionTypedMixin):
             so[so_camel_name] = partial_service_operation
             so.__dict__[so_camel_name] = so[so_camel_name]
         return so
+
+
+
+    def dump(self) -> BravadoResponse:
+        container = f"{self.idm_container_name}/"
+        for service_operation_name in self.service_operations:
+            if service_operation_name.startswith('list'):
+                dumper_service_operation = self.service_operations[service_operation_name]
+                break
+        # http_future = self.service_operations.list_instance(container=container)
+        http_future = dumper_service_operation(container=container)
+        request_url = http_future.future.request.url
+        service_response = http_future.response()
+        return service_response
+
+
 
     def get_idm_user_container_name(self, cloud_username: str = None) -> str:
         """ Return Compute-identityDomain/ or Compute-identityDomain/{cloud_username}/  eg. 'Compute-587626604/eric.harris@oracle.com' for gc30003

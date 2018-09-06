@@ -2,6 +2,8 @@ from pathlib import Path
 
 import pytest
 
+from bravado.response import  BravadoResponse
+
 from gc3_query.lib import gc3_cfg
 from gc3_query.lib.gc3_config import GC3Config
 from gc3_query.lib.iaas_classic import IaaSRequestsHTTPClient
@@ -167,11 +169,38 @@ def test_get_all_instances(setup_gc30003):
 
 
 
+def test_dump(setup_gc30003):
+    service_cfg, idm_cfg, http_client = setup_gc30003
+    instances = Instances(service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client)
+    service_response: BravadoResponse = instances.dump()
+    assert service_response
 
 
 
 
 
+
+@pytest.fixture()
+def setup_gc30003_dump():
+    service = 'Instances'
+    idm_domain = 'gc30003'
+    gc3_config = GC3Config(atoml_config_dir=config_dir)
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
+    idm_cfg = gc3_config.idm.domains[idm_domain]
+    iaas_service = Instances(service_cfg=service_cfg, idm_cfg=idm_cfg)
+    assert service==service_cfg.name
+    assert idm_domain==idm_cfg.name
+    assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
+    yield service_cfg, idm_cfg, iaas_service
+
+
+
+def test_dump(setup_gc30003_dump):
+    service_cfg, idm_cfg, iaas_service = setup_gc30003_dump
+    # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
+    service_response = iaas_service.dump()
+    assert service_response.result
+    result = service_response.result
 
 
 

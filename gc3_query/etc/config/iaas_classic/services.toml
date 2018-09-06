@@ -46,3 +46,11 @@ service_name = 'IPReservations'
 title = "IPReservations"
 api_version = '18.1.2'
 
+
+[iaas_classic.services.compute.SecLists]
+api_collection_name = 'compute'
+name = 'SecLists'
+service_name = 'SecLists'
+title = "SecLists"
+api_version = '18.1.2'
+

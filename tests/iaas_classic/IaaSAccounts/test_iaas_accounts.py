@@ -115,3 +115,27 @@ def test_get_all_account_data(setup_gc30003):
     assert 'nimbula' in accounts.http_client.auth_cookie_header['Cookie']
     all_accounts = accounts.get_all_account_data()
     assert all_accounts
+
+
+
+@pytest.fixture()
+def setup_gc30003_dump():
+    service = 'Accounts'
+    idm_domain = 'gc30003'
+    gc3_config = GC3Config(atoml_config_dir=config_dir)
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
+    idm_cfg = gc3_config.idm.domains[idm_domain]
+    iaas_service = Accounts(service_cfg=service_cfg, idm_cfg=idm_cfg)
+    assert service==service_cfg.name
+    assert idm_domain==idm_cfg.name
+    assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
+    yield service_cfg, idm_cfg, iaas_service
+
+
+
+def test_dump(setup_gc30003_dump):
+    service_cfg, idm_cfg, iaas_service = setup_gc30003_dump
+    # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
+    service_response = iaas_service.dump()
+    assert service_response.result
+    result = service_response.result

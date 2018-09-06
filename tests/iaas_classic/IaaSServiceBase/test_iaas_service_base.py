@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pytest
 from bravado_core.spec import Spec
+from bravado.response import  BravadoResponse, BravadoResponseMetadata
 
 from gc3_query.lib import gc3_cfg
 from gc3_query.lib import *
@@ -77,6 +78,16 @@ def test_service_call(setup_gc30003):
     assert "/Compute-" in service_response.result
 
 
+def test_dump(setup_gc30003):
+    service_cfg, idm_cfg = setup_gc30003
+    iaas_service_base = IaaSServiceBase(service_cfg=service_cfg, idm_cfg=idm_cfg)
+    assert 'nimbula' in iaas_service_base.http_client.auth_cookie_header['Cookie']
+    service_response: BravadoResponse = iaas_service_base.dump()
+    assert service_response
+
+
+
+
 def test_bravado_service_call(setup_gc30003):
     service_cfg, idm_cfg = setup_gc30003
     iaas_service_base = IaaSServiceBase(service_cfg=service_cfg, idm_cfg=idm_cfg)
@@ -126,6 +137,13 @@ def test_pre_authenticated_http_client(setup_gc30003):
     assert "/Compute-" in service_response.result
     assert id(iaas_service_base.http_client)==http_client_id
     assert iaas_service_base.http_client is http_client
+
+    assert service_response
+
+
+
+
+
 
 
 

@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import pytest
+
 from gc3_query.lib import gc3_cfg
 from gc3_query.lib.gc3_config import GC3Config
 from gc3_query.lib.iaas_classic.sec_lists import SecLists
@@ -36,6 +38,32 @@ def test_init():
     assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
     sec_lists = SecLists(service_cfg=service_cfg, idm_cfg=idm_cfg, from_url=True)
     assert sec_lists.name==service
+
+
+@pytest.fixture()
+def setup_gc30003_dump():
+    service = 'SecLists'
+    idm_domain = 'gc30003'
+    gc3_config = GC3Config(atoml_config_dir=config_dir)
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
+    idm_cfg = gc3_config.idm.domains[idm_domain]
+    iaas_service = SecLists(service_cfg=service_cfg, idm_cfg=idm_cfg)
+    assert service==service_cfg.name
+    assert idm_domain==idm_cfg.name
+    assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
+    yield service_cfg, idm_cfg, iaas_service
+
+
+
+def test_dump(setup_gc30003_dump):
+    service_cfg, idm_cfg, iaas_service = setup_gc30003_dump
+    # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
+    service_response = iaas_service.dump()
+    assert service_response.result
+    result = service_response.result
+
+
+
 #
 #
 # def test_overlays_applied():

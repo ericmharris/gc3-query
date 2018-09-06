@@ -1,7 +1,9 @@
 import json
 from pathlib import Path
 
+import pytest
 from bravado_core.spec import Spec
+from bravado.response import  BravadoResponse
 
 from gc3_query.lib import gc3_cfg
 from gc3_query.lib import *
@@ -138,4 +140,27 @@ def test_get_all_sec_rules():
     assert isinstance(result_json['result'][0]['dst_is_ip'], bool)
     assert len(result_json['result']) > 0
     assert 'src_list' in result_json['result'][0]
+
+
+@pytest.fixture()
+def setup_gc30003_dump():
+    service = 'SecRules'
+    idm_domain = 'gc30003'
+    gc3_config = GC3Config(atoml_config_dir=config_dir)
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
+    idm_cfg = gc3_config.idm.domains[idm_domain]
+    iaas_service = SecRules(service_cfg=service_cfg, idm_cfg=idm_cfg)
+    assert service==service_cfg.name
+    assert idm_domain==idm_cfg.name
+    assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
+    yield service_cfg, idm_cfg, iaas_service
+
+
+def test_dump(setup_gc30003_dump):
+    service_cfg, idm_cfg, iaas_service = setup_gc30003_dump
+    # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
+    service_response = iaas_service.dump()
+    assert service_response.result
+    result = service_response.result
+
 
