@@ -129,14 +129,13 @@ def test_instances_model_save():
 
     # container='/Compute-587626604'
     # container='Compute-587626604'
-    container=instances.idm_root_container_name
+    # container=instances.idm_root_container_name
 
     # http_future = instances.bravado_service_operations.listInstance(container=instances.idm_user_container_name)
     # http_future = instances.bravado_service_operations.listInstance(container=instances.idm_container_name)
-    http_future = instances.bravado_service_operations.listInstance(container=container)
+    # http_future = instances.bravado_service_operations.listInstance(container=container)
     # http_future = instances.service_operations.discover_root_instance()
-    request_url = http_future.future.request.url
-    service_response = http_future.response()
+    service_response = instances.dump()
     result = service_response.result
     result_json = service_response.incoming_response.json()
     assert service_response.metadata.status_code==200

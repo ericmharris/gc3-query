@@ -240,4 +240,9 @@ class Instances(IaaSServiceBase):
         r = SortedDict(result_json['result'][0])
         return service_response.result
 
-
+    def dump(self):
+        container = f"{self.idm_container_name}/"
+        http_future = self.service_operations.list_instance(container=container)
+        request_url = http_future.future.request.url
+        service_response = http_future.response()
+        return service_response
