@@ -24,22 +24,23 @@
 from gc3_query.lib import *
 #from gc3_query.lib.gc3logging import get_logging
 from . import *
+from mongoengine import *
 
 from gc3_query.lib import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
-data = dict(
-    dst_is_ip='false',
-    src_is_ip='true',
-    dst_list='seclist:/Compute-587626604/mayurnath.gokare@oracle.com/paas/SOA/gc3ntagrogr605/lb/ora_otd_infraadmin',
-    name='/Compute-587626604/mayurnath.gokare@oracle.com/paas/SOA/gc3ntagrogr605/lb/sys_infra2otd_admin_ssh',
-    src_list='seciplist:/oracle/public/paas-infra',
-    uri='https://compute.uscom-central-1.oraclecloud.com/secrule/Compute-587626604/mayurnath.gokare%40oracle.com/paas/SOA/gc3ntagrogr605/lb/sys_infra2otd_admin_ssh',
-    disabled=False,
-    application='/oracle/public/ssh',
+sec_rule_example = dict(
     action='PERMIT',
+    application='/oracle/public/ssh',
+    description='DO NOT MODIFY: Permit PSM to ssh to admin host',
+    disabled=False,
+    dst_is_ip=False,
+    dst_list='seclist:/Compute-587626604/mayurnath.gokare@oracle.com/paas/SOA/gc3ntagrogr605/lb/ora_otd_infraadmin',
     id='bfc39682-3929-4635-9834-e95b8ba7c2c2',
-    description='DO NOT MODIFY: Permit PSM to ssh to admin host')
+    name='/Compute-587626604/mayurnath.gokare@oracle.com/paas/SOA/gc3ntagrogr605/lb/sys_infra2otd_admin_ssh',
+    src_is_ip=True,
+    src_list='seciplist:/oracle/public/paas-infra',
+    uri='https://compute.uscom-central-1.oraclecloud.com/secrule/Compute-587626604/mayurnath.gokare%40oracle.com/paas/SOA/gc3ntagrogr605/lb/sys_infra2otd_admin_ssh')
 
 class SecRuleModel(DynamicDocument):
     """
@@ -54,37 +55,47 @@ class SecRuleModel(DynamicDocument):
     action      = 'PERMIT',
     id          = 'bfc39682-3929-4635-9834-e95b8ba7c2c2',
     description = 'DO NOT MODIFY: Permit PSM to ssh to admin host'
+
+first_result_dict = {
+    'action': 'PERMIT',
+    'application': '/oracle/public/ssh',
+    'description': 'DO NOT MODIFY: Permit PSM to ssh to admin host',
+    'disabled': False,
+    'dst_list': 'seclist:/Compute-587626604/mayurnath.gokare@oracle.com/paas/SOA/gc3ntagrogr605/lb/ora_otd_infraadmin',
+    'name': '/Compute-587626604/mayurnath.gokare@oracle.com/paas/SOA/gc3ntagrogr605/lb/sys_infra2otd_admin_ssh',
+    'src_list': 'seciplist:/oracle/public/paas-infra',
+    'uri': 'https://compute.uscom-central-1.oraclecloud.com/secrule/Compute-587626604/mayurnath.gokare%40oracle.com/paas/SOA/gc3ntagrogr605/lb/sys_infra2otd_admin_ssh',
+    'id': 'bfc39682-3929-4635-9834-e95b8ba7c2c2',
+    'dst_is_ip': False,
+    'src_is_ip': True
+}
     """
-    dst_is_ip = StringField()
-    src_is_ip = StringField()
-    dst_list = StringField()
-    name = StringField()
-    src_list = StringField()
-    uri = URLField()
-    disabled = BooleanField()
-    application = StringField()
-    action = StringField()
-    sec_rule_id = StringField()
-    description = StringField()
+
+    action=StringField()
+    application=StringField()
+    description=StringField()
+    disabled=BooleanField()
+    dst_is_ip=BooleanField()
+    dst_list=StringField()
+    # id=StringField(primary_key=True)
+    name=StringField()
+    src_is_ip=BooleanField()
+    src_list=StringField()
+    uri=StringField()
 
     meta = {
-        "db_alias": gc3_cfg.mongodb.db_alias,
-        "collection": "SecRules",
-        "indexes": [
-            "sec_rule_id",
-            "name",
-            "src_list",
-            'disabled',
-            "action",
-        ],
+    "db_alias": gc3_cfg.iaas_classic.mongodb.db_alias,
+    "collection": "SecRules",
+    "indexes": [
+        "name",
+        "application",
+        "action",
+        "dst_is_ip",
+        "src_is_ip",
+        'disabled',
+    ],
     }
 
-
-    def __init__(self, data: DictStrAny, metadata: DictStrAny, embedded_data: DictStrAny, **kwargs):
-        # kwargs['sec_rule_id'] = kwargs.pop('id')
-        self.data = data
-        self.metadata = metadata
-        self.embedded_data = embedded_data
-        super().__init__(**data)
-        _debug(f"{self.__class__.__name__} created")
-
+    def __init__(self, *args, **values):
+        super().__init__(*args, **values)
+        _debug(f"{self.__class__.__name__}.__init__(args={args}, values={values}):")

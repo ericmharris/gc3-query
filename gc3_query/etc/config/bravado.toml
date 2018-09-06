@@ -14,8 +14,8 @@ validate_requests = false
 
 # Use swagger_spec_validator to validate the swagger spec
 # 'validate_swagger_spec': True,
-# validate_swagger_spec = true
-validate_swagger_spec = false
+validate_swagger_spec = true
+# validate_swagger_spec = false
 
 # Use Python classes (models) instead of dicts for #/definitions/{models}
 # On the client side, this applies to incoming responses.
