@@ -1,0 +1,306 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "title" : "default",
+    "description" : "",
+    "version" : "1.0"
+  },
+  "basePath" : "/dataload/v1",
+  "paths" : {
+    "/about" : {
+      "get" : {
+        "summary" : "About the REST API",
+        "description" : "<p>Returns version and usage information for the REST API.</p>",
+        "responses" : {
+          "200" : {
+            "description" : "A map of values",
+            "schema" : {
+              "$ref" : "#/definitions/Version"
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/datasets" : {
+      "get" : {
+        "summary" : "List data sets",
+        "description" : "Lists the names of data sets in the schema. You can list all the data sets that belong to a user or use a query filter to list data sets that match a name pattern.<p>Use an asterisk (*) as a wildcard in your query filter.</p>",
+        "responses" : {
+          "200" : {
+            "description" : "Returns a comma separated list of data set names.",
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/datasets/{set name}" : {
+      "get" : {
+        "summary" : "Get a data set",
+        "description" : "Returns information about a named data set.",
+        "responses" : {
+          "200" : {
+            "description" : "Returns column information for the data set.",
+            "schema" : {
+              "$ref" : "#/definitions/Dataset"
+            }
+          },
+          "500" : {
+            "description" : "The data set doesn't exist or an internal error occurred.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put" : {
+        "summary" : "Create a data set",
+        "description" : "<p>Creates a data set.</p><p>Note: The body parameter is multipart/mixed with two parts. The first part contains load information in the JSON structure shown below. The second part is the data in application/octet-stream format, which is not shown due to a Swagger limitation. Data in the stream can be any custom delimiter separated text data (for example, a CSV file) or in the form of Java object arrays (one per record) which support a wider range of data types.</p>",
+        "consumes" : [ "multipart/mixed" ],
+        "parameters" : [ {
+          "name" : "Load information",
+          "in" : "body",
+          "description" : "Data set load information",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/DatasetLoadInformation"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Returns \"Data set <set name> already exists.\", \"Future data set file updated\", or \"Data set created\".",
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          "500" : {
+            "description" : "An error happened while preparing or creating the data set.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Create or update a data set",
+        "description" : "<p>Creates a new data set or updates an existing data set.</p><p>Note: The body parameter is multipart/mixed with two parts. The first part contains load information in the JSON structure shown below. The second part is the data in application/octet-stream format, which is not shown due to a Swagger limitation. Data in the stream can be any custom delimiter separated text data (for example, a CSV file) or in the form of Java object arrays (one per record) which support a wider range of data types.</p>",
+        "consumes" : [ "multipart/mixed" ],
+        "parameters" : [ {
+          "name" : "Load information",
+          "in" : "body",
+          "description" : "Data set load information",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/DatasetLoadInformation"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Returns \"Future data set file updated\" or \"Data set created\" or \"Data set updated\".",
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          "500" : {
+            "description" : "An error happened while preparing or creating the data set.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Delete a data set",
+        "description" : "Deletes a named data set.",
+        "responses" : {
+          "200" : {
+            "description" : "Returns \"Data set deleted\" if the data set exists.",
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          "500" : {
+            "description" : "Returns error if the data set doesn't exist or an internal error happened.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error.",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "parameters" : [ {
+        "name" : "set name",
+        "in" : "path",
+        "description" : "Name of the data set",
+        "required" : true,
+        "type" : "string"
+      } ]
+    }
+  },
+  "definitions" : {
+    "Version" : {
+      "type" : "object",
+      "properties" : {
+        "baseVersion" : {
+          "type" : "string",
+          "description" : "Version name."
+        },
+        "majorVersion" : {
+          "type" : "integer",
+          "description" : "A number that indicates the major version."
+        },
+        "minorVersion" : {
+          "type" : "integer",
+          "description" : "A number that indicates the minor version."
+        },
+        "build" : {
+          "type" : "string",
+          "description" : "Build information."
+        },
+        "deploymentMode" : {
+          "type" : "string",
+          "description" : "Service type: BICS (Oracle BI Cloud Service) or DVCS (Oracle Data Visualization Service)."
+        },
+        "maxNumberOfParallelProcesses" : {
+          "type" : "integer",
+          "description" : "The maximum number of parallel invocations of the REST API that are allowed."
+        },
+        "suggestedBatchSize" : {
+          "type" : "integer",
+          "description" : "The optimal number of rows suggested per each request to load data."
+        },
+        "maximumBatchSize" : {
+          "type" : "integer",
+          "description" : "The maximum number of rows allowed per each request to load data."
+        }
+      }
+    },
+    "Dataset" : {
+      "type" : "object",
+      "properties" : {
+        "name" : {
+          "type" : "string",
+          "description" : "Name of the data set"
+        },
+        "columns" : {
+          "description" : "List of columns",
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/DatasetColumn"
+          }
+        }
+      }
+    },
+    "DatasetLoadInformation" : {
+      "type" : "object",
+      "properties" : {
+        "columns" : {
+          "description" : "List of columns",
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/DatasetColumn"
+          }
+        },
+        "firstBatch" : {
+          "type" : "boolean",
+          "description" : "Indicates whether this is the first batch in the data set"
+        },
+        "lastBatch" : {
+          "type" : "boolean",
+          "description" : "Indicates whether this is the last batch in the data set"
+        },
+        "optionalStreamType" : {
+          "type" : "string",
+          "description" : "Data stream type. This is optional.",
+          "enum" : [ "Text", "Java" ],
+          "default" : "Text"
+        },
+        "delimiter" : {
+          "type" : "string",
+          "description" : "Delimiter that separates values when the data stream type is Text. For example, for CSV files, you specify a comma as the delimiter. Not applicable for Java streams."
+        },
+        "timestampFormat" : {
+          "type" : "string",
+          "description" : "Format of timestamps in the data stream. Leave the parameter empty if no timestamps are available. Applies only for Text streams. Not applicable for Java streams."
+        },
+        "numberOfLinesToSkip" : {
+          "type" : "integer",
+          "description" : "Number of lines in the stream of data to skip. Applies only for Text streams. Not applicable for Java streams."
+        }
+      }
+    },
+    "DatasetColumn" : {
+      "type" : "object",
+      "properties" : {
+        "columnName" : {
+          "type" : "string",
+          "description" : "Name of the column."
+        },
+        "datatype" : {
+          "type" : "string",
+          "description" : "Data type of the column, such as VARCHAR, DATE/TIMESTAMP, and NUMBER."
+        },
+        "length" : {
+          "type" : "integer",
+          "description" : "Length of the column for VARCHAR and NUMBER data types. This field is optional."
+        },
+        "precision" : {
+          "type" : "integer",
+          "description" : "Precision value for NUMBER data types. This field is optional."
+        },
+        "position" : {
+          "type" : "integer",
+          "description" : "Position of the column in the incoming array (for uploading data only). This field is optional."
+        }
+      }
+    },
+    "Error" : {
+      "type" : "object",
+      "properties" : {
+        "code" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "message" : {
+          "type" : "string"
+        }
+      }
+    }
+  }
+}

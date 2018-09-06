@@ -144,47 +144,47 @@ paths:
         description: 'The Cookie: header must be included with every request to the
           service. It must be set to the value of the set-cookie header in the response
           received to the POST /authenticate/ call.'
-  "/{name}":
-    get:
-      tags:
-      - Accounts
-      summary: Retrieve Details of an Account
-      description: 'Retrieves details of the specified account.<p><b>Required Role:
-        </b>To complete this task, you must have the <code>Compute_Monitor</code>
-        or <code>Compute_Operations</code> role. If this role isn''t assigned to you
-        or you''re not sure, then ask your system administrator to ensure that the
-        role is assigned to you in Oracle Cloud My Services. See <a target="_blank"
-        href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6">Modifying
-        User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.'
-      operationId: getAccount
-      responses:
-        '200':
-          headers:
-            set-cookie:
-              type: string
-              description: The cookie value is returned if the session is extended
-          description: OK. See <a class="xref" href="Status%20Codes.html">Status Codes</a>
-            for information about other possible HTTP status codes.
-          schema:
-            $ref: '#/definitions/Account-response'
-      consumes:
-      - application/oracle-compute-v3+json
-      produces:
-      - application/json
-      - application/oracle-compute-v3+json
-      parameters:
-      - name: name
-        in: path
-        description: 'Two-part name of the account: <code>/Compute-<em>identity_domain</em>/default</code>
-          or <code>/Compute-<em>identity_domain</em>/cloud_storage</code>'
-        required: true
-        type: string
-      - name: Cookie
-        in: header
-        type: string
-        description: 'The Cookie: header must be included with every request to the
-          service. It must be set to the value of the set-cookie header in the response
-          received to the POST /authenticate/ call.'
+#  "/{name}":
+#    get:
+#      tags:
+#      - Accounts
+#      summary: Retrieve Details of an Account
+#      description: 'Retrieves details of the specified account.<p><b>Required Role:
+#        </b>To complete this task, you must have the <code>Compute_Monitor</code>
+#        or <code>Compute_Operations</code> role. If this role isn''t assigned to you
+#        or you''re not sure, then ask your system administrator to ensure that the
+#        role is assigned to you in Oracle Cloud My Services. See <a target="_blank"
+#        href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6">Modifying
+#        User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.'
+#      operationId: getAccount
+#      responses:
+#        '200':
+#          headers:
+#            set-cookie:
+#              type: string
+#              description: The cookie value is returned if the session is extended
+#          description: OK. See <a class="xref" href="Status%20Codes.html">Status Codes</a>
+#            for information about other possible HTTP status codes.
+#          schema:
+#            $ref: '#/definitions/Account-response'
+#      consumes:
+#      - application/oracle-compute-v3+json
+#      produces:
+#      - application/json
+#      - application/oracle-compute-v3+json
+#      parameters:
+#      - name: name
+#        in: path
+#        description: 'Two-part name of the account: <code>/Compute-<em>identity_domain</em>/default</code>
+#          or <code>/Compute-<em>identity_domain</em>/cloud_storage</code>'
+#        required: true
+#        type: string
+#      - name: Cookie
+#        in: header
+#        type: string
+#        description: 'The Cookie: header must be included with every request to the
+#          service. It must be set to the value of the set-cookie header in the response
+#          received to the POST /authenticate/ call.'
 definitions:
   Account-discover-response:
     type: object
@@ -217,14 +217,11 @@ definitions:
         description: Description of this account.
       name:
         type: string
-        description: 'Two-part name of the account: <code>/Compute-<em>identity_domain</em>/default</code>
-          or <code>/Compute-<em>identity_domain</em>/cloud_storage</code>'
+        description: 'Two-part name of the account: <code>/Compute-<em>identity_domain</em>/default</code> or <code>/Compute-<em>identity_domain</em>/cloud_storage</code>'
       objectproperties:
-        additionalProperties:
-          type: object
         type: object
-        description: Properties to be applied to specific objects created using this
-          account
+        additionalProperties: {}
+        description: Properties to be applied to specific objects created using this account
       uri:
         type: string
         description: Uniform Resource Identifier
