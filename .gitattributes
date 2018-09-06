@@ -2,4 +2,8 @@ file.dat	binary
 *.zip		binary
 *.gz		binary
 *.jar		binary
+*.xlsx		binary
+*.xls		binary
+*.docx		binary
+*.doc		binary
 

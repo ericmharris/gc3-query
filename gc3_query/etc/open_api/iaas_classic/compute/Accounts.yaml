@@ -1,4 +1,3 @@
----
 swagger: '2.0'
 info:
   version: 18.1.2-20180126.052521
@@ -11,13 +10,22 @@ info:
 schemes:
 - https
 consumes:
+- application/json
 - application/oracle-compute-v3+json
 - application/oracle-compute-v3+directory+json
 produces:
+- application/json
 - application/oracle-compute-v3+json
 - application/oracle-compute-v3+directory+json
+tags:
+- name: Accounts
+  description: An account is used in Compute Classic to store credentials that must
+    be used to access another service. For example, you use an account to define the
+    credentials and other details of the Oracle Cloud Infrastructure Object Storage
+    Classic instance in which you store machine images.<p>You can view accounts using
+basePath: "/account"
 paths:
-  "/account/":
+  "/":
     get:
       tags:
       - Accounts
@@ -40,10 +48,11 @@ paths:
           description: OK. See <a class="xref" href="Status%20Codes.html">Status Codes</a>
             for information about other possible HTTP status codes.
           schema:
-            "$ref": "#/definitions/Account-discover-response"
+            $ref: '#/definitions/Account-discover-response'
       consumes:
       - application/oracle-compute-v3+json
       produces:
+      - application/json
       - application/oracle-compute-v3+directory+json
       parameters:
       - name: Cookie
@@ -52,7 +61,7 @@ paths:
         description: 'The Cookie: header must be included with every request to the
           service. It must be set to the value of the set-cookie header in the response
           received to the POST /authenticate/ call.'
-  "/account/{container}":
+  "/{container}":
     get:
       tags:
       - Accounts
@@ -74,16 +83,17 @@ paths:
           description: OK. See <a class="xref" href="Status%20Codes.html">Status Codes</a>
             for information about other possible HTTP status codes.
           schema:
-            "$ref": "#/definitions/Account-discover-response"
+            $ref: '#/definitions/Account-discover-response'
       consumes:
       - application/oracle-compute-v3+json
       produces:
+      - application/json
       - application/oracle-compute-v3+directory+json
       parameters:
       - name: container
         in: path
-        description: "<p>Specify <code>/Compute-<i>identityDomain</i></code> to retrieve
-          the names of objects that you can access."
+        description: <p>Specify <code>/Compute-<i>identityDomain</i></code> to retrieve
+          the names of objects that you can access.
         required: true
         type: string
       - name: Cookie
@@ -92,20 +102,13 @@ paths:
         description: 'The Cookie: header must be included with every request to the
           service. It must be set to the value of the set-cookie header in the response
           received to the POST /authenticate/ call.'
-  "/account/{container}/":
+  "/{container}/":
     get:
       tags:
       - Accounts
       summary: Retrieve Details of all Accounts in a Container
       description: 'Retrieves details of the accounts that are in the specified identity
         domain. You can use this HTTP request to get details of the account that you
-  "/account/{container}":
-    get:
-      tags:
-      - Accounts
-      summary: Retrieve Details of all Accounts in a Container
-      operationId: get_all_account_data
-      description: Retrieves details of the accounts that are in the specified identity
         must specify while creating a machine image.<p><b>Required Role: </b>To complete
         this task, you must have the <code>Compute_Monitor</code> or <code>Compute_Operations</code>
         role. If this role isn''t assigned to you or you''re not sure, then ask your
@@ -122,16 +125,17 @@ paths:
           description: OK. See <a class="xref" href="Status%20Codes.html">Status Codes</a>
             for information about other possible HTTP status codes.
           schema:
-            "$ref": "#/definitions/Account-list-response"
+            $ref: '#/definitions/Account-list-response'
       consumes:
       - application/oracle-compute-v3+json
       produces:
+      - application/json
       - application/oracle-compute-v3+json
       parameters:
       - name: container
         in: path
-        description: "<code>Compute-<em>identity_domain</em></code><p>For example:
-          <code>Compute-acme</code>."
+        description: '<code>Compute-<em>identity_domain</em></code><p>For example:
+          <code>Compute-acme</code>.'
         required: true
         type: string
       - name: Cookie
@@ -140,7 +144,7 @@ paths:
         description: 'The Cookie: header must be included with every request to the
           service. It must be set to the value of the set-cookie header in the response
           received to the POST /authenticate/ call.'
-  "/account/{name}":
+  "/{name}":
     get:
       tags:
       - Accounts
@@ -162,10 +166,11 @@ paths:
           description: OK. See <a class="xref" href="Status%20Codes.html">Status Codes</a>
             for information about other possible HTTP status codes.
           schema:
-            "$ref": "#/definitions/Account-response"
+            $ref: '#/definitions/Account-response'
       consumes:
       - application/oracle-compute-v3+json
       produces:
+      - application/json
       - application/oracle-compute-v3+json
       parameters:
       - name: name
@@ -181,18 +186,7 @@ paths:
           service. It must be set to the value of the set-cookie header in the response
           received to the POST /authenticate/ call.'
 definitions:
-  Accounts:
   Account-discover-response:
-    type: object
-    title: Accounts
-    properties:
-      result:
-        type: array
-        items:
-          "$ref": "#/defin"
-  Account:
-    title: Account-discover-response
-    "x-model": Account-discover-response
     type: object
     properties:
       result:
@@ -200,58 +194,99 @@ definitions:
           type: string
         type: array
   Account-list-response:
-    title: Account-list-response
-    "x-model": "Account-list-response"
     type: object
     properties:
       result:
-        type: array
-        title: Response Array
-        description: Response array
         items:
-          "$ref": "#/definitions/Account-response"
+          $ref: '#/definitions/Account-response'
+        type: array
   Account-response:
-    title: Account-response
-    description: Account-response
-    "x-model": Account-response
     type: object
     properties:
       accounttype:
         type: string
         description: Account Type for this account
-        "x-nullable": true
       credentials:
         additionalProperties:
           type: object
-          "x-nullable": true
         type: object
-        "x-nullable": true
         description: Credentials specific to the account, which may include a username,
           password or certificate. The credentials are not returned.
       description:
         type: string
         description: Description of this account.
-        "x-nullable": true
       name:
         type: string
-        "x-nullable": true
         description: 'Two-part name of the account: <code>/Compute-<em>identity_domain</em>/default</code>
           or <code>/Compute-<em>identity_domain</em>/cloud_storage</code>'
-      uri:
-        type: string
-        "x-nullable": true
-        description: Uniform Resource Identifier
       objectproperties:
-        type: object
-        "x-nullable": true
-        description: Properties to be applied to specific objects created using this account
         additionalProperties:
           type: object
-          "x-nullable": true
-tags:
-- name: Accounts
-  description: An account is used in Compute Classic to store credentials that must
-    be used to access another service. For example, you use an account to define the
-    credentials and other details of the Oracle Cloud Infrastructure Object Storage
-    Classic instance in which you store machine images.<p>You can view accounts using
-    the HTTP requests listed below.
+        type: object
+        description: Properties to be applied to specific objects created using this
+          account
+      uri:
+        type: string
+        description: Uniform Resource Identifier
+  DailyWeeklyInterval:
+    allOf:
+    - $ref: '#/definitions/Interval'
+    - type: object
+      properties:
+        userTimeZone:
+          type: string
+          description: 'Any IANA time zone. e.g: America/Los_Angeles'
+        timeOfDay:
+          pattern: ([01]?[0-9]|2[0-3]):[0-5][0-9]
+          type: string
+          description: Time of the day to run a backup
+        daysOfWeek:
+          items:
+            enum:
+            - MONDAY
+            - TUESDAY
+            - WEDNESDAY
+            - THURSDAY
+            - FRIDAY
+            - SATURDAY
+            - SUNDAY
+            type: string
+          type: array
+          description: Days of the week to run a backup
+      description: Backup Interval running once a day on certain days of the week
+  HourlyInterval:
+    allOf:
+    - $ref: '#/definitions/Interval'
+    - type: object
+      properties:
+        hourlyInterval:
+          type: integer
+          description: Hours to wait before starting the next backup
+          format: int32
+      description: Backup Interval running every X hours
+  Interval:
+    x-oneOf-instructions: Provide one of the valid object representations documented
+      here.  For more information about oneOf see http://json-schema.org/latest/json-schema-validation.html#anchor88
+    type: object
+    description: There are two kinds of Intervals. Each Interval has its own JSON
+      format. Your Interval field should look like one of the following:<p><ul><li><code>"interval":{"Hourly":{"hourlyInterval":2}}</code></li><li><code>{"DailyWeekly":{"daysOfWeek":["MONDAY"],"timeOfDay":"03:15","userTimeZone":"America/Los_Angeles"}}</code></li></ul><p>Days
+      of the week is any day of the week fully capitalized (MONDAY, TUESDAY, etc).
+      The user time zone is any IANA user timezone.  For example user time zones see
+      <a href="https://en.wikipedia.org/wiki/IANA_time_zone_database">List of IANA
+      time zones</a>.
+    x-oneOf:
+      oneOf:
+      - type: object
+        properties:
+          DailyWeekly:
+            allOf:
+            - $ref: '#/definitions/DailyWeeklyInterval'
+            - type: object
+              properties: {}
+      - type: object
+        properties:
+          Hourly:
+            allOf:
+            - $ref: '#/definitions/HourlyInterval'
+            - type: object
+              properties: {}

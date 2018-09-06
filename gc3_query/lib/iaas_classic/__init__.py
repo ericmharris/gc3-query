@@ -16,14 +16,17 @@
 ################################################################################
 ## Standard Library Imports
 from functools import partial
+from copy import deepcopy
 
 ################################################################################
 ## Third-Party Imports
+from sortedcontainers import SortedDict
 
 from bravado.client import ResourceDecorator
 from bravado.response import  BravadoResponse, BravadoResponseMetadata
 from bravado_core.spec import Spec
 from bravado.requests_client import RequestsClient
+
 
 ################################################################################
 ## Project Imports
@@ -37,7 +40,7 @@ from gc3_query.lib.iaas_classic.iaas_swagger_client import IaaSSwaggerClient
 from gc3_query.lib.open_api.open_api_spec import OpenApiSpec
 from gc3_query.lib.open_api.open_api_spec_catalog import OpenApiSpecCatalog
 from gc3_query.lib.signatures import GC3VersionTypedMixin
-from gc3_query.lib.utils import camelcase_to_snake
+from gc3_query.lib.util import camelcase_to_snake
 from gc3_query.lib.export_delegates.response_export import ResponseExport
 from gc3_query.lib.open_api.service_responses import IaaSServiceResponse
 
@@ -218,6 +221,11 @@ class IaaSServiceBase(GC3VersionTypedMixin):
         for service_operation_name in dir(bravado_service_operations):
             so_camel_name = camelcase_to_snake(service_operation_name)
             service_operation = getattr(bravado_service_operations, service_operation_name)
+
+            ## Need to make sure 'application/json' is in the request or models will never work.
+            if 'application/json' not in service_operation.operation.produces:
+                service_operation.operation.produces.insert(0, 'application/json')
+
             operation_headers = {"Accept": ','.join(service_operation.operation.produces),
                                  "Content-Type": ','.join(service_operation.operation.consumes)
                                  }

@@ -1,0 +1,228 @@
+---
+
+swagger: "2.0"
+info:
+  title: SecRules
+  description: A security rule defines network access over a specified protocol between
+    instances in two security lists, or from a set of external hosts (an IP list)
+    to instances in a security list.<p>Security rules tie the security list, security
+    IP list, and security application entities together.<p>You can create, delete,
+    update, and view security rules using the HTTP requests listed below. For more
+    information about security rules, see <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=STCSG-GUID-1AEDDA2C-3561-4759-B5AD-FB4CD9C2FBD8">About
+    Security Rules</a> in <em>Using Oracle Cloud Infrastructure Compute Classic</em>.
+  version: "18.1.2-20180126.052521"
+schemes:
+- https
+consumes:
+- application/json
+- application/oracle-compute-v3+json
+- application/oracle-compute-v3+directory+json
+produces:
+- application/json
+- application/oracle-compute-v3+json
+- application/oracle-compute-v3+directory+json
+tags:
+- name: SecRules
+  description: A security rule defines network access over a specified protocol between
+    instances in two security lists, or from a set of external hosts (an IP list)
+    to instances in a security list.<p>Security rules tie the security list, security
+    IP list, and security application entities together.<p>You can create, delete,
+    update, and view security rules using the HTTP requests listed below. For more
+    information about security rules, see <a target="_blank" href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=STCSG-GUID-1AEDDA2C-3561-4759-B5AD-FB4CD9C2FBD8">About
+    Security Rules</a> in <em>Using Oracle Cloud Infrastructure Compute Classic</em>.
+basePath: "/secrule"
+paths:
+  "/{container}":
+    get:
+      tags:
+      - SecRules
+      summary: Retrieve Details of all Security Rules in a Container
+      description: 'Retrieves details of the security rules that are in the specified
+        container and match the specified query criteria. If you don''t specify any
+        query criteria, then details of all the security rules in the container are
+        displayed. To filter the search results, you can pass one or more of the following
+        query parameters, by appending them to the URI in the following syntax:<p><code>?parameter1=value1&ampparameter2=value2&ampparameterN=valueN</code><p><b>Required
+        Role: </b>To complete this task, you must have the <code>Compute_Monitor</code>
+        or <code>Compute_Operations</code> role. If this role isn''t assigned to you
+        or you''re not sure, then ask your system administrator to ensure that the
+        role is assigned to you in Oracle Cloud My Services. See <a target="_blank"
+        href="http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6">Modifying
+        User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.'
+      operationId: listSecRule
+      consumes:
+      - application/oracle-compute-v3+json
+      produces:
+      - application/json
+      # - application/oracle-compute-v3+json
+      parameters:
+      - name: container
+        in: path
+        description: idm-name
+        required: true
+        type: string
+      - name: dst_list
+        in: query
+        description: '<p>The three-part name (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object_name</em></code>)
+          of the destination security list or security IP list.<p>You must use the
+          prefix <code>seclist</code>: or <code>seciplist</code>: to identify the
+          list type.<p><b>Note:</b> You can specify a security IP list as the destination
+          in a secrule, provided <code>src_list</code> is a security list that has
+          DENY as its outbound policy.<p>You cannot specify any of the security IP
+          lists in the <code>/oracle/public</code> container as a destination in a
+          secrule.'
+        required: false
+        type: string
+      - name: description
+        in: query
+        description: <p>A description of the security rule.
+        required: false
+        type: string
+      - name: src_list
+        in: query
+        description: '<p>The three-part name (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object_name</em></code>)
+          of the source security list or security IP list.<p>You must use the prefix
+          <code>seclist</code>: or <code>seciplist</code>: to identify the list type.'
+        required: false
+        type: string
+      - name: disabled
+        in: query
+        description: <p>Indicates whether the security rule is enabled (set to <code>false</code>)
+          or disabled (<code>true</code>). The default setting is <code>false</code>.
+        required: false
+        type: boolean
+      - name: application
+        in: query
+        description: '<p>The three-part name of the security application: (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object_name</em></code>)
+          for user-defined security applications and <code>/oracle/public/<em>object_name</em></code>
+          for predefined security applications.'
+        required: false
+        type: string
+      - name: name
+        in: query
+        description: The three-part name of the object (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>).
+        required: false
+        type: string
+      - name: Cookie
+        in: header
+        description: 'The Cookie: header must be included with every request to the
+          service. It must be set to the value of the set-cookie header in the response
+          received to the POST /authenticate/ call.'
+        type: string
+      responses:
+        "200":
+          description: OK. See <a class="xref" href="Status%20Codes.html">Status Codes</a>
+            for information about other possible HTTP status codes.
+          schema:
+            "$ref": '#/definitions/SecRule-list-response'
+          headers:
+            set-cookie:
+              description: The cookie value is returned if the session is extended
+              type: string
+definitions:
+  "SecRule-list-response":
+    title: "SecRule-list-response"
+    type: object
+    properties:
+      result:
+        title: "SecRule-response"
+        type: array
+        description: Array of json
+        items:
+          $ref: '#/definitions/SecRule-response'
+# {
+#     "result": [
+#     {
+#         "dst_is_ip": "false",
+#         "src_is_ip": "true",
+#         "dst_list": "seclist:/Compute-587626604/mayurnath.gokare@oracle.com/paas/SOA/gc3ntagrogr605/lb/ora_otd_infraadmin",
+#         "name": "/Compute-587626604/mayurnath.gokare@oracle.com/paas/SOA/gc3ntagrogr605/lb/sys_infra2otd_admin_ssh",
+#         "src_list": "seciplist:/oracle/public/paas-infra",
+#         "uri": "https://compute.uscom-central-1.oraclecloud.com/secrule/Compute-587626604/mayurnath.gokare%40oracle.com/paas/SOA/gc3ntagrogr605/lb/sys_infra2otd_admin_ssh",
+#         "disabled": false,
+#         "application": "/oracle/public/ssh",
+#         "action": "PERMIT",
+#         "id": "bfc39682-3929-4635-9834-e95b8ba7c2c2",
+#         "description": "DO NOT MODIFY: Permit PSM to ssh to admin host"
+#     },
+#     {
+#         "dst_is_ip": "false",
+#         "src_is_ip": "true",
+#         "dst_list": "seclist:/Compute-587626604/eric.harris@oracle.com/gc3_naac_soar_seclist_01",
+#         "name": "/Compute-587626604/eric.harris@oracle.com/gc3_naac_soar_secrule_07",
+#         "src_list": "seciplist:/Compute-587626604/eric.harris@oracle.com/emh-home-ip",
+#         "uri": "https://compute.uscom-central-1.oraclecloud.com/secrule/Compute-587626604/eric.harris%40oracle.com/gc3_naac_soar_secrule_07",
+#         "disabled": false,
+#         "application": "/oracle/public/all",
+#         "action": "PERMIT",
+#         "id": "5aee8ea3-8065-4ca2-8a28-e4306829da1e",
+#         "description": ""
+#     }]
+# }
+
+
+  "SecRule-response":
+    title: "SecRule-response"
+    type: object
+    x-model: "SecRule-response"
+    description: SecRule-response
+    example:
+    additionalProperties:
+      type: string
+    properties:
+      action:
+        description: <p>Set this parameter to <code>PERMIT</code>.
+        type: string
+        "x-nullable": true
+      application:
+        description: '<p>The three-part name of the security application: (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object_name</em></code>)
+          for user-defined security applications and <code>/oracle/public/<em>object_name</em></code>
+          for predefined security applications.'
+        type: string
+        "x-nullable": true
+      description:
+        description: <p>A description of the security rule.
+        type: string
+        "x-nullable": true
+      disabled:
+        description: <p>Indicates whether the security rule is enabled (set to <code>false</code>)
+          or disabled (<code>true</code>). The default setting is <code>false</code>.
+        type: boolean
+      dst_list:
+        description: '<p>The three-part name (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object_name</em></code>)
+          of the destination security list or security IP list.<p>You must use the
+          prefix <code>seclist</code>: or <code>seciplist</code>: to identify the
+          list type.<p><b>Note:</b> You can specify a security IP list as the destination
+          in a secrule, provided <code>src_list</code> is a security list that has
+          DENY as its outbound policy.<p>You cannot specify any of the security IP
+          lists in the <code>/oracle/public</code> container as a destination in a
+          secrule.'
+        type: string
+        "x-nullable": true
+      name:
+        description: The three-part name of the object (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>).
+        type: string
+        "x-nullable": true
+      src_list:
+        description: '<p>The three-part name (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object_name</em></code>)
+          of the source security list or security IP list.<p>You must use the prefix
+          <code>seclist</code>: or <code>seciplist</code>: to identify the list type.'
+        type: string
+        "x-nullable": true
+      uri:
+        description: Uniform Resource Identifier
+        type: string
+        "x-nullable": true
+      id:
+        description: id
+        type: string
+        "x-nullable": true
+      dst_is_ip:
+        description: Is the destination an IP
+        type: string
+        "x-nullable": true
+        format: "json-bool"
+      src_is_ip:
+        description: Is the source an IP
+        type: string
+        "x-nullable": true
+        format: "json-bool"
