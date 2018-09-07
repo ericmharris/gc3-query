@@ -60,8 +60,13 @@ def test_dump(setup_gc30003_dump):
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     service_response = iaas_service.dump()
     assert service_response.result
-    result_json = service_response.incoming_response.json()
     result = service_response.result
+    results = service_response.result.result
+    first_result = results[0]
+    result_text = service_response.incoming_response.text
+    result_dict = service_response.incoming_response.json()
+    first_result_dict = first_result._as_dict()
+    assert first_result
 
 
 

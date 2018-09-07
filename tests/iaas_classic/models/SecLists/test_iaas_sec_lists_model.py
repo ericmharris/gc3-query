@@ -20,6 +20,7 @@ from dataclasses import dataclass
 ################################################################################
 ## Project Imports
 from gc3_query.lib import *
+from gc3_query.lib.iaas_classic.models.sec_rule_model import SecRuleModel
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
