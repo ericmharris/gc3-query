@@ -209,26 +209,6 @@ def test_save_one(setup_gc30003_model):
     result_dict = service_response.incoming_response.json()
     first_result = results[0]
     first_result_dict = first_result._as_dict()
-
-    # first_result_dict = {
-    #     'action': 'PERMIT',
-    #     'application': '/oracle/public/ssh',
-    #     'description': 'DO NOT MODIFY: Permit PSM to ssh to admin host',
-    #     'disabled': False,
-    #     'dst_list': 'seclist:/Compute-587626604/mayurnath.gokare@oracle.com/iaas/SOA/gc3ntagrogr605/lb/ora_otd_infraadmin',
-    #     'name': '/Compute-587626604/mayurnath.gokare@oracle.com/iaas/SOA/gc3ntagrogr605/lb/sys_infra2otd_admin_ssh',
-    #     'src_list': 'seciplist:/oracle/public/iaas-infra',
-    #     'uri': 'https://compute.uscom-central-1.oraclecloud.com/secrule/Compute-587626604/mayurnath.gokare%40oracle.com/iaas/SOA/gc3ntagrogr605/lb/sys_infra2otd_admin_ssh',
-    #     'id': 'bfc39682-3929-4635-9834-e95b8ba7c2c2',
-    #     'dst_is_ip': False,
-    #     'src_is_ip': True
-    # }
-
-
-
-    # bravado_core.model.Model
-    # _id = first_result_dict.pop('id')
-    # _name = first_result_dict.pop('name')
     sec_rule_model = SecRuleModel(**first_result_dict)
     saved = sec_rule_model.save()
     assert saved
@@ -240,12 +220,22 @@ def test_save_all(setup_gc30003_model):
     service_response = iaas_service.dump()
     assert service_response.result
     results = service_response.result.result
-    results_dict = service_response.incoming_response.json()
     for result in results:
         result_dict = result._as_dict()
         sec_rule_model = SecRuleModel(**result_dict)
         saved = sec_rule_model.save()
 
+
+
+def test_insert_all(setup_gc30003_model):
+    service_cfg, idm_cfg, iaas_service, mongodb_connection = setup_gc30003_model
+    # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
+    service_response = iaas_service.dump()
+    assert service_response.result
+    results = service_response.result.result
+    sec_rules = [SecRuleModel(**result._as_dict()) for result in results]
+    _ = SecRuleModel.objects().insert(sec_rules)
+    assert sec_rules
 
 
 
