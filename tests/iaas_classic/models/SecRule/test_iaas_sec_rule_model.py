@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import pytest
+from mongoengine import connect
 
 from gc3_query.lib import gc3_cfg
 from gc3_query.lib.gc3_config import GC3Config
@@ -10,11 +11,12 @@ from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
 # fixme? from gc3_query.lib.open_api import API_SPECS_DIR
 import json
 from pathlib import Path
-
+from pymongo import MongoClient
 import pytest
 from bravado_core.spec import Spec
 from bravado.response import  BravadoResponse, BravadoResponseMetadata
 import mongoengine
+from mongoengine.connection import get_connection, register_connection
 from gc3_query.lib import *
 from gc3_query.lib import gc3_cfg
 
@@ -141,7 +143,7 @@ def test_list_sec_rules_model_save_from_url():
 #     assert gc3_cfg.user.cloud_username == 'eric.harris@oracle.com'
 #     yield service_cfg, idm_cfg, mongodb_config
 
-def storage_adapter_init(mongodb_config: NestedOrderedDictAttrListBase) -> DictStrAny:
+def storage_adapter_init(mongodb_config: DictStrAny) -> MongoClient:
     """
     mongoengine.register_connection(alias, db=None, name=None, host=None, port=None, read_preference=Primary(), username=None, password=None, authentication_source=None, authentication_mechanism=None, **kwargs)
 
@@ -162,14 +164,16 @@ def storage_adapter_init(mongodb_config: NestedOrderedDictAttrListBase) -> DictS
     kwargs – ad-hoc parameters to be passed into the pymongo driver, for example maxpoolsize, tz_aware, etc. See the documentation for pymongo’s MongoClient for a full list.
         :return:
     """
-    alias = mongodb_config.alias
-    name = mongodb_config.name
-    db = mongodb_config.db
-    host = mongodb_config.net.host
-    port = mongodb_config.net.port
-    _ = mongoengine.register_connection(alias=alias, db=db, host=host, port=port)
+    alias = mongodb_config["alias"]
+    name = mongodb_config["name"]
+    db = mongodb_config["db"]
+    host = mongodb_config["net"]["host"]
+    port = mongodb_config["net"]["port"]
+    _ = register_connection(alias=alias, db=db, host=host, port=port)
+    # _connection = connect(db=db, alias=alias)
+    connection: MongoClient = get_connection(alias=alias)
     _info(f"connection registered: alias={alias}, name={name}, db={db}, host={host}, port={port}")
-    return mongodb_config.as_dict()
+    return connection
 
 
 @pytest.fixture()
@@ -179,16 +183,16 @@ def setup_gc30003_model():
     gc3_config = GC3Config(atoml_config_dir=config_dir)
     service_cfg = gc3_config.iaas_classic.services.compute[service]
     idm_cfg = gc3_config.idm.domains[idm_domain]
-    mongodb_config = storage_adapter_init(mongodb_config=gc3_cfg.iaas_classic.mongodb)
+    mongodb_connection: MongoClient = storage_adapter_init(mongodb_config=gc3_cfg.iaas_classic.mongodb.as_dict())
     iaas_service = SecRules(service_cfg=service_cfg, idm_cfg=idm_cfg)
     assert service==service_cfg.name
     assert idm_domain==idm_cfg.name
     assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
-    yield service_cfg, idm_cfg, iaas_service, mongodb_config
+    yield service_cfg, idm_cfg, iaas_service, mongodb_connection
 
 
 def test_dump(setup_gc30003_model):
-    service_cfg, idm_cfg, iaas_service, mongodb_config = setup_gc30003_model
+    service_cfg, idm_cfg, iaas_service, mongodb_connection = setup_gc30003_model
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     service_response = iaas_service.dump()
     assert service_response.result
@@ -196,7 +200,7 @@ def test_dump(setup_gc30003_model):
 
 
 def test_save_one(setup_gc30003_model):
-    service_cfg, idm_cfg, iaas_service, mongodb_config = setup_gc30003_model
+    service_cfg, idm_cfg, iaas_service, mongodb_connection = setup_gc30003_model
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     service_response = iaas_service.dump()
     assert service_response.result
@@ -223,9 +227,27 @@ def test_save_one(setup_gc30003_model):
 
 
     # bravado_core.model.Model
-    _id = first_result_dict.pop('id')
-    _name = first_result_dict.pop('name')
+    # _id = first_result_dict.pop('id')
+    # _name = first_result_dict.pop('name')
     sec_rule_model = SecRuleModel(**first_result_dict)
     saved = sec_rule_model.save()
     assert saved
+
+
+def test_save_all(setup_gc30003_model):
+    service_cfg, idm_cfg, iaas_service, mongodb_connection = setup_gc30003_model
+    # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
+    service_response = iaas_service.dump()
+    assert service_response.result
+    results = service_response.result.result
+    results_dict = service_response.incoming_response.json()
+    for result in results:
+        result_dict = result._as_dict()
+        sec_rule_model = SecRuleModel(**result_dict)
+        saved = sec_rule_model.save()
+
+
+
+
+
 
