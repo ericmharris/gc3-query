@@ -358,6 +358,19 @@ class NestedConfigListBase(ListBase):
                 else:
                     self.append(v)
 
+# class MetaDict(dict):
+#     """Custom dictionary for meta classes.
+#     Handles the merging of set indexes
+#     """
+#     _merge_options = ('indexes',)
+#
+#     def merge(self, new_options):
+#         for k, v in new_options.iteritems():
+#             if k in self._merge_options:
+#                 self[k] = self.get(k, []) + v
+#             else:
+#                 self[k] = v
+
 
 class NestedOrderedDictAttrListBase(OrderedDictAttrBase):
 

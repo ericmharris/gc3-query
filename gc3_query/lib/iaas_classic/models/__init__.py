@@ -21,21 +21,19 @@
 
 from dataclasses import dataclass
 from mongoengine import DynamicDocument, EmbeddedDocument
-from mongoengine import StringField, URLField, BooleanField, ListField, DictField, DateTimeField, IntField
-from mongoengine import DynamicDocument, EmbeddedDocument
 from mongoengine import StringField, URLField, BooleanField, ListField, DictField, DateTimeField, IntField, UUIDField
 
 ################################################################################
 ################################################################################
-## Project Imports
-from gc3_query.lib.export_delegates.mongodb import storage_adapter_init
-from gc3_query.lib.open_api.service_responses import IaaSServiceResponse
+# ## Project Imports
+# from gc3_query.lib.export_delegates.mongodb import storage_adapter_init
+# from gc3_query.lib.open_api.service_responses import IaaSServiceResponse
 
 
-class IaaSServiceModelDynamicDocument(DynamicDocument):
-    connection_config = storage_adapter_init()
-
-
-class IaaSServiceModelEmbeddedDocument(EmbeddedDocument):
-    pass
+# class IaaSServiceModelDynamicDocument(DynamicDocument):
+#     connection_config = storage_adapter_init()
+#
+#
+# class IaaSServiceModelEmbeddedDocument(EmbeddedDocument):
+#     pass
 

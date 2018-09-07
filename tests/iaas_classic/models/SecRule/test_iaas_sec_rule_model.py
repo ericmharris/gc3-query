@@ -6,6 +6,7 @@ from gc3_query.lib import gc3_cfg
 from gc3_query.lib.gc3_config import GC3Config
 from gc3_query.lib.iaas_classic.models.sec_rule_model import SecRuleModel
 from gc3_query.lib.iaas_classic.sec_rules import SecRules
+from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
 # fixme? from gc3_query.lib.open_api import API_SPECS_DIR
 import json
 from pathlib import Path
@@ -140,15 +141,35 @@ def test_list_sec_rules_model_save_from_url():
 #     assert gc3_cfg.user.cloud_username == 'eric.harris@oracle.com'
 #     yield service_cfg, idm_cfg, mongodb_config
 
-def storage_adapter_init():
-    alias = gc3_cfg.iaas_classic.mongodb.db_alias
-    name = gc3_cfg.iaas_classic.mongodb.db_name
-    server = gc3_cfg.iaas_classic.mongodb.net.listen_address
-    port = gc3_cfg.iaas_classic.mongodb.net.listen_port
-    db_config = dict(host=server, port=port, alias=alias, name=name)
-    db_config['register'] = mongoengine.register_connection(**db_config)
-    _info(f"connection registered: alias={alias}, name={name}, db_config={db_config})")
-    return db_config
+def storage_adapter_init(mongodb_config: NestedOrderedDictAttrListBase) -> DictStrAny:
+    """
+    mongoengine.register_connection(alias, db=None, name=None, host=None, port=None, read_preference=Primary(), username=None, password=None, authentication_source=None, authentication_mechanism=None, **kwargs)
+
+    Add a connection.
+
+    Parameters:
+    alias – the name that will be used to refer to this connection throughout MongoEngine
+    name – the name of the specific database to use
+    db – the name of the database to use, for compatibility with connect
+    host – the host name of the mongod instance to connect to
+    port – the port that the mongod instance is running on
+    read_preference – The read preference for the collection ** Added pymongo 2.1
+    username – username to authenticate with
+    password – password to authenticate with
+    authentication_source – database to authenticate against
+    authentication_mechanism – database authentication mechanisms. By default, use SCRAM-SHA-1 with MongoDB 3.0 and later, MONGODB-CR (MongoDB Challenge Response protocol) for older servers.
+    is_mock – explicitly use mongomock for this connection (can also be done by using mongomock:// as db host prefix)
+    kwargs – ad-hoc parameters to be passed into the pymongo driver, for example maxpoolsize, tz_aware, etc. See the documentation for pymongo’s MongoClient for a full list.
+        :return:
+    """
+    alias = mongodb_config.alias
+    name = mongodb_config.name
+    db = mongodb_config.db
+    host = mongodb_config.net.host
+    port = mongodb_config.net.port
+    _ = mongoengine.register_connection(alias=alias, db=db, host=host, port=port)
+    _info(f"connection registered: alias={alias}, name={name}, db={db}, host={host}, port={port}")
+    return mongodb_config.as_dict()
 
 
 @pytest.fixture()
@@ -158,8 +179,8 @@ def setup_gc30003_model():
     gc3_config = GC3Config(atoml_config_dir=config_dir)
     service_cfg = gc3_config.iaas_classic.services.compute[service]
     idm_cfg = gc3_config.idm.domains[idm_domain]
+    mongodb_config = storage_adapter_init(mongodb_config=gc3_cfg.iaas_classic.mongodb)
     iaas_service = SecRules(service_cfg=service_cfg, idm_cfg=idm_cfg)
-    mongodb_config = storage_adapter_init()
     assert service==service_cfg.name
     assert idm_domain==idm_cfg.name
     assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
@@ -203,6 +224,7 @@ def test_save_one(setup_gc30003_model):
 
     # bravado_core.model.Model
     _id = first_result_dict.pop('id')
+    _name = first_result_dict.pop('name')
     sec_rule_model = SecRuleModel(**first_result_dict)
     saved = sec_rule_model.save()
     assert saved

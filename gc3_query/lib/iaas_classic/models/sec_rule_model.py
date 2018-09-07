@@ -78,13 +78,13 @@ first_result_dict = {
     dst_is_ip=BooleanField()
     dst_list=StringField()
     # id=StringField(primary_key=True)
-    name=StringField()
+    # name=StringField()
     src_is_ip=BooleanField()
     src_list=StringField()
     uri=StringField()
 
     meta = {
-    "db_alias": gc3_cfg.iaas_classic.mongodb.db_alias,
+    "db_alias": gc3_cfg.iaas_classic.mongodb.alias,
     "collection": "SecRules",
     "indexes": [
         "name",
@@ -96,6 +96,6 @@ first_result_dict = {
     ],
     }
 
-    def __init__(self, *args, **values):
-        super().__init__(*args, **values)
-        _debug(f"{self.__class__.__name__}.__init__(args={args}, values={values}):")
+    # def __init__(self, *args, **values):
+    #     super().__init__(*args, **values)
+    #     _debug(f"{self.__class__.__name__}.__init__(args={args}, values={values}):")

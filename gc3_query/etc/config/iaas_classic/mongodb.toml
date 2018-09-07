@@ -1,7 +1,8 @@
 [iaas_classic.mongodb]
 __descr__ = 'MongoDB setup data'
-db_name = 'iaas_classic'
-db_alias = 'IaaS'
+alias = 'iaas'
+db = 'iaas_classic'
+name = 'iaas_classic'
 
 [iaas_classic.mongodb.models]
 models_dir = 'lib/iaas_classic/models'
@@ -11,8 +12,8 @@ username = 'gc3user'
 password = 'keyring'
 
 [iaas_classic.mongodb.net]
-listen_port = 7117
-listen_address = '127.0.0.1'
+port = 7117
+host = '127.0.0.1'
 use_ssl = false
 use_auth = false
 
