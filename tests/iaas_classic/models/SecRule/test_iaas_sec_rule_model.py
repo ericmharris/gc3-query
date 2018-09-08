@@ -191,7 +191,7 @@ def setup_gc30003_model():
     yield service_cfg, idm_cfg, iaas_service, mongodb_connection
 
 
-def test_dump(setup_gc30003_model):
+def test_dump_gc30003(setup_gc30003_model):
     service_cfg, idm_cfg, iaas_service, mongodb_connection = setup_gc30003_model
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     service_response = iaas_service.dump()
@@ -200,7 +200,7 @@ def test_dump(setup_gc30003_model):
     result = service_response.result
 
 
-def test_save_one(setup_gc30003_model):
+def test_save_one_gc30003(setup_gc30003_model):
     service_cfg, idm_cfg, iaas_service, mongodb_connection = setup_gc30003_model
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     service_response = iaas_service.dump()
@@ -215,7 +215,7 @@ def test_save_one(setup_gc30003_model):
     assert saved
 
 
-def test_save_all(setup_gc30003_model):
+def test_save_all_gc30003(setup_gc30003_model):
     service_cfg, idm_cfg, iaas_service, mongodb_connection = setup_gc30003_model
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     service_response = iaas_service.dump()
@@ -228,7 +228,7 @@ def test_save_all(setup_gc30003_model):
 
 
 
-def test_insert_all(setup_gc30003_model):
+def test_insert_all_gc30003(setup_gc30003_model):
     service_cfg, idm_cfg, iaas_service, mongodb_connection = setup_gc30003_model
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     service_response = iaas_service.dump()
@@ -257,7 +257,7 @@ def setup_gc35001_model():
     yield service_cfg, idm_cfg, iaas_service, mongodb_connection
 
 
-def test_dump_idcs(setup_gc35001_model):
+def test_dump_gc35001(setup_gc35001_model):
     service_cfg, idm_cfg, iaas_service, mongodb_connection = setup_gc35001_model
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     service_response = iaas_service.dump()
@@ -266,7 +266,7 @@ def test_dump_idcs(setup_gc35001_model):
     result = service_response.result
 
 
-def test_save_one_idcs(setup_gc35001_model):
+def test_save_one_gc35001(setup_gc35001_model):
     service_cfg, idm_cfg, iaas_service, mongodb_connection = setup_gc35001_model
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     service_response = iaas_service.dump()
@@ -281,7 +281,7 @@ def test_save_one_idcs(setup_gc35001_model):
     assert saved
 
 
-def test_save_all_idcs(setup_gc35001_model):
+def test_save_all_gc35001(setup_gc35001_model):
     service_cfg, idm_cfg, iaas_service, mongodb_connection = setup_gc35001_model
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     service_response = iaas_service.dump()
@@ -314,7 +314,7 @@ def setup_gc30002_model():
     yield service_cfg, idm_cfg, iaas_service, mongodb_connection
 
 
-def test_dump_idcs(setup_gc30002_model):
+def test_dump_gc30002(setup_gc30002_model):
     service_cfg, idm_cfg, iaas_service, mongodb_connection = setup_gc30002_model
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     service_response = iaas_service.dump()
@@ -323,7 +323,7 @@ def test_dump_idcs(setup_gc30002_model):
     result = service_response.result
 
 
-def test_save_one_idcs(setup_gc30002_model):
+def test_save_one_gc30002(setup_gc30002_model):
     service_cfg, idm_cfg, iaas_service, mongodb_connection = setup_gc30002_model
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     service_response = iaas_service.dump()
@@ -338,7 +338,7 @@ def test_save_one_idcs(setup_gc30002_model):
     assert saved
 
 
-def test_save_all_idcs(setup_gc30002_model):
+def test_save_all_gc30002(setup_gc30002_model):
     service_cfg, idm_cfg, iaas_service, mongodb_connection = setup_gc30002_model
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     service_response = iaas_service.dump()
