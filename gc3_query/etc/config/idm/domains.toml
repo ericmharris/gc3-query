@@ -48,6 +48,27 @@ data_center ='usdc2'
 rest_endpoint = 'https://compute.uscom-central-1.oraclecloud.com'
 
 
+[idm.domains.gc30002]
+name = 'gc30002'
+id = 'gc30002'
+service_instance_id = 586297329
+subscription_id = 1586698
+csi_number = 21354824
+region = 'EMEA Commercial 2'
+data_center = 'nldc1'
+multiple_sites = false
+'login_url:url' = 'https://myservices.emea.oraclecloud.com/mycloud/gc30002/faces/dashboard.jspx '
+'rest_endpoint:url' = 'https://compute.eucom-north-1.oraclecloud.com'
+'sftp_url:url' = 'sftp2.em2.cloud.oracle.com:22'
+is_ucm = false
+is_classic = true
+has_identity_cloud_service = false
+[idm.domains.gc30002.sites.eucom-north-1]
+name = 'eucom-north-1'
+rest_endpoint = 'https://compute.eucom-north-1.oraclecloud.com'
+data_center = 'nldc1'
+
+
 [idm.domains.gc30003]
 name = 'gc30003'
 id = 'gc30003'
@@ -75,8 +96,8 @@ id = 'cacct-a37121f9d9014851bdcc94a64b4d32a4'
 service_instance_id = 605519274
 subscription_id = 7080092
 csi_number = 21858175
-region = 'us'
-data_center = 'usdc2'
+region = 'opc global'
+data_center = 'north america'
 multiple_sites = false
 'login_url:url' = 'https://myservices-gc35001.console.oraclecloud.com/mycloud/cloudportal/dashboard'
 'rest_endpoint:url' = 'https://compute.uscom-central-1.oraclecloud.com'
