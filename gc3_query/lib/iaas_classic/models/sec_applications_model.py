@@ -87,31 +87,22 @@ class SecApplicationModel(DynamicDocument):
 
 
     """
-
-    id = StringField(primary_key=True)
-    account = StringField()
     description = StringField()
-
-    application = StringField()
-    disabled = BooleanField()
-    dst_is_ip = BooleanField()
-    dst_list = StringField()
+    dport = IntField()
+    icmpcode = StringField()
+    icmptype = StringField()
+    id = UUIDField(primary_key=True)
     name = StringField()
-    src_is_ip = BooleanField()
-    src_list = StringField()
-    uri = StringField()
-
-    # meta = {'db_alias': 'iaas'}
+    protocol = StringField()
+    uri = URLField()
+    value1 = IntField()
+    value2 = IntField()
 
     meta = {
         "db_alias": gc3_cfg.iaas_classic.mongodb.alias,
         "collection": "SecApplications",
         "indexes": [
             "name",
-            "application",
-            "action",
-            "dst_is_ip",
-            "src_is_ip",
-            'disabled',
+            "dport",
         ],
     }

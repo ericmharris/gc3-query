@@ -22,13 +22,13 @@
 ################################################################################
 ## Project Imports
 from gc3_query.lib import *
-#from gc3_query.lib.gc3logging import get_logging
+# from gc3_query.lib.gc3logging import get_logging
 import mongoengine
 from mongoengine import *
 
 from gc3_query.lib import get_logging
-_debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
+_debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
 class SecRuleModel(DynamicDocument):
@@ -60,30 +60,27 @@ first_result_dict = {
 }
     """
 
-    action=StringField()
-    application=StringField()
-    description=StringField()
-    disabled=BooleanField()
-    dst_is_ip=BooleanField()
-    dst_list=StringField()
-    id=StringField(primary_key=True)
-    name=StringField()
-    src_is_ip=BooleanField()
-    src_list=StringField()
-    uri=StringField()
-
+    action = StringField()
+    application = StringField()
+    description = StringField()
+    disabled = BooleanField()
+    dst_is_ip = BooleanField()
+    dst_list = StringField()
+    id = UUIDField(primary_key=True)
+    name = StringField()
+    src_is_ip = BooleanField()
+    src_list = StringField()
+    uri = URLField()
 
     meta = {
-    "db_alias": gc3_cfg.iaas_classic.mongodb.alias,
-    "collection": "SecRules",
-    "indexes": [
-        "name",
-        "application",
-        "action",
-        "dst_is_ip",
-        "src_is_ip",
-        'disabled',
-    ],
+        "db_alias": gc3_cfg.iaas_classic.mongodb.alias,
+        "collection": "SecRules",
+        "indexes": [
+            "name",
+            "application",
+            "action",
+            "dst_is_ip",
+            "src_is_ip",
+            'disabled',
+        ],
     }
-
-

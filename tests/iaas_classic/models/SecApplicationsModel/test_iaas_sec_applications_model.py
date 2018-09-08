@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-gc3-query.test_iaas_sec_lists_model    [9/7/2018 3:22 PM]
+gc3-query.test_iaas_sec_applications_model    [9/7/2018 3:22 PM]
 ~~~~~~~~~~~~~~~~
 
 <DESCR SHORT>
@@ -20,7 +20,7 @@ from dataclasses import dataclass
 ################################################################################
 ## Project Imports
 from gc3_query.lib import *
-from gc3_query.lib.iaas_classic.models.sec_list_model import SecListModel
+from gc3_query.lib.iaas_classic.models.sec_applications_model import SecApplicationModel
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
@@ -32,8 +32,7 @@ from mongoengine import connect
 
 from gc3_query.lib import gc3_cfg
 from gc3_query.lib.gc3_config import GC3Config
-from gc3_query.lib.iaas_classic.models.sec_list_model import SecListModel
-from gc3_query.lib.iaas_classic.sec_lists import SecLists
+from gc3_query.lib.iaas_classic.sec_applications import SecApplications
 from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
 # fixme? from gc3_query.lib.open_api import API_SPECS_DIR
 import json
@@ -74,8 +73,8 @@ def test_setup():
 
 
 
-def test_list_sec_lists_model_from_url():
-    service = 'SecLists'
+def test_list_sec_applications_model_from_url():
+    service = 'SecApplications'
     idm_domain = 'gc30003'
     gc3_config = GC3Config(atoml_config_dir=config_dir)
     service_cfg = gc3_config.iaas_classic.services.compute[service]
@@ -84,15 +83,15 @@ def test_list_sec_lists_model_from_url():
     assert service==service_cfg.name
     assert idm_domain==idm_cfg.name
     assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
-    sec_lists = SecLists(service_cfg=service_cfg, idm_cfg=idm_cfg, from_url=True)
-    # container=sec_lists.idm_container_name.replace('/', '')
-    container=sec_lists.idm_root_container_name
-    old_container=sec_lists.idm_container_name
-    # http_future = sec_lists.bravado_service_operations.listInstance(container=sec_lists.idm_user_container_name)
-    # http_future = sec_lists.bravado_service_operations.listInstance(container=sec_lists.idm_container_name)
-    # http_future = sec_lists.bravado_service_operations.listSecRule(container=container)
-    http_future = sec_lists.service_operations.list_sec_list(container=container)
-    # http_future = sec_lists.service_operations.discover_root_instance()
+    sec_applications = SecApplications(service_cfg=service_cfg, idm_cfg=idm_cfg, from_url=True)
+    # container=sec_applications.idm_container_name.replace('/', '')
+    container=sec_applications.idm_root_container_name
+    old_container=sec_applications.idm_container_name
+    # http_future = sec_applications.bravado_service_operations.listInstance(container=sec_applications.idm_user_container_name)
+    # http_future = sec_applications.bravado_service_operations.listInstance(container=sec_applications.idm_container_name)
+    # http_future = sec_applications.bravado_service_operations.listSecRule(container=container)
+    http_future = sec_applications.service_operations.list_sec_application(container=container)
+    # http_future = sec_applications.service_operations.discover_root_instance()
     request_url = http_future.future.request.url
     service_response = http_future.response()
     result = service_response.result
@@ -102,8 +101,8 @@ def test_list_sec_lists_model_from_url():
     assert 'src_list' in result_json['result'][0]
 
 
-def test_list_sec_lists_model_save_from_url():
-    service = 'SecLists'
+def test_list_sec_applications_model_save_from_url():
+    service = 'SecApplications'
     idm_domain = 'gc30003'
     gc3_config = GC3Config(atoml_config_dir=config_dir)
     service_cfg = gc3_config.iaas_classic.services.compute[service]
@@ -112,27 +111,27 @@ def test_list_sec_lists_model_save_from_url():
     assert service==service_cfg.name
     assert idm_domain==idm_cfg.name
     assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
-    sec_lists = SecLists(service_cfg=service_cfg, idm_cfg=idm_cfg, from_url=True)
-    # container=sec_lists.idm_container_name.replace('/', '')
-    container=sec_lists.idm_root_container_name
-    old_container=sec_lists.idm_container_name
-    # http_future = sec_lists.bravado_service_operations.listInstance(container=sec_lists.idm_user_container_name)
-    # http_future = sec_lists.bravado_service_operations.listInstance(container=sec_lists.idm_container_name)
+    sec_applications = SecApplications(service_cfg=service_cfg, idm_cfg=idm_cfg, from_url=True)
+    # container=sec_applications.idm_container_name.replace('/', '')
+    container=sec_applications.idm_root_container_name
+    old_container=sec_applications.idm_container_name
+    # http_future = sec_applications.bravado_service_operations.listInstance(container=sec_applications.idm_user_container_name)
+    # http_future = sec_applications.bravado_service_operations.listInstance(container=sec_applications.idm_container_name)
 
     # http_future = instances.bravado_service_operations.discoverRootInstance(_request_options={"headers": {"Accept": "application/oracle-compute-v3+directory+json"}})
     # operation_name = 'listSecRule'
-    # callable_operation = getattr(sec_lists.bravado_service_operations, operation_name)
+    # callable_operation = getattr(sec_applications.bravado_service_operations, operation_name)
     # operation_headers = {"Accept": ','.join(callable_operation.operation.produces),
     #                      "Content-Type": ','.join(callable_operation.operation.consumes)
     #                      }
-    # sec_lists.http_client.session.headers.update(operation_headers)
+    # sec_applications.http_client.session.headers.update(operation_headers)
     # # http_future = callable_operation(container=container,  _request_options={"headers": {"Accept": ','.join(callable_operation.operation.produces)}})
     # http_future = callable_operation(container=container)
 
-    # http_future = sec_lists.bravado_service_operations.listSecRule(container=container, _request_options={"headers": {"Accept": ','.join(callable_operation.operation.produces)}})
-    http_future = sec_lists.service_operations.list_sec_list(container=container)
+    # http_future = sec_applications.bravado_service_operations.listSecRule(container=container, _request_options={"headers": {"Accept": ','.join(callable_operation.operation.produces)}})
+    http_future = sec_applications.service_operations.list_sec_application(container=container)
 
-    # http_future = sec_lists.service_operations.discover_root_instance()
+    # http_future = sec_applications.service_operations.discover_root_instance()
     request_url = http_future.future.request.url
     service_response = http_future.response()
     result = service_response.result
@@ -141,9 +140,9 @@ def test_list_sec_lists_model_save_from_url():
     assert len(results_json) > 0
     result_json = results_json[0]
     assert 'src_list' in result_json
-    result_json['sec_list_id'] = result_json.pop('id')
-    sec_list_model = SecListModel(**result_json)
-    saved = sec_list_model.save()
+    result_json['sec_application_id'] = result_json.pop('id')
+    sec_application_model = SecApplicationModel(**result_json)
+    saved = sec_application_model.save()
     assert saved
 
 
@@ -205,13 +204,13 @@ def storage_adapter_init(mongodb_config: DictStrAny) -> MongoClient:
 
 @pytest.fixture()
 def setup_gc30003_model():
-    service = 'SecLists'
+    service = 'SecApplications'
     idm_domain = 'gc30003'
     gc3_config = GC3Config(atoml_config_dir=config_dir)
     service_cfg = gc3_config.iaas_classic.services.compute[service]
     idm_cfg = gc3_config.idm.domains[idm_domain]
     mongodb_connection: MongoClient = storage_adapter_init(mongodb_config=gc3_cfg.iaas_classic.mongodb.as_dict())
-    iaas_service = SecLists(service_cfg=service_cfg, idm_cfg=idm_cfg)
+    iaas_service = SecApplications(service_cfg=service_cfg, idm_cfg=idm_cfg)
     assert service==service_cfg.name
     assert idm_domain==idm_cfg.name
     assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
@@ -236,8 +235,8 @@ def test_save_one(setup_gc30003_model):
     result_dict = service_response.incoming_response.json()
     first_result = results[0]
     first_result_dict = first_result._as_dict()
-    sec_list_model = SecListModel(**first_result_dict)
-    saved = sec_list_model.save()
+    sec_application_model = SecApplicationModel(**first_result_dict)
+    saved = sec_application_model.save()
     assert saved
 
 
@@ -249,8 +248,8 @@ def test_save_all(setup_gc30003_model):
     results = service_response.result.result
     for result in results:
         result_dict = result._as_dict()
-        sec_list_model = SecListModel(**result_dict)
-        saved = sec_list_model.save()
+        sec_application_model = SecApplicationModel(**result_dict)
+        saved = sec_application_model.save()
 
 
 
@@ -260,9 +259,9 @@ def test_insert_all(setup_gc30003_model):
     service_response = iaas_service.dump()
     assert service_response.result
     results = service_response.result.result
-    sec_lists = [SecListModel(**result._as_dict()) for result in results]
-    _ = SecListModel.objects().insert(sec_lists)
-    assert sec_lists
+    sec_applications = [SecApplicationModel(**result._as_dict()) for result in results]
+    _ = SecApplicationModel.objects().insert(sec_applications)
+    assert sec_applications
 
 
 

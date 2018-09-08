@@ -23,7 +23,6 @@ from gc3_query.lib import *
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
-
 ################################################################################
 ## Standard Library Imports
 
@@ -32,11 +31,9 @@ _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 ################################################################################
 ## Project Imports
-#from gc3_query.lib.gc3logging import get_logging
+# from gc3_query.lib.gc3logging import get_logging
 import mongoengine
 from mongoengine import *
-
-
 
 
 class SecListModel(DynamicDocument):
@@ -56,18 +53,6 @@ res = {
 }
 
 
-SecList = dict(
-    account='/Compute-587626604/default',
-    description='Security list for admin host of OTD component',
-    group_id=22606,
-    id='af82692e-72d7-44d7-8394-fdbd6a612d2c',
-    name=
-    '/Compute-587626604/eric.harris@oracle.com/paas/JaaS/NAAC-CDMT-D03-JCS/lb/ora_otd_infraadmin',
-    outbound_cidr_policy='PERMIT',
-    policy='DENY',
-    uri=
-    'https://compute.uscom-central-1.oraclecloud.com/seclist/Compute-587626604/eric.harris%40oracle.com/paas/JaaS/NAAC-CDMT-D03-JCS/lb/ora_otd_infraadmin'
-)
 
 {
     "result": [
@@ -93,35 +78,37 @@ SecList = dict(
     },
 
 
+SecList = dict(
+    account='/Compute-587626604/default',
+    description='Security list for admin host of OTD component',
+    group_id=22606,
+    id='af82692e-72d7-44d7-8394-fdbd6a612d2c',
+    name=
+    '/Compute-587626604/eric.harris@oracle.com/paas/JaaS/NAAC-CDMT-D03-JCS/lb/ora_otd_infraadmin',
+    outbound_cidr_policy='PERMIT',
+    policy='DENY',
+    uri=
+    'https://compute.uscom-central-1.oraclecloud.com/seclist/Compute-587626604/eric.harris%40oracle.com/paas/JaaS/NAAC-CDMT-D03-JCS/lb/ora_otd_infraadmin'
+)
 
 
     """
-
-    id=StringField(primary_key=True)
-    account=StringField()
-    description=StringField()
-
-    application=StringField()
-    disabled=BooleanField()
-    dst_is_ip=BooleanField()
-    dst_list=StringField()
-    name=StringField()
-    src_is_ip=BooleanField()
-    src_list=StringField()
-    uri=StringField()
+    account = StringField()
+    description = StringField()
+    group_id = IntField()
+    id = UUIDField(primary_key=True)
+    name = StringField()
+    outbound_cidr_policy = StringField()
+    policy = StringField()
+    uri = URLField()
 
     # meta = {'db_alias': 'iaas'}
 
     meta = {
-    "db_alias": gc3_cfg.iaas_classic.mongodb.alias,
-    "collection": "SecLists",
-    "indexes": [
-        "name",
-        "application",
-        "action",
-        "dst_is_ip",
-        "src_is_ip",
-        'disabled',
-    ],
+        "db_alias": gc3_cfg.iaas_classic.mongodb.alias,
+        "collection": "SecLists",
+        "indexes": [
+            "name",
+            "group_id",
+        ],
     }
-
