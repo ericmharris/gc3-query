@@ -251,48 +251,48 @@ paths:
                         codes.
                     schema:
                         $ref: '#/definitions/view-summary'
-        post:
-            operationId: postCredentialsCrednamesCredentialName
-            summary: Add an SSH Public Key
-            description: Adds an SSH public key to a Database Cloud Service instance.
-            consumes:
-            - application/json
-            produces:
-            - application/json
-            parameters:
-            -   name: identityDomainId
-                in: path
-                description: Identity domain ID for the Database Cloud Service account.
-                required: true
-                type: string
-            -   name: serviceId
-                in: path
-                description: Name of the Database Cloud Service instance.
-                required: true
-                type: string
-            -   name: credentialName
-                in: path
-                description: The value <code>vmspublickey</code>.
-                required: true
-                type: string
-            -   name: body
-                in: body
-                description: ''
-                required: true
-                schema:
-                    $ref: '#/definitions/add-key-request'
-            responses:
-                '202':
-                    headers:
-                        Location:
-                            description: A REST URI you can use to check the progress
-                                and completion of the operation.
-                            type: string
-                    description: Accepted. See <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_statuses'>Status
-                        Codes</a> for information about other possible HTTP status
-                        codes.
-                    schema:
-                        $ref: '#/definitions/add-key-response'
+#        post:
+#            operationId: postCredentialsCrednamesCredentialName
+#            summary: Add an SSH Public Key
+#            description: Adds an SSH public key to a Database Cloud Service instance.
+#            consumes:
+#            - application/json
+#            produces:
+#            - application/json
+#            parameters:
+#            -   name: identityDomainId
+#                in: path
+#                description: Identity domain ID for the Database Cloud Service account.
+#                required: true
+#                type: string
+#            -   name: serviceId
+#                in: path
+#                description: Name of the Database Cloud Service instance.
+#                required: true
+#                type: string
+#            -   name: credentialName
+#                in: path
+#                description: The value <code>vmspublickey</code>.
+#                required: true
+#                type: string
+#            -   name: body
+#                in: body
+#                description: ''
+#                required: true
+#                schema:
+#                    $ref: '#/definitions/add-key-request'
+#            responses:
+#                '202':
+#                    headers:
+#                        Location:
+#                            description: A REST URI you can use to check the progress
+#                                and completion of the operation.
+#                            type: string
+#                    description: Accepted. See <a href='http://www.oracle.com/pls/topic/lookup?ctx=cloud&id=dbcs_rest_statuses'>Status
+#                        Codes</a> for information about other possible HTTP status
+#                        codes.
+#                    schema:
+#                        $ref: '#/definitions/add-key-response'
     /paas/api/v1.1/instancemgmt/{identityDomainId}/services/dbaas/instances/{serviceId}/credentials/{credentialName}:
         get:
             operationId: getServiceidCredentialsCredentialName
@@ -350,7 +350,7 @@ paths:
                         $ref: '#/definitions/view-details'
 definitions:
     view-details-selected:
-        title: Response Body
+#        title: Response Body
         type: object
         description: ''
         properties:
@@ -369,7 +369,7 @@ definitions:
                 type: integer
                 description: Number of keys returned by this request.
     view-details-selected-items-array-item:
-        title: items Array Item
+#        title: items Array Item
         type: object
         properties:
             componentType:
@@ -423,7 +423,7 @@ definitions:
                 type: string
                 description: The value <code>DBaaS</code>.
     view-summaries-selected:
-        title: Response Body
+#        title: Response Body
         type: object
         description: ''
         properties:
@@ -442,7 +442,7 @@ definitions:
                 type: integer
                 description: Number of keys returned by this request.
     view-summaries-selected-items-array-item:
-        title: items Array Item
+#        title: items Array Item
         type: object
         properties:
             canonicalUrl:
@@ -468,7 +468,7 @@ definitions:
                 type: string
                 description: The value <code>DBaaS</code>.
     view-summary:
-        title: Response Body
+#        title: Response Body
         type: object
         description: ''
         properties:
@@ -495,7 +495,7 @@ definitions:
                 type: string
                 description: The value <code>DBaaS</code>.
     view-details:
-        title: Response Body
+#        title: Response Body
         type: object
         description: ''
         properties:
@@ -547,7 +547,7 @@ definitions:
                 type: string
                 description: The value <code>DBaaS</code>.
     add-key-request:
-        title: Request Body
+#        title: Request Body
         type: object
         description: ''
         required:
@@ -558,7 +558,7 @@ definitions:
                 description: The value of the SSH public key, with any slashes (<code>/</code>)
                     it contains preceded by backslashes, as in <code>\/</code>.
     add-key-response:
-        title: Response Body
+#        title: Response Body
         type: object
         description: ''
         properties:
@@ -566,7 +566,7 @@ definitions:
                 type: string
                 description: 'Status description. For example: <code>submitted job</code>.'
     view-job-status:
-        title: Response Body
+#        title: Response Body
         type: object
         description: ''
         properties:
@@ -638,7 +638,7 @@ definitions:
                 type: string
                 description: The value <code>SSH_PUBLIC_KEY_RESET</code>.
     view-job-status-messages-item:
-        title: messages Array Item
+#        title: messages Array Item
         type: object
         properties:
             activityDate:

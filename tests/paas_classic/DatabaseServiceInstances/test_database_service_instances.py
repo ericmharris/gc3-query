@@ -10,9 +10,10 @@ from gc3_query.lib import *
 from gc3_query.lib import gc3_cfg
 from gc3_query.lib.paas_classic import PaaSServiceBase
 from gc3_query.lib.paas_classic.database_service_instances import DatabaseServiceInstances
+from gc3_query.lib.paas_classic.database_ssh_keys import DatabaseSSHKeys
 from gc3_query.lib.paas_classic.paas_requests_http_client import PaaSRequestsHTTPClient
 # # fixme? from gc3_query.lib.open_api import API_SPECS_DIR
-
+from pymongo import MongoClient
 TEST_BASE_DIR: Path = Path(__file__).parent
 # config_dir = TEST_BASE_DIR.joinpath("config")
 config_dir = gc3_cfg.BASE_DIR.joinpath("etc/config")
@@ -99,5 +100,45 @@ def test_get_all_domain_data(setup_gc30003):
 
 
 
+@pytest.fixture()
+def setup_gc30003_dbcs_service_instances():
+    service = 'ServiceInstances'
+    idm_domain = 'gc30003'
+    paas_type = 'database'
+    service_cfg = gc3_cfg.paas_classic.services.get(paas_type)[service]
+    idm_cfg = gc3_cfg.idm.domains[idm_domain]
+    paas_service: DatabaseServiceInstances = DatabaseServiceInstances(service_cfg=service_cfg, idm_cfg=idm_cfg)
+    assert service==service_cfg.name
+    assert idm_domain==idm_cfg.name
+    assert gc3_cfg.user.cloud_username == 'eric.harris@oracle.com'
+    yield service_cfg, idm_cfg, paas_service
 
 
+def test_dump(setup_gc30003_dbcs_service_instances):
+    service_cfg, idm_cfg, paas_service = setup_gc30003_dbcs_service_instances
+    service_response = paas_service.dump()
+    assert service_response.result
+    result = service_response.result
+
+
+
+
+@pytest.fixture()
+def setup_gc30003_dbcs_ssh_keys():
+    service = 'SSHKeys'
+    idm_domain = 'gc30003'
+    paas_type = 'database'
+    service_cfg = gc3_cfg.paas_classic.services.get(paas_type)[service]
+    idm_cfg = gc3_cfg.idm.domains[idm_domain]
+    paas_service = DatabaseSSHKeys(service_cfg=service_cfg, idm_cfg=idm_cfg)
+    assert service==service_cfg.name
+    assert idm_domain==idm_cfg.name
+    assert gc3_cfg.user.cloud_username == 'eric.harris@oracle.com'
+    yield service_cfg, idm_cfg, paas_service
+
+
+def test_dump_dbcs_ssh_keys(setup_gc30003_dbcs_ssh_keys):
+    service_cfg, idm_cfg, paas_service = setup_gc30003_dbcs_ssh_keys
+    service_response = paas_service.dump()
+    assert service_response.result
+    result = service_response.result

@@ -84,3 +84,7 @@ first_result_dict = {
             'disabled',
         ],
     }
+
+    def __init__(self, *args, **values):
+        super().__init__(*args, **values)
+        _debug(f"{self.__class__.__name__}.__init__(args={args}, values={values}):")

@@ -21,7 +21,7 @@ from copy import deepcopy
 ## Third-Party Imports
 
 from bravado.requests_client import RequestsClient
-
+from bravado.client import CallableOperation
 ################################################################################
 ## Project Imports
 
@@ -64,7 +64,7 @@ class PaaSServiceBase(IaaSServiceBase):
         so = OrderedDictAttrBase()
         for service_operation_name in dir(bravado_service_operations):
             so_camel_name = camelcase_to_snake(service_operation_name)
-            service_operation = getattr(bravado_service_operations, service_operation_name)
+            service_operation: CallableOperation = getattr(bravado_service_operations, service_operation_name)
             # operation_headers = {"Accept": ','.join(service_operation.operation.produces),
             #                      "Content-Type": ','.join(service_operation.operation.consumes)
             #                      }
@@ -73,7 +73,14 @@ class PaaSServiceBase(IaaSServiceBase):
                                  }
             operation_headers.update(self.http_client.authentication_headers)
             # partial_service_operation = partial(service_operation, _request_options={"headers": {"Accept": "application/oracle-compute-v3+directory+json"}})
-            partial_service_operation = partial(service_operation, _request_options={"headers": operation_headers})
+            partial_service_operation: CallableOperation = partial(service_operation, _request_options={"headers": operation_headers})
             so[so_camel_name] = partial_service_operation
             so.__dict__[so_camel_name] = so[so_camel_name]
         return so
+
+    def dump(self, dumper_service_operation_name: str) -> BravadoResponse:
+        # return super().dump()
+        raise NotImplementedError('Must impliment in the child class')
+        return service_response
+
+

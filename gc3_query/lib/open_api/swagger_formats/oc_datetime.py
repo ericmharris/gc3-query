@@ -33,3 +33,11 @@ oc_datetime_format = SwaggerFormat(
     validate=NO_OP,  # jsonschema validates date-time
     description=(
         'Converts string:date-time <=> python datetime.datetime'))
+
+paas_date_time =  SwaggerFormat(
+        format='paas-date-time',
+        to_wire=lambda dt: dt.iso8601(),
+        to_python=lambda dt: maya.parse(dt),
+        validate=NO_OP,  # jsonschema validates date-time
+        description=(
+            'Converts string:date-time <=> python datetime.datetime'))

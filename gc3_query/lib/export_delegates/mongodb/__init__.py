@@ -20,6 +20,8 @@ import ssl
 ################################################################################
 ## Third-Party Imports
 import mongoengine
+from pymongo import MongoClient
+from mongoengine.connection import get_connection, register_connection
 
 ################################################################################
 ## Project Imports
@@ -48,31 +50,37 @@ _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 # ):
 
 
-def storage_adapter_init(user: str = gc3_cfg.mongodb.security.username,
-                         password: str = gc3_cfg.mongodb.security.password,
-                         port: int = gc3_cfg.mongodb.net.listen_port,
-                         server: str = gc3_cfg.mongodb.net.listen_address,
-                         use_ssl: bool = gc3_cfg.mongodb.net.use_ssl,
-                         use_auth: bool = gc3_cfg.mongodb.net.use_auth) -> DictStrAny:
-    if use_auth:
-        db_config = dict(
-            username=user,
-            password=password,
-            host=server,
-            port=port,
-            authentication_source="admin",
-            authentication_mechanism="SCRAM-SHA-1",
-            ssl=use_ssl,
-            ssl_cert_reqs=ssl.CERT_NONE,
-            alias=gc3_cfg.mongodb.db_alias,
-            name=gc3_cfg.mongodb.db_name
-        )
-    else:
-        db_config = dict(host=server, port=port, alias=gc3_cfg.mongodb.db_alias, name=gc3_cfg.mongodb.db_name)
+def storage_adapter_init(mongodb_config: DictStrAny) -> MongoClient:
+    """
+    mongoengine.register_connection(alias, db=None, name=None, host=None, port=None, read_preference=Primary(), username=None, password=None, authentication_source=None, authentication_mechanism=None, **kwargs)
 
-    mongoengine.register_connection(**db_config)
-    _info(f"connection registered: alias={gc3_cfg.mongodb.db_alias}, name={gc3_cfg.mongodb.db_name}, db_config={db_config})")
-    return db_config
+    Add a connection.
+
+    Parameters:
+    alias – the name that will be used to refer to this connection throughout MongoEngine
+    name – the name of the specific database to use
+    db – the name of the database to use, for compatibility with connect
+    host – the host name of the mongod instance to connect to
+    port – the port that the mongod instance is running on
+    read_preference – The read preference for the collection ** Added pymongo 2.1
+    username – username to authenticate with
+    password – password to authenticate with
+    authentication_source – database to authenticate against
+    authentication_mechanism – database authentication mechanisms. By default, use SCRAM-SHA-1 with MongoDB 3.0 and later, MONGODB-CR (MongoDB Challenge Response protocol) for older servers.
+    is_mock – explicitly use mongomock for this connection (can also be done by using mongomock:// as db host prefix)
+    kwargs – ad-hoc parameters to be passed into the pymongo driver, for example maxpoolsize, tz_aware, etc. See the documentation for pymongo’s MongoClient for a full list.
+        :return:
+    """
+    alias = mongodb_config["alias"]
+    name = mongodb_config["name"]
+    db = mongodb_config["db"]
+    host = mongodb_config["net"]["host"]
+    port = mongodb_config["net"]["port"]
+    _ = register_connection(alias=alias, db=db, host=host, port=port)
+    # _connection = connect(db=db, alias=alias)
+    connection: MongoClient = get_connection(alias=alias)
+    _info(f"connection registered: alias={alias}, name={name}, db={db}, host={host}, port={port}")
+    return connection
 
 
 MONGODB_MODELS_DIR = gc3_cfg.BASE_DIR.joinpath('lib/iaas_classic/models')

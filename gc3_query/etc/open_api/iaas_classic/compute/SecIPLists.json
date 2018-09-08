@@ -1,0 +1,429 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "version" : "18.1.2-20180126.052521",
+    "description" : "A security IP list is a set of IP addresses or subnets external to the instances you create in Compute Classic. These lists can then be used as a source when you define security rules.<p>Note that, a security IP list named <code>/oracle/public/public-internet</code> is predefined in Compute Classic. You can use this security IP list as the source in a security rule to permit traffic from any host on the Internet.<p>You can create, delete, update, and view security IP lists using the HTTP requests listed below.",
+    "title" : "SecIPLists"
+  },
+  "schemes" : [ "http" ],
+  "consumes" : [ "application/oracle-compute-v3+json", "application/oracle-compute-v3+directory+json" ],
+  "produces" : [ "application/oracle-compute-v3+json", "application/oracle-compute-v3+directory+json" ],
+  "paths" : {
+    "/seciplist/" : {
+      "post" : {
+        "tags" : [ "SecIPLists" ],
+        "summary" : "Create a Security IP List",
+        "description" : "Creates a security IP list. Note that, after creating a security IP list, you can add additional IP addresses to the list by using the POST /seciplist/ HTTP request again with just the additional IP addresses.<p><b>Required Role: </b>To complete this task, you must have the <code>Compute_Operations</code> role. If this role isn't assigned to you or you're not sure, then ask your system administrator to ensure that the role is assigned to you in Oracle Cloud My Services. See <a target=\"_blank\" href=\"http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6\">Modifying User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.",
+        "operationId" : "addSecIPList",
+        "responses" : {
+          "201" : {
+            "headers" : {
+              "set-cookie" : {
+                "type" : "string",
+                "description" : "The cookie value is returned if the session is extended"
+              }
+            },
+            "description" : "Created. See <a class=\"xref\" href=\"Status%20Codes.html\">Status Codes</a> for information about other possible HTTP status codes.",
+            "schema" : {
+              "$ref" : "#/definitions/SecIPList-response"
+            }
+          }
+        },
+        "consumes" : [ "application/oracle-compute-v3+json" ],
+        "produces" : [ "application/oracle-compute-v3+json" ],
+        "parameters" : [ {
+          "name" : "body",
+          "in" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/SecIPList-post-request"
+          }
+        }, {
+          "name" : "Cookie",
+          "in" : "header",
+          "type" : "string",
+          "description" : "The Cookie: header must be included with every request to the service. It must be set to the value of the set-cookie header in the response received to the POST /authenticate/ call."
+        } ]
+      },
+      "get" : {
+        "tags" : [ "SecIPLists" ],
+        "summary" : "Retrieve Names of Containers",
+        "description" : "Retrieves the names of containers that contain objects that you can access. You can use this information to construct the multipart name of an object.<p><b>Required Role: </b>To complete this task, you must have the <code>Compute_Monitor</code> or <code>Compute_Operations</code> role. If this role isn't assigned to you or you're not sure, then ask your system administrator to ensure that the role is assigned to you in Oracle Cloud My Services. See <a target=\"_blank\" href=\"http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6\">Modifying User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.",
+        "operationId" : "discoverRootSecIPList",
+        "responses" : {
+          "200" : {
+            "headers" : {
+              "set-cookie" : {
+                "type" : "string",
+                "description" : "The cookie value is returned if the session is extended"
+              }
+            },
+            "description" : "OK. See <a class=\"xref\" href=\"Status%20Codes.html\">Status Codes</a> for information about other possible HTTP status codes.",
+            "schema" : {
+              "$ref" : "#/definitions/SecIPList-discover-response"
+            }
+          }
+        },
+        "consumes" : [ "application/oracle-compute-v3+json" ],
+        "produces" : [ "application/oracle-compute-v3+directory+json" ],
+        "parameters" : [ {
+          "name" : "Cookie",
+          "in" : "header",
+          "type" : "string",
+          "description" : "The Cookie: header must be included with every request to the service. It must be set to the value of the set-cookie header in the response received to the POST /authenticate/ call."
+        } ]
+      }
+    },
+    "/seciplist/{container}" : {
+      "get" : {
+        "tags" : [ "SecIPLists" ],
+        "summary" : "Retrieve Names of all Security IP Lists and Subcontainers in a Container",
+        "description" : "Retrieves the names of objects and subcontainers that you can access in the specified container.<p><b>Required Role: </b>To complete this task, you must have the <code>Compute_Monitor</code> or <code>Compute_Operations</code> role. If this role isn't assigned to you or you're not sure, then ask your system administrator to ensure that the role is assigned to you in Oracle Cloud My Services. See <a target=\"_blank\" href=\"http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6\">Modifying User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.",
+        "operationId" : "discoverSecIPList",
+        "responses" : {
+          "200" : {
+            "headers" : {
+              "set-cookie" : {
+                "type" : "string",
+                "description" : "The cookie value is returned if the session is extended"
+              }
+            },
+            "description" : "OK. See <a class=\"xref\" href=\"Status%20Codes.html\">Status Codes</a> for information about other possible HTTP status codes.",
+            "schema" : {
+              "$ref" : "#/definitions/SecIPList-discover-response"
+            }
+          }
+        },
+        "consumes" : [ "application/oracle-compute-v3+json" ],
+        "produces" : [ "application/oracle-compute-v3+directory+json" ],
+        "parameters" : [ {
+          "name" : "container",
+          "in" : "path",
+          "description" : "Specify <code>/Compute-<i>identityDomain</i>/<i>user</i>/</code> to retrieve the names of objects that you can access. Specify <code>/Compute-<i>identityDomain</i>/</code> to retrieve the names of containers that contain objects that you can access. Specify <code>/oracle/public</code> to retrieve the names of system-provided objects.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Cookie",
+          "in" : "header",
+          "type" : "string",
+          "description" : "The Cookie: header must be included with every request to the service. It must be set to the value of the set-cookie header in the response received to the POST /authenticate/ call."
+        } ]
+      }
+    },
+    "/seciplist/{container}/" : {
+      "get" : {
+        "tags" : [ "SecIPLists" ],
+        "summary" : "Retrieve Details of all Security IP Lists in a Container",
+        "description" : "Retrieves details of the security IP lists that are in the specified container and match the specified query criteria. If you don't specify any query criteria, then details of all the security IP lists in the container are displayed. To filter the search results, you can pass one or more of the following query parameters, by appending them to the URI in the following syntax:<p><code>?parameter1=value1&ampparameter2=value2&ampparameterN=valueN</code><p><b>Required Role: </b>To complete this task, you must have the <code>Compute_Monitor</code> or <code>Compute_Operations</code> role. If this role isn't assigned to you or you're not sure, then ask your system administrator to ensure that the role is assigned to you in Oracle Cloud My Services. See <a target=\"_blank\" href=\"http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6\">Modifying User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.",
+        "operationId" : "listSecIPList",
+        "responses" : {
+          "200" : {
+            "headers" : {
+              "set-cookie" : {
+                "type" : "string",
+                "description" : "The cookie value is returned if the session is extended"
+              }
+            },
+            "description" : "OK. See <a class=\"xref\" href=\"Status%20Codes.html\">Status Codes</a> for information about other possible HTTP status codes.",
+            "schema" : {
+              "$ref" : "#/definitions/SecIPList-list-response"
+            }
+          }
+        },
+        "consumes" : [ "application/oracle-compute-v3+json" ],
+        "produces" : [ "application/oracle-compute-v3+json" ],
+        "parameters" : [ {
+          "name" : "container",
+          "in" : "path",
+          "description" : "<p><code>/Compute-<em>identity_domain</em>/<em>user</em></code> and <code>/Compute-<em>identity_domain</em>/</code>for user-defined security IP lists and <code>/oracle/public</code> for the predefined public-internet security IP list.</p>",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "description" : "<p>The three-part name of the object (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code> or <code>/oracle/public/<em>object</em></code>.)",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "Cookie",
+          "in" : "header",
+          "type" : "string",
+          "description" : "The Cookie: header must be included with every request to the service. It must be set to the value of the set-cookie header in the response received to the POST /authenticate/ call."
+        } ]
+      }
+    },
+    "/seciplist/{name}" : {
+      "put" : {
+        "tags" : [ "SecIPLists" ],
+        "summary" : "Update a Security IP List",
+        "description" : "Updates IP addresses and description of the specified security IP list. Note that this command replaces the values in the <code>secipentries</code> and <code>description</code> fields with the new values that you specify. To add one or more IP addresses to the existing list, run the add seciplist command and specify just the additional IP addresses.<p><b>Required Role: </b>To complete this task, you must have the <code>Compute_Operations</code> role. If this role isn't assigned to you or you're not sure, then ask your system administrator to ensure that the role is assigned to you in Oracle Cloud My Services. See <a target=\"_blank\" href=\"http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6\">Modifying User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.",
+        "operationId" : "updateSecIPList",
+        "responses" : {
+          "200" : {
+            "headers" : {
+              "set-cookie" : {
+                "type" : "string",
+                "description" : "The cookie value is returned if the session is extended"
+              }
+            },
+            "description" : "OK. See <a class=\"xref\" href=\"Status%20Codes.html\">Status Codes</a> for information about other possible HTTP status codes.",
+            "schema" : {
+              "$ref" : "#/definitions/SecIPList-response"
+            }
+          }
+        },
+        "consumes" : [ "application/oracle-compute-v3+json" ],
+        "produces" : [ "application/oracle-compute-v3+json" ],
+        "parameters" : [ {
+          "name" : "name",
+          "in" : "path",
+          "description" : "<p>The three-part name of the object (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>).",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "body",
+          "in" : "body",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/SecIPList-put-request"
+          }
+        }, {
+          "name" : "Cookie",
+          "in" : "header",
+          "type" : "string",
+          "description" : "The Cookie: header must be included with every request to the service. It must be set to the value of the set-cookie header in the response received to the POST /authenticate/ call."
+        } ]
+      },
+      "delete" : {
+        "tags" : [ "SecIPLists" ],
+        "summary" : "Delete a Security IP List",
+        "description" : "Deletes the specified security IP list. No response is returned.<p>You can't delete system-provided security application that are available in the <code>/oracle/public</code> container.<p><b>Required Role: </b>To complete this task, you must have the <code>Compute_Operations</code> role. If this role isn't assigned to you or you're not sure, then ask your system administrator to ensure that the role is assigned to you in Oracle Cloud My Services. See <a target=\"_blank\" href=\"http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6\">Modifying User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.",
+        "operationId" : "deleteSecIPList",
+        "responses" : {
+          "204" : {
+            "headers" : {
+              "set-cookie" : {
+                "type" : "string",
+                "description" : "The cookie value is returned if the session is extended"
+              }
+            },
+            "description" : "No Content. See <a class=\"xref\" href=\"Status%20Codes.html\">Status Codes</a> for information about other possible HTTP status codes."
+          }
+        },
+        "consumes" : [ "application/oracle-compute-v3+json" ],
+        "produces" : [ "application/oracle-compute-v3+json" ],
+        "parameters" : [ {
+          "name" : "name",
+          "in" : "path",
+          "description" : "<p>The three-part name of the object (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>).",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Cookie",
+          "in" : "header",
+          "type" : "string",
+          "description" : "The Cookie: header must be included with every request to the service. It must be set to the value of the set-cookie header in the response received to the POST /authenticate/ call."
+        } ]
+      },
+      "get" : {
+        "tags" : [ "SecIPLists" ],
+        "summary" : "Retrieve Details of a Security IP List",
+        "description" : "Retrieves information about the specified security IP list. You can use this request to verify whether POST and PUT operations were completed successfully.<p><b>Required Role: </b>To complete this task, you must have the <code>Compute_Monitor</code> or <code>Compute_Operations</code> role. If this role isn't assigned to you or you're not sure, then ask your system administrator to ensure that the role is assigned to you in Oracle Cloud My Services. See <a target=\"_blank\" href=\"http://www.oracle.com/pls/topic/lookup?ctx=stcomputecs&id=MMOCS-GUID-54C2E747-7D5B-451C-A39C-77936178EBB6\">Modifying User Roles</a> in <em>Managing and Monitoring Oracle Cloud</em>.",
+        "operationId" : "getSecIPList",
+        "responses" : {
+          "200" : {
+            "headers" : {
+              "set-cookie" : {
+                "type" : "string",
+                "description" : "The cookie value is returned if the session is extended"
+              }
+            },
+            "description" : "OK. See <a class=\"xref\" href=\"Status%20Codes.html\">Status Codes</a> for information about other possible HTTP status codes.",
+            "schema" : {
+              "$ref" : "#/definitions/SecIPList-response"
+            }
+          }
+        },
+        "consumes" : [ "application/oracle-compute-v3+json" ],
+        "produces" : [ "application/oracle-compute-v3+json" ],
+        "parameters" : [ {
+          "name" : "name",
+          "in" : "path",
+          "description" : "<p>The three-part name of the object (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code> or <code>/oracle/public/<em>object</em></code>.)",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Cookie",
+          "in" : "header",
+          "type" : "string",
+          "description" : "The Cookie: header must be included with every request to the service. It must be set to the value of the set-cookie header in the response received to the POST /authenticate/ call."
+        } ]
+      }
+    }
+  },
+  "definitions" : {
+    "DailyWeeklyInterval" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/Interval"
+      }, {
+        "type" : "object",
+        "properties" : {
+          "userTimeZone" : {
+            "type" : "string",
+            "description" : "Any IANA time zone. e.g: America/Los_Angeles"
+          },
+          "timeOfDay" : {
+            "pattern" : "([01]?[0-9]|2[0-3]):[0-5][0-9]",
+            "type" : "string",
+            "description" : "Time of the day to run a backup"
+          },
+          "daysOfWeek" : {
+            "items" : {
+              "enum" : [ "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY" ],
+              "type" : "string"
+            },
+            "type" : "array",
+            "description" : "Days of the week to run a backup"
+          }
+        },
+        "description" : "Backup Interval running once a day on certain days of the week"
+      } ]
+    },
+    "HourlyInterval" : {
+      "allOf" : [ {
+        "$ref" : "#/definitions/Interval"
+      }, {
+        "type" : "object",
+        "properties" : {
+          "hourlyInterval" : {
+            "type" : "integer",
+            "description" : "Hours to wait before starting the next backup",
+            "format" : "int32"
+          }
+        },
+        "description" : "Backup Interval running every X hours"
+      } ]
+    },
+    "Interval" : {
+      "x-oneOf-instructions" : "Provide one of the valid object representations documented here.  For more information about oneOf see http://json-schema.org/latest/json-schema-validation.html#anchor88",
+      "type" : "object",
+      "description" : "There are two kinds of Intervals. Each Interval has its own JSON format. Your Interval field should look like one of the following:<p><ul><li><code>\"interval\":{\"Hourly\":{\"hourlyInterval\":2}}</code></li><li><code>{\"DailyWeekly\":{\"daysOfWeek\":[\"MONDAY\"],\"timeOfDay\":\"03:15\",\"userTimeZone\":\"America/Los_Angeles\"}}</code></li></ul><p>Days of the week is any day of the week fully capitalized (MONDAY, TUESDAY, etc). The user time zone is any IANA user timezone.  For example user time zones see <a href=\"https://en.wikipedia.org/wiki/IANA_time_zone_database\">List of IANA time zones</a>.",
+      "x-oneOf" : {
+        "oneOf" : [ {
+          "type" : "object",
+          "properties" : {
+            "DailyWeekly" : {
+              "allOf" : [ {
+                "$ref" : "#/definitions/DailyWeeklyInterval"
+              }, {
+                "type" : "object",
+                "properties" : { }
+              } ]
+            }
+          }
+        }, {
+          "type" : "object",
+          "properties" : {
+            "Hourly" : {
+              "allOf" : [ {
+                "$ref" : "#/definitions/HourlyInterval"
+              }, {
+                "type" : "object",
+                "properties" : { }
+              } ]
+            }
+          }
+        } ]
+      }
+    },
+    "SecIPList-discover-response" : {
+      "properties" : {
+        "result" : {
+          "items" : {
+            "type" : "string"
+          },
+          "type" : "array"
+        }
+      }
+    },
+    "SecIPList-list-response" : {
+      "properties" : {
+        "result" : {
+          "items" : {
+            "$ref" : "#/definitions/SecIPList-response"
+          },
+          "type" : "array"
+        }
+      }
+    },
+    "SecIPList-post-request" : {
+      "required" : [ "name", "secipentries" ],
+      "description" : "The request body contains details of the security IP list that you want to create. ",
+      "properties" : {
+        "description" : {
+          "type" : "string",
+          "description" : "<p>A description of the security IP list."
+        },
+        "name" : {
+          "type" : "string",
+          "description" : "<p>The three-part name of the object (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>).<p>Object names can contain only alphanumeric characters, hyphens, underscores, and periods. Object names are case-sensitive."
+        },
+        "secipentries" : {
+          "items" : {
+            "type" : "string"
+          },
+          "type" : "array",
+          "description" : "<p>A comma-separated list of the subnets (in CIDR format) or IPv4 addresses for which you want to create this security IP list.<p>For example, to create a security IP list containing the IP addresses 203.0.113.1 and 203.0.113.2, enter one of the following:<p><code>203.0.113.0/30</code><p><code>203.0.113.1, 203.0.113.2</code>"
+        }
+      }
+    },
+    "SecIPList-put-request" : {
+      "required" : [ "name", "secipentries" ],
+      "description" : "The request body contains details of the security IP list that you want to update. ",
+      "properties" : {
+        "description" : {
+          "type" : "string",
+          "description" : "<p>A description of the security IP list."
+        },
+        "name" : {
+          "type" : "string",
+          "description" : "<p>The three-part name of the object (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>)."
+        },
+        "secipentries" : {
+          "items" : {
+            "type" : "string"
+          },
+          "type" : "array",
+          "description" : "Comma-separated list of IPv4 addresses or subnets or both."
+        }
+      }
+    },
+    "SecIPList-response" : {
+      "properties" : {
+        "description" : {
+          "type" : "string",
+          "description" : "<p>A description of the security IP list."
+        },
+        "name" : {
+          "type" : "string",
+          "description" : "<p>The three-part name of the object"
+        },
+        "secipentries" : {
+          "items" : {
+            "type" : "string"
+          },
+          "type" : "array",
+          "description" : "<p>A comma-separated list of the subnets (in CIDR format) or IPv4 addresses for which you want to create this security IP list.<p>For example, to create a security IP list containing the IP addresses 203.0.113.1 and 203.0.113.2, enter one of the following:<p><code>203.0.113.0/30</code><p><code>203.0.113.1, 203.0.113.2</code>"
+        },
+        "uri" : {
+          "type" : "string",
+          "description" : "Uniform Resource Identifier"
+        }
+      }
+    }
+  },
+  "tags" : [ {
+    "name" : "SecIPLists",
+    "description" : "A security IP list is a set of IP addresses or subnets external to the instances you create in Compute Classic. These lists can then be used as a source when you define security rules.<p>Note that, a security IP list named <code>/oracle/public/public-internet</code> is predefined in Compute Classic. You can use this security IP list as the source in a security rule to permit traffic from any host on the Internet.<p>You can create, delete, update, and view security IP lists using the HTTP requests listed below."
+  } ]
+}

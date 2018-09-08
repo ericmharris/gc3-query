@@ -26,6 +26,7 @@ from bravado.client import ResourceDecorator
 from bravado.response import  BravadoResponse, BravadoResponseMetadata
 from bravado_core.spec import Spec
 from bravado.requests_client import RequestsClient
+from bravado.client import CallableOperation
 
 
 ################################################################################
@@ -220,7 +221,7 @@ class IaaSServiceBase(GC3VersionTypedMixin):
         so = OrderedDictAttrBase()
         for service_operation_name in dir(bravado_service_operations):
             so_camel_name = camelcase_to_snake(service_operation_name)
-            service_operation = getattr(bravado_service_operations, service_operation_name)
+            service_operation: CallableOperation = getattr(bravado_service_operations, service_operation_name)
 
             ## Need to make sure 'application/json' is in the request or models will never work.
             ## TODO:  Move this to OpenAPI code
@@ -231,7 +232,7 @@ class IaaSServiceBase(GC3VersionTypedMixin):
                                  "Content-Type": ','.join(service_operation.operation.consumes)
                                  }
             # partial_service_operation = partial(service_operation, _request_options={"headers": {"Accept": "application/oracle-compute-v3+directory+json"}})
-            partial_service_operation = partial(service_operation, _request_options={"headers": operation_headers})
+            partial_service_operation: CallableOperation = partial(service_operation, _request_options={"headers": operation_headers})
             so[so_camel_name] = partial_service_operation
             so.__dict__[so_camel_name] = so[so_camel_name]
         return so

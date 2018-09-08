@@ -11,15 +11,17 @@ from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
 # fixme? from gc3_query.lib.open_api import API_SPECS_DIR
 import json
 from pathlib import Path
-from pymongo import MongoClient
 import pytest
 from bravado_core.spec import Spec
 from bravado.response import  BravadoResponse, BravadoResponseMetadata
 import mongoengine
+
+from pymongo import MongoClient
 from mongoengine.connection import get_connection, register_connection
+
 from gc3_query.lib import *
 from gc3_query.lib import gc3_cfg
-
+from gc3_query.lib.export_delegates.mongodb import storage_adapter_init
 # from gc3_query.lib.export_delegates.mongodb import storage_adapter_init
 # # fixme? from gc3_query.lib.open_api import API_SPECS_DIR
 from pathlib import Path
@@ -143,37 +145,37 @@ def test_list_sec_rules_model_save_from_url():
 #     assert gc3_cfg.user.cloud_username == 'eric.harris@oracle.com'
 #     yield service_cfg, idm_cfg, mongodb_config
 
-def storage_adapter_init(mongodb_config: DictStrAny) -> MongoClient:
-    """
-    mongoengine.register_connection(alias, db=None, name=None, host=None, port=None, read_preference=Primary(), username=None, password=None, authentication_source=None, authentication_mechanism=None, **kwargs)
-
-    Add a connection.
-
-    Parameters:
-    alias – the name that will be used to refer to this connection throughout MongoEngine
-    name – the name of the specific database to use
-    db – the name of the database to use, for compatibility with connect
-    host – the host name of the mongod instance to connect to
-    port – the port that the mongod instance is running on
-    read_preference – The read preference for the collection ** Added pymongo 2.1
-    username – username to authenticate with
-    password – password to authenticate with
-    authentication_source – database to authenticate against
-    authentication_mechanism – database authentication mechanisms. By default, use SCRAM-SHA-1 with MongoDB 3.0 and later, MONGODB-CR (MongoDB Challenge Response protocol) for older servers.
-    is_mock – explicitly use mongomock for this connection (can also be done by using mongomock:// as db host prefix)
-    kwargs – ad-hoc parameters to be passed into the pymongo driver, for example maxpoolsize, tz_aware, etc. See the documentation for pymongo’s MongoClient for a full list.
-        :return:
-    """
-    alias = mongodb_config["alias"]
-    name = mongodb_config["name"]
-    db = mongodb_config["db"]
-    host = mongodb_config["net"]["host"]
-    port = mongodb_config["net"]["port"]
-    _ = register_connection(alias=alias, db=db, host=host, port=port)
-    # _connection = connect(db=db, alias=alias)
-    connection: MongoClient = get_connection(alias=alias)
-    _info(f"connection registered: alias={alias}, name={name}, db={db}, host={host}, port={port}")
-    return connection
+# def storage_adapter_init(mongodb_config: DictStrAny) -> MongoClient:
+#     """
+#     mongoengine.register_connection(alias, db=None, name=None, host=None, port=None, read_preference=Primary(), username=None, password=None, authentication_source=None, authentication_mechanism=None, **kwargs)
+#
+#     Add a connection.
+#
+#     Parameters:
+#     alias – the name that will be used to refer to this connection throughout MongoEngine
+#     name – the name of the specific database to use
+#     db – the name of the database to use, for compatibility with connect
+#     host – the host name of the mongod instance to connect to
+#     port – the port that the mongod instance is running on
+#     read_preference – The read preference for the collection ** Added pymongo 2.1
+#     username – username to authenticate with
+#     password – password to authenticate with
+#     authentication_source – database to authenticate against
+#     authentication_mechanism – database authentication mechanisms. By default, use SCRAM-SHA-1 with MongoDB 3.0 and later, MONGODB-CR (MongoDB Challenge Response protocol) for older servers.
+#     is_mock – explicitly use mongomock for this connection (can also be done by using mongomock:// as db host prefix)
+#     kwargs – ad-hoc parameters to be passed into the pymongo driver, for example maxpoolsize, tz_aware, etc. See the documentation for pymongo’s MongoClient for a full list.
+#         :return:
+#     """
+#     alias = mongodb_config["alias"]
+#     name = mongodb_config["name"]
+#     db = mongodb_config["db"]
+#     host = mongodb_config["net"]["host"]
+#     port = mongodb_config["net"]["port"]
+#     _ = register_connection(alias=alias, db=db, host=host, port=port)
+#     # _connection = connect(db=db, alias=alias)
+#     connection: MongoClient = get_connection(alias=alias)
+#     _info(f"connection registered: alias={alias}, name={name}, db={db}, host={host}, port={port}")
+#     return connection
 
 
 @pytest.fixture()

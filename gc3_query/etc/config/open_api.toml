@@ -23,6 +23,10 @@ spec_overlay_format = 'toml'
 format = 'oc-datetime'
 description = 'Converts string:date-time <=> python Maya object'
 
+[open_api.formats.paas_date_time]
+format = 'paas-date-time'
+description = 'Converts string:date-time <=> python Maya object'
+
 [open_api.formats.json_bool]
 format = 'json-bool'
 description = 'Converts "true" and "false" to/from equivalent booleans.'
