@@ -93,6 +93,16 @@ class IaaSRequestsHTTPClient(RequestsClient):
     def authenticate(self) -> dict:
         auth_url = f"{self.rest_endpoint}/authenticate/"
         idm_cred = gc3_cfg.get_credential(idm_domain_name=self.idm_cfg.name)
+
+        # BULLSHIT, this doesn't work! If you are using a traditional cloud account or if your account creation email contains information about the identity domain as shown in the following example,
+        # then you must use the following format for the two-part user name:
+        # /Compute-identityDomainName/username
+        #
+        # If you are using a cloud account with Identity Cloud Service (IDCS) or if your account creation email does not contain information about the identity domain,
+        # then you must use the following format for the two-part user name:
+        # /Compute-serviceInstanceID/username
+
+
         json_data = {"user": f"/Compute-{self.idm_cfg.service_instance_id}/{idm_cred.username}", "password": idm_cred.password}
         # json_data = {"user": f"/Compute-{self.idm_cfg.name}/{idm_cred.username}", "password": idm_cred.password}
         response = self.session.post(url=auth_url, json=json_data)

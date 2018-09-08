@@ -16,6 +16,7 @@ data_center = 'usdc2'
 multiple_sites = true
 is_ucm = false
 is_classic = true
+has_identity_cloud_service = false
 [idm.domains.gc3pilot.sites.uscom-central-1]
 name = 'uscom-central-1'
 data_center ='usdc2'
@@ -40,6 +41,7 @@ multiple_sites = false
 'sftp_url:url' = 'sftp://sftp.us2.cloud.oracle.com:22'
 is_ucm = false
 is_classic = true
+has_identity_cloud_service = false
 [idm.domains.gc3test.sites.uscom-central-1]
 name = 'uscom-central-1'
 data_center ='usdc2'
@@ -60,6 +62,7 @@ multiple_sites = false
 'sftp_url:url' = 'sftp://sftp.us2.cloud.oracle.com:22'
 is_ucm = false
 is_classic = true
+has_identity_cloud_service = false
 [idm.domains.gc30003.sites.uscom-central-1]
 name = 'uscom-central-1'
 data_center ='usdc2'
@@ -68,10 +71,10 @@ rest_endpoint = 'https://compute.uscom-central-1.oraclecloud.com'
 
 [idm.domains.gc35001]
 name = 'gc35001'
-id = 'gc35001'
-service_instance_id = 587626604
-subscription_id = 1586698
-csi_number = 21361344
+id = 'cacct-a37121f9d9014851bdcc94a64b4d32a4'
+service_instance_id = 605519274
+subscription_id = 7080092
+csi_number = 21858175
 region = 'us'
 data_center = 'usdc2'
 multiple_sites = false
@@ -80,6 +83,8 @@ multiple_sites = false
 'sftp_url:url' = 'sftp://sftp.us2.cloud.oracle.com:22'
 is_ucm = true
 is_classic = false
+has_identity_cloud_service = true
+identity_service_id = 'idcs-a278337596ba4daf98c688e7a4ebdc87'
 [idm.domains.gc35001.sites.uscom-central-1]
 name = 'uscom-central-1'
 data_center ='usdc2'

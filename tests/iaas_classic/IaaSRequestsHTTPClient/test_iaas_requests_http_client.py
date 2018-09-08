@@ -42,3 +42,30 @@ def test_authentication(setup_gc30003):
 
 
 
+@pytest.fixture()
+def setup_gc35001() -> Dict[str, Any]:
+    idm_domain = 'gc35001'
+    gc3_config = GC3Config()
+    assert idm_domain in gc3_config['idm']['domains']
+    assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
+    check_credential = gc3_config.get_credential(idm_domain_name=idm_domain)
+    idm_cfg = gc3_config['idm']['domains'][idm_domain]
+    yield idm_cfg
+
+
+def test_init_no_auth_idcs(setup_gc35001):
+    idm_cfg = setup_gc35001
+    http_client = IaaSRequestsHTTPClient(idm_cfg=idm_cfg, skip_authentication=True)
+    assert http_client.skip_authentication==True
+    assert http_client.idm_domain_name==idm_cfg.name
+
+
+def test_authentication_idcs(setup_gc35001):
+    idm_cfg = setup_gc35001
+    http_client = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
+    assert http_client.skip_authentication==False
+    assert http_client.idm_domain_name==idm_cfg.name
+    assert http_client.auth_cookie_header is not None
+    assert 'nimbula' in http_client.auth_cookie_header['Cookie']
+
+
