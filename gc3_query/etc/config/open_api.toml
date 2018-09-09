@@ -35,7 +35,10 @@ description = 'Converts "true" and "false" to/from equivalent booleans.'
 format = 'bool-in-str'
 description = 'Converts "true" and "false" to/from equivalent booleans.'
 
-
 [open_api.formats.date]
 format = 'date'
-description = 'Converts "true" and "false" to/from equivalent booleans.'
+description = 'Converts [wire]string:date <=> python datetime.date'
+
+[open_api.formats.date_time]
+format = 'date-time'
+description = 'Converts string:date-time <=> python datetime.datetime'
