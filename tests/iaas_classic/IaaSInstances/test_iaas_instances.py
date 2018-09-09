@@ -169,14 +169,6 @@ def test_get_all_instances(setup_gc30003):
 
 
 
-def test_dump(setup_gc30003):
-    service_cfg, idm_cfg, http_client = setup_gc30003
-    instances = Instances(service_cfg=service_cfg, idm_cfg=idm_cfg, http_client=http_client)
-    service_response: BravadoResponse = instances.dump()
-    assert service_response
-
-
-
 
 
 
@@ -195,15 +187,19 @@ def setup_gc30003_dump():
 
 
 
+
 def test_dump(setup_gc30003_dump):
     service_cfg, idm_cfg, iaas_service = setup_gc30003_dump
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
     service_response = iaas_service.dump()
     assert service_response.result
     result = service_response.result
-
-
-
+    results = service_response.result.result
+    first_result = results[0]
+    result_text = service_response.incoming_response.text
+    result_dict = service_response.incoming_response.json()
+    first_result_dict = first_result._as_dict()
+    assert first_result
 
 
 
