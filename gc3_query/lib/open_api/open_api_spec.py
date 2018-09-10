@@ -38,6 +38,7 @@ from gc3_query.lib.signatures import GC3VersionTypedMixin
 # from . import OPEN_API_CATALOG_DIR
 
 from gc3_query.lib import get_logging
+from gc3_query.lib.gc3_bravado import bravado_cfg
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
@@ -130,7 +131,8 @@ class OpenApiSpec(GC3VersionTypedMixin):
         rest_endpoint = rest_endpoint if rest_endpoint else self.rest_endpoint
         if not rest_endpoint:
             raise RuntimeError("rest_endpoint not provided in either method call or in **wkargs={self.kwargs}")
-        spec: Spec = Spec(spec_dict=self.spec_dict, origin_url=rest_endpoint, http_client=None, config=gc3_cfg.BRAVADO_CONFIG)
+        # spec: Spec = Spec(spec_dict=self.spec_dict, origin_url=rest_endpoint, http_client=None, config=gc3_cfg.BRAVADO_CONFIG)
+        spec: Spec = Spec(spec_dict=self.spec_dict, origin_url=rest_endpoint, http_client=None, config=bravado_cfg.BRAVADO_CONFIG)
         #### bravado_core.spec.Spec#client_spec_dict
         # Return a copy of spec_dict with x-scope metadata removed so that it
         #         is suitable for consumption by Swagger clients.

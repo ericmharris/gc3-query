@@ -44,6 +44,7 @@ from gc3_query.lib.signatures import GC3VersionTypedMixin
 from gc3_query.lib.util import camelcase_to_snake
 from gc3_query.lib.export_delegates.response_export import ResponseExport
 from gc3_query.lib.open_api.service_responses import IaaSServiceResponse
+from gc3_query.lib.gc3_bravado import bravado_cfg
 
 from gc3_query.lib import get_logging
 
@@ -81,7 +82,10 @@ class IaaSServiceBase(GC3VersionTypedMixin):
 
         # self.bravado_config: DictStrAny = gc3_cfg.bravado.client_config.as_dict()
         # self.bravado_config.update(gc3_cfg.bravado.core_config.as_dict())
-        self.bravado_config: DictStrAny = gc3_cfg.BRAVADO_CONFIG
+
+        # self.bravado_config: DictStrAny = gc3_cfg.BRAVADO_CONFIG
+        # from gc3_query.lib.gc3_bravado import bravado_cfg
+        self.bravado_config: DictStrAny = bravado_cfg.BRAVADO_CONFIG
 
         if kwargs.get('spec_dict', False) and kwargs.get('swagger_spec', False):
             raise RuntimeError(f"Supplying both a spec_dict and swagger_spec not allowed")

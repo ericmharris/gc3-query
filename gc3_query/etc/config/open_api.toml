@@ -42,3 +42,7 @@ description = 'Converts [wire]string:date <=> python datetime.date'
 [open_api.formats.date_time]
 format = 'date-time'
 description = 'Converts string:date-time <=> python datetime.datetime'
+
+[open_api.formats.sec_list]
+format = 'sec-list'
+description = 'Converts to seclist or seciplist'

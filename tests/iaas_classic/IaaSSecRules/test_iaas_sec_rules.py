@@ -8,6 +8,7 @@ from bravado.response import  BravadoResponse
 from gc3_query.lib import gc3_cfg
 from gc3_query.lib import *
 from gc3_query.lib.gc3_config import GC3Config
+from gc3_query.lib.gc3_bravado import bravado_cfg
 # from gc3_query.lib.iaas_classic import BRAVADO_CONFIG
 from gc3_query.lib.iaas_classic import IaaSRequestsHTTPClient
 from gc3_query.lib.iaas_classic.sec_rules import SecRules
@@ -122,7 +123,8 @@ def test_get_all_sec_rules():
         spec_dict = json.load(fp=fd)
     assert spec_dict
     http_client: IaaSRequestsHTTPClient =  IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
-    bravado_config = gc3_cfg.BRAVADO_CONFIG
+    # bravado_config = gc3_cfg.BRAVADO_CONFIG
+    bravado_config = bravado_cfg.BRAVADO_CONFIG
     assert 'json_bool' in [f.format for f in bravado_config['formats']]
     swagger_spec = Spec.from_dict(spec_dict=spec_dict, origin_url=idm_cfg.rest_endpoint, http_client=http_client, config=bravado_config)
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)

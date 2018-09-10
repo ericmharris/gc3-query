@@ -15,7 +15,10 @@
 
 ################################################################################
 ## Standard Library Imports
+from pathlib import Path
+from typing import List, Optional, Any, Callable, Dict, Tuple, Union, Set, Generator, Iterable
 
+DictStrAny = Dict[str, Any]
 from copy import deepcopy
 
 import keyring
@@ -25,13 +28,14 @@ from dataclasses import dataclass, field
 from requests.auth import _basic_auth_str
 
 
+
 ################################################################################
 ## Project Imports
-from gc3_query.lib import *
+# from gc3_query.lib import *
 from gc3_query.lib.atoml.atoml_config import ATomlConfig
 from gc3_query.lib.base_collections import NestedOrderedDictAttrListBase
 from gc3_query.lib.gc3logging import get_logging
-from gc3_query.lib.open_api.swagger_formats import gc3_formats
+# from gc3_query.lib.open_api import swagger_formats
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
@@ -95,13 +99,14 @@ class GC3Config(NestedOrderedDictAttrListBase):
 
     @property
     def BRAVADO_CONFIG(self) -> DictStrAny:
-        bravado_config: DictStrAny = self.bravado.client_config.as_dict()
-        bravado_config.update(self.bravado.core_config.as_dict())
-        gc3_format_names = [f.format for f in self.open_api.formats.values()]
-        for gc3_format in gc3_formats:
-            if gc3_format.format in gc3_format_names:
-                bravado_config['formats'].append(gc3_format)
-        return bravado_config
+        # bravado_config: DictStrAny = self.bravado.client_config.as_dict()
+        # bravado_config.update(self.bravado.core_config.as_dict())
+        # gc3_format_names = [f.format for f in self.open_api.formats.values()]
+        # for gc3_format in gc3_formats:
+        #     if gc3_format.format in gc3_format_names:
+        #         bravado_config['formats'].append(gc3_format)
+
+        raise RuntimeError('NOPE')
 
     def get_credential(self, idm_domain_name: str) -> IDMCredential:
         if idm_domain_name not in self['idm']['domains']:
@@ -146,44 +151,52 @@ class GC3Config(NestedOrderedDictAttrListBase):
         else:
             raise RuntimeError(f"Failed to set password for service_name={service_name}, username={service_name}")
 
-    def get_bravado_config(self, config_type: str = 'bravado') -> DictStrAny:
-        """
-        bravado.client.SwaggerClient#from_spec
-        # Apply bravado config defaults
-        config = config or {}
-        bravado_config = BravadoConfig.from_config_dict(config)
-        # remove bravado configs from config dict
-        for key in set(bravado_config._fields).intersection(set(config)):
-            del config[key]
-        # set bravado config object
-        config['bravado'] = bravado_config
+    # def get_bravado_config(self, config_type: str = 'bravado') -> DictStrAny:
+    #     """
+    #     bravado.client.SwaggerClient#from_spec
+    #     # Apply bravado config defaults
+    #     config = config or {}
+    #     bravado_config = BravadoConfig.from_config_dict(config)
+    #     # remove bravado configs from config dict
+    #     for key in set(bravado_config._fields).intersection(set(config)):
+    #         del config[key]
+    #     # set bravado config object
+    #     config['bravado'] = bravado_config
+    #
+    #     :param config_type:
+    #     :return:
+    #     """
+    #     config_types = {'bravado': self.bravado.core_config.as_dict_melded_with(self.bravado.client_config),  # All config
+    #                     'bravado_client': self.bravado.client_config.as_dict(),                                  # Only config for client
+    #                     'bravado_core': self.bravado.core_config.as_dict()                                       # core
+    #                     }
+    #     if config_type not in config_types:
+    #         _error(f"config_type={config_type} not found in {config_types.keys()}")
+    #         raise RuntimeError(f"config_type={config_type} not found in {config_types.keys()}")
+    #     config: dict = config_types[config_type]
+    #     if config_type in ['bravado', 'bravado_core']:
+    #         # config['formats'] = gc3_formats
+    #         config['formats'] = self._load_formats()
+    #     return deepcopy(config)
+    #
+    #
+    # @property
+    # def bravado_config(self):
+    #     return self.get_bravado_config(config_type='bravado')
+    #
+    # @property
+    # def bravado_core_config(self):
+    #     return self.get_bravado_config(config_type='bravado_core')
+    #
+    # @property
+    # def bravado_client_config(self):
+    #     return self.get_bravado_config(config_type='bravado_client')
+    #
 
-        :param config_type:
-        :return:
-        """
-        config_types = {'bravado': self.bravado.core_config.as_dict_melded_with(self.bravado.client_config),  # All config
-                        'bravado_client': self.bravado.client_config.as_dict(),                                  # Only config for client
-                        'bravado_core': self.bravado.core_config.as_dict()                                       # core
-                        }
-        if config_type not in config_types:
-            _error(f"config_type={config_type} not found in {config_types.keys()}")
-            raise RuntimeError(f"config_type={config_type} not found in {config_types.keys()}")
-        config: dict = config_types[config_type]
-        if config_type in ['bravado', 'bravado_core']:
-            config['formats'] = gc3_formats
-        return deepcopy(config)
-
-
-    @property
-    def bravado_config(self):
-        return self.get_bravado_config(config_type='bravado')
-
-    @property
-    def bravado_core_config(self):
-        return self.get_bravado_config(config_type='bravado_core')
-
-    @property
-    def bravado_client_config(self):
-        return self.get_bravado_config(config_type='bravado_client')
-
+    # def _load_formats(self) -> List[SwaggerFormat]:
+    #     formats = []
+    #     for obj in dir(swagger_formats):
+    #         if isinstance(obj, SwaggerFormat):
+    #             formats.append(obj)
+    #     return formats
 

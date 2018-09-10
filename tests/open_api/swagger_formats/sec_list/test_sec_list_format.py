@@ -23,7 +23,7 @@ from bravado_core.exception import SwaggerValidationError
 ################################################################################
 ## Project Imports
 from gc3_query.lib import *
-from gc3_query.lib.open_api.swagger_formats.sec_lists import from_wire, SecListBaseFormat, SecListFormat, SecIPListFormat
+from gc3_query.lib.open_api.swagger_formats.sec_lists_formats import from_wire, SecListBaseFormat, SecListFormat, SecIPListFormat
 
 from gc3_query.lib import gc3_cfg
 from gc3_query.lib.gc3_config import GC3Config

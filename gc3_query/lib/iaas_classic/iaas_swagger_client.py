@@ -24,13 +24,17 @@ from bravado.client import inject_headers_for_remote_refs
 ################################################################################
 ## Project Imports
 from gc3_query.lib import *
-from gc3_query.lib.open_api.swagger_formats import gc3_formats
+from gc3_query.lib.gc3_bravado import bravado_config
+# from gc3_query.lib.open_api.swagger_formats import gc3_formats
+from gc3_query.lib.gc3_bravado import bravado_cfg
 
-BRAVADO_CORE_CONFIG: DictStrAny = gc3_cfg.bravado.core_config.as_dict()
-BRAVADO_CORE_CONFIG['formats'] = gc3_formats
-BRAVADO_CLIENT_CONFIG: DictStrAny = gc3_cfg.bravado.client_config.as_dict()
-BRAVADO_CONFIG: DictStrAny = gc3_cfg.bravado.core_config.as_dict_melded_with(gc3_cfg.bravado.client_config)
-BRAVADO_CONFIG['formats'] = gc3_formats
+# BRAVADO_CORE_CONFIG: DictStrAny = gc3_cfg.bravado.core_config.as_dict()
+# BRAVADO_CORE_CONFIG['formats'] = gc3_formats
+# BRAVADO_CLIENT_CONFIG: DictStrAny = gc3_cfg.bravado.client_config.as_dict()
+# BRAVADO_CONFIG: DictStrAny = gc3_cfg.bravado.core_config.as_dict_melded_with(gc3_cfg.bravado.client_config)
+# BRAVADO_CONFIG['formats'] = gc3_formats
+
+
 
 from gc3_query.lib import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
@@ -57,7 +61,8 @@ class IaaSSwaggerClient(SwaggerClient):
         """
         _debug(u"Loading from %s", spec_url)
 
-        config = config if config else BRAVADO_CONFIG
+        # config = config if config else gc3_cfg.BRAVADO_CONFIG
+        config: DictStrAny = bravado_cfg.BRAVADO_CONFIG
 
 
         http_client.set_basic_auth(host='https://compute.uscom-central-1.oraclecloud.com', username="/Compute-587626604/eric.harris@oracle.com", password="V@nadium123!")

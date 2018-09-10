@@ -9,21 +9,41 @@ gc3-query.sec_list    [9/9/2018 11:47 AM]
 <DESCR>
 """
 
-################################################################################
-## Standard Library Imports
-import sys, os
+# ################################################################################
+# ## Standard Library Imports
+# import sys, os
+# from typing import List, Optional, Any, Callable, Dict, Tuple, Union, Set, Generator, Iterable
+#
+# ################################################################################
+# ## Third-Party Imports
+# from dataclasses import dataclass
+# from bravado_core.formatter import SwaggerFormat, NO_OP
+# from bravado_core.exception import SwaggerValidationError
+#
+# ################################################################################
+# ## Project Imports
+# # from gc3_query.lib import *
+# from gc3_query.lib import gc3_cfg
+# # from gc3_query.lib.gc3_config import GC3Config
+# from gc3_query.lib.gc3logging import get_logging
+# _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
-################################################################################
-## Third-Party Imports
-from dataclasses import dataclass
+
+# gc3_cfg = GC3Config()
+
 from bravado_core.formatter import SwaggerFormat, NO_OP
 from bravado_core.exception import SwaggerValidationError
 
 ################################################################################
 ## Project Imports
 from gc3_query.lib import *
+from gc3_query.lib import gc3_cfg
+# from gc3_query.lib.gc3_config import GC3Config
+from gc3_query.lib.gc3logging import get_logging
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
+
+# gc3_cfg = GC3Config()
 
 
 

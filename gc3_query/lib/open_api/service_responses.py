@@ -18,7 +18,7 @@ import sys, os
 from dataclasses import dataclass, field
 from bravado.response import BravadoResponseMetadata
 from bravado.requests_client import RequestsResponseAdapter
-
+from gc3_query.lib.gc3_bravado import bravado_cfg
 ################################################################################
 ## Project Imports
 from gc3_query.lib import *
@@ -39,7 +39,8 @@ class ServiceResponse:
     num_results: int = field(init=False)
 
     def __post_init__(self):
-        self.bravado_config = gc3_cfg.BRAVADO_CONFIG
+        # self.bravado_config = gc3_cfg.BRAVADO_CONFIG
+        self.bravado_config = bravado_cfg.BRAVADO_CONFIG
         self.num_results = len(self.results)
 
     def __len__(self):
