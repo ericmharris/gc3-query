@@ -88,5 +88,7 @@ first_result_dict = {
     }
 
     def __init__(self, *args, **values):
+        values['dst_list'] = values['dst_list'].__dict__
+        values['src_list'] = values['src_list'].__dict__
         super().__init__(*args, **values)
         _debug(f"{self.__class__.__name__}.__init__(args={args}, values={values}):")
