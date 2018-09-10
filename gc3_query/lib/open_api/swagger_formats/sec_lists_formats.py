@@ -46,11 +46,10 @@ _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 # gc3_cfg = GC3Config()
 
 
+idm_instance_id_to_name = {idm_domain.service_instance_id:idm_domain.name for idm_domain in [d for d in gc3_cfg.idm.domains.values() if not isinstance(d, str)]}
 
 
 class SecListBaseFormat:
-
-    idm_instance_id_to_name = {idm_domain.service_instance_id:idm_domain.name for idm_domain in [d for d in gc3_cfg.idm.domains.values() if not isinstance(d, str)]}
 
 
     def __init__(self, name: str):
@@ -72,7 +71,7 @@ class SecListBaseFormat:
         """
         self.name = name.strip()
         # self.idm_service_instance_id, self.username, self.list_object_name, self.list_type = self._parse_name(name=self.name)
-        # self.idm_domain_name = self.idm_instance_id_to_name.get(self.idm_service_instance_id, False)
+        # self.idm_domain_name = idm_instance_id_to_name.get(self.idm_service_instance_id, False)
         # if not self.idm_domain_name:
         #     raise RuntimeError(f"Failed to parse IDM Domain name for {self.__class__.__name__}: {name}")
         # _debug(f"{self.__class__.__name__} created ")
@@ -113,7 +112,7 @@ class SecListFormat(SecListBaseFormat):
         """
         super().__init__(name)
         self.idm_service_instance_id, self.username, self.list_object_name, self.list_type = self._parse_name(name=self.name)
-        self.idm_domain_name = self.idm_instance_id_to_name.get(self.idm_service_instance_id, False)
+        self.idm_domain_name = idm_instance_id_to_name.get(self.idm_service_instance_id, False)
         if not self.idm_domain_name:
             raise RuntimeError(f"Failed to parse IDM Domain name for {self.__class__.__name__}: {name}")
         _debug(f"{self.__class__.__name__} created ")
