@@ -350,3 +350,68 @@ def test_save_all_gc30002(setup_gc30002_model):
         result_dict = result._as_dict()
         sec_rule_model = SecRuleModel(**result_dict)
         saved = sec_rule_model.save()
+
+
+
+
+
+
+
+
+
+@pytest.fixture()
+def setup_gc3pilot_model():
+    service = 'SecRules'
+    idm_domain = 'gc3pilot'
+    gc3_config = GC3Config()
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
+    idm_cfg = gc3_config.idm.domains[idm_domain]
+    mongodb_connection: MongoClient = storage_adapter_init(mongodb_config=gc3_cfg.iaas_classic.mongodb.as_dict())
+    iaas_service = SecRules(service_cfg=service_cfg, idm_cfg=idm_cfg)
+    assert service==service_cfg.name
+    assert idm_domain==idm_cfg.name
+    assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
+    yield service_cfg, idm_cfg, iaas_service, mongodb_connection
+
+
+def test_dump_gc3pilot(setup_gc3pilot_model):
+    service_cfg, idm_cfg, iaas_service, mongodb_connection = setup_gc3pilot_model
+    # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
+    service_response = iaas_service.dump()
+    assert service_response.result
+    result_json = service_response.incoming_response.json()
+    result = service_response.result
+
+
+def test_save_one_gc3pilot(setup_gc3pilot_model):
+    service_cfg, idm_cfg, iaas_service, mongodb_connection = setup_gc3pilot_model
+    # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
+    service_response = iaas_service.dump()
+    assert service_response.result
+    result = service_response.result
+    results = service_response.result.result
+    result_dict = service_response.incoming_response.json()
+    first_result = results[0]
+    first_result_dict = first_result._as_dict()
+    sec_rule_model = SecRuleModel(**first_result_dict)
+    saved = sec_rule_model.save()
+    assert saved
+
+
+def test_save_all_gc3pilot(setup_gc3pilot_model):
+    service_cfg, idm_cfg, iaas_service, mongodb_connection = setup_gc3pilot_model
+    # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
+    service_response = iaas_service.dump()
+    assert service_response.result
+    results = service_response.result.result
+    for result in results:
+        result_dict = result._as_dict()
+        sec_rule_model = SecRuleModel(**result_dict)
+        saved = sec_rule_model.save()
+
+
+
+
+
+
+
