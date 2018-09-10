@@ -66,12 +66,14 @@ first_result_dict = {
     disabled = BooleanField()
     dst_is_ip = BooleanField()
     # dst_list = StringField()
-    dst_list = DynamicField()
+    # dst_list = DynamicField()
+    dst_list = DictField()
     id = UUIDField(primary_key=True)
     name = StringField()
     src_is_ip = BooleanField()
     # src_list = StringField()
-    src_list = DynamicField()
+    # src_list = DynamicField()
+    src_list = DictField()
     uri = URLField()
 
     meta = {
