@@ -17,6 +17,9 @@ multiple_sites = true
 is_ucm = false
 is_classic = true
 has_identity_cloud_service = false
+# /Compute-identityDomainName/username
+# /Compute-serviceInstanceID/username
+auth_uses_domain_name = true
 [idm.domains.gc3pilot.sites.uscom-central-1]
 name = 'uscom-central-1'
 data_center ='usdc2'
@@ -63,6 +66,9 @@ multiple_sites = false
 is_ucm = false
 is_classic = true
 has_identity_cloud_service = false
+# /Compute-identityDomainName/username
+# /Compute-serviceInstanceID/username
+auth_uses_domain_name = false
 [idm.domains.gc30002.sites.eucom-north-1]
 name = 'eucom-north-1'
 rest_endpoint = 'https://compute.eucom-north-1.oraclecloud.com'
@@ -84,6 +90,9 @@ multiple_sites = false
 is_ucm = false
 is_classic = true
 has_identity_cloud_service = false
+# /Compute-identityDomainName/username
+# /Compute-serviceInstanceID/username
+auth_uses_domain_name = false
 [idm.domains.gc30003.sites.uscom-central-1]
 name = 'uscom-central-1'
 data_center ='usdc2'
@@ -106,6 +115,9 @@ is_ucm = true
 is_classic = false
 has_identity_cloud_service = true
 identity_service_id = 'idcs-a278337596ba4daf98c688e7a4ebdc87'
+# /Compute-identityDomainName/username
+# /Compute-serviceInstanceID/username
+auth_uses_domain_name = false
 [idm.domains.gc35001.sites.uscom-central-1]
 name = 'uscom-central-1'
 data_center ='usdc2'
