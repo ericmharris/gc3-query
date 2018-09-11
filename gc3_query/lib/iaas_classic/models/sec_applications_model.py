@@ -88,7 +88,11 @@ class SecApplicationModel(DynamicDocument):
 
     """
     description = StringField()
-    dport = IntField()
+
+    # dport = IntField()
+    # This can also be a port range, eg. '5040-5059'
+    dport = StringField()
+
     icmpcode = StringField()
     icmptype = StringField()
     id = UUIDField(primary_key=True)

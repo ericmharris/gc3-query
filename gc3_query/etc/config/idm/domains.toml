@@ -1,8 +1,8 @@
 [idm.domains]
-__descr__ = 'Oracle Cloud IDM Domains'
 
 
 [idm.domains.gc3pilot]
+active = true
 name = 'gc3pilot'
 id = 'gc3pilot'
 service_instance_id = 575988287
@@ -32,6 +32,7 @@ rest_endpoint = 'https://api-z70.compute.us6.oraclecloud.com'
 
 
 [idm.domains.gc3test]
+active = false
 name = 'gc3test'
 id = 'gc3test'
 service_instance_id = 587626604
@@ -53,6 +54,7 @@ rest_endpoint = 'https://compute.uscom-central-1.oraclecloud.com'
 
 
 [idm.domains.gc30002]
+active = true
 name = 'gc30002'
 id = 'gc30002'
 service_instance_id = 586297329
@@ -78,6 +80,7 @@ data_center = 'nldc1'
 
 
 [idm.domains.gc30003]
+active = true
 name = 'gc30003'
 id = 'gc30003'
 service_instance_id = 587626604
@@ -102,7 +105,36 @@ data_center ='usdc2'
 rest_endpoint = 'https://compute.uscom-central-1.oraclecloud.com'
 
 
+[idm.domains.gc35000]
+active = true
+name = 'gc35000'
+id = 'cacct-3d305a580e624aaf8a2c99e2fb83df6a'
+service_instance_id = 604700914
+subscription_id = 7072467
+csi_number = 21846427
+region = 'opc global'
+data_center = 'north america'
+multiple_sites = false
+'login_url:url' = 'https://myservices-gc35000.console.oraclecloud.com/mycloud/cloudportal/dashboard'
+'rest_endpoint:url' = 'https://compute.uscom-central-1.oraclecloud.com'
+'sftp_url:url' = 'sftp://sftp.us2.cloud.oracle.com:22'
+is_ucm = true
+is_classic = false
+has_identity_cloud_service = true
+identity_service_id = 'idcs-978140cdb35446a19d924b1c1fa15905'
+# /Compute-identityDomainName/username
+# /Compute-serviceInstanceID/username
+formal_id= "604700914"
+formal_name = "Compute-604700914"
+[idm.domains.gc35000.sites.uscom-central-1]
+name = 'uscom-central-1'
+data_center ='usdc2'
+rest_endpoint = 'https://compute.uscom-central-1.oraclecloud.com'
+
+
+
 [idm.domains.gc35001]
+active = true
 name = 'gc35001'
 id = 'cacct-a37121f9d9014851bdcc94a64b4d32a4'
 service_instance_id = 605519274
@@ -123,6 +155,33 @@ identity_service_id = 'idcs-a278337596ba4daf98c688e7a4ebdc87'
 formal_id= "605519274"
 formal_name = "Compute-605519274"
 [idm.domains.gc35001.sites.uscom-central-1]
+name = 'uscom-central-1'
+data_center ='usdc2'
+rest_endpoint = 'https://compute.uscom-central-1.oraclecloud.com'
+
+
+[idm.domains.gc35003]
+active = false
+name = 'gc35003'
+id = 'cacct-a37121f9d9014851bdcc94a64b4d32a4'
+service_instance_id = 605519274
+subscription_id = 7080092
+csi_number = 21858175
+region = 'opc global'
+data_center = 'north america'
+multiple_sites = false
+'login_url:url' = 'https://myservices-gc35003.console.oraclecloud.com/mycloud/cloudportal/dashboard'
+'rest_endpoint:url' = 'https://compute.uscom-central-1.oraclecloud.com'
+'sftp_url:url' = 'sftp://sftp.us2.cloud.oracle.com:22'
+is_ucm = true
+is_classic = false
+has_identity_cloud_service = true
+identity_service_id = 'idcs-a278337596ba4daf98c688e7a4ebdc87'
+# /Compute-identityDomainName/username
+# /Compute-serviceInstanceID/username
+formal_id= "605519274"
+formal_name = "Compute-605519274"
+[idm.domains.gc35003.sites.uscom-central-1]
 name = 'uscom-central-1'
 data_center ='usdc2'
 rest_endpoint = 'https://compute.uscom-central-1.oraclecloud.com'

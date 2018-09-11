@@ -24,6 +24,7 @@ import click
 
 ################################################################################
 ## Project Imports
+from gc3_query.lib.base_collections import OrderedDictAttrBase
 from gc3_query.lib import gc3_cfg
 
 from gc3_query.lib import get_logging

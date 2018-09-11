@@ -495,7 +495,7 @@ definitions:
           to the <code>icmp</code> protocol.<p><b>Note:</b> This request fails if
           the range-end is lower than the range-start. For example, if you specify
           the port range as 5000-4000.
-        format: "int32"       
+#        format: "int32", this can be a port range eg.'5040-5059'      
       icmpcode:
         type: string
         description: The ICMP code.<p>This parameter is relevant only if you specify
