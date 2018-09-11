@@ -201,6 +201,13 @@ def test_dump_gc30003(setup_gc30003_model):
     result_json = service_response.incoming_response.json()
     result = service_response.result
 
+def test_dump_using_idm_name_gc30003(setup_gc30003_model):
+    service_cfg, idm_cfg, iaas_service, mongodb_connection = setup_gc30003_model
+    # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
+    service_response = iaas_service.dump_using_idm_name()
+    assert service_response.result
+    result_json = service_response.incoming_response.json()
+    result = service_response.result
 
 def test_save_one_gc30003(setup_gc30003_model):
     service_cfg, idm_cfg, iaas_service, mongodb_connection = setup_gc30003_model
@@ -381,6 +388,16 @@ def test_dump_gc3pilot(setup_gc3pilot_model):
     assert service_response.result
     result_json = service_response.incoming_response.json()
     result = service_response.result
+
+
+def test_dump_using_idm_name_gc3pilot(setup_gc3pilot_model):
+    service_cfg, idm_cfg, iaas_service, mongodb_connection = setup_gc3pilot_model
+    # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
+    service_response = iaas_service.dump_using_idm_name()
+    assert service_response.result
+    result_json = service_response.incoming_response.json()
+    result = service_response.result
+
 
 
 def test_save_one_gc3pilot(setup_gc3pilot_model):

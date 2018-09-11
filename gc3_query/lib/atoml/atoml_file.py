@@ -65,7 +65,7 @@ class ATomlFile:
             return AnnotatedTOML(input=s, key='None', type_name='None', value='None', toml=s)
 
         value = s[first_eq_loc + 1:]
-        key = s[0:first_eq_loc - 1].strip()
+        key = s[0:first_eq_loc].strip()
         _debug(f"s={s}, first_eq_loc={first_eq_loc}, key={key}, value={value}")
 
         if "'" in key:

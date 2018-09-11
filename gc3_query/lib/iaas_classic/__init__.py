@@ -229,6 +229,17 @@ class IaaSServiceBase(GC3VersionTypedMixin):
         service_response = http_future.response()
         return service_response
 
+    def dump_using_idm_name(self) -> BravadoResponse:
+        container = f"Compute-{self.idm_cfg.name}/"
+        for service_operation_name in self.service_operations:
+            if service_operation_name.startswith('list'):
+                dumper_service_operation = self.service_operations[service_operation_name]
+                break
+        # http_future = self.service_operations.list_instance(container=container)
+        http_future = dumper_service_operation(container=container)
+        request_url = http_future.future.request.url
+        service_response = http_future.response()
+        return service_response
 
 
     def get_idm_user_container_name(self, cloud_username: str = None) -> str:
@@ -239,17 +250,19 @@ class IaaSServiceBase(GC3VersionTypedMixin):
         :return:
         """
         if cloud_username:
-            return f"Compute-{self.idm_cfg.service_instance_id}/{cloud_username}"
-            # return  f"/Compute-{self.idm_cfg.service_instance_id}/{cloud_username}"
+            return f"{self.idm_cfg.formal_name}/{cloud_username}"
+            # return  f"/Compute-{self.idm_cfg.formal_name}/{cloud_username}"
         else:
             return self.idm_user_container_name
-            # return  f"/Compute-{self.idm_cfg.service_instance_id}/"
+            # return  f"/Compute-{self.idm_cfg.formal_name}/"
 
     @property
     def idm_container_name(self) -> str:
         """Return Compute-identityDomain/, eg. 'Compute-587626604/' for gc30003
 
         Specify /Compute-identityDomain/user/ to retrieve the names of objects that you can access. Specify /Compute-identityDomain/ to retrieve the names of containers that contain objects that you can access.
+        # /Compute-identityDomainName/username
+        # /Compute-serviceInstanceID/username
 
         :return:
         """
@@ -260,6 +273,8 @@ class IaaSServiceBase(GC3VersionTypedMixin):
         """Return Compute-identityDomain/user/, eg. 'Compute-587626604/eric.harris@oracle.com' for gc30003
 
         Specify /Compute-identityDomain/user/ to retrieve the names of objects that you can access. Specify /Compute-identityDomain/ to retrieve the names of containers that contain objects that you can access.
+        # /Compute-identityDomainName/username
+        # /Compute-serviceInstanceID/username
 
         :return:
         """
@@ -272,4 +287,4 @@ class IaaSServiceBase(GC3VersionTypedMixin):
 
         :return:
         """
-        return f"Compute-{self.idm_cfg.service_instance_id}"
+        return f"{self.idm_cfg.formal_name}"

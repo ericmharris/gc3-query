@@ -103,7 +103,7 @@ class IaaSRequestsHTTPClient(RequestsClient):
         # /Compute-serviceInstanceID/username
 
         # json_data = {"user": f"/Compute-{self.idm_cfg.service_instance_id}/{idm_cred.username}", "password": idm_cred.password}
-        user = f"/Compute-{self.idm_cfg.name}/{idm_cred.username}" if self.idm_cfg.auth_uses_domain_name else f"/Compute-{self.idm_cfg.service_instance_id}/{idm_cred.username}"
+        user = f"/{self.idm_cfg.formal_name}/{idm_cred.username}"
         json_data = {"user": user, "password": idm_cred.password}
         # json_data = {"user": f"/Compute-{self.idm_cfg.name}/{idm_cred.username}", "password": idm_cred.password}
         response = self.session.post(url=auth_url, json=json_data)

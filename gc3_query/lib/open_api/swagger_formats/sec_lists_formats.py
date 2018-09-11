@@ -46,11 +46,15 @@ _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 # gc3_cfg = GC3Config()
 
 
-idm_instance_id_to_name = {idm_domain.service_instance_id:idm_domain.name for idm_domain in [d for d in gc3_cfg.idm.domains.values() if not isinstance(d, str)]}
+idm_instance_id_to_name = {idm_domain.formal_id: idm_domain.name for idm_domain in [d for d in gc3_cfg.idm.domains.values() if not isinstance(d, str)]}
+
+# SecRule = dict(action='PERMIT', application='/oracle/public/rdp', description='', disabled=False, dst_is_ip=False,
+#                dst_list='seclist:/Compute-gc3pilot/eric.harris@oracle.com/psft_seclist_win_01', id='c16eb739-9b60-4c6a-91a3-97a197d98183',
+#                name='/Compute-gc3pilot/eric.harris@oracle.com/psft_pcm_rdp', src_is_ip=True, src_list='seciplist:/oracle/public/public-internet',
+#                uri='https://compute.uscom-central-1.oraclecloud.com/secrule/Compute-gc3pilot/eric.harris%40oracle.com/psft_pcm_rdp')
 
 
 class SecListBaseFormat:
-
 
     def __init__(self, name: str):
         """Takes three-part name of object from Oracle Cloud Classic.
@@ -64,6 +68,8 @@ class SecListBaseFormat:
         seclist:/Compute-586297329/seetharaman.nandyal@oracle.com/paas/JaaS/gc3apacasbx529/lb/ora_otd
         seclist:/Compute-586297329/sharad.salian@oracle.com/dbaas/gc3emeaczsi201/db_1/ora_db
         seclist:/Compute-586297329/sharad.salian@oracle.com/paas/SOA/gc3emeaoics106/lb/ora_otd_infraadmin
+
+        seclist:/Compute-gc3pilot/eric.harris@oracle.com/psft_seclist_win_01
 
 
 
@@ -82,11 +88,8 @@ class SecListBaseFormat:
     def __repr__(self):
         return f"{self.__class__.__name__}({self})"
 
-
     def to_wire(self):
         return self.__str__()
-
-
 
     @classmethod
     def validate(cls, sec_list_name: str) -> bool:
@@ -95,7 +98,6 @@ class SecListBaseFormat:
         if 'seciplist' in sec_list_name:
             return True
         raise SwaggerValidationError(f"Value={from_wire} not recognized as SecListFormat")
-
 
 
 class SecListFormat(SecListBaseFormat):
@@ -117,19 +119,17 @@ class SecListFormat(SecListBaseFormat):
             raise RuntimeError(f"Failed to parse IDM Domain name for {self.__class__.__name__}: {name}")
         _debug(f"{self.__class__.__name__} created ")
 
-
-    def _parse_name(self, name: str)->Tuple[str]:
+    def _parse_name(self, name: str) -> Tuple[str]:
         list_type, _name = name.split(':')
         _, idm_name_part, username, *object_name_parts = _name.split('/')
 
         # idm_name_part = 'Compute-605519274'
         _, _idm_service_instance_id = idm_name_part.split('-')
-        idm_service_instance_id = int(_idm_service_instance_id)
+        idm_service_instance_id = _idm_service_instance_id
 
         _list_object_name = '/'.join(object_name_parts)
         list_object_name = f"/{_list_object_name}"
         return idm_service_instance_id, username, list_object_name, list_type
-
 
 
 class SecIPListFormat(SecListBaseFormat):
@@ -148,11 +148,9 @@ class SecIPListFormat(SecListBaseFormat):
         self.list_object_name, self.list_type = self._parse_name(name=self.name)
         _debug(f"{self.__class__.__name__} created ")
 
-
-    def _parse_name(self, name: str)->Tuple[str]:
+    def _parse_name(self, name: str) -> Tuple[str]:
         list_type, list_object_name = name.split(':')
-        return  list_object_name, list_type
-
+        return list_object_name, list_type
 
 
 def from_wire(name: str) -> Union[SecListFormat, SecIPListFormat]:
@@ -161,8 +159,6 @@ def from_wire(name: str) -> Union[SecListFormat, SecIPListFormat]:
     if 'seciplist' in name:
         return SecIPListFormat(name=name)
     raise SwaggerValidationError(f'Failed to find SecList/SecIPList format in: {name}')
-
-
 
 
 sec_list_format = SwaggerFormat(
