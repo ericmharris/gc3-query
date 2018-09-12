@@ -22,6 +22,7 @@
 from dataclasses import dataclass
 from mongoengine import DynamicDocument, EmbeddedDocument
 from mongoengine import StringField, URLField, BooleanField, ListField, DictField, DateTimeField, IntField, UUIDField
+from mongoengine import EmbeddedDocumentField, EmbeddedDocumentListField
 
 ################################################################################
 ################################################################################

@@ -12,7 +12,7 @@ gc3-query.multi_part_name_formats    [9/11/2018 4:24 PM]
 ################################################################################
 ## Standard Library Imports
 import sys, os
-
+from collections.abc import MutableMapping
 ################################################################################
 ## Third-Party Imports
 from dataclasses import dataclass
@@ -46,7 +46,7 @@ idm_instance_id_to_name = {idm_domain.formal_id: idm_domain.name for idm_domain 
 #                uri='https://compute.uscom-central-1.oraclecloud.com/secrule/Compute-gc3pilot/eric.harris%40oracle.com/psft_pcm_rdp')
 
 
-class MultiPartNameBaseFormat:
+class ThreePartNameFormat(MutableMapping):
 
     def __init__(self, name: str):
         """
@@ -57,14 +57,61 @@ class MultiPartNameBaseFormat:
         /Compute-604700914/mayurnath.gokare@oracle.com/paas/OEHPCS/gc3mayurtst100/kafka/vm-1/0e86f68b-422c-4ed6-b62d-b2f1dd1cf28b
         /Compute-gc3pilot/eric.harris@oracle.com/psft-cldmgr-v501/8ee914dc-70c2-49b2-af2c-af1941af94f8
 
+        :param from_wire: <p>The three-part name of the object (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>).<p>Object
+          names can contain only alphanumeric characters, hyphens, underscores, and
+          periods. Object names are case-sensitive.
+
         """
-        self.name = name.strip()
+        self._d = dict()
+        self['name'] = name.strip()
+        self['idm_service_instance_id'], self['object_owner'], self['object_name'] =  self._parse_name(name=name)
+        self['idm_domain_name'] = idm_instance_id_to_name.get(self['idm_service_instance_id'], False)
+        if not self['idm_domain_name']:
+            raise RuntimeError(f"Failed to parse IDM Domain name for {self.__class__.__name__}: {name}")
+        _debug(f"{self.__class__.__name__} created ")
 
     def __str__(self):
-        return self.name
+        return self['name']
 
     def __repr__(self):
         return f"{self.__class__.__name__}({self})"
+
+
+    def __setitem__(self, key, value):
+        self._d[key] = value
+
+    def __getitem__(self, key):
+        return self._d[key]
+
+    # access members with a '.'
+    def __getattr__(self, key):
+        """
+        Called when an attribute can't be found in an object's instance __dict__.
+        :param key:
+        :return:
+        """
+        return self._d[key]
+
+    def __delitem__(self, key):
+        del self._d[key]
+
+    def __iter__(self):
+        return iter(self._d)
+
+    def __len__(self):
+        return len(self._d)
+
+    def keys(self):
+        return list(super().keys())
+
+    def values(self):
+        return list(super().values())
+
+    def items(self):
+        return list(super().items())
+
+    def __eq__(self, other):
+        return self['name'] == other['name']
 
     def to_wire(self):
         return self.__str__()
@@ -76,23 +123,6 @@ class MultiPartNameBaseFormat:
         raise SwaggerValidationError(f"Value={from_wire} not recognized as MultiPartNameFormat")
 
 
-class ThreePartNameFormat(MultiPartNameBaseFormat):
-
-    def __init__(self, name: str):
-        """
-
-
-        :param from_wire: <p>The three-part name of the object (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>).<p>Object
-          names can contain only alphanumeric characters, hyphens, underscores, and
-          periods. Object names are case-sensitive.
-
-        """
-        super().__init__(name)
-        self.idm_service_instance_id, self.object_owner, self.object_name =  self._parse_name(name=self.name)
-        self.idm_domain_name = idm_instance_id_to_name.get(self.idm_service_instance_id, False)
-        if not self.idm_domain_name:
-            raise RuntimeError(f"Failed to parse IDM Domain name for {self.__class__.__name__}: {name}")
-        _debug(f"{self.__class__.__name__} created ")
 
     def _parse_name(self, name: str) -> Tuple[str]:
         _, idm_name_part, object_owner, *object_name_parts = name.split('/')
@@ -106,28 +136,8 @@ class ThreePartNameFormat(MultiPartNameBaseFormat):
         return idm_service_instance_id, object_owner, object_name
 
 
-class TwoPartNameFormat(MultiPartNameBaseFormat):
 
-    def __init__(self, name: str):
-        """
-        seciplist:/oracle/public/paas-infra
-
-
-        :param from_wire: <p>The three-part name of the object (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>).<p>Object
-          names can contain only alphanumeric characters, hyphens, underscores, and
-          periods. Object names are case-sensitive.
-
-        """
-        super().__init__(name)
-        self.object_name, self.type = self._parse_name(name=self.name)
-        _debug(f"{self.__class__.__name__} created ")
-
-    def _parse_name(self, name: str) -> Tuple[str]:
-        type, object_name = name.split(':')
-        return object_name, type
-
-
-def from_wire(name: str) -> Union[ThreePartNameFormat, TwoPartNameFormat]:
+def from_wire(name: str) -> ThreePartNameFormat:
     return ThreePartNameFormat(name=name)
 
 
@@ -143,6 +153,6 @@ multi_part_name = SwaggerFormat(
     to_python=from_wire,
 
     # Callable to validate the cidr in string form
-    validate=MultiPartNameBaseFormat.validate,
+    validate=ThreePartNameFormat.validate,
     description='Converts seciplist:/oracle/public/paas-infra or seclist:/Compute-605519274/siva.subramani@oracle.com/paas/JaaS/gc3ossitcmf103JAAS/wls/ora_ms into objects'
 )

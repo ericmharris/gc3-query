@@ -25,6 +25,7 @@ from gc3_query.lib import *
 # from gc3_query.lib.gc3logging import get_logging
 import mongoengine
 from mongoengine import *
+from gc3_query.lib.open_api.swagger_formats.models.three_part_name_model import ThreePartNameModel
 
 from gc3_query.lib import get_logging
 
@@ -77,7 +78,9 @@ first_result_dict = {
     #     "username" : "eric.harris@oracle.com",
     #     "object_name" : "/dbaas/gc3-naac-soar-d05-dbcs/db_1/vm-1/57cced1d-c74f-41da-9c24-e86666eee4b2",
     #     "idm_domain_name" : "gc30003" }
-    name = StringField()
+    # name = StringField()
+    # name = DictField()
+    name = EmbeddedDocumentField(ThreePartNameModel)
     multi_part_name = DictField()
 
     src_is_ip = BooleanField()
@@ -100,8 +103,7 @@ first_result_dict = {
     }
 
     def __init__(self, *args, **values):
-        values['multi_part_name'] = values['name'].__dict__
-        values['name'] = values['name'].__dict__['name']
+        values['name'] = ThreePartNameModel(**values['name'])
         values['dst_list'] = values['dst_list'].__dict__
         values['src_list'] = values['src_list'].__dict__
         super().__init__(*args, **values)

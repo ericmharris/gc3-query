@@ -227,7 +227,6 @@ def setup_SecLists():
     yield service_cfg, idm_domains, iaas_services, mongodb_connection
 
 
-
 def test_save_all_SecLists(setup_SecLists):
     service_cfg, idm_domains, iaas_services, mongodb_connection = setup_SecLists
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)

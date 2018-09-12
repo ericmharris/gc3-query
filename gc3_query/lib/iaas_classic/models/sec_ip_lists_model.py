@@ -21,6 +21,7 @@ from dataclasses import dataclass
 ################################################################################
 ## Project Imports
 from gc3_query.lib import *
+from gc3_query.lib.open_api.swagger_formats.models.three_part_name_model import ThreePartNameModel
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
@@ -95,7 +96,9 @@ SecIPList_fixed = dict(
     #     "username" : "eric.harris@oracle.com",
     #     "object_name" : "/dbaas/gc3-naac-soar-d05-dbcs/db_1/vm-1/57cced1d-c74f-41da-9c24-e86666eee4b2",
     #     "idm_domain_name" : "gc30003" }
-    name = StringField()
+    # name = StringField()
+    # name = DictField()
+    name = EmbeddedDocumentField(ThreePartNameModel)
     multi_part_name = DictField()
 
     secipentries=ListField(StringField())
@@ -112,7 +115,6 @@ SecIPList_fixed = dict(
     }
 
     def __init__(self, *args, **values):
-        values['multi_part_name'] = values['name'].__dict__
-        values['name'] = values['name'].__dict__['name']
+        values['name'] = ThreePartNameModel(**values['name'])
         super().__init__(*args, **values)
         _debug(f"{self.__class__.__name__}.__init__(args={args}, values={values}):")
