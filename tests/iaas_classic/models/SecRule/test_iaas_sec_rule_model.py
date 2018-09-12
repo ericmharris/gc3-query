@@ -248,6 +248,20 @@ def test_insert_all_gc30003(setup_gc30003_model):
     assert sec_rules
 
 
+def test_query_objects(setup_gc30003_model):
+    service_cfg, idm_cfg, iaas_service, mongodb_connection = setup_gc30003_model
+    # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
+    sec_rule_models = SecRuleModel.objects()
+    assert sec_rule_models
+    sec_rule_model = sec_rule_models.first()
+    assert sec_rule_model
+    owner =  sec_rule_model.name.object_owner
+    assert 'oracle.com' in owner
+    assert  sec_rule_model.name.name.startswith('/Compute')
+
+
+
+
 @pytest.fixture()
 def setup_gc35000_model():
     service = 'SecRules'
