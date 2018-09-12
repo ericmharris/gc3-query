@@ -586,6 +586,7 @@ definitions:
       name:
         type: string
         description: Multipart name of the instance.
+        format: "multi-part-name"
       networking:
         additionalProperties:
           type: object

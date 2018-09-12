@@ -54,7 +54,7 @@ rest_endpoint = 'https://compute.uscom-central-1.oraclecloud.com'
 
 
 [idm.domains.gc30002]
-active = true
+active = false
 name = 'gc30002'
 id = 'gc30002'
 service_instance_id = 586297329

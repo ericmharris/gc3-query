@@ -32,6 +32,7 @@ from .oc_datetime import date, date_time
 from .oc_datetime import oc_datetime_format, paas_date_time
 from .boolean_formats import bool_in_str
 from .sec_lists_formats import sec_list_format
+from .multi_part_name_formats import multi_part_name
 
 ################################################################################
 ## Project Imports

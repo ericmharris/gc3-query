@@ -523,7 +523,18 @@ class InstanceModel(DynamicDocument):
     ip = StringField()
     label = StringField()
     metadata = DictField()
-    name = StringField(primary_key=True)
+
+    # swagger_formats.multi_part_name_formats.ThreePartNameFormat converts name to
+    # name =  {
+    #     "name" : "/Compute-587626604/eric.harris@oracle.com/dbaas/gc3-naac-soar-d05-dbcs/db_1/vm-1/57cced1d-c74f-41da-9c24-e86666eee4b2",
+    #     "idm_service_instance_id" : "587626604",
+    #     "username" : "eric.harris@oracle.com",
+    #     "object_name" : "/dbaas/gc3-naac-soar-d05-dbcs/db_1/vm-1/57cced1d-c74f-41da-9c24-e86666eee4b2",
+    #     "idm_domain_name" : "gc30003" }
+    name = StringField()
+    id = StringField(primary_key=True)
+    multi_part_name = DictField()
+
     networking = DictField()
     placement_requirements = ListField(StringField())
     platform = StringField()
@@ -558,10 +569,21 @@ class InstanceModel(DynamicDocument):
         ],
     }
 
-    # def __init__(self, data: DictStrAny, metadata: DictStrAny, embedded_data: DictStrAny, **kwargs):
-    #     # kwargs['sec_rule_id'] = kwargs.pop('id')
-    #     self.data = data
-    #     self.metadata = metadata
-    #     self.embedded_data = embedded_data
-    #     super().__init__(**data)
-    #     _debug(f"{self.__class__.__name__} created")
+
+    def __init__(self, *args, **values):
+        """
+    name =  {
+    "name" : "/Compute-587626604/eric.harris@oracle.com/dbaas/gc3-naac-soar-d05-dbcs/db_1/vm-1/57cced1d-c74f-41da-9c24-e86666eee4b2",
+    "idm_service_instance_id" : "587626604",
+    "username" : "eric.harris@oracle.com",
+    "object_name" : "/dbaas/gc3-naac-soar-d05-dbcs/db_1/vm-1/57cced1d-c74f-41da-9c24-e86666eee4b2",
+    "idm_domain_name" : "gc30003" }
+
+        :param args:
+        :param values:
+        """
+        values['multi_part_name'] = values['name'].__dict__
+        values['id'] = values['name'].__dict__['name']
+        values['name'] = values['name'].__dict__['name']
+        super().__init__(*args, **values)
+        _debug(f"{self.__class__.__name__}.__init__(args={args}, values={values}):")

@@ -69,7 +69,17 @@ first_result_dict = {
     # dst_list = DynamicField()
     dst_list = DictField()
     id = UUIDField(primary_key=True)
+
+    # swagger_formats.multi_part_name_formats.ThreePartNameFormat converts name to
+    # name =  {
+    #     "name" : "/Compute-587626604/eric.harris@oracle.com/dbaas/gc3-naac-soar-d05-dbcs/db_1/vm-1/57cced1d-c74f-41da-9c24-e86666eee4b2",
+    #     "idm_service_instance_id" : "587626604",
+    #     "username" : "eric.harris@oracle.com",
+    #     "object_name" : "/dbaas/gc3-naac-soar-d05-dbcs/db_1/vm-1/57cced1d-c74f-41da-9c24-e86666eee4b2",
+    #     "idm_domain_name" : "gc30003" }
     name = StringField()
+    multi_part_name = DictField()
+
     src_is_ip = BooleanField()
     # src_list = StringField()
     # src_list = DynamicField()
@@ -90,6 +100,8 @@ first_result_dict = {
     }
 
     def __init__(self, *args, **values):
+        values['multi_part_name'] = values['name'].__dict__
+        values['name'] = values['name'].__dict__['name']
         values['dst_list'] = values['dst_list'].__dict__
         values['src_list'] = values['src_list'].__dict__
         super().__init__(*args, **values)
