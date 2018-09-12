@@ -35,7 +35,7 @@ _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 import mongoengine
 from mongoengine import *
 from gc3_query.lib.open_api.swagger_formats.models.three_part_name_model import ThreePartNameModel
-
+from gc3_query.lib.open_api.swagger_formats.three_part_name_formats import ThreePartNameFormat
 
 class SecListModel(DynamicDocument):
     """
@@ -129,6 +129,11 @@ SecList = dict(
     }
 
     def __init__(self, *args, **values):
-        values['name'] = ThreePartNameModel(**values['name'])
+        _name: ThreePartNameFormat = values['name']
+        values['name'] = ThreePartNameModel(name=_name.name,
+                                            idm_service_instance_id=_name.idm_service_instance_id,
+                                            object_owner=_name.object_owner,
+                                            object_name=_name.object_name,
+                                            idm_domain_name=_name.idm_domain_name)
         super().__init__(*args, **values)
         _debug(f"{self.__class__.__name__}.__init__(args={args}, values={values}):")

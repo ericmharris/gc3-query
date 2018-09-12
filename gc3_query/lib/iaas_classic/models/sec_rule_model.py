@@ -26,7 +26,7 @@ from gc3_query.lib import *
 import mongoengine
 from mongoengine import *
 from gc3_query.lib.open_api.swagger_formats.models.three_part_name_model import ThreePartNameModel
-
+from gc3_query.lib.open_api.swagger_formats.three_part_name_formats import ThreePartNameFormat
 from gc3_query.lib import get_logging
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
@@ -103,7 +103,12 @@ first_result_dict = {
     }
 
     def __init__(self, *args, **values):
-        values['name'] = ThreePartNameModel(**values['name'])
+        _name: ThreePartNameFormat = values['name']
+        values['name'] = ThreePartNameModel(name=_name.name,
+                                            idm_service_instance_id=_name.idm_service_instance_id,
+                                            object_owner=_name.object_owner,
+                                            object_name=_name.object_name,
+                                            idm_domain_name=_name.idm_domain_name)
         values['dst_list'] = values['dst_list'].__dict__
         values['src_list'] = values['src_list'].__dict__
         super().__init__(*args, **values)

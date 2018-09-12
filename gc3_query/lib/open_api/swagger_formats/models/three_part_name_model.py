@@ -37,3 +37,6 @@ class ThreePartNameModel(EmbeddedDocument):
     object_name = StringField()
     idm_domain_name = StringField()
 
+    def __init__(self, *args, **values):
+        super().__init__(*args, **values)
+        _debug(f"{self.__class__.__name__}.__init__(args={args}, values={values}):")

@@ -213,3 +213,12 @@ def test_insert_all(setup_gc30003_model):
     assert instances
 
 
+
+def test_query_objects(setup_gc30003_model):
+    service_cfg, idm_cfg, iaas_service, mongodb_connection = setup_gc30003_model
+    # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
+    instance_models = InstanceModel.objects()
+    assert instance_models
+    instance_model = instance_models.first()
+    assert instance_model
+    assert '.oracle.com' in instance_model.name.object_owner
