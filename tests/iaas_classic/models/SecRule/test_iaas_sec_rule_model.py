@@ -258,6 +258,9 @@ def test_query_objects(setup_gc30003_model):
     owner =  sec_rule_model.name.object_owner
     assert 'oracle.com' in owner
     assert  sec_rule_model.name.name.startswith('/Compute')
+    enabled_secrules = SecRuleModel.objects(disabled=False)
+    disabled_secrules = SecRuleModel.objects(disabled=True)
+    assert len(enabled_secrules) > len(disabled_secrules)
 
 
 
