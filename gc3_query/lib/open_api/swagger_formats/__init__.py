@@ -30,7 +30,7 @@ from .json_bool import json_bool_format
 from .integer import integer_format, mydouble, int64_format
 from .oc_datetime import date, date_time
 from .oc_datetime import oc_datetime_format, paas_date_time
-from .boolean_formats import bool_in_str
+from .boolean_formats import boolean
 from .sec_lists_formats import sec_list_format
 from .three_part_name_formats import three_part_name
 

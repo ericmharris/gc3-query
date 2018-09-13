@@ -28,8 +28,8 @@ from gc3_query.lib.gc3logging import get_logging
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
-bool_in_str = SwaggerFormat(
-    format='bool-in-str',
+boolean = SwaggerFormat(
+    format='boolean',
     to_wire=bool_to_str,
     to_python=str_to_bool,
     validate=is_str_bool_like,
