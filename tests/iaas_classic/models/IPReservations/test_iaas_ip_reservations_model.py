@@ -55,6 +55,7 @@ from pathlib import Path
 
 import pytest
 from mongoengine import connect
+from mongoengine import QuerySet
 
 from gc3_query.lib import gc3_cfg
 from gc3_query.lib.gc3_config import GC3Config
@@ -313,7 +314,7 @@ def setup_gc30003_model_query():
 def test_query_objects(setup_gc30003_model_query):
     service_cfg, idm_cfg, iaas_service, mongodb_connection = setup_gc30003_model_query
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
-    objects = IPReservationModel.objects()
+    objects: QuerySet = IPReservationModel.objects()
     assert objects
     object = objects.first()
     assert object

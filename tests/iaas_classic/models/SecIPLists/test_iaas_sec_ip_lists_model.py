@@ -46,6 +46,7 @@ from mongoengine.connection import get_connection, register_connection
 from gc3_query.lib import *
 from gc3_query.lib import gc3_cfg
 
+from mongoengine import QuerySet
 # from gc3_query.lib.export_delegates.mongodb import storage_adapter_init
 # # fixme? from gc3_query.lib.open_api import API_SPECS_DIR
 from pathlib import Path
@@ -291,7 +292,7 @@ def setup_gc30003_model_query():
 def test_query_objects(setup_gc30003_model_query):
     service_cfg, idm_cfg, iaas_service, mongodb_connection = setup_gc30003_model_query
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
-    objects = SecIPListsModel.objects()
+    objects: QuerySet = SecIPListsModel.objects()
     assert objects
     object = objects.first()
     assert object

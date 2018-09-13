@@ -13,6 +13,7 @@ from gc3_query.lib.iaas_classic.instances import Instances
 from gc3_query.lib.iaas_classic.models.instance_model import InstanceModel
 # fixme? from gc3_query.lib.open_api import API_SPECS_DIR
 # from pprint import pprint, pformat
+from mongoengine import QuerySet
 
 TEST_BASE_DIR: Path = Path(__file__).parent
 # config_dir = TEST_BASE_DIR.joinpath("config")
@@ -236,7 +237,7 @@ def setup_gc30003_model_query():
 def test_query_objects(setup_gc30003_model_query):
     service_cfg, idm_cfg, iaas_service, mongodb_connection = setup_gc30003_model_query
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
-    objects = InstanceModel.objects()
+    objects: QuerySet = InstanceModel.objects()
     assert objects
     object = objects.first()
     assert object

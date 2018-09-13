@@ -370,6 +370,44 @@ definitions:
           format: <code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>.<p>For
           more information about the vcable of an instance, see <a class="xref" href="op-instance-{name}-get.html">Retrieve
           Details of an Instance</a>.'
+          
+          
+          
+#ip_reservation = dict(
+#    account='/Compute-587626604/default',
+#    ip='129.150.219.3',
+#    name=ThreePartNameFormat('/Compute-587626604/eric.harris@oracle.com/dbaas/gc3-naac-soar-d02-dbcs/db_1/vm-1/ipreservation'),
+#    parentpool='/oracle/public/ippool',
+#    permanent=True,
+#    quota=None,
+#    tags=[],
+#    uri='https://compute.uscom-central-1.oraclecloud.com/ip/reservation/Compute-587626604/eric.harris%40oracle.com/dbaas/gc3-naac-soar-d02-dbcs/db_1/vm-1/ipreservation',
+#    used=True)        
+#{
+#    "result": [
+#        {
+#            "account": "/Compute-587626604/default",
+#            "used": true,
+#            "name": "/Compute-587626604/eric.harris@oracle.com/dbaas/gc3-naac-soar-d02-dbcs/db_1/vm-1/ipreservation",
+#            "tags": [],
+#            "ip": "129.150.219.3",
+#            "uri": "https://compute.uscom-central-1.oraclecloud.com/ip/reservation/Compute-587626604/eric.harris%40oracle.com/dbaas/gc3-naac-soar-d02-dbcs/db_1/vm-1/ipreservation",
+#            "quota": null,
+#            "parentpool": "/oracle/public/ippool",
+#            "permanent": true
+#        },
+#        {
+#            "account": "/Compute-587626604/default",
+#            "used": true,
+#            "name": "/Compute-587626604/eric.harris@oracle.com/dbaas/gc3-ntag-pod1-d01-jcsdb/db_1/vm-1/ipreservation",
+#            "tags": [],
+#            "ip": "129.150.194.191",
+#            "uri": "https://compute.uscom-central-1.oraclecloud.com/ip/reservation/Compute-587626604/eric.harris%40oracle.com/dbaas/gc3-ntag-pod1-d01-jcsdb/db_1/vm-1/ipreservation",
+#            "quota": null,
+#            "parentpool": "/oracle/public/ippool",
+#            "permanent": true
+#        },
+
   IPAssociation-response:
     type: object
     properties:
