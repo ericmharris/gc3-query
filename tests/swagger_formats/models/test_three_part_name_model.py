@@ -93,3 +93,15 @@ def test_query_objects(setup_gc30003_model):
     owner =  instance_model.name.object_owner
     assert 'oracle.com' in owner
     assert  instance_model.name.full_name.startswith('/Compute')
+
+
+def test_from_result_constructor(setup_gc30003_model):
+    service_cfg, idm_cfg, iaas_service, mongodb_connection = setup_gc30003_model
+    # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
+    instance_models = InstanceModel.objects()
+    assert instance_models
+    instance_model = instance_models.first()
+    assert instance_model
+    owner =  instance_model.name.object_owner
+    assert 'oracle.com' in owner
+    assert  instance_model.name.full_name.startswith('/Compute')

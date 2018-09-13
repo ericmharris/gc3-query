@@ -50,3 +50,20 @@ class ThreePartNameModel(EmbeddedDocument):
 
     def __eq__(self, other):
         return self['full_name'] == other['full_name']
+
+    @classmethod
+    def from_result(cls, result, key: Optional[str] = 'name') -> 'ThreePartNameModel':
+        """Return a ThreePartNameModel using the values in result['key']
+
+        :param result:
+        :param key:
+        :return:
+        """
+        _value = result[key]
+        model = ThreePartNameModel(full_name=_value .full_name,
+                                            idm_service_instance_id=_value .idm_service_instance_id,
+                                            object_owner=_value .object_owner,
+                                            object_name=_value .object_name,
+                                            idm_domain_name=_value .idm_domain_name)
+        return model
+
