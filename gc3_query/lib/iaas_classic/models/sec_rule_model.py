@@ -113,20 +113,27 @@ first_result_dict = {
         _dst =  values['dst_list']
         _src =  values['src_list']
 
+        # if _dst.object_type.startswith('seclist'):
+        #     dl = SecListFormatModel(name = _dst.name, idm_service_instance_id = _dst.idm_service_instance_id, object_owner = _dst.object_owner, object_name = _dst.object_name, idm_domain_name =  _dst.idm_domain_name)
+        # else:
+        #     dl = SecIPListFormatModel(name = _dst.name, object_name = _dst.object_name, object_type =  _dst.object_type)
+        #
+        # if _src.object_type.startswith('seclist'):
+        #     sl = SecListFormatModel(name = _src.name, idm_service_instance_id = _src.idm_service_instance_id, object_owner = _src.object_owner, object_name = _src.object_name, idm_domain_name =  _src.idm_domain_name)
+        # else:
+        #     sl = SecIPListFormatModel(name = _src.name, object_name = _src.object_name, object_type =  _src.object_type)
+        # values['dst_list'] = dl
+        # values['src_list'] = sl
+
         if _dst.object_type.startswith('seclist'):
-            dl = SecListFormatModel(name = _dst.name, idm_service_instance_id = _dst.idm_service_instance_id, object_owner = _dst.object_owner,
-                                    object_name = _dst.object_name, idm_domain_name =  _dst.idm_domain_name)
+            values['dst_list'] = SecListFormatModel.from_result(result=values, key='dst_list')
         else:
-            dl = SecIPListFormatModel(name = _dst.name, object_name = _dst.object_name, object_type =  _dst.object_type)
+            values['dst_list'] = SecIPListFormatModel.from_result(result=values, key='dst_list')
 
         if _src.object_type.startswith('seclist'):
-            sl = SecListFormatModel(name = _src.name, idm_service_instance_id = _src.idm_service_instance_id, object_owner = _src.object_owner,
-                                    object_name = _src.object_name, idm_domain_name =  _src.idm_domain_name)
+            values['src_list'] = SecListFormatModel.from_result(result=values, key='src_list')
         else:
-            sl = SecIPListFormatModel(name = _src.name, object_name = _src.object_name, object_type =  _src.object_type)
-
-        values['dst_list'] = dl
-        values['src_list'] = sl
+            values['src_list'] = SecIPListFormatModel.from_result(result=values, key='src_list')
 
         super().__init__(*args, **values)
         _debug(f"{self.__class__.__name__}.__init__(args={args}, values={values}):")

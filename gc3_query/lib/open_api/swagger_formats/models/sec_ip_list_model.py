@@ -28,7 +28,7 @@ _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 class SecIPListFormatModel(DynamicEmbeddedDocument):
     """
     """
-    name = StringField()
+    full_name = StringField()
     object_name = StringField()
     object_type = StringField()
 
@@ -37,8 +37,17 @@ class SecIPListFormatModel(DynamicEmbeddedDocument):
         _debug(f"{self.__class__.__name__}.__init__(args={args}, values={values}):")
 
 
+    def __str__(self):
+        return self['full_name']
+
+    def __repr__(self):
+        return self.__str__()
+
+    def __eq__(self, other):
+        return self['full_name'] == other['full_name']
+
     @classmethod
-    def from_result(cls, result, key: Optional[str] = 'name') -> 'SecIPListFormatModel':
+    def from_result(cls, result, key: str) -> 'SecIPListFormatModel':
         """Return a SecIPListFormatModel using the values in result['key']
 
         :param result:
@@ -46,9 +55,7 @@ class SecIPListFormatModel(DynamicEmbeddedDocument):
         :return:
         """
         _value = result[key]
-        model = SecIPListFormatModel(full_name=_value .full_name,
-                                            idm_service_instance_id=_value .idm_service_instance_id,
-                                            object_owner=_value .object_owner,
-                                            object_name=_value .object_name,
-                                            idm_domain_name=_value .idm_domain_name)
+        model = SecIPListFormatModel(full_name=_value.full_name,
+                                     object_name=_value.object_name,
+                                     object_type=_value.object_type)
         return model
