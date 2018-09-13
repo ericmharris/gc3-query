@@ -127,7 +127,7 @@ class SecApplicationModel(DynamicDocument):
 
     def __init__(self, *args, **values):
         _name: ThreePartNameFormat = values['name']
-        values['name'] = ThreePartNameModel(name=_name.name,
+        values['name'] = ThreePartNameModel(full_name=_name.full_name,
                                             idm_service_instance_id=_name.idm_service_instance_id,
                                             object_owner=_name.object_owner,
                                             object_name=_name.object_name,

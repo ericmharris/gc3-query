@@ -63,7 +63,7 @@ class ThreePartNameFormat(MutableMapping):
 
         """
         self._d = dict()
-        self['name'] = name.strip()
+        self['full_name'] = name.strip()
         self['idm_service_instance_id'], self['object_owner'], self['object_name'] =  self._parse_name(name=name)
         self['idm_domain_name'] = idm_instance_id_to_name.get(self['idm_service_instance_id'], False)
         if not self['idm_domain_name']:
@@ -71,7 +71,7 @@ class ThreePartNameFormat(MutableMapping):
         _debug(f"{self.__class__.__name__} created ")
 
     def __str__(self):
-        return self['name']
+        return self['full_name']
 
     def __repr__(self):
         return f"{self.__class__.__name__}({self})"
@@ -111,7 +111,7 @@ class ThreePartNameFormat(MutableMapping):
         return list(super().items())
 
     def __eq__(self, other):
-        return self['name'] == other['name']
+        return self['full_name'] == other['full_name']
 
     def to_wire(self):
         return self.__str__()
@@ -141,9 +141,9 @@ def from_wire(name: str) -> ThreePartNameFormat:
     return ThreePartNameFormat(name=name)
 
 
-multi_part_name = SwaggerFormat(
+three_part_name = SwaggerFormat(
     # name of the format as used in the Swagger spec
-    format='multi-part-name',
+    format='three-part-name',
 
     # Callable to convert a python object to_wire representations
     # to_wire=lambda json_bool_instance: json_bool_instance.as_wire,

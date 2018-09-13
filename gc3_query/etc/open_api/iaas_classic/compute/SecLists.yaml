@@ -511,7 +511,7 @@ definitions:
       name:
         type: string
         description: <p>The three-part name of the object (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>).
-        format: "multi-part-name"
+        format: "three-part-name"
       outbound_cidr_policy:
         type: string
         description: '<p>The policy for outbound traffic from the security list. You

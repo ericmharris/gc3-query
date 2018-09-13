@@ -513,7 +513,7 @@ definitions:
       name:
         type: string
         description: The three-part name of the object (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>).
-        format: "multi-part-name"
+        format: "three-part-name"
       protocol:
         type: string
         description: 'The protocol to use.<p>The value that you specify can be either

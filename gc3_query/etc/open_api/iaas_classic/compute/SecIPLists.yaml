@@ -454,7 +454,7 @@ definitions:
       name:
         type: string
         description: <p>The three-part name of the object
-        format: "multi-part-name"
+        format: "three-part-name"
       secipentries:
         items:
           type: string

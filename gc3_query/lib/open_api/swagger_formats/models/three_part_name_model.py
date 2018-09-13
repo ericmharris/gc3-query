@@ -31,7 +31,7 @@ class ThreePartNameModel(EmbeddedDocument):
     """
     """
 
-    name = StringField()
+    full_name = StringField()
     idm_service_instance_id = StringField()
     object_owner = StringField()
     object_name = StringField()
@@ -43,10 +43,10 @@ class ThreePartNameModel(EmbeddedDocument):
 
 
     def __str__(self):
-        return self['name']
+        return self['full_name']
 
     def __repr__(self):
         return self.__str__()
 
     def __eq__(self, other):
-        return self['name'] == other['name']
+        return self['full_name'] == other['full_name']
