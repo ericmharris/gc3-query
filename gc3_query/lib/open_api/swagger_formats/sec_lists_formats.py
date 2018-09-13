@@ -175,7 +175,7 @@ class SecListFormat(SecListBaseFormat):
         idm_service_instance_id = _idm_service_instance_id
 
         _list_object_name = '/'.join(object_name_parts)
-        list_object_name = f"/{_list_object_name}"
+        list_object_name = f"{_list_object_name}"
         return idm_service_instance_id, username, list_object_name, list_type
 
 
