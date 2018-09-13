@@ -498,13 +498,13 @@ def setup_gc30003_model_query():
 def test_query_objects(setup_gc30003_model_query):
     service_cfg, idm_cfg, iaas_service, mongodb_connection = setup_gc30003_model_query
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
-    sec_rule_models = SecRuleModel.objects()
-    assert sec_rule_models
-    sec_rule_model = sec_rule_models.first()
-    assert sec_rule_model
-    owner =  sec_rule_model.name.object_owner
+    objects = SecRuleModel.objects()
+    assert objects
+    object = objects.first()
+    assert object
+    owner =  object.name.object_owner
     assert '@oracle.com' in owner
-    assert  sec_rule_model.name.full_name.startswith('/Compute')
+    assert  object.name.full_name.startswith('/Compute')
     enabled_secrules = SecRuleModel.objects(disabled=False)
     disabled_secrules = SecRuleModel.objects(disabled=True)
     assert len(enabled_secrules) > len(disabled_secrules)

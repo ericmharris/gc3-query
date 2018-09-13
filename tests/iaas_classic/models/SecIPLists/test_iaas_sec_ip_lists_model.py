@@ -89,7 +89,7 @@ def test_list_sec_ip_lists_model_from_url():
     old_container=sec_ip_lists.idm_container_name
     # http_future = sec_ip_lists.bravado_service_operations.listInstance(container=sec_ip_lists.idm_user_container_name)
     # http_future = sec_ip_lists.bravado_service_operations.listInstance(container=sec_ip_lists.idm_container_name)
-    # http_future = sec_ip_lists.bravado_service_operations.listSecRule(container=container)
+    # http_future = sec_ip_lists.bravado_service_operations.listSecIPList(container=container)
     http_future = sec_ip_lists.service_operations.list_sec_ip_list(container=container)
     # http_future = sec_ip_lists.service_operations.discover_root_instance()
     request_url = http_future.future.request.url
@@ -119,7 +119,7 @@ def test_list_sec_ip_lists_model_save_from_url():
     # http_future = sec_ip_lists.bravado_service_operations.listInstance(container=sec_ip_lists.idm_container_name)
 
     # http_future = instances.bravado_service_operations.discoverRootInstance(_request_options={"headers": {"Accept": "application/oracle-compute-v3+directory+json"}})
-    # operation_name = 'listSecRule'
+    # operation_name = 'listSecIPList'
     # callable_operation = getattr(sec_ip_lists.bravado_service_operations, operation_name)
     # operation_headers = {"Accept": ','.join(callable_operation.operation.produces),
     #                      "Content-Type": ','.join(callable_operation.operation.consumes)
@@ -128,7 +128,7 @@ def test_list_sec_ip_lists_model_save_from_url():
     # # http_future = callable_operation(container=container,  _request_options={"headers": {"Accept": ','.join(callable_operation.operation.produces)}})
     # http_future = callable_operation(container=container)
 
-    # http_future = sec_ip_lists.bravado_service_operations.listSecRule(container=container, _request_options={"headers": {"Accept": ','.join(callable_operation.operation.produces)}})
+    # http_future = sec_ip_lists.bravado_service_operations.listSecIPList(container=container, _request_options={"headers": {"Accept": ','.join(callable_operation.operation.produces)}})
     http_future = sec_ip_lists.service_operations.list_sec_ip_list(container=container)
 
     # http_future = sec_ip_lists.service_operations.discover_root_instance()
@@ -264,6 +264,41 @@ def test_insert_all(setup_gc30003_model):
     assert sec_ip_lists
 
 
+
+
+
+
+
+
+
+@pytest.fixture()
+def setup_gc30003_model_query():
+    service = 'SecIPLists'
+    idm_domain = 'gc30003'
+    gc3_config = GC3Config(atoml_config_dir=config_dir)
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
+    idm_cfg = gc3_config.idm.domains[idm_domain]
+    mongodb_connection: MongoClient = storage_adapter_init(mongodb_config=gc3_cfg.iaas_classic.mongodb.as_dict())
+    iaas_service = SecIPLists(service_cfg=service_cfg, idm_cfg=idm_cfg)
+    assert service==service_cfg.name
+    assert idm_domain==idm_cfg.name
+    assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
+    yield service_cfg, idm_cfg, iaas_service, mongodb_connection
+
+
+
+
+def test_query_objects(setup_gc30003_model_query):
+    service_cfg, idm_cfg, iaas_service, mongodb_connection = setup_gc30003_model_query
+    # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
+    objects = SecIPListsModel.objects()
+    assert objects
+    object = objects.first()
+    assert object
+    owner =  object.name.object_owner
+    full_name = object.name.full_name
+    assert '@oracle.com' in owner
+    assert  full_name.startswith('/Compute')
 
 
 

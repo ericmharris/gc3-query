@@ -115,7 +115,7 @@ def test_list_ip_reservations_model_from_url():
     old_container=ip_reservations.idm_container_name
     # http_future = ip_reservations.bravado_service_operations.listInstance(container=ip_reservations.idm_user_container_name)
     # http_future = ip_reservations.bravado_service_operations.listInstance(container=ip_reservations.idm_container_name)
-    # http_future = ip_reservations.bravado_service_operations.listSecRule(container=container)
+    # http_future = ip_reservations.bravado_service_operations.listIPReservation(container=container)
     http_future = ip_reservations.service_operations.list_ip_reservation(container=container)
     # http_future = ip_reservations.service_operations.discover_root_instance()
     request_url = http_future.future.request.url
@@ -145,7 +145,7 @@ def test_list_ip_reservations_model_save_from_url():
     # http_future = ip_reservations.bravado_service_operations.listInstance(container=ip_reservations.idm_container_name)
 
     # http_future = instances.bravado_service_operations.discoverRootInstance(_request_options={"headers": {"Accept": "application/oracle-compute-v3+directory+json"}})
-    # operation_name = 'listSecRule'
+    # operation_name = 'listIPReservation'
     # callable_operation = getattr(ip_reservations.bravado_service_operations, operation_name)
     # operation_headers = {"Accept": ','.join(callable_operation.operation.produces),
     #                      "Content-Type": ','.join(callable_operation.operation.consumes)
@@ -154,7 +154,7 @@ def test_list_ip_reservations_model_save_from_url():
     # # http_future = callable_operation(container=container,  _request_options={"headers": {"Accept": ','.join(callable_operation.operation.produces)}})
     # http_future = callable_operation(container=container)
 
-    # http_future = ip_reservations.bravado_service_operations.listSecRule(container=container, _request_options={"headers": {"Accept": ','.join(callable_operation.operation.produces)}})
+    # http_future = ip_reservations.bravado_service_operations.listIPReservation(container=container, _request_options={"headers": {"Accept": ','.join(callable_operation.operation.produces)}})
     http_future = ip_reservations.service_operations.list_ip_reservation(container=container)
 
     # http_future = ip_reservations.service_operations.discover_root_instance()
@@ -289,6 +289,38 @@ def test_insert_all(setup_gc30003_model):
     _ = IPReservationModel.objects().insert(ip_reservations)
     assert ip_reservations
 
+
+
+
+
+@pytest.fixture()
+def setup_gc30003_model_query():
+    service = 'IPReservations'
+    idm_domain = 'gc30003'
+    gc3_config = GC3Config(atoml_config_dir=config_dir)
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
+    idm_cfg = gc3_config.idm.domains[idm_domain]
+    mongodb_connection: MongoClient = storage_adapter_init(mongodb_config=gc3_cfg.iaas_classic.mongodb.as_dict())
+    iaas_service = IPReservations(service_cfg=service_cfg, idm_cfg=idm_cfg)
+    assert service==service_cfg.name
+    assert idm_domain==idm_cfg.name
+    assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
+    yield service_cfg, idm_cfg, iaas_service, mongodb_connection
+
+
+
+
+def test_query_objects(setup_gc30003_model_query):
+    service_cfg, idm_cfg, iaas_service, mongodb_connection = setup_gc30003_model_query
+    # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
+    objects = IPReservationModel.objects()
+    assert objects
+    object = objects.first()
+    assert object
+    owner =  object.name.object_owner
+    full_name = object.name.full_name
+    assert '@oracle.com' in owner
+    assert  full_name.startswith('/Compute')
 
 
 
