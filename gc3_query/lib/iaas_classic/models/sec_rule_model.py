@@ -81,6 +81,7 @@ first_result_dict = {
         "indexes": [
             "name",
             "application",
+            "$application",         # text index, http://docs.mongoengine.org/guide/text-indexes.html
             "action",
             "dst_is_ip",
             "src_is_ip",
