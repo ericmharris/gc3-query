@@ -109,17 +109,7 @@ first_result_dict = {
     }
 
     def __init__(self, *args, **values):
-        # _name: ThreePartNameFormat = values['name']
-        # values['name'] = ThreePartNameModel(full_name=_name.full_name,
-        #                                     idm_service_instance_id=_name.idm_service_instance_id,
-        #                                     object_owner=_name.object_owner,
-        #                                     object_name=_name.object_name,
-        #                                     idm_domain_name=_name.idm_domain_name)
-        # values['name'] = ThreePartNameModel.from_result(values)
         values['name'] = ThreePartNameModel.from_result(values)
-        # values['dst_list'] = values['dst_list'].__dict__
-        # values['src_list'] = values['src_list'].__dict__
-
         _dst =  values['dst_list']
         _src =  values['src_list']
 

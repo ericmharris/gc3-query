@@ -120,13 +120,6 @@ class InstanceModel(DynamicDocument):
         :param args:
         :param values:
         """
-
-        # _name: ThreePartNameFormat = values['name']
-        # values['name'] = ThreePartNameModel(full_name=_name.full_name,
-        #                                     idm_service_instance_id=_name.idm_service_instance_id,
-        #                                     object_owner=_name.object_owner,
-        #                                     object_name=_name.object_name,
-        #                                     idm_domain_name=_name.idm_domain_name)
         values['name'] = ThreePartNameModel.from_result(values)
         values['id'] = values['name'].full_name
         super().__init__(*args, **values)

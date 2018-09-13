@@ -37,19 +37,43 @@ from gc3_query.lib import get_logging
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
-ip_reservation = dict(
-    account='/Compute-587626604/default',
-    ip='129.150.219.3',
-    name=ThreePartNameFormat('/Compute-587626604/eric.harris@oracle.com/dbaas/gc3-naac-soar-d02-dbcs/db_1/vm-1/ipreservation'),
-    parentpool='/oracle/public/ippool',
-    permanent=True,
-    quota=None,
-    tags=[],
-    uri='https://compute.uscom-central-1.oraclecloud.com/ip/reservation/Compute-587626604/eric.harris%40oracle.com/dbaas/gc3-naac-soar-d02-dbcs/db_1/vm-1/ipreservation',
-    used=True)
 
 class IPReservationModel(DynamicDocument):
     """
+ip_reservation = dict(
+   account='/Compute-587626604/default',
+   ip='129.150.219.3',
+   name=ThreePartNameFormat('/Compute-587626604/eric.harris@oracle.com/dbaas/gc3-naac-soar-d02-dbcs/db_1/vm-1/ipreservation'),
+   parentpool='/oracle/public/ippool',
+   permanent=True,
+   quota=None,
+   tags=[],
+   uri='https://compute.uscom-central-1.oraclecloud.com/ip/reservation/Compute-587626604/eric.harris%40oracle.com/dbaas/gc3-naac-soar-d02-dbcs/db_1/vm-1/ipreservation',
+   used=True)
+{
+   "result": [
+       {
+           "account": "/Compute-587626604/default",
+           "used": true,
+           "name": "/Compute-587626604/eric.harris@oracle.com/dbaas/gc3-naac-soar-d02-dbcs/db_1/vm-1/ipreservation",
+           "tags": [],
+           "ip": "129.150.219.3",
+           "uri": "https://compute.uscom-central-1.oraclecloud.com/ip/reservation/Compute-587626604/eric.harris%40oracle.com/dbaas/gc3-naac-soar-d02-dbcs/db_1/vm-1/ipreservation",
+           "quota": null,
+           "parentpool": "/oracle/public/ippool",
+           "permanent": true
+       },
+       {
+           "account": "/Compute-587626604/default",
+           "used": true,
+           "name": "/Compute-587626604/eric.harris@oracle.com/dbaas/gc3-ntag-pod1-d01-jcsdb/db_1/vm-1/ipreservation",
+           "tags": [],
+           "ip": "129.150.194.191",
+           "uri": "https://compute.uscom-central-1.oraclecloud.com/ip/reservation/Compute-587626604/eric.harris%40oracle.com/dbaas/gc3-ntag-pod1-d01-jcsdb/db_1/vm-1/ipreservation",
+           "quota": null,
+           "parentpool": "/oracle/public/ippool",
+           "permanent": true
+       },
     """
     account = StringField()
     ip = StringField()
@@ -72,12 +96,6 @@ class IPReservationModel(DynamicDocument):
     }
 
     def __init__(self, *args, **values):
-        # _name: ThreePartNameFormat = values['name']
-        # values['name'] = ThreePartNameModel(full_name=_name.full_name,
-        #                                     idm_service_instance_id=_name.idm_service_instance_id,
-        #                                     object_owner=_name.object_owner,
-        #                                     object_name=_name.object_name,
-        #                                     idm_domain_name=_name.idm_domain_name)
         values['name'] = ThreePartNameModel.from_result(values)
         super().__init__(*args, **values)
         _debug(f"{self.__class__.__name__}.__init__(args={args}, values={values}):")

@@ -35,3 +35,20 @@ class SecIPListFormatModel(DynamicEmbeddedDocument):
     def __init__(self, *args, **values):
         super().__init__(*args, **values)
         _debug(f"{self.__class__.__name__}.__init__(args={args}, values={values}):")
+
+
+    @classmethod
+    def from_result(cls, result, key: Optional[str] = 'name') -> 'SecIPListFormatModel':
+        """Return a SecIPListFormatModel using the values in result['key']
+
+        :param result:
+        :param key:
+        :return:
+        """
+        _value = result[key]
+        model = SecIPListFormatModel(full_name=_value .full_name,
+                                            idm_service_instance_id=_value .idm_service_instance_id,
+                                            object_owner=_value .object_owner,
+                                            object_name=_value .object_name,
+                                            idm_domain_name=_value .idm_domain_name)
+        return model
