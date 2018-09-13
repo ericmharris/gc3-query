@@ -161,6 +161,7 @@ class SecListFormat(SecListBaseFormat):
         super().__init__(name)
         self.idm_service_instance_id, self.object_owner, self.object_name, self.object_type = self._parse_name(name=self.name)
         self.idm_domain_name = idm_instance_id_to_name.get(self.idm_service_instance_id, False)
+        self.object_type = "SecList"
         if not self.idm_domain_name:
             raise RuntimeError(f"Failed to parse IDM Domain name for {self.__class__.__name__}: {name}")
         _debug(f"{self.__class__.__name__} created ")
@@ -192,11 +193,12 @@ class SecIPListFormat(SecListBaseFormat):
         """
         super().__init__(name)
         self.object_name, self.object_type = self._parse_name(name=self.name)
+        self.object_type = "SecIPList"
         _debug(f"{self.__class__.__name__} created ")
 
     def _parse_name(self, name: str) -> Tuple[str]:
         object_type, object_name = name.split(':')
-        return object_type, object_name
+        return object_name, object_type
 
 
 def from_wire(name: str) -> Union[SecListFormat, SecIPListFormat]:
