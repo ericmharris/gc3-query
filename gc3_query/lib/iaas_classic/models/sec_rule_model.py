@@ -25,8 +25,11 @@ from gc3_query.lib import *
 # from gc3_query.lib.gc3logging import get_logging
 import mongoengine
 from mongoengine import *
-from gc3_query.lib.open_api.swagger_formats.models.three_part_name_model import ThreePartNameModel
 from gc3_query.lib.open_api.swagger_formats.three_part_name_formats import ThreePartNameFormat
+from gc3_query.lib.open_api.swagger_formats.sec_lists_formats import SecIPListFormat, SecListFormat
+from gc3_query.lib.open_api.swagger_formats.models.three_part_name_model import ThreePartNameModel
+from gc3_query.lib.open_api.swagger_formats.models.sec_ip_list_model import SecIPListFormatModel
+from gc3_query.lib.open_api.swagger_formats.models.sec_list_model import SecListFormatModel
 from gc3_query.lib import get_logging
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
@@ -68,7 +71,8 @@ first_result_dict = {
     dst_is_ip = BooleanField()
     # dst_list = StringField()
     # dst_list = DynamicField()
-    dst_list = DictField()
+    # dst_list = DictField()
+    dst_list = GenericEmbeddedDocumentField()
     id = UUIDField(primary_key=True)
 
     # swagger_formats.multi_part_name_formats.ThreePartNameFormat converts name to
@@ -86,7 +90,9 @@ first_result_dict = {
     src_is_ip = BooleanField()
     # src_list = StringField()
     # src_list = DynamicField()
-    src_list = DictField()
+    # src_list = DictField()
+    # src_list = EmbeddedDocumentField(SecIPListFormatModel)
+    src_list = GenericEmbeddedDocumentField()
     uri = URLField()
 
     meta = {
@@ -109,7 +115,26 @@ first_result_dict = {
                                             object_owner=_name.object_owner,
                                             object_name=_name.object_name,
                                             idm_domain_name=_name.idm_domain_name)
-        values['dst_list'] = values['dst_list'].__dict__
-        values['src_list'] = values['src_list'].__dict__
+        # values['dst_list'] = values['dst_list'].__dict__
+        # values['src_list'] = values['src_list'].__dict__
+
+        _dst =  values['dst_list']
+        _src =  values['src_list']
+
+        if _dst.object_type.startswith('seclist'):
+            dl = SecListFormatModel(name = _dst.name, idm_service_instance_id = _dst.idm_service_instance_id, object_owner = _dst.object_owner,
+                                    object_name = _dst.object_name, idm_domain_name =  _dst.idm_domain_name)
+        else:
+            dl = SecIPListFormatModel(name = _dst.name, object_name = _dst.object_name, object_type =  _dst.object_type)
+
+        if _src.object_type.startswith('seclist'):
+            sl = SecListFormatModel(name = _src.name, idm_service_instance_id = _src.idm_service_instance_id, object_owner = _src.object_owner,
+                                    object_name = _src.object_name, idm_domain_name =  _src.idm_domain_name)
+        else:
+            sl = SecIPListFormatModel(name = _src.name, object_name = _src.object_name, object_type =  _src.object_type)
+
+        values['dst_list'] = dl
+        values['src_list'] = sl
+
         super().__init__(*args, **values)
         _debug(f"{self.__class__.__name__}.__init__(args={args}, values={values}):")

@@ -23,8 +23,6 @@ from gc3_query.lib import *
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
-
-
 ################################################################################
 ## Standard Library Imports
 import sys, os
@@ -37,11 +35,10 @@ from dataclasses import dataclass
 ## Project Imports
 from gc3_query.lib import *
 from gc3_query.lib import *
-#from gc3_query.lib.gc3logging import get_logging
+# from gc3_query.lib.gc3logging import get_logging
 from . import *
 
 from gc3_query.lib import get_logging
-_debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
@@ -50,5 +47,13 @@ class SecListFormatModel(EmbeddedDocument):
     """
     seclist:/Compute-586297329/siva.subramani@oracle.com/paas/ANALYTICS/gc3emeaaadw603/BI/ora_BISecList
     """
+    name = StringField()
+    idm_service_instance_id = StringField()
+    object_owner = StringField()
+    object_name = StringField()
+    idm_domain_name = StringField()
 
-    pass
+    def __init__(self, *args, **values):
+        super().__init__(*args, **values)
+        _debug(f"{self.__class__.__name__}.__init__(args={args}, values={values}):")
+

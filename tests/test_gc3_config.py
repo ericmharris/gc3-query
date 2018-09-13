@@ -28,6 +28,14 @@ def test_set_credential():
     assert credential.idm_domain_name == 'gc3test'
 
 
+def test_set_gc3pilot_credential():
+    gc3_config = GC3Config()
+    assert 'gc3pilot' in gc3_config['idm']['domains']
+    assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
+    credential = gc3_config.set_credential(idm_domain_name='gc3pilot', password='V@nadium123!' )
+    assert credential
+    assert credential.password == 'V@nadium123!'
+    assert credential.idm_domain_name == 'gc3pilot'
 
 
 

@@ -33,7 +33,7 @@ gc3-query.sec_list    [9/9/2018 11:47 AM]
 
 from bravado_core.formatter import SwaggerFormat, NO_OP
 from bravado_core.exception import SwaggerValidationError
-
+from collections.abc import MutableMapping
 ################################################################################
 ## Project Imports
 from gc3_query.lib import *
@@ -54,7 +54,7 @@ idm_instance_id_to_name = {idm_domain.formal_id: idm_domain.name for idm_domain 
 #                uri='https://compute.uscom-central-1.oraclecloud.com/secrule/Compute-gc3pilot/eric.harris%40oracle.com/psft_pcm_rdp')
 
 
-class SecListBaseFormat:
+class SecListBaseFormat(MutableMapping):
 
     def __init__(self, name: str):
         """Takes three-part name of object from Oracle Cloud Classic.
@@ -75,18 +75,20 @@ class SecListBaseFormat:
 
         :param name:  The three-part name of the object (/Compute-identity_domain/user/object).
         """
-        self.name = name.strip()
         # self.idm_service_instance_id, self.username, self.list_object_name, self.list_type = self._parse_name(name=self.name)
         # self.idm_domain_name = idm_instance_id_to_name.get(self.idm_service_instance_id, False)
         # if not self.idm_domain_name:
         #     raise RuntimeError(f"Failed to parse IDM Domain name for {self.__class__.__name__}: {name}")
         # _debug(f"{self.__class__.__name__} created ")
+        self._d = dict()
+        self['name'] = name.strip()
+        _debug(f"{self.__class__.__name__} created ")
 
-    def __str__(self):
-        return self.name
-
-    def __repr__(self):
-        return f"{self.__class__.__name__}({self})"
+    # def __str__(self):
+    #     return self.name
+    #
+    # def __repr__(self):
+    #     return f"{self.__class__.__name__}({self})"
 
     def to_wire(self):
         return self.__str__()
@@ -98,6 +100,50 @@ class SecListBaseFormat:
         if 'seciplist' in sec_list_name:
             return True
         raise SwaggerValidationError(f"Value={from_wire} not recognized as SecListFormat")
+
+    def __str__(self):
+        return self['name']
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}({self})"
+
+
+    def __setitem__(self, key, value):
+        self._d[key] = value
+
+    def __getitem__(self, key):
+        return self._d[key]
+
+    # access members with a '.'
+    def __getattr__(self, key):
+        """
+        Called when an attribute can't be found in an object's instance __dict__.
+        :param key:
+        :return:
+        """
+        return self._d[key]
+
+    def __delitem__(self, key):
+        del self._d[key]
+
+    def __iter__(self):
+        return iter(self._d)
+
+    def __len__(self):
+        return len(self._d)
+
+    def keys(self):
+        return list(super().keys())
+
+    def values(self):
+        return list(super().values())
+
+    def items(self):
+        return list(super().items())
+
+    def __eq__(self, other):
+        return self['name'] == other['name']
+
 
 
 class SecListFormat(SecListBaseFormat):
@@ -113,7 +159,7 @@ class SecListFormat(SecListBaseFormat):
 
         """
         super().__init__(name)
-        self.idm_service_instance_id, self.username, self.list_object_name, self.list_type = self._parse_name(name=self.name)
+        self.idm_service_instance_id, self.object_owner, self.object_name, self.object_type = self._parse_name(name=self.name)
         self.idm_domain_name = idm_instance_id_to_name.get(self.idm_service_instance_id, False)
         if not self.idm_domain_name:
             raise RuntimeError(f"Failed to parse IDM Domain name for {self.__class__.__name__}: {name}")
@@ -145,12 +191,12 @@ class SecIPListFormat(SecListBaseFormat):
 
         """
         super().__init__(name)
-        self.list_object_name, self.list_type = self._parse_name(name=self.name)
+        self.object_name, self.object_type = self._parse_name(name=self.name)
         _debug(f"{self.__class__.__name__} created ")
 
     def _parse_name(self, name: str) -> Tuple[str]:
-        list_type, list_object_name = name.split(':')
-        return list_object_name, list_type
+        object_type, object_name = name.split(':')
+        return object_type, object_name
 
 
 def from_wire(name: str) -> Union[SecListFormat, SecIPListFormat]:

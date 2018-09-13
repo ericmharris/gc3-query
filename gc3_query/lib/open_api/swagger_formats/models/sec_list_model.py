@@ -27,10 +27,11 @@ _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
 
-class SecListModel(EmbeddedDocument):
+class SecListFormatModel(DynamicEmbeddedDocument):
     """
     """
 
+    name = StringField()
     idm_service_instance_id = StringField()
     object_owner = StringField()
     object_name = StringField()
