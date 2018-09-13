@@ -497,6 +497,7 @@ definitions:
       name:
         type: string
         description: "<p>The three-part name of the object (<code>/Compute-<em>identity_domain</em>/<em>user</em>/<em>object</em></code>)."
+        format: "three-part-name"
       parentpool:
         type: string
         description: "<code>/oracle/public/ippool</code><p>Pool of public IP addresses"
@@ -524,8 +525,7 @@ definitions:
         description: Uniform Resource Identifier
       used:
         type: boolean
-        description: "<code>true</code> indicates that the IP reservation is associated
-          with an instance."
+        description: "<code>true</code> indicates that the IP reservation is associated with an instance."
   Interval:
     x-oneOf-instructions: Provide one of the valid object representations documented
       here.  For more information about oneOf see http://json-schema.org/latest/json-schema-validation.html#anchor88

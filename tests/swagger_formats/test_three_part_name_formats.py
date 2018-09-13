@@ -83,6 +83,7 @@ def test_init(setup_fixture):
         assert 'oracle.com' in  tpn['object_owner']
         assert tpn['idm_domain_name'] in gc3_cfg.idm.domains
 
+
 def test_attribute_access(setup_fixture):
     names = setup_fixture
 

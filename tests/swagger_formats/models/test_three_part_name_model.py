@@ -92,4 +92,4 @@ def test_query_objects(setup_gc30003_model):
     assert instance_model
     owner =  instance_model.name.object_owner
     assert 'oracle.com' in owner
-    assert  instance_model.name.name.startswith('/Compute')
+    assert  instance_model.name.full_name.startswith('/Compute')

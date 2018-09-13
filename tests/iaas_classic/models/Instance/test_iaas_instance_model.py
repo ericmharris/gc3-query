@@ -214,11 +214,33 @@ def test_insert_all(setup_gc30003_model):
 
 
 
-def test_query_objects(setup_gc30003_model):
-    service_cfg, idm_cfg, iaas_service, mongodb_connection = setup_gc30003_model
+
+
+@pytest.fixture()
+def setup_gc30003_model_query():
+    service = 'Instances'
+    idm_domain = 'gc30003'
+    gc3_config = GC3Config(atoml_config_dir=config_dir)
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
+    idm_cfg = gc3_config.idm.domains[idm_domain]
+    mongodb_connection: MongoClient = storage_adapter_init(mongodb_config=gc3_cfg.iaas_classic.mongodb.as_dict())
+    iaas_service = Instances(service_cfg=service_cfg, idm_cfg=idm_cfg)
+    assert service==service_cfg.name
+    assert idm_domain==idm_cfg.name
+    assert gc3_config.user.cloud_username == 'eric.harris@oracle.com'
+    yield service_cfg, idm_cfg, iaas_service, mongodb_connection
+
+
+
+
+def test_query_objects(setup_gc30003_model_query):
+    service_cfg, idm_cfg, iaas_service, mongodb_connection = setup_gc30003_model_query
     # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
-    instance_models = InstanceModel.objects()
-    assert instance_models
-    instance_model = instance_models.first()
-    assert instance_model
-    assert '.oracle.com' in instance_model.name.object_owner
+    sec_rule_models = InstanceModel.objects()
+    assert sec_rule_models
+    sec_rule_model = sec_rule_models.first()
+    assert sec_rule_model
+    owner =  sec_rule_model.name.object_owner
+    assert '@oracle.com' in owner
+    assert  sec_rule_model.name.full_name.startswith('/Compute')
+

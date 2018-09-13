@@ -282,3 +282,43 @@ def test_save_all_SecRules(setup_SecRules):
             model = SecRuleModel(**result_dict)
             saved = model.save()
     print(f"\nPRINT: {iaas_service.service_name} exported: {total_results}")
+
+
+
+from gc3_query.lib.iaas_classic.ip_reservations import IPReservations
+from gc3_query.lib.iaas_classic.models.ip_reservations_model import IPReservationModel
+
+@pytest.fixture()
+def setup_IPReservations():
+    service = 'IPReservations'
+    # idm_domain = 'gc30003'
+    gc3_config = GC3Config(atoml_config_dir=config_dir)
+    mongodb_connection: MongoClient = storage_adapter_init(mongodb_config=gc3_config.iaas_classic.mongodb.as_dict())
+    service_cfg = gc3_config.iaas_classic.services.compute[service]
+    idm_domains = [idm_domain for idm_domain in gc3_config.idm.domains.values() if idm_domain.active]
+    # idm_cfg = gc3_config.idm.domains[idm_domain]
+    # iaas_service = IPReservations(service_cfg=service_cfg, idm_cfg=idm_cfg)
+    iaas_services = [IPReservations(service_cfg=service_cfg, idm_cfg=idm_cfg) for idm_cfg in idm_domains]
+    assert service == service_cfg.name
+    yield service_cfg, idm_domains, iaas_services, mongodb_connection
+
+def test_save_all_IPReservations(setup_IPReservations):
+    service_cfg, idm_domains, iaas_services, mongodb_connection = setup_IPReservations
+    # http_client: IaaSRequestsHTTPClient = IaaSRequestsHTTPClient(idm_cfg=idm_cfg)
+    total_results = 0
+    for iaas_service in iaas_services:
+        try:
+            service_response = iaas_service.dump()
+        except Exception as e:
+            _warning(f"Exception during iaas_service.dump() for {iaas_service.service_name} on IDM Domain {iaas_service.idm_cfg.name}\nRetrying ...")
+            _warning(f"Exception: {e}")
+            _warning(f"Retrying ...")
+            service_response = iaas_service.dump()
+        assert service_response.result
+        results = service_response.result.result
+        total_results = total_results + len(results)
+        for result in results:
+            result_dict = result._as_dict()
+            model = IPReservationModel(**result_dict)
+            saved = model.save()
+    print(f"\nPRINT: {iaas_service.service_name} exported: {total_results}")
