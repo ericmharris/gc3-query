@@ -25,12 +25,14 @@ _debug, _info, _warning, _error, _critical = get_logging(name=__name__)
 
 
 
-class SecIPListFormatModel(DynamicEmbeddedDocument):
+class SecListFormatModelBase(EmbeddedDocument):
     """
     """
     full_name = StringField()
     object_name = StringField()
     object_type = StringField()
+
+    meta = {'allow_inheritance': True}
 
     def __init__(self, *args, **values):
         super().__init__(*args, **values)
@@ -45,6 +47,36 @@ class SecIPListFormatModel(DynamicEmbeddedDocument):
 
     def __eq__(self, other):
         return self['full_name'] == other['full_name']
+
+    def __hash__(self):
+        return hash(self['full_name'])
+
+
+class SecIPListFormatModel(SecListFormatModelBase):
+    """
+    """
+    # full_name = StringField()
+    # object_name = StringField()
+    # object_type = StringField()
+    #
+    # meta = {'allow_inheritance': True}
+    #
+    # def __init__(self, *args, **values):
+    #     super().__init__(*args, **values)
+    #     _debug(f"{self.__class__.__name__}.__init__(args={args}, values={values}):")
+    #
+    #
+    # def __str__(self):
+    #     return self['full_name']
+    #
+    # def __repr__(self):
+    #     return self.__str__()
+    #
+    # def __eq__(self, other):
+    #     return self['full_name'] == other['full_name']
+    #
+    # def __hash__(self):
+    #     return hash(self['full_name'])
 
     @classmethod
     def from_result(cls, result, key: str) -> 'SecIPListFormatModel':

@@ -121,8 +121,20 @@ def test_query_sec_rules(setup_gc30003_model_query):
     # "src_is_ip": true,
     # "src_list.object_type": "SecIPList",
     # "src_list.object_name": "/oracle/public/public-internet"})
-    enabled_public_internet_secrules: QuerySet = SecRuleModel.objects(disabled=False, src_is_ip=True)
-    enabled_public_internet_secrules_2: QuerySet = SecRuleModel.objects(disabled=False, src_is_ip=True, src_list__object_type="SecIPList")
-    enabled_public_internet_secrules_3: QuerySet = SecRuleModel.objects(disabled=False, src_is_ip=True,
-                                                                        src_list__object_name="/oracle/public/public-internet")
-    assert enabled_public_internet_secrules_2
+    # enabled_public_internet_secrules: QuerySet = SecRuleModel.objects(disabled=False, src_is_ip=True)
+    # enabled_public_internet_secrules_2: QuerySet = SecRuleModel.objects(disabled=False, src_is_ip=True, src_list__object_type="SecIPList")
+    # enabled_public_internet_secrules_3: QuerySet = SecRuleModel.objects(disabled=False, src_is_ip=True,
+    #                                                                     src_list__object_name="/oracle/public/public-internet")
+    enabled_public_internet_secrules: QuerySet = SecRuleModel.objects(disabled=False, src_is_ip=True, src_list__object_type="SecIPList", src_list__full_name__contains="/oracle/public/public-internet")
+
+    assert enabled_public_internet_secrules
+    enabled_public_internet_applications = [s.application for s in enabled_public_internet_secrules]
+    enabled_public_internet_applications_set = set([s.application for s in enabled_public_internet_secrules])
+    assert enabled_public_internet_applications_set
+
+
+    enabled_sec_applications: QuerySet = SecApplicationModel.objects(name__full_name__in=enabled_public_internet_applications)
+    assert enabled_sec_applications
+
+
+

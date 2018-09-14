@@ -28,7 +28,7 @@ from mongoengine import *
 from gc3_query.lib.open_api.swagger_formats.three_part_name_formats import ThreePartNameFormat
 from gc3_query.lib.open_api.swagger_formats.sec_lists_formats import SecIPListFormat, SecListFormat
 from gc3_query.lib.open_api.swagger_formats.models.three_part_name_model import ThreePartNameModel
-from gc3_query.lib.open_api.swagger_formats.models.sec_ip_list_model import SecIPListFormatModel
+from gc3_query.lib.open_api.swagger_formats.models.sec_ip_list_model import SecIPListFormatModel, SecListFormatModelBase
 from gc3_query.lib.open_api.swagger_formats.models.sec_list_model import SecListFormatModel
 from gc3_query.lib import get_logging
 
@@ -68,11 +68,14 @@ first_result_dict = {
     description = StringField()
     disabled = BooleanField()
     dst_is_ip = BooleanField()
-    dst_list = GenericEmbeddedDocumentField()
+    # dst_list = GenericEmbeddedDocumentField()
+    dst_list = EmbeddedDocumentField(SecListFormatModelBase)
     id = UUIDField(primary_key=True)
     name = EmbeddedDocumentField(ThreePartNameModel)
     src_is_ip = BooleanField()
-    src_list = GenericEmbeddedDocumentField()
+    # src_list = GenericEmbeddedDocumentField()
+    src_list = EmbeddedDocumentField(SecListFormatModelBase)
+    # src_list = DictField()
     uri = URLField()
 
     meta = {
