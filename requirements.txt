@@ -8,4 +8,8 @@ keyring
 toml
 maya
 bravado
-logbook
+Logbook
+dataclasses
+melddict
+pytest
+pytest-runner

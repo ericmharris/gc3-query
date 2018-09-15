@@ -1,4 +1,5 @@
-from prettyprinter import pprint as pp
+#from prettyprinter import pprint as pp
+from pprint import pprint as pp
 from json import loads
 from pathlib import Path
 

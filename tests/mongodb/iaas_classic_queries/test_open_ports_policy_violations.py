@@ -126,6 +126,7 @@ def test_query_sec_rules(setup_gc30003_model_query):
     # enabled_public_internet_secrules_3: QuerySet = SecRuleModel.objects(disabled=False, src_is_ip=True,
     #                                                                     src_list__object_name="/oracle/public/public-internet")
     enabled_public_internet_secrules: QuerySet = SecRuleModel.objects(disabled=False, src_is_ip=True, src_list__object_type="SecIPList", src_list__full_name__contains="/oracle/public/public-internet")
+    enabled_public_internet_secrule = enabled_public_internet_secrules.first()
 
     assert enabled_public_internet_secrules
     enabled_public_internet_applications = [s.application for s in enabled_public_internet_secrules]
