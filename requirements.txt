@@ -10,6 +10,16 @@ maya
 bravado
 Logbook
 dataclasses
-melddict
-pytest
-pytest-runner
+
+## Extra from the OCI SDK/client
+appdirs
+arrow
+httpsig-cffi
+jinja2
+jmespath
+ndg-httpsclient
+pluggy
+pyOpenSSL
+pyparsing
+retrying
+terminaltables

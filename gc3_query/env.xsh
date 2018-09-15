@@ -1,5 +1,5 @@
 #from prettyprinter import pprint as pp
-from pprint import pprint as pp
+# from pprint import pprint as pp
 from json import loads
 from pathlib import Path
 
@@ -8,22 +8,22 @@ print('Configuring xonsh for gc3-query: {}'.format($BASE_DIR))
 # $BASE_DIR = BASE_DIR
 
 
-def _pretty_print_json(args=None, stdin=None):
-    """
-[root@eharris-lnxobi-01:master ~]# ppj opc -f json compute instance list $OPC_IDENT_CONTAINER
-args: ['opc', '-f', 'json', 'compute', 'instance', 'list', '/Compute-587626604']
-stdin: None
-[root@eharris-lnxobi-01:master ~]#
+# def _pretty_print_json(args=None, stdin=None):
+#     """
+# [root@eharris-lnxobi-01:master ~]# ppj opc -f json compute instance list $OPC_IDENT_CONTAINER
+# args: ['opc', '-f', 'json', 'compute', 'instance', 'list', '/Compute-587626604']
+# stdin: None
+# [root@eharris-lnxobi-01:master ~]#
 
-    """
-    print('args: {}'.format(args))
-    print('stdin: {}'.format(stdin))
-aliases['ppj'] = _pretty_print_json
+#     """
+#     print('args: {}'.format(args))
+#     print('stdin: {}'.format(stdin))
+# aliases['ppj'] = _pretty_print_json
 
 
-def _pretty_print_psm_data(args=None, stdin=None):
-    pp(psm_data)
-aliases['ppp'] = _pretty_print_psm_data
+# def _pretty_print_psm_data(args=None, stdin=None):
+#     pp(psm_data)
+# aliases['ppp'] = _pretty_print_psm_data
 
 
 aliases['dev'] = r'cd $DEVEL_DIR'
