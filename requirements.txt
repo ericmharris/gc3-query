@@ -7,7 +7,7 @@ cryptography==2.3.1
 keyring==15.1.0
 toml==0.9.6
 maya==0.5.0
-bravado
+bravado==10.0.1
 Logbook
 dataclasses
 
