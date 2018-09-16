@@ -14,7 +14,7 @@ dataclasses==0.6
 ## Extra from the OCI SDK/client
 appdirs==1.4.3
 arrow==0.12.1
-httpsig-cffi
+httpsig-cffi==15.0.0
 jinja2
 jmespath
 ndg-httpsclient
