@@ -4,7 +4,7 @@ cookiecutter==1.6.0
 pymongo==3.7.1
 mongoengine==0.15.3
 cryptography==2.3.1
-keyring
+keyring==15.1.0
 toml
 maya
 bravado
