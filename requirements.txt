@@ -20,6 +20,6 @@ jmespath==0.9.3
 ndg-httpsclient==0.5.1
 pluggy==0.7.1
 pyOpenSSL==18.0.0
-pyparsing
+pyparsing==2.2.0
 retrying
 terminaltables
