@@ -12,7 +12,7 @@ Logbook==1.4.0
 dataclasses==0.6
 
 ## Extra from the OCI SDK/client
-appdirs
+appdirs==1.4.3
 arrow
 httpsig-cffi
 jinja2
