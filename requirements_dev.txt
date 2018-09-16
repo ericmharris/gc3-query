@@ -5,4 +5,4 @@
 # Sphinx
 pytest==3.8.0
 pytest-runner==4.2
-black
+black==18.6b3
