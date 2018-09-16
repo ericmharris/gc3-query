@@ -8,7 +8,7 @@ keyring==15.1.0
 toml==0.9.6
 maya==0.5.0
 bravado==10.0.1
-Logbook
+Logbook==1.4.0
 dataclasses
 
 ## Extra from the OCI SDK/client
