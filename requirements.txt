@@ -1,5 +1,5 @@
 click==6.7
-requests
+requests==2.19.1
 cookiecutter
 pymongo
 mongoengine
