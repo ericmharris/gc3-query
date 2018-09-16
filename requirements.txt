@@ -19,7 +19,7 @@ jinja2==2.10
 jmespath==0.9.3
 ndg-httpsclient==0.5.1
 pluggy==0.7.1
-pyOpenSSL
+pyOpenSSL==18.0.0
 pyparsing
 retrying
 terminaltables
