@@ -2,7 +2,7 @@ click==6.7
 requests==2.19.1
 cookiecutter==1.6.0
 pymongo==3.7.1
-mongoengine
+mongoengine==0.15.3
 cryptography
 keyring
 toml
