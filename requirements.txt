@@ -9,7 +9,7 @@ toml==0.9.6
 maya==0.5.0
 bravado==10.0.1
 Logbook==1.4.0
-dataclasses
+dataclasses==0.6
 
 ## Extra from the OCI SDK/client
 appdirs
