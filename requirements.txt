@@ -17,7 +17,7 @@ arrow==0.12.1
 httpsig-cffi==15.0.0
 jinja2==2.10
 jmespath==0.9.3
-ndg-httpsclient
+ndg-httpsclient==0.5.1
 pluggy
 pyOpenSSL
 pyparsing
